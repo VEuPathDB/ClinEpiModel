@@ -1,0 +1,127 @@
+<project name="ClinEpiModel" default="Installation" basedir=".">
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo  Dependencies  oooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <import file="${projectsDir}/WDK/build.xml" />
+  <import file="${projectsDir}/CBIL/build.xml" />
+
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo    Checkout    oooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <target name="ClinEpiModel-ChildCheckout">
+    <available file="${projectsDir}/CBIL" type="dir" property="CBIL.present" />
+    <available file="${projectsDir}/WDK" type="dir" property="WDK.present" />
+    <antcall target="CBIL-Checkout" />
+    <antcall target="WDK-Checkout"/>
+  </target>
+
+  <target name="CBIL-Checkout" unless="CBIL.present">
+    <ant target="defaultProjectCheckout" inheritAll="false">
+      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/gus/CBIL" />
+      <property name="project" value="CBIL"/>
+      <property name="version" value="internal/api-build-9"/>
+    </ant>
+  </target>
+
+  <target name="WDK-Checkout" unless="WDK.present">
+    <ant target="defaultProjectCheckout" inheritAll="false">
+      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/gus/WDK"/>
+      <property name="project" value="WDK"/>
+      <property name="version" value="WDK_version_1-28"/>
+    </ant>
+  </target>
+
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo    Update    oooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+
+  <target name="ClinEpiModel-ChildUpdate" >
+    <ant target="defaultProjectUpdate">
+      <property name="project" value="CBIL"/>
+    </ant>
+    <ant target="defaultProjectUpdate">
+      <property name="project" value="WDK"/>
+    </ant>
+  </target>
+
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <target name="ClinEpiModel-Installation" depends="CBIL-Installation,
+    WDK-Installation,
+    ClinEpiModel/DatasetPresenter-Installation,
+    ClinEpiModel/Model-Installation">
+
+
+    <ant target="defaultProjectInstall">
+      <property name="project" value="ClinEpiModel"/>
+    </ant>
+
+  </target>
+
+
+  <!-- oooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->
+
+  <target name="ClinEpiModel-Installation-postprocess">
+    <echo message="Postprocessing the ClinEpiModel installation"/>
+
+    <replace dir="${targetDir}/bin"
+      propertyFile="${targetDir}/config/replacements.prop" >
+      <include name="**/*" />
+      <replacefilter token="@perl@" property="perl"/>
+    </replace>
+
+  </target>
+
+
+  <!-- ooooooooooooooooooooooo  Install Components  ooooooooooooooooooooooo -->
+
+  <target name="ClinEpiModel/DatasetPresenter-Installation" depends="ProjectTree">
+    <echo message="Nothing to do"/>
+    <!--
+    <ant target="defaultComponentInstall">
+      <property name="project" value="ClinEpiModel"/>
+      <property name="component" value="DatasetPresenter"/>
+    </ant>
+    -->
+  </target>
+
+  <target name="ClinEpiModel/Model-Installation" depends="ProjectTree">
+    <ant target="defaultComponentInstall">
+      <property name="project" value="ClinEpiModel"/>
+      <property name="component" value="Model"/>
+    </ant>
+  </target>
+
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo  Distributable  ooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <target name="ClinEpiModel-Distributable" depends="ProjectTree">
+
+    <copy todir="${targetDir}">
+      <fileset dir="${projectsDir}" >
+        <exclude name="**/CVS/*" />
+      </fileset>
+    </copy>
+  </target>
+
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo  ProjectTree  ooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <target name="ProjectTree" if="${checkout}">
+    <ant target="projectCheckOut"/>
+  </target>
+
+</project>
