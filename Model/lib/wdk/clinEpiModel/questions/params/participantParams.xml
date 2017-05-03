@@ -1,0 +1,404 @@
+<wdkModel>
+
+  <paramSet name="participantParams">
+    
+    <enumParam name="type"
+               prompt="type"
+               multiPick="false"
+               quote="true"
+               visible="false">
+      <help>this is internal</help>
+      <enumList>
+        <enumValue default="true">
+          <term>person</term>
+          <internal>person</internal>
+        </enumValue>
+        <enumValue>
+          <term>household</term>
+          <internal>household</internal>
+        </enumValue>  
+      </enumList>
+    </enumParam>
+
+     <filterParam name="participants_by_all_metadata"
+                 queryRef="ParticipantVQ.Participants"
+                 metadataQueryRef="ParticipantVQ.ParticipantMetadataXProto"
+                 metadataSpecQueryRef="ParticipantVQ.NodeMetadataSpecXProto"
+                 prompt="Participant"
+                 multiPick="true"
+                 quote="true"
+                 dependedParamRef="clinicalVisitParams.minAgeAtVisit,clinicalVisitParams.maxAgeAtVisit,participantParams.start_date,participantParams.end_date,participantParams.duration_observation"
+                 suppressNode="true">
+         <help>
+              Select participants based on Characteristics. 
+         </help>
+         <!-- <suggest selectMode="all" /> -->
+       </filterParam>
+
+    
+    <datasetParam name="participantsBySourceID" 
+		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
+		  prompt="Source ID input set">
+      <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
+
+             It can be delimited by a comma, semi colon or any white space.<br><br>
+             Its possible that not all the IDs in the list will be found in the database
+             due to anumber of reasons such as unavailable ID mapping. It is currenly not
+             possible to inform which IDs did not match anything in the database]]> </help>
+     <suggest includeProjects="INIT" default="FILL" />
+     <suggest default="3001" />
+      
+    </datasetParam>
+
+   <stringParam name="duration_observation"
+		 prompt="Days of observation &gt;= "
+		 number="true">
+      <help>Specify the minimum number of days from the date range that the participant was observed (ie, in the study).</help>
+      <suggest default="1"/>
+      <regex>\d\d*</regex>
+    </stringParam>
+
+   <stringParam name="max_visits"
+		 prompt="Number of visits / year &lt;= "
+		 number="true">
+      <help>Specify the maximum number of visits per participant per year that match your visit criteria.</help>
+      <suggest default="365"/>
+      <regex>\d\d*\.*\d*</regex>
+    </stringParam>
+
+   <stringParam name="min_visits"
+		 prompt="Number of visits / year &gt;= "
+		 number="true">
+      <help>Specify the minimum number of visits per participant per year that match your visit criteria.</help>
+      <suggest default="0.1"/>
+      <regex>\d\d*\.*\d*</regex>
+    </stringParam>
+   <stringParam name="max_para_density"
+		 prompt="Geometric mean parasite density &lt;= "
+		 number="true">
+      <help>Specify the maximum average parasite density across the visits that match your visit criteria.</help>
+      <suggest default="1000000"/>
+      <regex>\d\d*</regex>
+    </stringParam>
+
+   <stringParam name="min_para_density"
+		 prompt="Geometric mean parasite density &gt;= "
+		 number="true">
+      <help>Specify the minimum average parasite density across the visits that match your visit criteria.</help>
+      <suggest default="0"/>
+      <regex>\d\d*</regex>
+    </stringParam>
+
+   <stringParam name="max_anoph"
+		 prompt="Average number of anopheles &lt;= "
+		 number="true">
+      <help>Specify the maximum average number of anopheles mosquitos collected per dwelling over the date range specified that match your criteria.</help>
+      <suggest default="1000"/>
+      <regex>\d\d*</regex>
+    </stringParam>
+
+   <stringParam name="min_anoph"
+		 prompt="Average number of anopheles &gt;= "
+		 number="true">
+      <help>Specify the minimum average number of anopheles mosquitos collected per dwelling over the date range specified that match your criteria.</help>
+      <suggest default="0"/>
+      <regex>\d\d*</regex>
+    </stringParam>
+
+   <stringParam name="end_date"
+		 prompt="Latest date to include in this search: "
+		 number="false">
+      <help>Put in the latest date to include for identifying participant visits and computing anopheles counts.</help>
+      <suggest default="30-JUN-2016"/>
+      <regex>\d\d*-\w\w\w-\d\d\d\d</regex>
+    </stringParam>
+
+   <stringParam name="start_date"
+		 prompt="Earliest date to include in this search: "
+		 number="false">
+      <!-- visibleHelp>Put in the earliest date to include for identifying participant visits and computing anopheles counts.</visibleHelp -->
+      <help>Put in the earliest date to include for identifying participant visits and computing anopheles counts.</help>
+      <suggest default="05-AUG-2011"/>
+      <regex>\d\d*-\w\w\w-\d\d\d\d</regex>
+    </stringParam>
+
+    <answerParam name="participant_result"
+                  prompt="Input Result Set"
+                  readonly="true"
+                  visible="false">
+       <recordClass ref="ParticipantRecordClasses.ParticipantRecordClass" />
+    </answerParam>
+
+  </paramSet>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  Vocab queries-->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+ <querySet name="ParticipantVQ" queryType="vocab" isCacheable="true">
+   <sqlQuery name="Participants" excludeProjects="TrichDB,EuPathDB">
+            <paramRef ref="clinicalVisitParams.minAgeAtVisit" />
+            <paramRef ref="clinicalVisitParams.maxAgeAtVisit" />
+            <paramRef ref="participantParams.start_date" />
+            <paramRef ref="participantParams.end_date" />
+            <paramRef ref="participantParams.duration_observation" />  
+            <column name="internal"/>
+            <column name="term"/>
+            <sql>
+         <![CDATA[
+          select 
+         nvl(pa.source_id,pa.name)  as term,
+         nvl(pa.source_id,pa.name)  as internal
+  from ApidbTuning.PersonAttributes pa, 
+           (select CASE WHEN round($$maxAgeAtVisit$$) = $$maxAgeAtVisit$$ 
+            THEN $$maxAgeAtVisit$$ + 0.99
+            ELSE $$maxAgeAtVisit$$
+            END as max_age
+            from dual                    
+           ) ma
+  where least(to_date(pa.last_date_observed,'YYYYMMDD'), to_date($$end_date$$,'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( ma.max_age * 365)) - greatest(pa.app_date, to_date($$start_date$$,'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1 >= $$duration_observation$$
+         ]]>
+            </sql>
+
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetadataCross">
+            <column name="term"/>
+            <column name="property"/>
+            <column name="value"/>
+            <sql>
+         <![CDATA[
+select * from (
+                   select name as term,
+           ontology_term_source_id as property,
+           value as value
+  from ApidbTuning.AppNodeCharacteristics
+where type = 'person'
+union 
+select person.name as term,
+             dwelling.ontology_term_source_id as property,
+             dwelling.value as value
+from ApidbTuning.AppNodeCharacteristics person,
+     ApidbTuning.AppNodeCharacteristics dwelling,
+     APIDBTUNING.PANAssociations pan
+     
+where  person.type = 'person'
+  and  dwelling.type ='dwelling'
+  and person.SOURCE_ID = pan.node_source_id
+  and dwelling.source_id = pan.associated_node_source_id
+  union 
+  select person.name as term,
+             cvd.ontology_term_source_id as property,
+             cvd.value as value
+from ApidbTuning.AppNodeCharacteristics person,
+     ApidbTuning.AppNodeCharacteristics cvd,
+     APIDBTUNING.PANAssociations pan
+     
+where  person.type = 'person'
+  and  cvd.type ='clinical_visit_data'
+  and person.SOURCE_ID = pan.node_source_id
+  and cvd.source_id = pan.associated_node_source_id
+    union 
+select person.name as term,
+             ltd.ontology_term_source_id as property,
+             ltd.value as value
+from ApidbTuning.AppNodeCharacteristics person,
+     ApidbTuning.AppNodeCharacteristics ltd,
+     APIDBTUNING.PANAssociations pan
+     
+where  person.type = 'person'
+  and  ltd.type ='light_trap_data'
+  and person.SOURCE_ID = pan.node_source_id
+  and ltd.source_id = pan.associated_node_source_id)
+where value is not null
+order by term
+]]>
+            </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetadataXProto">
+            <paramRef ref="clinicalVisitParams.minAgeAtVisit" />
+            <paramRef ref="clinicalVisitParams.maxAgeAtVisit" />
+            <paramRef ref="participantParams.start_date" />
+            <paramRef ref="participantParams.end_date" />
+            <paramRef ref="participantParams.duration_observation" />  
+            <column name="term"/>
+            <column name="property"/>
+            <column name="value"/>
+            <sql>
+         <![CDATA[
+select li.* from (
+           select name as term,
+           ontology_term_source_id as property,
+           (case when ontology_term_source_id in ( select distinct property 
+                                     from apidbtuning.metadataspec
+                                    where spec_property = 'type'
+                                      and spec_value = 'date' )
+                then substr(value,1,4) || '-' || substr(value,5,2)|| '-' || substr(value,7,2)
+                else value
+            end) as value
+  from ApidbTuning.AppNodeCharacteristics
+     
+where type = 'person'
+and ontology_term_source_id  in (select distinct property 
+                       from ApidbTuning.MetadataSpec
+                      
+                      ) 
+union 
+select person.name as term,
+             dwelling.ontology_term_source_id as property,
+             dwelling.value as value
+from ApidbTuning.AppNodeCharacteristics person,
+     ApidbTuning.AppNodeCharacteristics dwelling,
+     APIDBTUNING.PANAssociations pan
+     
+where  person.type = 'person'
+  and  dwelling.type ='dwelling'
+  and person.SOURCE_ID = pan.associated_node_source_id
+  and dwelling.source_id = pan.node_source_id
+) li, ApidbTuning.personAttributes pa,
+        (select CASE WHEN round($$maxAgeAtVisit$$) = $$maxAgeAtVisit$$ 
+            THEN $$maxAgeAtVisit$$ + 0.99
+            ELSE $$maxAgeAtVisit$$
+            END as max_age
+            from dual                    
+           ) ma
+where li.value is not null
+and li.term = pa.source_id
+and least(to_date(pa.last_date_observed,'YYYYMMDD'), to_date($$end_date$$,'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( ma.max_age * 365)) - greatest(pa.app_date, to_date($$start_date$$,'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1 >= $$duration_observation$$
+order by term
+
+]]>
+            </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetadata">
+            <column name="term"/>
+            <column name="property"/>
+            <column name="value"/>
+            <sql>
+         <![CDATA[
+   select name as term,
+           ontology_term_source_id as property,
+           value as value
+  from ApidbTuning.AppNodeCharacteristics
+]]>
+            </sql>
+   </sqlQuery>
+
+
+   <sqlQuery name="NodeMetadataSpec">
+            <column name="property"/>
+            <column name="spec_property"/>
+            <column name="spec_value"/>
+            <sql>
+         <![CDATA[
+select distinct property, spec_property, spec_value
+  from ApidbTuning.MetadataSpec
+where property not in (select property 
+                         from ApidbTuning.MetadataSpec
+                        where lower(spec_value) = 'do not display'
+                      ) 
+order by property
+        ]]>
+     </sql>
+   </sqlQuery>
+
+   <sqlQuery name="NodeMetadataSpecXProto">
+            <column name="property"/>
+            <column name="spec_property"/>
+            <column name="spec_value"/>
+            <sql>
+         <![CDATA[
+select distinct * from (
+            Select mds.* from (
+  select distinct property as property, spec_property, spec_value
+  from ApidbTuning.MetadataSpec
+  where ( entity_type in 'person' or entity_type = 'dwelling')
+  and property not in  (select distinct property
+                                       from Apidbtuning.metadataspec
+                                     where lower(spec_value) = 'do not display'
+                                            or property = 'rltshp')
+    union select spec_value as property, 'parent' as spec_property, '' as spec_value
+     from ApidbTuning.MetadataSpec
+  where ( entity_type in 'person' or entity_type = 'dwelling')
+  and spec_property = 'display'
+  and property not in  (select distinct property
+                                      from Apidbtuning.metadataspec
+                                     where spec_property not in ( 'parent', 'leaf') ))mds,
+  ( select property, nvl(spec_value, 9999999999) as ord_num from apidbtuning.metadataspec
+     where spec_property = 'order_num') ord_num
+     where mds.property = ord_num.property (+)
+     and mds.spec_property not like 'order_num'
+    order by to_number(ord_num), mds.property)
+
+
+        ]]>
+     </sql>
+   </sqlQuery>
+
+  </querySet>    
+
+      <groupSet name="metaDataGroups">
+        
+        <group name="daterange" displayName="Choose participants based on date range and minimum days of observation (default is all participants)" displayType="ShowHide">
+            <description>
+                <![CDATA[
+Select the minimum and maximum dates (ie, the date range) to be considered in this search.  Also set the number of days that the participant was in the study (observed) over that date range.  Note: the observation time is impacted by the age range selected in the previous parameter. Data currently loaded ranges 05-AUG-2015 to 31-MAR-2015
+                ]]>
+            </description>
+        </group>
+        <group name="age_at_visit" displayName="Choose participants based on age (default is all children)" displayType="ShowHide">
+            <description>
+                <![CDATA[
+You can modify the age range of the participants at the time of their visits.  The defaults include all children in the study aged between 0.5 and 11 years, adults from 18 to 75 years of age.
+                ]]>
+            </description>
+        </group>
+        <group name="part_characteristics" displayName="Choose participants based on where they live and their characteristics such as genotype (default is all participants)" displayType="ShowHide">
+            <description>
+                <![CDATA[
+You can restrict the participants returned in your search by selecting characteristics about where they live including their dwelling type and their own characteristics such as genotype information.
+                ]]>
+            </description>
+        </group>
+        <group name="visit_part_characteristics" displayName="Restrict visits based on participant characteristics such as where they live and their genotype (default is all participants)" displayType="ShowHide">
+            <description>
+                <![CDATA[
+You can restrict visits returned based on participants by selecting characteristics about where they live including their dwelling type and their own characteristics such as genotype information.
+                ]]>
+            </description>
+        </group>
+        <group name="visit_visit_characteristics" displayName="Select visits based on data from clinic visits such as type of visit and diagnosis (default is all visits)" displayType="ShowHide">
+            <description>
+                <![CDATA[
+You can restrict the visits returned in your search by selecting characteristics such as the type of visit, diagnosis, visit tpye, etc.
+                ]]>
+            </description>
+        </group>
+        <group name="visit_characteristics" displayName="Restrict participants based on data from their clinic visits such as type of visit and diagnosis (default is all visits)" displayType="ShowHide">
+            <description>
+                <![CDATA[
+You can restrict the participants returned in your search by selecting characteristics of their clinical visits such as the type of their visit and their diagnosis at that visit.  Note that the numbers shown as you make selections are the number of visits selected, not the number of participants.
+                ]]>
+            </description>
+        </group>
+        <group name="summary_params" displayName="Choose participants based on summary data from the homes or visits selected above (default is all participants)" displayType="ShowHide">
+            <description>
+                <![CDATA[
+You can further restrict the participants returned in your search by setting summary values such as the average number of mosquitos collected per month in their home, the average parasitemia of the visits they had or the number of visits matching the visit characteristics above.
+                ]]>
+            </description>
+        </group>
+        <group name="relative_visits" displayName="Set these parameters to restrict your visits based on these relative visits." displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         You can further restrict the visits you have selected above by removing (or keeping) those visits based on a relative visit you define below.  For example, you may want to only keep visits with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a visit where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove visits where diagnosis of malaria = yes.
+                ]]>
+            </description>
+        </group>
+
+
+    </groupSet>
+
+</wdkModel>

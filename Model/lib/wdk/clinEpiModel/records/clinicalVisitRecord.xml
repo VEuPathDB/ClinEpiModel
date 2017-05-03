@@ -1,0 +1,744 @@
+<wdkModel>
+    <recordClassSet name="ClinicalVisitRecordClasses">
+
+      <recordClass name="ClinicalVisitRecordClass" urlName="clinical-visit" displayName="Clinical Visit"> 
+
+
+            <!-- primary key definition -->
+            <primaryKeyAttribute name="primary_key"
+                                 displayName="Visit Id">
+                <columnRef>source_id</columnRef>
+                <text>
+                    <![CDATA[
+                      $$source_id$$
+                    ]]>
+                </text>                
+            </primaryKeyAttribute>
+     
+
+           <attributesList summary="visit_date,parent_id,visit_type"       
+            />
+        <!-- =============================================================== -->
+      <!--  Step Analysis Plugins -->
+      <!-- =============================================================== -->
+
+             <stepAnalysisRef name="clinical-visit-dist" excludeProjects="EuPathDB"/>
+
+     
+ <!-- =============================================================== -->
+      <!--   Reporters -->  
+      <!-- =============================================================== -->
+
+          <reporter name="tabular" displayName="Summary - tab delimited"
+                    implementation="org.gusdb.wdk.model.report.TabularReporter"/>
+      
+          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables" 
+                    implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
+
+
+      <!-- =================================================================== -->
+      <!--  Text Attributes  ++++++++-->
+      <!-- =================================================================== -->
+ <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB"
+                         internal="true" inReportMaker="false">
+
+             <text>
+                  <![CDATA[
+                  Visit from <i>$$visit_date$$</i> for Participant <a href="showRecord.do?name=ParticipantRecordClasses.ParticipantRecordClass&project_id=@PROJECT_ID@&primary_key=$$parent_id$$">$$parent_id$$</a>.
+                  ]]>
+             </text>
+          </textAttribute>
+
+	  <attributeQueryRef ref="ClinicalVisitAttributes.All">
+         <columnAttribute name="source_id" inReportMaker="false"/>
+         <columnAttribute name="name" inReportMaker="false"/>
+         <columnAttribute name="visit_date" />
+<columnAttribute name="abdominal_pain" displayName="Abdominal Pain"  help="Pain perceived to originate in the abdomen">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="abdominal_pain_duration" displayName="Abdominal Pain Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="admitting_hospital" displayName="Admitting Hospital"  help="Does any member of your household own or have a boat without a motor?">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="age_since_birth_at_time_of_vi" displayName="Age At Time Of Visit">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="anorexia" displayName="Anorexia"  help="A lack or loss of appetite for food (as a medical condition)">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="anorexia_duration" displayName="Anorexia Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="asexual_parasite_density" displayName="Asexual Parasite Density"  help="Number of asexual parasites in the blood (counts per microliter)">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="asexual_parasites_present_mic" displayName="Asexual Parasites Present (microscopy)"  help="Asexual parasites in the blood, as determined by microscopy">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="basis_of_complicated_diagnosi" displayName="Basis Of Complicated Diagnosis">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="complicated_malaria" displayName="Complicated Malaria"  help="Diagnosis of malaria with danger signs including inability to sit up or stand, vomiting, unable to breastfeed or drink and lethargy, or criteria for severe malaria.">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="cough" displayName="Cough">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="cough_duration" displayName="Cough Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="date_of_hospital_admission" displayName="Date Of Hospital Admission">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="date_of_hospital_discharge" displayName="Date Of Hospital Discharge">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="date_of_visit" displayName="Date Of Visit"  help="Month and year">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="days_since_enrollment" displayName="Days Since Enrollment"  help="Number of days from time of participant enrollment in study until current visit">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="diagnosis_of_symptomatic_mala" displayName="Symptomatic Malaria">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="diarrhea" displayName="Diarrhea"  help="Abnormally increased frequency of loose or watery bowel movements">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="diarrhea_duration" displayName="Diarrhea Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="fatigue" displayName="Fatigue"  help="Fatigue or malaise">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="fatigue_duration" displayName="Fatigue Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="febrile" displayName="Febrile"  help="Elevated temperature or subjective fever">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="fever_subjective_" displayName="Fever (subjective)"  help="Subjective fever, as reported by the study participant or their parent/guardian">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="gametocytes_present_microscop" displayName="Gametocytes Present (microscopy)">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="headache" displayName="Headache"  help="Cephalgia, or pain sensed in various parts of the head, not confined to the area of distribution of any nerve">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="headache_duration" displayName="Headache Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="height" displayName="Height">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="hemoglobin" displayName="Hemoglobin"  help="Blood hemoglobin (g/dl)">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="household_id" displayName="Household Id">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="itn_last_night" displayName="Itn Last Night"  help="Slept in an insectside treated net last night?">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="jaundice" displayName="Jaundice"  help="Yellow pigmentation of the skin or sclera due to bilirubin, the result of increased bilirubin in the bloodstream">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="jaundice_duration" displayName="Jaundice Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="joint_pains" displayName="Joint Pains">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="joint_pains_duration" displayName="Joint Pains Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="malaria_diagnosis_and_parasit" displayName="Malaria Diagnosis And Parasite Status"  help="Malaria cat">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="malaria_medication" displayName="Malaria Medication">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="medication" displayName="Medication">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="muscle_aches" displayName="Muscle Aches">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="muscle_aches_duration" displayName="Muscle Aches Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="non_malaria_medication" displayName="Non-malaria Medication">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="other_diagnosis" displayName="Other Diagnosis">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="other_medical_complaint" displayName="Other Medical Complaint">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="seizures" displayName="Seizures"  help="Intermittent abnormality of the central nervous system (FMA:HP:0002011) due to sudden, excessive, disorderly discharge of cerebral neurons; characterized by some combination of disturbance of sensation, loss of consciousness, impairment of psychic function, or convulsive movements (epilepsy is used to describe chronic, recurrent seizures)">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="seizures_duration" displayName="Seizures Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="severe_malaria_criteria" displayName="Severe Malaria Criteria">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="specimen" displayName="Specimen Type">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="subjective_fever_duration" displayName="Subjective Fever Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="submicroscopic_parasites_pres" displayName="Submicroscopic Parasites Present (lamp)"  help="Results of test for parasitemia based on Loop-mediated isothermal amplification of parasite DNA">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="temperature" displayName="Temperature"  help="Temperature (in degrees Celsius)">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="uncomplicated_malaria" displayName="Uncomplicated Malaria">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="visit_type" displayName="Visit Type"  help="Classification of clinical visit based on reason for the visit">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="vomiting" displayName="Vomiting"  help="Forceful ejection of the contents of the stomach through the mouth by means of a series of involuntary spasmic contractions">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="vomiting_duration" displayName="Vomiting Duration">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="weight" displayName="Weight">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="parent_id" displayName="Participant ID">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+
+<columnAttribute name="subcounty_in_uganda" displayName="Subcounty In Uganda"  help="Subcounty in Uganda (Walukuba&lt;Jinja, Kihihi&lt;Kanungu, Nagongera&lt;Tororo)">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+
+</attributeQueryRef>
+
+        <table name="Characteristics"
+               displayName="Clinical Visit Characteristics"
+               queryRef="ClinicalVisitTables.Characteristics">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
+             <columnAttribute name="parent_category" displayName="Category"/>
+            <columnAttribute name="category" displayName="Characteristic"/>
+            <columnAttribute name="value" displayName="Value"/>
+        </table>
+
+        <table name="UncategorizedCharacteristics"
+               displayName="Uncategorized Clinical Visit Characteristics"
+               queryRef="ClinicalVisitTables.UncategorizedCharacteristics">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="category" displayName="Category"/>
+            <columnAttribute name="value" displayName="Value"/>
+        </table>
+
+        <table name="SamplesCollected"
+               displayName="Samples Collected During Visit"
+               queryRef="ClinicalVisitTables.SamplesCollected">
+            <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
+            <columnAttribute name="name" inReportMaker="false" internal="true"/>
+            <columnAttribute name="sample_id" displayName="Sample ID"/>
+            <columnAttribute name="specimen_type" displayName="Specimen Type"/>
+        </table>
+    </recordClass>
+    </recordClassSet>
+
+
+
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+      <!-- Attribute queries -->  
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <querySet name="ClinicalVisitAttributes" queryType="attribute" doNotTest="true"  
+              isCacheable='false'
+              excludeProjects="TrichDB">
+
+      <testRowCountSql>
+select count(*) from apidbtuning.ClinicalVisitAttributes
+       </testRowCountSql>
+       <sqlQuery name="All" isCacheable="false">
+         <column name="source_id"/>
+         <column name="name"/>
+         <column name="visit_date"/>
+<column name="abdominal_pain"/>
+<column name="abdominal_pain_duration"/>
+<column name="admitting_hospital"/>
+<column name="age_since_birth_at_time_of_vi"/>
+<column name="anorexia"/>
+<column name="anorexia_duration"/>
+<column name="asexual_parasite_density"/>
+<column name="asexual_parasites_present_mic"/>
+<column name="basis_of_complicated_diagnosi"/>
+<column name="complicated_malaria"/>
+<column name="cough"/>
+<column name="cough_duration"/>
+<column name="date_of_hospital_admission"/>
+<column name="date_of_hospital_discharge"/>
+<column name="date_of_visit"/>
+<column name="days_since_enrollment"/>
+<column name="diagnosis_of_symptomatic_mala"/>
+<column name="diarrhea"/>
+<column name="diarrhea_duration"/>
+<column name="fatigue"/>
+<column name="fatigue_duration"/>
+<column name="febrile"/>
+<column name="fever_subjective_"/>
+<column name="gametocytes_present_microscop"/>
+<column name="headache"/>
+<column name="headache_duration"/>
+<column name="height"/>
+<column name="hemoglobin"/>
+<column name="household_id"/>
+<column name="itn_last_night"/>
+<column name="jaundice"/>
+<column name="jaundice_duration"/>
+<column name="joint_pains"/>
+<column name="joint_pains_duration"/>
+<column name="malaria_diagnosis_and_parasit"/>
+<column name="malaria_medication"/>
+<column name="medication"/>
+<column name="muscle_aches"/>
+<column name="muscle_aches_duration"/>
+<column name="non_malaria_medication"/>
+<column name="other_diagnosis"/>
+<column name="other_medical_complaint"/>
+<column name="parent_id"/>
+<column name="seizures"/>
+<column name="seizures_duration"/>
+<column name="severe_malaria_criteria"/>
+<column name="specimen"/>
+<column name="subcounty_in_uganda"/>
+<column name="subjective_fever_duration"/>
+<column name="submicroscopic_parasites_pres"/>
+<column name="temperature"/>
+<column name="uncomplicated_malaria"/>
+<column name="visit_type"/>
+<column name="vomiting"/>
+<column name="vomiting_duration"/>
+<column name="weight"/>
+ <sql>
+            <![CDATA[
+select distinct * 
+	          from ApidbTuning.ClinicalVisitAttributes
+            ]]>
+         </sql>
+         </sqlQuery>
+      </querySet>
+
+
+    <querySet name="ClinicalVisitTables" queryType="table" 
+              isCacheable='false'
+              excludeProjects="TrichDB">
+
+      <sqlQuery name="Characteristics"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="name"/>
+            <column name="parent_category"/>
+            <column name="category"/>
+            <column name="value"/>
+            <sql>
+            <![CDATA[
+        select distinct 
+                 anc.source_id, 
+                 anc.source_id as name,
+                 anc.value,
+                 pc.parent_category,
+                nvl(os.ontology_synonym,anc.category) as category
+            from ApidbTuning.AppNodeCharacteristics anc
+                 ,ApidbTuning.MetaDataSpec mds
+                 ,Sres.OntologySynonym os
+                 ,( select listagg(display.spec_value,' : ') within group (order by tier desc) as parent_category,
+                           root as ontology_term_id
+                      from ( select distinct property as term, 
+                                             ontology_term_id, 
+                                             spec_value as parent_term,
+                                             connect_by_root ontology_term_id as root,
+                                             to_number(level) as  tier
+                               from (select * from apidbtuning.metadataspec  where spec_property = 'parent' ) mds
+                              start with property in ( select distinct property from ApidbTuning.metadataspec where spec_property = 'leaf' )
+                            connect by prior spec_value = property
+                            )mds, 
+                            (select distinct property,
+                                             ontology_term_id,
+                                             spec_value 
+                              from ApidbTuning.metadataspec 
+                             where spec_property = 'display' )display
+                    where tier != 1 
+                      and mds.ontology_term_id = display.ontology_term_id
+                    group by root) pc
+                    
+              where anc.type = 'clinical_visit_data'
+             and anc.ontology_term_source_id = mds.property
+             and anc.ontology_term_id = os.ontology_term_id (+)
+             and pc.ontology_term_id(+) = anc.ontology_term_id
+          union
+           select distinct source_id,
+                  source_id as name,
+                  value,
+                  'participant' as parent_category,
+                  'participant id' as category
+            from ApidbTuning.AppNodeCharacteristics
+           where category = 'parent_id'
+           and type = 'clinical_visit_data'
+           order by source_id, parent_category, category
+            ]]>
+            </sql>
+       </sqlQuery>
+
+      <sqlQuery name="UncategorizedCharacteristics"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="name"/>
+            <column name="category"/>
+            <column name="value"/>
+            <sql>
+            <![CDATA[
+select distinct source_id, 
+       source_id as name,
+       anc.category,
+       anc.value
+  from Apidbtuning.AppNodeCharacteristics anc
+             ,ApidbTuning.MetaDataSpec mds
+           where anc.type = 'clinical_visit_data'
+             and anc.category = mds.property
+             and mds.spec_property = 'categorized'
+             and mds.spec_value = 'false'    
+           order by source_id, category
+            ]]>
+            </sql>
+        </sqlQuery>
+
+      <sqlQuery name="SamplesCollected"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="name"/>
+            <column name="sample_id"/>
+            <column name="specimen_type"/>
+            <sql>
+              select distinct cv.source_id, cv.name, sa.name as sample_id, sa.specimen_type
+                       from ApidbTuning.CLINICALVISITATTRIBUTES cv, apidbtuning.SampleAttributes sa  
+                      where cv.parent_id = sa.parent_id 
+                        and cv.visit_date = sa.collection_date
+                  order by cv.source_id, sa.SPECIMEN_TYPE,sa.name
+            </sql>
+        </sqlQuery>
+      </querySet>
+</wdkModel>
+

@@ -1,0 +1,219 @@
+<wdkModel>
+
+  <paramSet name="dwellingParams">
+    
+    <enumParam name="type"
+               prompt="type"
+               multiPick="false"
+               quote="true"
+               visible="false">
+      <help>this is internal</help>
+      <enumList>
+        <enumValue default="true">
+          <term>dwelling</term>
+          <internal>dwelling</internal>
+        </enumValue>
+      </enumList>
+    </enumParam>
+
+    <filterParam name="dwellings_by_metadata"
+                 queryRef="DwellingVQ.Dwellings"
+                 metadataQueryRef="DwellingVQ.DwellingMetadata"
+                 metadataSpecQueryRef="DwellingVQ.NodeMetadataSpec"
+                 prompt="Dwellings"
+                 multiPick="true"
+                 quote="true"
+                 suppressNode="false">
+         <help>
+              Select dwellings based on Characteristics. 
+         </help>
+         <!-- <suggest selectMode="all" /> -->
+       </filterParam>
+
+    <filterParam name="dwellings_by_all_metadata"
+                 queryRef="DwellingVQ.Dwellings"
+                 metadataQueryRef="DwellingVQ.DwellingMetadataCross"
+                 metadataSpecQueryRef="DwellingVQ.NodeMetadataSpecCross"
+                 prompt="Dwelling"
+                 multiPick="true"
+                 quote="true"
+                 suppressNode="true">
+         <help>
+              Select dwellings based on Characteristics. 
+         </help>
+         <!-- <suggest selectMode="all" /> -->
+       </filterParam>
+
+    <datasetParam name="dwellingsBySourceID"
+		  recordClassRef="DwellingRecordClasses.DwellingRecordClass"
+		  prompt="Source ID input set">
+      <help><![CDATA[Input a set of source ID's, or upload a file <br><br>
+
+               It can be delimited by a comma, semi colon or any white space<br><br>
+
+               Its possible that not all ID's in the list will be found in the database
+               due to a number of reasons such as unavailable ID maping. Its also currently not
+               possible to inform which ID's did not match anything in the database]]></help>
+      <suggest includeProjects="INIT" default="FILL" />
+      <suggest default="HH101009801" />
+      
+    </datasetParam>
+    <answerParam name="dwelling_result"
+                  prompt="Input Result Set"
+                  readonly="true"
+                  visible="false">
+       <recordClass ref="DwellingRecordClasses.DwellingRecordClass" />
+    </answerParam>
+
+ <enumParam name="district"
+               prompt="Study site "
+               multiPick="true"
+               quote="true"
+               visible="true">
+      <help>Choose the study sites (districts) for your search.</help>
+      <enumList>
+        <enumValue default="true">
+          <term>Tororo</term>
+          <internal>tororo</internal>
+        </enumValue>
+        <enumValue default="true">
+          <term>Kanungu</term>
+          <internal>kanungu</internal>
+        </enumValue>  
+        <enumValue default="true">
+          <term>Jinja</term>
+          <internal>jinja</internal>
+        </enumValue>  
+      </enumList>
+    </enumParam>
+
+  </paramSet>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  Vocab queries-->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+ <querySet name="DwellingVQ" queryType="vocab" isCacheable="true">
+   <sqlQuery name="Dwellings" excludeProjects="TrichDB,EuPathDB">
+            <column name="internal"/>
+            <column name="term"/>
+            <sql>
+         <![CDATA[
+          select 
+         nvl(pan.source_id,pan.name)  as term,
+         nvl(pan.source_id,pan.name)  as internal
+  from ApidbTuning.DwellingAttributes pan
+         ]]>
+            </sql>
+   </sqlQuery>
+
+   <sqlQuery name="DwellingMetadataCross">
+            <column name="term"/>
+            <column name="property"/>
+            <column name="value"/>
+            <sql>
+         <![CDATA[
+select distinct * from (
+    select name as term,
+           ontology_term_source_id as property,
+           (case when ontology_term_source_id in ( select distinct property 
+                                     from apidbtuning.metadataspec
+                                    where spec_property = 'type'
+                                      and spec_value = 'date' )
+                then substr(value,1,4) || '-' || substr(value,5,2)|| '-' || substr(value,7,2)
+                else value
+            end) as value
+  from ApidbTuning.AppNodeCharacteristics
+     
+where type = 'dwelling'
+and ontology_term_source_id  in (select distinct property 
+                       from ApidbTuning.MetadataSpec
+                      
+                      ) 
+union 
+select dwelling.name as term,
+             person.ontology_term_source_id as property,
+           (case when person.ontology_term_source_id in ( select distinct property 
+                                     from apidbtuning.metadataspec
+                                    where spec_property = 'type'
+                                      and spec_value = 'date' )
+                then substr(person.value,1,4) || '-' || substr(person.value,5,2)|| '-' || substr(person.value,7,2)
+                else person.value
+            end) as value
+from ApidbTuning.AppNodeCharacteristics person,
+     ApidbTuning.AppNodeCharacteristics dwelling,
+     APIDBTUNING.PANAssociations pan
+     
+where  person.type = 'person'
+  and  dwelling.type ='dwelling'
+  and person.SOURCE_ID = pan.associated_node_source_id
+  and dwelling.source_id = pan.node_source_id
+and person.ontology_term_source_id  in (select distinct property 
+                       from ApidbTuning.MetadataSpec
+                      ) 
+)
+where value is not null
+]]>
+            </sql>
+   </sqlQuery>
+
+   <sqlQuery name="DwellingMetadata">
+            <column name="term"/>
+            <column name="property"/>
+            <column name="value"/>
+            <sql>
+         <![CDATA[
+   select distinct name as term,
+           ontology_term_source_id as property,
+           value as value
+  from ApidbTuning.AppNodeCharacteristics
+where type = 'dwelling'
+and value is not null
+]]>
+            </sql>
+   </sqlQuery>
+
+
+   <sqlQuery name="NodeMetadataSpec">
+            <column name="property"/>
+            <column name="spec_property"/>
+            <column name="spec_value"/>
+            <sql>
+         <![CDATA[
+select distinct property, spec_property, spec_value
+  from ApidbTuning.MetadataSpec
+ where entity_type ='dwelling'
+    or entity_type ='all' 
+        ]]>
+     </sql>
+   </sqlQuery>
+
+   <sqlQuery name="NodeMetadataSpecCross">
+            <column name="property"/>
+            <column name="spec_property"/>
+            <column name="spec_value"/>
+            <sql>
+<![CDATA[
+    with mds as (
+ select distinct property, spec_property, spec_value
+  from ApidbTuning.MetadataSpec
+  where ( entity_type in 'person' or entity_type = 'dwelling')
+  and property not in  (select distinct property
+                                       from Apidbtuning.metadataspec
+                                     where lower(spec_value) = 'do not display'
+                                                       or lower(property) = 'rltshp' )
+  )
+  select mds.* from mds
+  union 
+   select property as property, 'parent' as spec_property, '' as spec_value
+    from (select spec_value as property from mds where spec_property = 'parent'
+           minus 
+          select property from mds where spec_property ='parent'
+          )
+        ]]>
+     </sql>
+   </sqlQuery>   
+
+ </querySet>
+
+</wdkModel>

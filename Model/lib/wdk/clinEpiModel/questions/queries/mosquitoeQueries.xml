@@ -1,0 +1,84 @@
+<wdkModel>
+
+  <!-- notes-->
+
+  <querySet name="LightTrapId" queryType="id" isCacheable="false" excludeProjects="TrichDB">
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!-- Source id  -->
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+     <sqlQuery name="LightTrapDataByMetadataCross"
+         isCacheable="true">
+      <paramRef ref="participantParams.start_date"/>
+      <paramRef ref="participantParams.end_date"/>
+      <paramRef ref="lighttrapParams.lighttraps_by_all_metadata" />
+      <column name="source_id"/>
+      <column name="ave_num_anoph"/>
+        <sql>
+          <![CDATA[
+     select lta.source_id, round(avg(SUM_FEMALE_AS_IN_A_COLLECTION),1) as ave_num_anoph
+       from apidbtuning.lighttrapattributes lta, apidbtuning.dwellingattributes da
+       where lta.source_id in  ($$lighttraps_by_all_metadata$$)
+       and da.source_id = lta.parent_id(+)
+       and lta.collection_date(+) >= to_date($$start_date$$, 'DD-MON-YYYY')
+       and lta.collection_date(+) <= to_date($$end_date$$, 'DD-MON-YYYY')
+       group by lta.source_id, da.subcounty_in_uganda
+            ]]>
+       </sql>
+    </sqlQuery>
+
+        <sqlQuery name="LightTrapDataByMetadataCross_"
+         isCacheable="true">
+      <paramRef ref="participantParams.start_date"/>
+      <paramRef ref="participantParams.end_date"/>
+      <paramRef ref="dwellingParams.dwellings_by_all_metadata"/>
+      <paramRef ref="mosquitoParams.lighttraps_by_all_metadata"/>
+      <column name="source_id"/>
+      <column name="ave_num_anoph"/>
+        <sql>
+          <![CDATA[
+           select lta.source_id, round(avg(SUM_FEMALE_AS_IN_A_COLLECTION),1) as ave_num_anoph
+       from apidbtuning.lighttrapattributes lta
+       where lta.source_id in  ($$lighttraps_by_all_metadata$$)
+       and lta.parent_id in ($$dwellings_by_all_metadata$$)
+       and lta.collection_date(+) >= to_date($$start_date$$, 'DD-MON-YYYY')
+       and lta.collection_date(+) <= to_date($$end_date$$, 'DD-MON-YYYY')
+       group by lta.source_id
+             ]]>
+       </sql>
+    </sqlQuery>
+
+
+    <sqlQuery name="CollectionsBySourceID"
+	      isCacheable="true">
+      <paramRef ref="lighttrapParams.collectionsBySourceID" />
+      <column name="source_id" />
+      <column name="project_id" />
+      <sql>
+
+	<![CDATA[select distinct lta.source_id, '@PROJECT_ID@' as project_id from APIDBTUNING.LIGHTTRAPATTRIBUTES lta,
+        ($$collectionsBySourceID$$) ds WHERE lta.source_id=ds.source_id]]>
+      </sql>
+    </sqlQuery>
+      
+    <sqlQuery name="LightTrapsByDwellingIds" doNotTest="true" displayName="ID" isCacheable="true">
+    <paramRef ref="dwellingParams.dwelling_result"/>
+        <column name="project_id"/>
+        <column name="source_id"/>
+        <column name="wdk_weight"/>
+
+        <sql>
+            <![CDATA[
+               SELECT DISTINCT pana.associated_node_source_id as source_id , '@PROJECT_ID@' as project_id, max(source_set.wdk_weight) as wdk_weight
+              FROM ($$dwelling_result$$) source_set, ApidbTuning.PANAssociations pana
+              where source_set.source_id = pana.node_source_id AND node_type='dwelling' and associated_node_type = 'light_trap_data'
+              GROUP BY pana.associated_node_source_id
+
+              
+             ]]>
+        </sql>
+    </sqlQuery>
+ 
+  </querySet>
+</wdkModel>

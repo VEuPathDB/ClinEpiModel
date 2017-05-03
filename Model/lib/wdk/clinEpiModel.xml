@@ -25,4 +25,30 @@
 
   <ontology name="Categories" pluginClass="org.gusdb.wdk.model.ontology.TestOntologyPlugin" useAsWdkCategories="true" />
 
+      <!-- Person record  -->
+    <import file="clinEpiModel/records/participantRecord.xml"/>
+    <import file="clinEpiModel/questions/queries/participantQueries.xml"/>
+    <import file="clinEpiModel/questions/participantQuestions.xml"/> 
+    <import file="clinEpiModel/questions/params/participantParams.xml"/>
+
+    <!-- Dwelling record -->
+    <import file="clinEpiModel/records/dwellingRecord.xml"/>
+    <import file="clinEpiModel/questions/queries/dwellingQueries.xml"/>
+    <import file="clinEpiModel/questions/dwellingQuestions.xml"/> 
+    <import file="clinEpiModel/questions/params/dwellingParams.xml"/>
+
+    <!-- Light Trap record -->
+    <import file="clinEpiModel/records/lightTrapRecord.xml"/>
+    <import file="clinEpiModel/questions/queries/mosquitoeQueries.xml"/>
+    <import file="clinEpiModel/questions/mosquitoeQuestions.xml"/> 
+    <import file="clinEpiModel/questions/params/mosquitoParams.xml"/>
+    <import file="clinEpiModel/questions/params/lighttrapParams.xml"/>
+
+
+    <!-- Clinical Visits record -->
+    <import file="clinEpiModel/records/clinicalVisitRecord.xml"/>
+    <import file="clinEpiModel/questions/queries/clinicalVisitQueries.xml"/>
+    <import file="clinEpiModel/questions/clinicalVisitQuestions.xml"/> 
+    <import file="clinEpiModel/questions/params/clinicalVisitParams.xml"/>
+
 </wdkModel>

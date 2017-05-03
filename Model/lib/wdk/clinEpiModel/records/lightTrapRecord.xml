@@ -1,0 +1,351 @@
+<wdkModel>
+    <recordClassSet name="LightTrapRecordClasses">
+
+      <recordClass name="LightTrapRecordClass" urlName="light-trap" displayName="Light Trap Collection"> 
+
+
+            <!-- primary key definition -->
+            <primaryKeyAttribute name="primary_key"
+                                 displayName="Collection Barcode">
+                <columnRef>source_id</columnRef>
+                <text>
+                    <![CDATA[
+                      $$source_id$$
+                    ]]>
+                </text>                
+            </primaryKeyAttribute>
+	     <!-- =============================================================== -->
+      <!--  Step Analysis Plugins -->
+      <!-- =============================================================== -->
+
+             <stepAnalysisRef name="light-trap-plots" excludeProjects="EuPathDB"/> 
+
+      <!-- =============================================================== -->
+      <!--   Reporters -->  
+      <!-- =============================================================== -->
+
+          <reporter name="tabular" displayName="Summary - tab delimited"
+                    implementation="org.gusdb.wdk.model.report.TabularReporter"/>
+
+          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables" 
+                    implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
+
+      <!-- =================================================================== -->
+      <!--  Text Attributes  ++++++++-->
+      <!-- =================================================================== -->
+  <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB" internal="true" inReportMaker="false">
+    <text>
+      <![CDATA[
+       Lighttrap <i>$$source_id$$<i> from household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$parent_id$$">$$parent_id$$</a> in $$subcounty_in_uganda$$ subcounty.
+]]>
+    </text>
+  </textAttribute>
+	  <attributeQueryRef ref="LightTrapAttributes.All">
+         <columnAttribute name="source_id" inReportMaker="false"/>
+<columnAttribute name="anopheles_other" displayName="Anopheles Other"  help="Number of other female Anopheles species">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="date_of_visit" displayName="Date Of Visit"  help="Month and year">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="discparity" displayName="Discparity">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="enrollment_date" displayName="Enrollment Date"  help="Date household first enrolled in study">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="fed_a_funestus" displayName="Fed A. Funestus"  help="Number of female Anopheles funestus with a recent blood meal">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="fed_a_gambiae" displayName="Fed A. Gambiae"  help="Number of female Anopheles gambiae with a recent blood meal">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="gravid_a_funestus" displayName="Gravid A. Funestus"  help="Number of gravid or semi-gravid Anopheles funestus">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="gravid_a_gambiae" displayName="Gravid A. Gambiae"  help="Number of gravid or semi-gravid Anopheles gambiae">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="nulliparous" displayName="Nulliparous">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="parent_id" displayName="Household ID">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="parous" displayName="Parous">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="subcounty_in_uganda" displayName="Subcounty In Uganda"  help="Subcounty in Uganda (Walukuba&lt;Jinja, Kihihi&lt;Kanungu, Nagongera&lt;Tororo)">
+              <plugin name="wordCloud" display="Word Cloud"
+                      description="Display the terms in the attribute as word clouds"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
+                      view="/wdk/jsp/results/wordCloud.jsp">
+                      <property name="min-word-length">1</property>
+                      <property name="common-words"></property>
+                      <property name="exclude-numbers">false</property>
+              </plugin>
+</columnAttribute>
+<columnAttribute name="sum_female_As_funestus_in_a_c" displayName="# A. Funestus"  help="Number of female Anopheles funestus collected">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="sum_female_As_gambiae_in_a_co" displayName="# A. Gambiae"  help="Number of female Anopheles gambiae collected">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="sum_female_As_in_a_collection" displayName="# Female Anopheles Collected"  help="Total # female Anopheles collected">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="total_anopheles_positive" displayName="Total Anopheles Positive"  help="Total number of Anopheles with Plasmodium sporozoites">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="total_anopheles_tested" displayName="Total Anopheles Tested"  help="Total number of Anopheles examined for sporozoites">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="unable_to_assess_a_funestus" displayName="Unable To Assess A. Funestus"  help="Number of Anopheles gambiae that could not be assessed">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="unable_to_assess_a_gambiae" displayName="Unable To Assess A. Gambiae"  help="Number of Anopheles funestus that could not be assessed">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="unfed_a_funestus" displayName="Unfed A. Funestus"  help="Number of female Anopheles funestus without a recent blood meal">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+<columnAttribute name="unfed_a_gambiae" displayName="Unfed A. Gambiae"  help="Number of female Anopheles gambiae without a recent blood meal">
+                            <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+</columnAttribute>
+</attributeQueryRef>
+
+
+        <table name="Characteristics"
+               displayName="Lighttrap Characteristics"
+               queryRef="LightTrapTables.Characteristics">
+
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
+             <columnAttribute name="parent_category" displayName="Category"/>
+            <columnAttribute name="category" displayName="Characteristic"/>
+            <columnAttribute name="value" displayName="Value"/>
+        </table>
+<!--
+        <table name="UnCategorisedCharacteristics"
+               displayName="Lighttrap Characteristics"
+               queryRef="LightTrapTables.UnCategorisedCharacteristics">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="category" displayName="Category"/>
+            <columnAttribute name="value" displayName="Value"/>
+        </table>
+-->
+    </recordClass>
+    </recordClassSet>
+
+
+
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+      <!-- Attribute queries -->  
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <querySet name="LightTrapAttributes" queryType="attribute" doNotTest="true"  
+              isCacheable='false'
+              excludeProjects="TrichDB">
+      
+      <testRowCountSql>
+select count(*) from apidbtuning.LightTrapAttributes
+       </testRowCountSql>
+       <sqlQuery name="All" isCacheable="false">
+         <column name="source_id"/>
+         <column name="name"/>
+<column name="anopheles_other"/>
+<column name="date_of_visit"/>
+<column name="discparity"/>
+<column name="enrollment_date"/>
+<column name="fed_a_funestus"/>
+<column name="fed_a_gambiae"/>
+<column name="gravid_a_funestus"/>
+<column name="gravid_a_gambiae"/>
+<column name="nulliparous"/>
+<column name="parent_id"/>
+<column name="parous"/>
+<column name="subcounty_in_uganda"/>
+<column name="sum_female_As_funestus_in_a_c"/>
+<column name="sum_female_As_gambiae_in_a_co"/>
+<column name="sum_female_As_in_a_collection"/>
+<column name="total_anopheles_positive"/>
+<column name="total_anopheles_tested"/>
+<column name="unable_to_assess_a_funestus"/>
+<column name="unable_to_assess_a_gambiae"/>
+<column name="unfed_a_funestus"/>
+<column name="unfed_a_gambiae"/>
+
+         <sql>
+            <![CDATA[
+select distinct lta.*, to_char(collection_date,'dd-Mon-YYYY') as cdate 
+	          from ApidbTuning.LightTrapAttributes lta
+            ]]>
+       </sql>
+       </sqlQuery>
+    </querySet>
+
+
+    <querySet name="LightTrapTables" queryType="table" 
+              isCacheable='false'
+              excludeProjects="TrichDB">
+      
+      <sqlQuery name="Characteristics"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="name"/>
+            <column name="parent_category"/>
+            <column name="category"/>
+            <column name="value"/>
+       <sql>
+          <![CDATA[
+   select distinct 
+                 anc.source_id, 
+                 anc.source_id as name,
+                 anc.value,
+                 pc.parent_category,
+                nvl(os.ontology_synonym,anc.category) as category
+            from ApidbTuning.AppNodeCharacteristics anc
+                 ,ApidbTuning.MetaDataSpec mds
+                 ,Sres.OntologySynonym os
+                 ,( select listagg(display.spec_value,' : ') within group (order by tier desc) as parent_category,
+                           root as ontology_term_id
+                      from ( select distinct property as term, 
+                                             ontology_term_id, 
+                                             spec_value as parent_term,
+                                             connect_by_root ontology_term_id as root,
+                                             to_number(level) as  tier
+                               from (select * from apidbtuning.metadataspec  where spec_property = 'parent' ) mds
+                              start with property in ( select distinct property from ApidbTuning.metadataspec where spec_property = 'leaf' )
+                            connect by prior spec_value = property
+                            )mds, 
+                            (select distinct property,
+                                             ontology_term_id,
+                                             spec_value 
+                              from ApidbTuning.metadataspec 
+                             where spec_property = 'display' )display
+                    where tier != 1 
+                      and mds.ontology_term_id = display.ontology_term_id
+                    group by root) pc
+                    
+              where anc.type = 'light_trap_data'
+             and anc.category = mds.property
+             and anc.category != 'parent_id'
+             and anc.category != 'information content entity'
+              and lower(os.ontology_synonym) not like '%do not display%'
+              and lower(anc.category) not like '%do not display%'
+             and anc.ontology_term_id = os.ontology_term_id (+)
+             and pc.ontology_term_id(+) = anc.ontology_term_id
+                       union
+           select distinct source_id,
+                  source_id as name,
+                  value,
+                  'dwelling' as parent_category,
+                  'household id' as category
+            from ApidbTuning.AppNodeCharacteristics
+           where category = 'parent_id'
+           and type = 'light_trap_data'
+           order by source_id, parent_category, category
+            ]]>
+        </sql>
+      </sqlQuery>
+<!--      
+      <sqlQuery name="UnCategorisedCharacteristics"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="name"/>
+            <column name="category"/>
+            <column name="value"/>
+            <sql>
+            <![CDATA[
+              select distinct
+                 anc.source_id,
+                 anc.source_id as name,
+                 anc.value,
+                 anc.category
+            from ApidbTuning.AppNodeCharacteristics anc
+                 ,ApidbTuning.MetaDataSpec mds
+           where anc.type = 'light_trap_data'
+             and anc.category = mds.property
+             and mds.spec_property = 'categorized'
+             and mds.spec_value = 'false'
+             and anc.category != 'parent_id'
+           order by source_id, category
+
+            ]]>
+            </sql>
+        </sqlQuery>
+-->
+
+    </querySet>
+
+</wdkModel>

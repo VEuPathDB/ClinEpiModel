@@ -1,0 +1,149 @@
+<wdkModel>
+
+  <questionSet name="DwellingQuestions" displayName="Search for Dwellings" excludeProjects="TrichDB">
+
+    <!-- ************************************************************ -->
+    <!-- Characteristics -->  
+    <!-- ************************************************************ -->
+
+
+   <question name="DwellingsByCharacteristicIntersection" newBuild="22"
+              searchCategory="Dwelling"
+              displayName="Dwelling and Participant Details"
+              shortDisplayName="Dwelling Details"
+              queryRef="DwellingId.DwellingsByMetadataCross" 
+              recordClassRef="DwellingRecordClasses.DwellingRecordClass">
+
+
+
+        <attributesList 
+            summary="subcounty_in_uganda,ave_num_anoph,num_residents_in_dwelling,lt_graph"        
+        /> 
+
+
+	<dynamicAttributes>
+	     <columnAttribute name="ave_num_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time frame specified" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+            <columnAttribute internal="true" inReportMaker="false" name="start_date"/>
+            <columnAttribute internal="true" inReportMaker="false" name="end_date"/>
+             <textAttribute name="lt_graph" displayName="Mosquito Collections" inReportMaker="false" truncateTo="100000">
+                <text>
+                   <![CDATA[
+                   <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=$$primary_key$$&enddate=$$end_date$$&startdate=$$start_date$$&type=DwellingLightTrap&fmt=png&thumb=1"/>
+                    ]]>
+                </text>
+             </textAttribute>
+        </dynamicAttributes>
+            
+
+        <summary>
+            <![CDATA[ 
+           Find dwellings based on dwelling and participant details.
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <description>
+            <![CDATA[
+             Find dwellings based on details of the dwelling itself and the participants participants who live there. 
+            ]]>
+        </description>
+ 
+    </question>
+
+    <!--Find records by Source ID-->
+   <question name="DwellingsBySourceID" newBuild="22"
+              searchCategory="Dwelling"
+              displayName="Dwelling ID"
+              shortDisplayName="Dwelling ID"
+              queryRef="DwellingId.DwellingsBySourceID" 
+              recordClassRef="DwellingRecordClasses.DwellingRecordClass"
+             >
+        <attributesList 
+            summary="source_id"
+                  /> 
+
+        <summary>
+            <![CDATA[ 
+           Find Households based on Sourcd ID.
+            ]]>
+        </summary>
+
+        <description
+>
+            <![CDATA[
+             Find households based on Source ID. <br />
+            ]]>
+        </description>
+    </question>
+   
+   <question name="DwellingsByParticipantId"   newBuild="1" 
+              displayName="Transform to Dwellings"
+              shortDisplayName="participant->dwelling"
+              queryRef="DwellingId.DwellingsByParticipantIds" 
+              recordClassRef="DwellingRecordClasses.DwellingRecordClass"
+              noSummaryOnSingleRecord="true">
+ 
+        <attributesList 
+            summary="subcounty_in_uganda,participants,participant_count"   
+            sorting ="participant_count desc"
+        /> 
+
+	<dynamicAttributes>
+	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this dwelling" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="participants" displayName="Participants Transformed" help="list of participant ids from transformed result set associated with this dwelling " align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	</dynamicAttributes>
+
+             <summary>
+             Find dwelling by participants who are household members.
+             </summary>
+
+             <description>
+               <![CDATA[
+              Find dwelling by participants who are household members.
+               ]]>
+             </description>
+    </question>
+    
+    <question name="DwellingsByLightTrapId"   newBuild="1"
+              displayName="Transform to Dwellings"
+              shortDisplayName="lighttrap->dwelling"
+              queryRef="DwellingId.DwellingsByLightTrapIds"
+              recordClassRef="DwellingRecordClasses.DwellingRecordClass"
+              noSummaryOnSingleRecord="true">
+    
+    <attributesList
+            summary="subcounty_in_uganda,average_number_of_female_anop,num_residents_in_dwelling"
+            sorting ="subcounty_in_uganda desc,average_number_of_female_anop desc"
+        />
+
+             <summary>
+             Find dwellings by light trap collections from the dwelling.
+             </summary>
+
+             <description>
+               <![CDATA[
+              Find dwellings by light trap collections from the dwelling.
+               ]]>
+             </description>
+    </question>
+  
+
+  </questionSet>
+</wdkModel>
