@@ -6,15 +6,17 @@
 
 
             <!-- primary key definition -->
-            <primaryKeyAttribute name="primary_key"
-                                 displayName="Participant Id">
+            <primaryKey aliasQueryRef="ParticipantAttributes.ParticipantAlias">
                 <columnRef>source_id</columnRef>
+            </primaryKey>
+
+            <idAttribute name="primary_key" displayName="Participant Id">
                 <text>
                     <![CDATA[
                       $$source_id$$
                     ]]>
                 </text>                
-            </primaryKeyAttribute>
+            </idAttribute>
 
            
 
@@ -37,10 +39,10 @@
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
-          <reporter name="tabular" displayName="Summary - tab delimited"
+          <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
                     implementation="org.gusdb.wdk.model.report.TabularReporter"/>
 
-          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables" 
+          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
 
     <!--
@@ -66,7 +68,6 @@
              </text>
           </textAttribute>
         <attributeQueryRef ref="ParticipantAttributes.All">
-        <columnAttribute name="source_id" inReportMaker="false"/>
         <columnAttribute name="name" inReportMaker="false"/>
 <columnAttribute name="a_thalassemia_genotype" displayName="A-thalassemia Genotype">
               <plugin name="wordCloud" display="Word Cloud"
@@ -355,6 +356,16 @@
       <testRowCountSql>
 select count(*) from apidbtuning.PersonAttributes
        </testRowCountSql>
+
+       <sqlQuery name="ParticipantAlias" doNotTest="true">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="old_source_id"/>
+         <column name="old_project_id"/>
+         <sql>
+             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.PersonAttributes
+         </sql>
+       </sqlQuery>
 
        <sqlQuery name="All" isCacheable="false">
          <column name="source_id"/>

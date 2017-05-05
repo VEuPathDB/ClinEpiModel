@@ -5,15 +5,17 @@
 
 
             <!-- primary key definition -->
-            <primaryKeyAttribute name="primary_key"
-                                 displayName="Visit Id">
-                <columnRef>source_id</columnRef>
+            <primaryKey aliasQueryRef="ClinicalVisitAttributes.VisitsAlias">
+              <columnRef>source_id</columnRef>
+            </primaryKey>
+
+            <idAttribute name="primary_key" displayName="Visit Id">
                 <text>
                     <![CDATA[
                       $$source_id$$
                     ]]>
-                </text>                
-            </primaryKeyAttribute>
+                </text>
+            </idAttribute>
      
 
            <attributesList summary="visit_date,parent_id,visit_type"       
@@ -29,10 +31,10 @@
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
-          <reporter name="tabular" displayName="Summary - tab delimited"
+          <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
                     implementation="org.gusdb.wdk.model.report.TabularReporter"/>
       
-          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables" 
+          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
 
 
@@ -50,7 +52,6 @@
           </textAttribute>
 
 	  <attributeQueryRef ref="ClinicalVisitAttributes.All">
-         <columnAttribute name="source_id" inReportMaker="false"/>
          <columnAttribute name="name" inReportMaker="false"/>
          <columnAttribute name="visit_date" />
 <columnAttribute name="abdominal_pain" displayName="Abdominal Pain"  help="Pain perceived to originate in the abdomen">
@@ -575,6 +576,15 @@
       <testRowCountSql>
 select count(*) from apidbtuning.ClinicalVisitAttributes
        </testRowCountSql>
+       <sqlQuery name="VisitsAlias" doNotTest="true">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="old_source_id"/>
+         <column name="old_project_id"/>
+         <sql>
+             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ClinicalVisitAttributes
+         </sql>
+       </sqlQuery>
        <sqlQuery name="All" isCacheable="false">
          <column name="source_id"/>
          <column name="name"/>

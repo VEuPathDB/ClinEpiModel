@@ -5,15 +5,17 @@
 
 
             <!-- primary key definition -->
-            <primaryKeyAttribute name="primary_key"
-                                 displayName="Collection Barcode">
+            <primaryKey aliasQueryRef="LightTrapAttributes.LightTrapAlias">
                 <columnRef>source_id</columnRef>
+              </primaryKey>
+
+              <idAttribute name="primary_key" displayName="Collection Barcode">
                 <text>
                     <![CDATA[
                       $$source_id$$
                     ]]>
                 </text>                
-            </primaryKeyAttribute>
+            </idAttribute>
 	     <!-- =============================================================== -->
       <!--  Step Analysis Plugins -->
       <!-- =============================================================== -->
@@ -24,10 +26,10 @@
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
-          <reporter name="tabular" displayName="Summary - tab delimited"
+          <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
                     implementation="org.gusdb.wdk.model.report.TabularReporter"/>
 
-          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables" 
+          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
 
       <!-- =================================================================== -->
@@ -191,7 +193,6 @@
                displayName="Lighttrap Characteristics"
                queryRef="LightTrapTables.Characteristics">
 
-            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="name"  inReportMaker="false" internal="true"/>
              <columnAttribute name="parent_category" displayName="Category"/>
             <columnAttribute name="category" displayName="Characteristic"/>
@@ -222,6 +223,15 @@
       <testRowCountSql>
 select count(*) from apidbtuning.LightTrapAttributes
        </testRowCountSql>
+       <sqlQuery name="LightTrapAlias" doNotTest="true">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="old_source_id"/>
+         <column name="old_project_id"/>
+         <sql>
+             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.LightTrapAttributes
+         </sql>
+       </sqlQuery>
        <sqlQuery name="All" isCacheable="false">
          <column name="source_id"/>
          <column name="name"/>

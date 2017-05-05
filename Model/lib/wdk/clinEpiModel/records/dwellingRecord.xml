@@ -5,15 +5,17 @@
 
 
             <!-- primary key definition -->
-            <primaryKeyAttribute name="primary_key"
+            <primaryKey aliasQueryRef="DwellingAttributes.DwellingAlias">
+              <columnRef>source_id</columnRef>
+            </primaryKey>
+            <idAttribute name="primary_key"
                                  displayName="Household Id">
-                <columnRef>source_id</columnRef>
                 <text>
                     <![CDATA[
                       $$source_id$$
                     ]]>
                 </text>                
-            </primaryKeyAttribute>
+            </idAttribute>
         
             <attributesList summary="subcounty_in_uganda,num_anopheles_collections,average_number_of_female_anop"
                             sorting="subcounty_in_uganda DESC"         
@@ -33,10 +35,10 @@
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
-          <reporter name="tabular" displayName="Summary - tab delimited"
+          <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
                     implementation="org.gusdb.wdk.model.report.TabularReporter"/>
 
-          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables" 
+          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
 
       <!-- =================================================================== -->
@@ -67,7 +69,6 @@
                 </text>
              </textAttribute>
 -->
-            <columnAttribute name="source_id" inReportMaker="false"/>
         <columnAttribute name="name" inReportMaker="false"/>
 <columnAttribute name="num_acres" displayName="# Acres"  help="Size of property (in acres)">
                             <plugin name="histogram" display="Histogram"
@@ -482,6 +483,15 @@
       <testRowCountSql>
 select count(*) from apidbtuning.DwellingAttributes
        </testRowCountSql>
+       <sqlQuery name="DwellingAlias" doNotTest="true">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="old_source_id"/>
+         <column name="old_project_id"/>
+         <sql>
+             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.DwellingAttributes
+         </sql>
+       </sqlQuery>
        <sqlQuery name="All" isCacheable="false">
          <column name="source_id"/>
          <column name="name"/>
