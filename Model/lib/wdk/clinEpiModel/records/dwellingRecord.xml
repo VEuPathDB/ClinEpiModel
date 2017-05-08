@@ -28,7 +28,7 @@
 
       <summaryView name="isolate-view" display="Dwellings Geographical Location"
             jsp="/wdkCustomization/jsp/results/dwelling-geographical-view.jsp"
-          handlerClass="org.apidb.apicommon.model.view.GeoDwellingViewHandler"/>
+          handlerClass="org.clinepi.model.view.GeoDwellingViewHandler"/>
 
 
       <!-- =============================================================== -->

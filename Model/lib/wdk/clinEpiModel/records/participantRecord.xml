@@ -26,7 +26,7 @@
 
       <summaryView name="isolate-view" display="Participants Geographical Location"
             jsp="/wdkCustomization/jsp/results/participant-geographical-view.jsp"
-          handlerClass="org.apidb.apicommon.model.view.GeoParticipantViewHandler"/>
+          handlerClass="org.clinepi.model.view.GeoParticipantViewHandler"/>
 
       <!-- =============================================================== -->
       <!--  Step Analysis Plugins -->
