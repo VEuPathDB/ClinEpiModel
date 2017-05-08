@@ -4,77 +4,11 @@
     <viewConfig prefix="/wdkCustomization/jsp/analysis/" suffix=".jsp"/>
     <executionConfig threadPoolSize="25" fileStoreDirectory="@STEP_ANALYSIS_JOB_DIR@"/>
 
-    <stepAnalysisPlugin
-        name="go-enrichment" displayName="Gene Ontology Enrichment"
-        customThumbnail="wdkCustomization/images/go-analysis-logo.png"
-        releaseVersion="22"
-        formViewName="goEnrichmentForm"
-        analysisViewName="goEnrichmentResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.GoEnrichmentPlugin">
-      <shortDescription>
-        <![CDATA[
-          Find Gene Ontology terms that are enriched in your gene result.
-        ]]>
-      </shortDescription>
-      <description>
-        <![CDATA[
-          <p>The Gene Ontology (GO) is a public resource that develops organism 
-            independent ontologies (structured controlled vocabularies) that describe 
-            a gene&rsquo;s molecular function, cellular component or biological processes. 
-            GO Terms are associated with genes as a form of annotation. 
-            This tool looks for enriched GO terms &#8212; GO terms that appear in the genes of 
-            your search result (subset) more frequently than they do in the set of all genes 
-            for that organism (background).
-           </p>
-           <p>For statistical reasons, this analysis can only be performed on a set of genes 
-             from a single organism. If your gene result contains genes from several organisms, 
-             use the Filter Table to limit your gene result. Then choose an Ontology, a GO Association 
-             Source, and a P-Value Cutoff and click Submit.
-           </p>
-           <p>Hover over the help icon <img data-assets-src='wdk/images/question.png'/> 
-             next to each parameter for more information about that parameter.
-           </p>
-        ]]>
-      </description>
-      <property name="goTermPageUrl"><![CDATA[%%goTermPageUrl%%]]></property>
-    </stepAnalysisPlugin>
-
-    <stepAnalysisPlugin
-        name="pathway-enrichment" displayName="Metabolic Pathway Enrichment"
-        customThumbnail="wdkCustomization/images/pathway-analysis-logo2.png"
-        releaseVersion="22"
-        formViewName="pathwayEnrichmentForm"
-        analysisViewName="pathwayEnrichmentResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.PathwaysEnrichmentPlugin">
-      <shortDescription>
-        <![CDATA[
-          Find Metabolic Pathways that are enriched in your Genes result.
-        ]]>
-      </shortDescription>
-      <description/>
-      <property name="pathwayPageUrl"><![CDATA[showRecord.do?name=PathwayRecordClasses.PathwayRecordClass&amp;project_id=@PROJECT_ID@&amp;source_id=]]></property>
-    </stepAnalysisPlugin>
-
-    <stepAnalysisPlugin
-        name="word-enrichment" displayName="Word Enrichment"
-        customThumbnail="wdkCustomization/images/word-analysis-logo.png"
-        releaseVersion="22"
-        formViewName="wordEnrichmentForm"
-        analysisViewName="wordEnrichmentResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.WordEnrichmentPlugin">
-      <shortDescription>
-        <![CDATA[
-          Find words (from the product description)  that are enriched in your Genes result.
-        ]]>
-      </shortDescription>
-      <description/>
-     </stepAnalysisPlugin>
-
      <stepAnalysisPlugin
         name="person-graph-analysis" displayName="Graph Person Results"
         releaseVersion="1"
-        analysisViewName="apiExternalAnalysisResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.ApiExternalAnalyzer">
+        analysisViewName="eupathExternalAnalysisResult"
+        analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
         <![CDATA[
                  Graph utilizing R and shiny the results in this step.
@@ -82,7 +16,7 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/App-2-ps]]></property>
-      <property name="columnsToExtract">source_id,avg_hemo,avg_weight,ave_anoph,ave_para_density,visits_per_year_obs,visit_count,time_of_obs,ave_age_visit,age_since_birth_at_time_of_en,a_thalassemia_genotype,avg_parasite_density__asympto,avg_parasite_density__malaria,subcounty_in_uganda,g6pd_genotype,hbs_genotype,avg_annual_visits_with__asymp,avg_annual_visits_with__malar,sex</property>
+      <property name="attributesToExtract">source_id,avg_hemo,avg_weight,ave_anoph,ave_para_density,visits_per_year_obs,visit_count,time_of_obs,ave_age_visit,age_since_birth_at_time_of_en,a_thalassemia_genotype,avg_parasite_density__asympto,avg_parasite_density__malaria,subcounty_in_uganda,g6pd_genotype,hbs_genotype,avg_annual_visits_with__asymp,avg_annual_visits_with__malar,sex</property>
       <property name="addHeader">true</property>
     </stepAnalysisPlugin>     
 
@@ -90,8 +24,8 @@
 <stepAnalysisPlugin
         name="light-trap-plots" displayName="Total Anopheles graphed by Month Year"
         releaseVersion="1"
-        analysisViewName="apiExternalAnalysisResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.ApiExternalAnalyzer">
+        analysisViewName="eupathExternalAnalysisResult"
+        analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
         <![CDATA[
           Plot a graph of # mosquito collections of this result
@@ -99,15 +33,15 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/App-3-lts]]></property>
-      <property name="columnsToExtract">source_id,sum_female_As_in_a_collection,sum_female_As_gambiae_in_a_co,sum_female_As_funestus_in_a_c,total_anopheles_tested,total_anopheles_positive,subcounty_in_uganda,date_of_visit,gravid_a_gambiae,gravid_a_funestus,parous,nulliparous</property>
+      <property name="attributesToExtract">source_id,sum_female_As_in_a_collection,sum_female_As_gambiae_in_a_co,sum_female_As_funestus_in_a_c,total_anopheles_tested,total_anopheles_positive,subcounty_in_uganda,date_of_visit,gravid_a_gambiae,gravid_a_funestus,parous,nulliparous</property>
       <property name="addHeader">true</property>
     </stepAnalysisPlugin>
 
 <stepAnalysisPlugin
         name="clinical-visit-dist" displayName="Number of Visits Distribution"
         releaseVersion="1"
-        analysisViewName="apiExternalAnalysisResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.ApiExternalAnalyzer">
+        analysisViewName="eupathExternalAnalysisResult"
+        analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
         <![CDATA[
           Plot a graph of # of visits distribution of this result
@@ -115,92 +49,8 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/App-1-cv]]></property>
-      <property name="columnsToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property>
+      <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property>
       <property name="addHeader">true</property>
-    </stepAnalysisPlugin>
-
-    <!-- ============================================================================= -->
-    <!-- ========== PLUGINS BELOW ARE FOR TESTING AND SHOULD NOT BE REMOVED ========== -->
-    <!-- ============================================================================= -->
-
-    <stepAnalysisPlugin
-        name="transcript-length-dist" displayName="Number of Visits Distribution"
-        releaseVersion="1"
-        analysisViewName="externalAnalysisResult"
-        analyzerClass="org.gusdb.wdk.model.analysis.ExternalAnalyzer">
-      <shortDescription>
-        <![CDATA[
-          Plot a graph of # of visits distribution of this result
-        ]]>
-      </shortDescription>
-      <description/>
-      <property name="externalAppUrl"><![CDATA[http://localhost:7000/]]></property>
-      <property name="columnsToExtract">visits_per_year,total_visits</property>
-      <property name="addHeader">false</property>
-    </stepAnalysisPlugin>
-
-    <stepAnalysisPlugin
-        name="long-running-test" displayName="Long Running Test"
-        releaseVersion="1"
-        formViewName="defaultAnalysisForm"
-        analysisViewName="defaultAnalysisResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.LongRunningTestPlugin">
-      <shortDescription>
-        <![CDATA[
-          This plugin tests long-running processes!
-        ]]>
-      </shortDescription>
-      <description>
-        <![CDATA[
-          Run run run forever more!
-        ]]>
-      </description>
-    </stepAnalysisPlugin>
-
-    <stepAnalysisPlugin name="result-counter" displayName="Result Counter"
-        releaseVersion="1"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.ResultCounterPlugin">
-      <shortDescription>
-        <![CDATA[
-          A test plugin to count number of records in this result.
-        ]]>
-      </shortDescription>
-      <description/>
-    </stepAnalysisPlugin>
-
-    <stepAnalysisPlugin name="form-test" displayName="Form Tester"
-        releaseVersion="1"
-        formViewName="formTestFormView" analysisViewName="defaultAnalysisResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.FormTestPlugin">
-      <shortDescription>
-        <![CDATA[
-          A test plugin to create, reset, verify, and display form params.
-        ]]>
-      </shortDescription>
-      <description/>
-    </stepAnalysisPlugin>
-
-    <stepAnalysisPlugin name="process-test" displayName="Process Tester"
-        releaseVersion="1"
-        formViewName="processTestFormView" analysisViewName="defaultAnalysisResult"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.ListProcessPlugin">
-      <shortDescription>
-        <![CDATA[
-          A test plugin to easily run a unix process from a plugin.
-        ]]>
-      </shortDescription>
-      <description/>
-    </stepAnalysisPlugin>
-
-    <stepAnalysisPlugin name="checkbox-tree-test" displayName="Checkbox Tree Tester"
-        releaseVersion="1" formViewName="checkboxTreeTestFormView"
-        analyzerClass="org.apidb.apicommon.model.stepanalysis.CheckboxTreeTestPlugin">
-      <shortDescription>
-        <![CDATA[
-          A test plugin to test using a checkbox tree as a form param.
-        ]]>
-      </shortDescription>
-      <description/>
     </stepAnalysisPlugin>
 
   </stepAnalysisPlugins>

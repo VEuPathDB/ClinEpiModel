@@ -40,7 +40,7 @@
       <!-- =============================================================== -->
 
           <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
-                    implementation="org.gusdb.wdk.model.report.TabularReporter"/>
+                    implementation="org.gusdb.wdk.model.report.AttributesTabularReporter"/>
 
           <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>

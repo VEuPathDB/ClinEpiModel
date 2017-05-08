@@ -27,7 +27,7 @@
       <!-- =============================================================== -->
 
           <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
-                    implementation="org.gusdb.wdk.model.report.TabularReporter"/>
+                    implementation="org.gusdb.wdk.model.report.AttributesTabularReporter"/>
 
           <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
@@ -43,7 +43,6 @@
     </text>
   </textAttribute>
 	  <attributeQueryRef ref="LightTrapAttributes.All">
-         <columnAttribute name="source_id" inReportMaker="false"/>
 <columnAttribute name="anopheles_other" displayName="Anopheles Other"  help="Number of other female Anopheles species">
                             <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
