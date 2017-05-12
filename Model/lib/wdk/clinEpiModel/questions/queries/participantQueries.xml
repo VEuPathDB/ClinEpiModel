@@ -24,6 +24,69 @@
         </sql>
      </sqlQuery>
 
+     
+     <sqlQuery name="ParticipantsByCharSteps"
+          isCacheable="true">
+       <paramRef ref="clinicalVisitParams.minAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
+       <paramRef ref="clinicalVisitParams.maxAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
+       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
+       <paramRef ref="participantParams.participants_dwellings_nf" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_by_metadata" groupRef="metaDataGroups.visit_characteristics"/>
+       <paramRef ref="participantParams.min_anoph" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.max_anoph" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.min_para_density" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.max_para_density" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.min_visits" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.max_visits" groupRef="metaDataGroups.summary_params"/>
+       <column name="source_id"/>
+       <column name="ave_anoph"/>
+       <column name="avg_hemo"/>
+       <column name="avg_weight"/>
+       <column name="ave_para_density"/>
+       <column name="ave_age_visit"/>
+       <column name="visit_count"/>
+       <column name="visits_per_year_obs"/>
+       <column name="time_of_obs"/>
+         <sql>
+           <![CDATA[
+                    select round(count(*) / (to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$,'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365),1) as visits_per_year_obs,
+                    round(to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365,1) as time_of_obs,
+                    count(*) as visit_count, pa.source_id, lt.ave_anoph, 
+   round(exp(avg(case when ASEXUAL_PARASITE_DENSITY > 0.0 then ln(ASEXUAL_PARASITE_DENSITY) else ln(0.00000000000001) end)),1) as ave_para_density,
+   round(avg(age_since_birth_at_time_of_vi),1) as ave_age_visit,
+   round(avg(hemoglobin),1) as avg_hemo,
+   round(avg(weight),1) as avg_weight
+ from APIDBTUNING.PERSONATTRIBUTES pa, apidbtuning.clinicalvisitattributes ca,
+      (select da.source_id as dwelling_id, round(avg(SUM_FEMALE_AS_IN_A_COLLECTION),1) as ave_anoph 
+        from apidbtuning.lighttrapattributes lta, apidbtuning.dwellingattributes da
+        where da.source_id in (select parent_id from ApidbTuning.PersonAttributes where source_id in ($$participants_by_all_metadata$$) ) 
+        and da.source_id = lta.parent_id(+)
+        and lta.collection_date(+) >= to_date($$start_date$$, 'DD-MON-YYYY')
+        and lta.collection_date(+) <= to_date($$end_date$$, 'DD-MON-YYYY')
+        group by da.source_id
+        having nvl(round(avg(lta.SUM_FEMALE_AS_IN_A_COLLECTION(+)),1),0) >= $$min_anoph$$ 
+        and nvl(round(avg(lta.SUM_FEMALE_AS_IN_A_COLLECTION(+)),1),0) <= $$max_anoph$$ ) lt,
+        (select CASE WHEN round($$maxAgeAtVisit$$) = $$maxAgeAtVisit$$ 
+            THEN $$maxAgeAtVisit$$ + 0.99
+            ELSE $$maxAgeAtVisit$$
+            END as max_age
+            from dual                    
+           ) ma
+ where pa.source_id in ($$participants_by_all_metadata$$)
+ and ca.source_id in ($$visits_by_metadata$$) 
+ and ca.parent_id = pa.source_id
+ and lt.dwelling_id = pa.parent_id
+ group by pa.source_id, lt.ave_anoph,max_age
+ having count(*) / (to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365) >= $$min_visits$$
+ and count(*) / (to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365) <= $$max_visits$$
+ and round(exp(avg(case when ASEXUAL_PARASITE_DENSITY > 0.0 then ln(ASEXUAL_PARASITE_DENSITY) else ln(0.00000000000001) end)),1) >= $$min_para_density$$
+ and round(exp(avg(case when ASEXUAL_PARASITE_DENSITY > 0.0 then ln(ASEXUAL_PARASITE_DENSITY) else ln(0.00000000000001) end)),1) <= $$max_para_density$$
+                ]]>   
+        </sql>
+     </sqlQuery>
+
      <sqlQuery name="ParticipantsByMetadataCross"
           isCacheable="true">
        <paramRef ref="clinicalVisitParams.minAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
