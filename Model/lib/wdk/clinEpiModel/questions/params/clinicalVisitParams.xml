@@ -30,6 +30,16 @@
       
     </datasetParam>
 
+      <filterParamNew name="visits_by_metadata_nf" 
+                      metadataQueryRef="ClinicalVisitVQ.ClinicalVisitMetadataNf"
+                      ontologyQueryRef="ClinicalVisitVQ.ClinicalVisitOntologyNf"
+                      prompt="ClinicalVisits"
+                      dependedParamRef="clinicalVisitParams.minAgeAtVisit,clinicalVisitParams.maxAgeAtVisit,participantParams.start_date,participantParams.end_date,participantParams.duration_observation"
+                      trimMetadataTerms="false">
+         <help>
+              Select reference samples. 
+         </help>
+       </filterParamNew>
 
     <filterParam name="visits_by_metadata"
                  queryRef="ClinicalVisitVQ.ClinicalVisits"
@@ -194,7 +204,6 @@
             <column name="value"/>
             <sql>
          <![CDATA[
-
    select c.source_id as term,
            c.ontology_term_source_id as property,
            (case when c.ontology_term_source_id in ( select distinct property 
@@ -277,6 +286,110 @@ select distinct * from (
         ]]>
      </sql>
    </sqlQuery>
+
+          <sqlQuery name="ClinicalVisitOntologyNf">
+         <paramRef ref="clinicalVisitParams.minAgeAtVisit" />
+         <paramRef ref="clinicalVisitParams.maxAgeAtVisit" />
+         <paramRef ref="participantParams.start_date" />
+         <paramRef ref="participantParams.end_date" />
+         <paramRef ref="participantParams.duration_observation" />  
+        <column name="ontology_term_name"/>
+        <column name="parent_ontology_term_name"/>
+        <column name="display_name"/>
+        <column name="description"/>
+        <column name="type"/>
+        <column name="units"/>
+        <column name="precision"/>
+        <column name="is_range"/>
+        <sql>
+           <![CDATA[
+select property as ontology_term_name, parent_ontology_term_name, display_name, description, units,
+CASE WHEN type is null THEN 'string' ELSE type END as type, 
+CASE WHEN range = 'range' THEN 1 ELSE 0 END as is_range, 
+CASE WHEN type = 'number' THEN 1 ELSE null END as precision 
+  from (
+            Select distinct mds.* from (
+  select distinct property, spec_property, spec_value
+  from ApidbTuning.MetadataSpec
+  where ( entity_type in 'clinical_visit_data')
+  and property not in  (select distinct property
+                                       from Apidbtuning.metadataspec
+                                     where lower(spec_value) = 'do not display'
+                                            or property in ('EUPATH_0000054', 'EUPATH_0000094','incidentmalaria','parent_id'))
+    union select spec_value as property, 'parent' as spec_property, '' as spec_value
+     from ApidbTuning.MetadataSpec
+  where ( entity_type = 'clinical_visit_data')
+  and spec_property = 'display'
+  and property not in  (select distinct property
+                                      from Apidbtuning.metadataspec
+                                     where spec_property = 'parent'))mds,
+  ( select property, nvl(spec_value, 9999999999) as ord_num from apidbtuning.metadataspec
+     where spec_property = 'order_num') ord_num
+     where mds.property = ord_num.property (+)
+     and mds.spec_property not like 'order_num'
+    order by to_number(ord_num), mds.property)
+        pivot(max(spec_value) for spec_property in ('parent' as parent_ontology_term_name, 'display' as display_name, 'description' as description, 
+    'type' as type, 'units' as units, 'filter' as range, 'categorized' as is_categorized))
+    ]]>   
+        </sql>
+          </sqlQuery>
+
+   <sqlQuery name="ClinicalVisitMetadataNf">
+      <paramRef ref="clinicalVisitParams.minAgeAtVisit" />
+      <paramRef ref="clinicalVisitParams.maxAgeAtVisit" />
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="participantParams.duration_observation" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select ids.term as internal, ids.property as ontology_term_name,
+CASE WHEN ms.spec_value = 'number' THEN ids.value ELSE null END as number_value,
+CASE WHEN ms.spec_value = 'number' THEN null ELSE value END as string_value,
+null as date_value
+from
+apidbtuning.metadataspec ms,
+ (select c.source_id as term,
+           c.ontology_term_source_id as property,
+           (case when c.ontology_term_source_id in ( select distinct property 
+                                     from apidbtuning.metadataspec
+                                    where spec_property = 'type'
+                                      and spec_value = 'date' )
+                then substr(c.value,1,4) || '-' || substr(c.value,5,2)|| '-' || substr(c.value,7,2)
+                else c.value
+            end) as value
+  from ApidbTuning.AppNodeCharacteristics c, ApidbTuning.ClinicalVisitAttributes ca, ApidbTuning.personAttributes pa,
+        (select CASE WHEN round($$maxAgeAtVisit$$) = $$maxAgeAtVisit$$ 
+            THEN $$maxAgeAtVisit$$ + 0.99
+            ELSE $$maxAgeAtVisit$$
+            END as max_age
+            from dual                    
+           ) ma
+where c.type = 'clinical_visit_data'
+and c.value is not null
+and c.category not in ('subcounty in uganda','household id')
+and c.ontology_term_source_id  in (select property 
+                         from ApidbTuning.MetadataSpec
+                    )
+         and c.source_id = ca.source_id
+         and ca.visit_date >= to_date($$start_date$$,'DD-MON-YYYY')
+         and ca.visit_date <= to_date($$end_date$$, 'DD-MON-YYYY')
+         and ca.age_since_birth_at_time_of_vi >= $$minAgeAtVisit$$
+         and ca.age_since_birth_at_time_of_vi <= ma.max_age
+         and ca.parent_id = pa.source_id
+         and least(to_date(pa.last_date_observed,'YYYYMMDD'), to_date($$end_date$$,'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( ma.max_age * 365)) - greatest(pa.app_date, to_date($$start_date$$,'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1 >= $$duration_observation$$
+         
+         ) ids
+         where ids.property = ms.property
+         and ms.spec_property = 'type'        
+         ]]>   
+      </sql>
+   </sqlQuery>
+          
   </querySet>    
 
 </wdkModel>

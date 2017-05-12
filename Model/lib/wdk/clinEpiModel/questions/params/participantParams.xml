@@ -363,8 +363,11 @@ select distinct * from (
         <column name="precision"/>
         <column name="is_range"/>
     <sql>
-select property as ontology_term_name, parent_ontology_term_name, display_name, description, type, units,
-CASE WHEN range = 'range' THEN 1 ELSE 0 END as is_range, 1 as precision from (
+select property as ontology_term_name, parent_ontology_term_name, display_name, description, units,
+CASE WHEN type is null THEN 'string' ELSE type END as type, 
+CASE WHEN range = 'range' THEN 1 ELSE 0 END as is_range, 
+CASE WHEN type = 'number' THEN 1 ELSE null END as precision
+from (
             Select distinct mds.* from (
   select distinct property as property, spec_property, spec_value
   from ApidbTuning.MetadataSpec
