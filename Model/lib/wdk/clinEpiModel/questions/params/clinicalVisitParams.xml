@@ -348,9 +348,9 @@ CASE WHEN type = 'number' THEN 1 ELSE null END as precision
       <sql>
         <![CDATA[
 select ids.term as internal, ids.property as ontology_term_name,
-CASE WHEN ms.spec_value = 'number' THEN ids.value ELSE null END as number_value,
-CASE WHEN ms.spec_value = 'number' THEN null ELSE value END as string_value,
-null as date_value
+cast(CASE WHEN ms.spec_value = 'number' THEN ids.value ELSE null END as number) as number_value,
+CASE WHEN ms.spec_value = 'string' THEN ids.value ELSE cast(null as varchar2(10)) END as string_value,
+cast(CASE WHEN ms.spec_value = 'date' THEN ids.value ELSE null END as date) as date_value
 from
 apidbtuning.metadataspec ms,
  (select c.source_id as term,
