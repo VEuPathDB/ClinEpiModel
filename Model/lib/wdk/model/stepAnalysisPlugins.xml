@@ -18,6 +18,8 @@
       <property name="externalAppUrl"><![CDATA[/shiny/App-2-ps]]></property>
       <property name="attributesToExtract">source_id,avg_hemo,avg_weight,ave_anoph,ave_para_density,visits_per_year_obs,visit_count,time_of_obs,ave_age_visit,age_since_birth_at_time_of_en,a_thalassemia_genotype,avg_parasite_density__asympto,avg_parasite_density__malaria,subcounty_in_uganda,g6pd_genotype,hbs_genotype,avg_annual_visits_with__asymp,avg_annual_visits_with__malar,sex</property>
       <property name="addHeader">true</property>
+      <property name="iframeWidthPx">1000</property>
+      <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>     
 
 
@@ -35,6 +37,8 @@
       <property name="externalAppUrl"><![CDATA[/shiny/App-3-lts]]></property>
       <property name="attributesToExtract">source_id,sum_female_As_in_a_collection,sum_female_As_gambiae_in_a_co,sum_female_As_funestus_in_a_c,total_anopheles_tested,total_anopheles_positive,subcounty_in_uganda,date_of_visit,gravid_a_gambiae,gravid_a_funestus,parous,nulliparous</property>
       <property name="addHeader">true</property>
+      <property name="iframeWidthPx">1000</property>
+      <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 
 <stepAnalysisPlugin
@@ -51,6 +55,8 @@
       <property name="externalAppUrl"><![CDATA[/shiny/App-1-cv]]></property>
       <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property>
       <property name="addHeader">true</property>
+      <property name="iframeWidthPx">1000</property>
+      <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 
   </stepAnalysisPlugins>
