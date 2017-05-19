@@ -25,6 +25,8 @@
 
   <ontology name="Categories" pluginClass="org.gusdb.wdk.model.ontology.TestOntologyPlugin" useAsWdkCategories="true" />
 
+    <import file="ebrcModelCommon.xml"/>
+
     <import file="model/stepAnalysisPlugins.xml"/>
 
       <!-- Person record  -->
