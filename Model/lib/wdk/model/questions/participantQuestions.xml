@@ -74,13 +74,17 @@
           
 
         <summary>
-            <![CDATA[ 
-           Find participants based on metadata characteristics.
+            <![CDATA[
+            In this search, you will build a set of Participants.  You can use the wealth of data in the PRISM study to find Participants with scientifically interesting patterns.
+            More here...
             ]]>
         </summary>
 
         <propertyList name="organism">
            <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="wizard">
+           <value>true</value>
         </propertyList>
         <description>
             <![CDATA[

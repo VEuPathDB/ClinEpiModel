@@ -61,7 +61,7 @@
  from APIDBTUNING.PERSONATTRIBUTES pa, apidbtuning.clinicalvisitattributes ca,
       (select da.source_id as dwelling_id, round(avg(SUM_FEMALE_AS_IN_A_COLLECTION),1) as ave_anoph 
         from apidbtuning.lighttrapattributes lta, apidbtuning.dwellingattributes da
-        where da.source_id in (select parent_id from ApidbTuning.PersonAttributes where source_id in ($$participants_by_all_metadata$$) ) 
+        where da.source_id in (select parent_id from ApidbTuning.PersonAttributes where source_id in ($$participants_dwellings_nf$$) ) 
         and da.source_id = lta.parent_id(+)
         and lta.collection_date(+) >= to_date($$start_date$$, 'DD-MON-YYYY')
         and lta.collection_date(+) <= to_date($$end_date$$, 'DD-MON-YYYY')
@@ -74,8 +74,8 @@
             END as max_age
             from dual                    
            ) ma
- where pa.source_id in ($$participants_by_all_metadata$$)
- and ca.source_id in ($$visits_by_metadata$$) 
+ where pa.source_id in ($$participants_dwellings_nf$$)
+ and ca.source_id in ($$visits_by_metadata_nf$$) 
  and ca.parent_id = pa.source_id
  and lt.dwelling_id = pa.parent_id
  group by pa.source_id, lt.ave_anoph,max_age
