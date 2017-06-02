@@ -463,56 +463,56 @@ and ms.spec_property = 'type'
 
       <groupSet name="metaDataGroups">
         
-        <group name="daterange" displayName="Choose participants based on date range and minimum days of observation (default is all participants)" displayType="ShowHide">
+        <group name="daterange" displayName="Time period" displayType="ShowHide">
             <description>
                 <![CDATA[
 Select the minimum and maximum dates (ie, the date range) to be considered in this search.  Also set the number of days that the participant was in the study (observed) over that date range.  Note: the observation time is impacted by the age range selected in the previous parameter. Data currently loaded ranges 05-AUG-2015 to 31-MAR-2015
                 ]]>
             </description>
         </group>
-        <group name="age_at_visit" displayName="Choose participants based on age (default is all children)" displayType="ShowHide">
+        <group name="age_at_visit" displayName="Age" displayType="ShowHide">
             <description>
                 <![CDATA[
 You can modify the age range of the participants at the time of their visits.  The defaults include all children in the study aged between 0.5 and 11 years, adults from 18 to 75 years of age.
                 ]]>
             </description>
         </group>
-        <group name="part_characteristics" displayName="Choose participants based on where they live and their characteristics such as genotype (default is all participants)" displayType="ShowHide">
+        <group name="part_characteristics" displayName="Personal characteristics" displayType="ShowHide">
             <description>
                 <![CDATA[
 You can restrict the participants returned in your search by selecting characteristics about where they live including their dwelling type and their own characteristics such as genotype information.
                 ]]>
             </description>
         </group>
-        <group name="visit_part_characteristics" displayName="Restrict visits based on participant characteristics such as where they live and their genotype (default is all participants)" displayType="ShowHide">
+        <group name="visit_part_characteristics" displayName="Dwellings" displayType="ShowHide">
             <description>
                 <![CDATA[
 You can restrict visits returned based on participants by selecting characteristics about where they live including their dwelling type and their own characteristics such as genotype information.
                 ]]>
             </description>
         </group>
-        <group name="visit_visit_characteristics" displayName="Select visits based on data from clinic visits such as type of visit and diagnosis (default is all visits)" displayType="ShowHide">
+        <group name="visit_visit_characteristics" displayName="Visit visits" displayType="ShowHide">
             <description>
                 <![CDATA[
 You can restrict the visits returned in your search by selecting characteristics such as the type of visit, diagnosis, visit tpye, etc.
                 ]]>
             </description>
         </group>
-        <group name="visit_characteristics" displayName="Restrict participants based on data from their clinic visits such as type of visit and diagnosis (default is all visits)" displayType="ShowHide">
+        <group name="visit_characteristics" displayName="Visits" displayType="ShowHide">
             <description>
                 <![CDATA[
 You can restrict the participants returned in your search by selecting characteristics of their clinical visits such as the type of their visit and their diagnosis at that visit.  Note that the numbers shown as you make selections are the number of visits selected, not the number of participants.
                 ]]>
             </description>
         </group>
-        <group name="summary_params" displayName="Choose participants based on summary data from the homes or visits selected above (default is all participants)" displayType="ShowHide">
+        <group name="summary_params" displayName="Vector aggregates" displayType="ShowHide">
             <description>
                 <![CDATA[
 You can further restrict the participants returned in your search by setting summary values such as the average number of mosquitos collected per month in their home, the average parasitemia of the visits they had or the number of visits matching the visit characteristics above.
                 ]]>
             </description>
         </group>
-        <group name="relative_visits" displayName="Set these parameters to restrict your visits based on these relative visits." displayType="ShowHide">
+        <group name="relative_visits" displayName="Relative visits" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can further restrict the visits you have selected above by removing (or keeping) those visits based on a relative visit you define below.  For example, you may want to only keep visits with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a visit where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove visits where diagnosis of malaria = yes.

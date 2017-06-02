@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="datasetPresenters.xslt"?>
+<!DOCTYPE datasetPresenters SYSTEM "datasetPresenters.dtd">
+<datasetPresenters>
+
+  <datasetPresenter name="taxonomy_RSRC"
+                    projectName="@PROJECT_ID@"
+                    >
+    <displayName><![CDATA[NCBI Taxonomy]]></displayName>
+    <shortDisplayName></shortDisplayName>
+    <displayCategory>Taxonomy and Phylogeny</displayCategory>
+    <summary></summary>
+    <description><![CDATA[
+        
+         The NCBI Taxonomy database is a curated set of names and classifications for all organisms that are represented in the Entrez databases. 
+         The Taxonomy database attempts to incorporate phylogenetic and taxonomic knowledge from a variety of sources, including the published literature,
+          web-based databases, and the advice of sequence submitters and outside taxonomy experts. 
+      ]]></description>
+    <usage>EuPathDB provides a link to an organism's NCBI Taxonomy record from our Data Summary table. </usage>
+    <protocol></protocol>
+    <caveat></caveat>
+    <acknowledgement></acknowledgement>
+    <releasePolicy></releasePolicy>
+    <primaryContactId>taxon</primaryContactId>
+    <link>
+      <text>Download taxonomy information</text>
+      <url><![CDATA[ftp://ftp.ncbi.nih.gov/pub/taxonomy//]]></url>
+    </link>
+    <link>
+      <text>The Taxonomy Database of the National Center for Biotechnology Information</text>
+      <url><![CDATA[http://www.ncbi.nlm.nih.gov/taxonomy]]></url>
+    </link>
+    <templateInjector className="org.apidb.apicommon.model.datasetInjector.NcbiTaxonomy"/>
+  </datasetPresenter>
+  
+</datasetPresenters>
