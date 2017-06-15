@@ -8,7 +8,7 @@
 
    <question name="ParticipantsByCharSteps" newBuild="22"
               searchCategory="Participant"
-              displayName="Dwelling, Individual and Visit Details"
+              displayName="Select a Set of Participants"
               shortDisplayName="Part Details"
               queryRef="ParticipantId.ParticipantsByCharSteps" 
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
@@ -83,8 +83,11 @@
         <propertyList name="organism">
            <value>H. sapien</value>
         </propertyList>
-        <propertyList name="wizard">
-           <value>true</value>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
         </propertyList>
         <description>
             <![CDATA[

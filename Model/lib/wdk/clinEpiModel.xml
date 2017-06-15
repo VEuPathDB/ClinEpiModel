@@ -23,6 +23,8 @@
   <declaredMacro name="WEBAPP_BASE_URL"          usedBy="model"/>
   <declaredMacro name="LEGACY_WEBAPP_BASE_URL"   usedBy="model"/>
 
+  <uiConfig showStratPanelByDefault="false"/>
+
   <ontology name="Categories" pluginClass="org.gusdb.wdk.model.ontology.TestOntologyPlugin" useAsWdkCategories="true" />
 
     <import file="ebrcModelCommon.xml"/>

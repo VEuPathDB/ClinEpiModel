@@ -98,7 +98,7 @@
 		 prompt="Age at visit &lt;= "
 		 number="true">
       <help>Maximum age at time of visit.</help>
-      <suggest default="11"/>
+      <suggest default="80"/>
       <regex>\d\d*\.*\d*</regex>
     </stringParam>
 
