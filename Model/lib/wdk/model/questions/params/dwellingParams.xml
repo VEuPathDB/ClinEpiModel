@@ -16,6 +16,27 @@
       </enumList>
     </enumParam>
 
+    <filterParamNew name="dwellings_nf" 
+                    metadataQueryRef="DwellingVQ.DwellingMetaData"
+                    ontologyQueryRef="DwellingVQ.DwellingOntology"
+                    prompt="Dwelling"
+                    trimMetadataTerms="false"
+                    dependedParamRef="dwellingParams.geographic_region,participantParams.start_date,participantParams.end_date">
+      <help>
+        Select participants based on their characteristics. 
+      </help>
+    </filterParamNew>
+
+     <filterParamNew name="geographic_region" 
+                    metadataQueryRef="DwellingVQ.RegionMetaData"
+                    ontologyQueryRef="DwellingVQ.RegionOntology"
+                    prompt="Dwelling"
+                    trimMetadataTerms="false">
+      <help>
+        Select dwellngs based on geographic region. 
+      </help>
+    </filterParamNew>          
+
     <filterParam name="dwellings_by_metadata"
                  queryRef="DwellingVQ.Dwellings"
                  metadataQueryRef="DwellingVQ.DwellingMetadata"
@@ -94,6 +115,91 @@
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
  <querySet name="DwellingVQ" queryType="vocab" isCacheable="true">
+
+   <sqlQuery name="DwellingOntology">
+     <paramRef ref="participantParams.start_date" />
+     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.geographic_region" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+                  select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o, 
+(select distinct term
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and category = 'dwelling') md
+ where o.ontology_term_name = md.term
+         ]]>
+    </sql>
+   </sqlQuery>
+          
+    <sqlQuery name="DwellingMetaData">
+     <paramRef ref="participantParams.start_date" />
+     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.geographic_region" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+--TODO .. add in the light trap based on dates ... another table that then join with the following
+select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'dwelling'
+ and m.protocol_app_node_id in ($$geographic_region$$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+   <sqlQuery name="RegionOntology">
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+ select o.ontology_term_name, 'dwelling' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o 
+ where o.ontology_term_name = 'subcounty in Uganda'
+ union
+ select 'dwelling' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+ null as precision from dual
+         ]]>
+    </sql>
+   </sqlQuery>
+   
+   <sqlQuery name="RegionMetaData">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and category = 'dwelling'
+ and term = 'subcounty in Uganda'
+          ]]>
+    </sql>
+    </sqlQuery>
+    
    <sqlQuery name="Dwellings" excludeProjects="TrichDB,EuPathDB">
             <column name="internal"/>
             <column name="term"/>

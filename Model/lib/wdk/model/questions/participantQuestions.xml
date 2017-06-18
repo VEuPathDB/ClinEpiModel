@@ -10,13 +10,13 @@
               searchCategory="Participant"
               displayName="Select a Set of Participants"
               shortDisplayName="Part Details"
-              queryRef="ParticipantId.ParticipantsByCharSteps" 
+              queryRef="ParticipantId.ParticipantsByCharWiz" 
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
 
 
 
         <attributesList 
-            summary="subcounty_in_uganda,parent_id,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
+            summary="ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
 
 
