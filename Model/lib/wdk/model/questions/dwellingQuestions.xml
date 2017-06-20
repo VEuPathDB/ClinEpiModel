@@ -15,11 +15,11 @@
               recordClassRef="DwellingRecordClasses.DwellingRecordClass">
 
 
-
+<!--
         <attributesList 
             summary="subcounty_in_uganda,ave_num_anoph,num_residents_in_dwelling,lt_graph"        
         /> 
-
+-->
 
 	<dynamicAttributes>
 	     <columnAttribute name="ave_num_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time frame specified" align="center"> 
@@ -65,10 +65,11 @@
               queryRef="DwellingId.DwellingsBySourceID" 
               recordClassRef="DwellingRecordClasses.DwellingRecordClass"
              >
+<!--
         <attributesList 
             summary="source_id"
                   /> 
-
+-->
         <summary>
             <![CDATA[ 
            Find Households based on Sourcd ID.
@@ -90,11 +91,12 @@
               recordClassRef="DwellingRecordClasses.DwellingRecordClass"
               noSummaryOnSingleRecord="true">
  
+<!--
         <attributesList 
             summary="subcounty_in_uganda,participants,participant_count"   
             sorting ="participant_count desc"
         /> 
-
+-->
 	<dynamicAttributes>
 	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this dwelling" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -128,11 +130,12 @@
               recordClassRef="DwellingRecordClasses.DwellingRecordClass"
               noSummaryOnSingleRecord="true">
     
+<!--
     <attributesList
             summary="subcounty_in_uganda,average_number_of_female_anop,num_residents_in_dwelling"
             sorting ="subcounty_in_uganda desc,average_number_of_female_anop desc"
         />
-
+-->
              <summary>
              Find dwellings by light trap collections from the dwelling.
              </summary>

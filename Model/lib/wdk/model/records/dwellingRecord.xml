@@ -7,7 +7,9 @@
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="DwellingAttributes.DwellingAlias">
               <columnRef>source_id</columnRef>
+              <columnRef>project_id</columnRef>
             </primaryKey>
+
             <idAttribute name="primary_key"
                                  displayName="Household Id">
                 <text>
@@ -16,31 +18,44 @@
                     ]]>
                 </text>                
             </idAttribute>
-        
+
+<!--
             <attributesList summary="subcounty_in_uganda,num_anopheles_collections,average_number_of_female_anop"
                             sorting="subcounty_in_uganda DESC"         
             />
+-->
+
+<!-- JB: missing "num_anopheles_collections"... couldn't work out what that is;  avg mos counts are light trap attributes i think?-->
+            <attributesList summary="c_EUPATH_0000054"
+                            sorting="c_EUPATH_0000054 DESC"         
+            />
+
+
 
 
       <!-- =============================================================== -->
       <!--  Summary & record views -->
       <!-- =============================================================== -->
 
+<!-- TODO
       <summaryView name="isolate-view" display="Dwellings Geographical Location"
             jsp="/wdkCustomization/jsp/results/dwelling-geographical-view.jsp"
           handlerClass="org.clinepi.model.view.GeoDwellingViewHandler"/>
-
+-->
 
       <!-- =============================================================== -->
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
+
+<!-- TODO
           <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
                     implementation="org.gusdb.wdk.model.report.AttributesTabularReporter"/>
 
           <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
 
+-->
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
@@ -52,220 +67,15 @@
                          inReportMaker="false" internal="true">
            <text>
               <![CDATA[
-                  Subcounty: $$subcounty_in_uganda$$<br>
+                  Subcounty: $$c_EUPATH_0000054$$<br>
               ]]>
            </text>
          </textAttribute>
 
-	  <attributeQueryRef ref="DwellingAttributes.All">
-<!--
- <columnAttribute internal="true" inReportMaker="false" name="start_date"/>
-            <columnAttribute internal="true" inReportMaker="false" name="end_date"/>
-             <textAttribute name="lt_graph" displayName="Mosquito Collections" inReportMaker="false" truncateTo="100000">
-                <text>
-                   <![CDATA[
-                   <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=$$primary_key$$&enddate=$$end_date$$&startdate=$$start_date$$&type=DwellingLightTrap&fmt=png&thumb=1"/>
-                    ]]>
-                </text>
-             </textAttribute>
--->
-        <columnAttribute name="name" inReportMaker="false"/>
-<columnAttribute name="num_acres" displayName="# Acres"  help="Size of property (in acres)">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_meals_day" displayName="# Meals / Day"  help="Number of meals eaten by household on an average day">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_meat_meals_week" displayName="# Meat Meals / Week"  help="Number of meals per week that household eats meat">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_residents_in_dwelling" displayName="# Residents In Dwelling"  help="Number of people in household (scalar measurement)">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_rooms" displayName="# Rooms"  help="Number of rooms in dwelling used for sleeping (scalar measurement)">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_sleeping_places" displayName="# Sleeping Places"  help="How many sleeping spaces (mats, mattresses, beds are available in your household? (scalar measurement)">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="air_bricks" displayName="Air Bricks"  help="Type of airbricks (if any)">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="assets" displayName="Assets">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="average_number_of_female_anop" displayName="Human Biting Rate (hbr)"  help="Average number of Anopheles females trapped per night">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="categorical_household_wealth_" displayName="Categorical Household Wealth Index"  help="Top, middle or bottom third of Household Wealth Index scale.">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="cooking_fuel" displayName="Cooking Fuel"  help="Primary fuel used for cooking">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="drinking_water_source" displayName="Drinking Water Source"  help="Primary source of drinking water">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="dwelling_type" displayName="Dwelling Type"  help="Nature of accommodation (building; part of building; caravan, houseboat or other mobile accommodation; etc)">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="eaves" displayName="Eaves"  help="Nature of eaves (exposure to outside air)">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="floor_material" displayName="Floor Material"  help="Primary material of floors">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="food_problems_week" displayName="Food Problems / Week"  help="Number of times per week that household has difficulty in satisfying food needs">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="human_waste_disposal" displayName="Human Waste Disposal"  help="Nature of toilet">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="lighting_source" displayName="Lighting Source"  help="Primary source of artificial lighting">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="num_anopheles_collections" displayName="Num Collections">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="numerical_household_wealth_in" displayName="Numerical Household Wealth Index"  help="The Household Wealth Index (HWI) is a cumulative living standard, calculated using easy-to-collect data on ownership of selected assets, such as televisions and bicycles, materials used for housing construction, types of water access, and sanitation facilities (continuous variable).">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="roof_material" displayName="Roof Material"  help="Primary material of roof">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="subcounty_in_uganda" displayName="Subcounty In Uganda"  help="Subcounty in Uganda (Walukuba&lt;Jinja, Kihihi&lt;Kanungu, Nagongera&lt;Tororo)">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="wall_material" displayName="Wall Material"  help="Primary material of exterior walls">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-</attributeQueryRef>
 
+         <attributeQueryRef ref="DwellingAttributes.DwellingAttributes" attributeMetaQueryRef="DwellingAttributes.DwellingAttributesMeta"/>
+
+<!--
         <table name="Characteristics"
                displayName="Household Characteristics"
                queryRef="DwellingTables.Characteristics">
@@ -342,7 +152,7 @@
 </columnAttribute>
           </table>
 
-	 <!--Mosquite collection table-->
+
 	  <table name="mosquitoCollections"
                  displayName="Mosquitoe Collections"
                  queryRef="DwellingTables.mosquitoeCollections_" excludeProjects="TriTrypDB,TrichDB">
@@ -468,6 +278,8 @@
 </columnAttribute>
            
     </table>
+
+-->
     </recordClass>
     </recordClassSet>
 
@@ -483,45 +295,48 @@
       <testRowCountSql>
 select count(*) from apidbtuning.DwellingAttributes
        </testRowCountSql>
+
        <sqlQuery name="DwellingAlias" doNotTest="true">
          <column name="source_id"/>
          <column name="project_id"/>
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.DwellingAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.DwellingAttributes
          </sql>
        </sqlQuery>
-       <sqlQuery name="All" isCacheable="false">
+
+
+
+       <sqlQuery name="DwellingAttributes" attributeMetaQueryRef="DwellingAttributes.DwellingAttributesMeta">
          <column name="source_id"/>
-         <column name="name"/>
-<column name="num_acres"/>
-<column name="num_meals_day"/>
-<column name="num_meat_meals_week"/>
-<column name="num_residents_in_dwelling"/>
-<column name="num_rooms"/>
-<column name="num_sleeping_places"/>
-<column name="air_bricks"/>
-<column name="assets"/>
-<column name="average_number_of_female_anop"/>
-<column name="categorical_household_wealth_"/>
-<column name="cooking_fuel"/>
-<column name="drinking_water_source"/>
-<column name="dwelling_type"/>
-<column name="eaves"/>
-<column name="floor_material"/>
-<column name="food_problems_week"/>
-<column name="human_waste_disposal"/>
-<column name="lighting_source"/>
-<column name="num_anopheles_collections"/>
-<column name="numerical_household_wealth_in"/>
-<column name="roof_material"/>
-<column name="subcounty_in_uganda"/>
-<column name="wall_material"/>
+         <column name="project_id"/>
+
+          <sql excludeProjects="EuPathDB">
+            <![CDATA[
+                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.dwellingattributes d
+            ]]>
+          </sql>  
+         </sqlQuery>
+
+       <sqlQuery name="DwellingAttributesMeta" isCacheable="false">
+          <column name="name" />
+          <column name="display_name" />
+          <column name="help" />
          <sql>
             <![CDATA[
-                select distinct *
-                  from ApidbTuning.DwellingAttributes
+                     select distinct ot.name as displayName, 'c_' || ot.source_id as name, ot.DEFINITION as help
+                     from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot
+                     where m.protocol_app_node_type = 'dwelling'
+                     and ot.ontology_term_id = m.TERM_ID
+                     union
+                     select distinct ot.name as displayName, 'p_' || ot.source_id as name, ot.DEFINITION as help
+                     from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot
+                     where m.protocol_app_node_type = 'dwelling'
+                     and ot.ontology_term_id = m.TERM_ID
+                     union
+                     select 'Name' as displayName, 'name' as name, '' as help from dual
+                     
             ]]>
          </sql>
 

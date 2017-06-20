@@ -8,6 +8,7 @@
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="ParticipantAttributes.ParticipantAlias">
                 <columnRef>source_id</columnRef>
+                <columnRef>project_id</columnRef>
             </primaryKey>
 
             <idAttribute name="primary_key" displayName="Participant Id">
@@ -24,9 +25,11 @@
       <!--  Summary & record views -->
       <!-- =============================================================== -->
 
+<!-- TODO: why do we need this?
       <summaryView name="isolate-view" display="Participants Geographical Location"
             jsp="/wdkCustomization/jsp/results/participant-geographical-view.jsp"
           handlerClass="org.clinepi.model.view.GeoParticipantViewHandler"/>
+-->
 
       <!-- =============================================================== -->
       <!--  Step Analysis Plugins -->
@@ -39,12 +42,13 @@
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
+<!-- TODO
           <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
                     implementation="org.gusdb.wdk.model.report.AttributesTabularReporter"/>
 
           <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
-
+-->
     <!--
           <reporter name="fullRecordDump" displayName="Text: choose from columns and/or tables" 
                     inReportMaker="false"
@@ -63,172 +67,25 @@
 
              <text>
                   <![CDATA[
-                  Participant <i>$$source_id$$</i> from Household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$parent_id$$">$$parent_id$$</a> in subcounty $$subcounty_in_uganda$$.
+                  Participant <i>$$source_id$$</i> from Household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$parent_id$$">$$parent_id$$</a> in subcounty $$c_EUPATH_0000054$$.
                   ]]>
              </text>
           </textAttribute>
-        <attributeQueryRef ref="ParticipantAttributes.All">
-        <columnAttribute name="name" inReportMaker="false"/>
-<columnAttribute name="a_thalassemia_genotype" displayName="A-thalassemia Genotype">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="age_since_birth_at_time_of_en" displayName="Age At Time Of Enrollment">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="avg_parasite_density__asymp_m" displayName="Ave Parasite Density (microscopic Parasitemia)">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="avg_parasite_density__malaria" displayName="Ave Parasite Density (malaria Diagnosis)">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="average_number_of_clinical_vi" displayName="Visits Per Year">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="avg_annual_visits_with__asymp" displayName="Visits With Microscopic Parasitemia Per Year">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="avg_annual_visits_with__malar" displayName="Visits With Malaria Per Year">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="g6pd_genotype" displayName="G6pd Genotype">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="hbs_genotype" displayName="Hbs Genotype">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="last_date_observed" displayName="Last Date Observed"  help="Date participant last seen in study">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="num_clinical_visits" displayName="Total Visits">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_visits_with__a_malaria_di" displayName="Total Visits With Malaria">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_visits_with__an_asymp_mic" displayName="Total Visits With Microscopic Parasitemia">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_visits_with__an_asymp_par" displayName="Total Visits With Asymptomatic Parasitemia">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_non_scheduled_visits" displayName="# Non Scheduled Visits">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="num_scheduled_visits" displayName="# Scheduled Visits">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="parent_id" displayName="Household ID">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="participant_observation_durat" displayName="Observation Period"  help="Total period of participant observation">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="sex" displayName="Sex">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="subcounty_in_uganda" displayName="Subcounty In Uganda"  help="Subcounty in Uganda (Walukuba&lt;Jinja, Kihihi&lt;Kanungu, Nagongera&lt;Tororo)">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="time_of_screening" displayName="Time Of Screening">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-</attributeQueryRef>
 
+
+
+         <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
+
+
+         <!-- TODO:  The special column here will need to change when we add GATES data; Should make this dynamic columns too and parameterize by source_id somehow -->
+         <attributeQueryRef ref="ParticipantAttributes.Parent">
+            <columnAttribute name="parent_id" displayName="Dwelling" />
+            <columnAttribute name="c_EUPATH_0000054" displayName="subcounty in Uganda" />
+
+         </attributeQueryRef>
+
+
+<!--
         <table name="Characteristics"
                displayName="Participant Characteristics"
                queryRef="ParticipantTables.Characteristics">
@@ -340,7 +197,7 @@
             <columnAttribute name="sample_id" displayName="Sample ID"/>
             <columnAttribute name="specimen_type" displayName="Specimen Type"/>
         </table>
-
+-->
     </recordClass>
     </recordClassSet>
 
@@ -354,7 +211,7 @@
               excludeProjects="TrichDB">
 
       <testRowCountSql>
-select count(*) from apidbtuning.PersonAttributes
+select count(*) from apidbtuning.ParticipantAttributes
        </testRowCountSql>
 
        <sqlQuery name="ParticipantAlias" doNotTest="true">
@@ -363,45 +220,79 @@ select count(*) from apidbtuning.PersonAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.PersonAttributes
+             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ParticipantAttributes
          </sql>
        </sqlQuery>
 
-       <sqlQuery name="All" isCacheable="false">
+
+       <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta">
          <column name="source_id"/>
-         <column name="name"/>
-<column name="a_thalassemia_genotype"/>
-<column name="age_since_birth_at_time_of_en"/>
-<column name="avg_parasite_density__asymp_m"/>
-<column name="avg_parasite_density__malaria"/>
-<column name="average_number_of_clinical_vi"/>
-<column name="avg_annual_visits_with__asymp"/>
-<column name="avg_annual_visits_with__malar"/>
-<column name="g6pd_genotype"/>
-<column name="hbs_genotype"/>
-<column name="last_date_observed"/>
-<column name="num_clinical_visits"/>
-<column name="num_visits_with__a_malaria_di"/>
-<column name="num_visits_with__an_asymp_mic"/>
-<column name="num_visits_with__an_asymp_par"/>
-<column name="num_non_scheduled_visits"/>
-<column name="num_scheduled_visits"/>
-<column name="parent_id"/>
-<column name="participant_observation_durat"/>
-<column name="sex"/>
-<column name="subcounty_in_uganda"/>
-<column name="time_of_screening"/>
-        <sql>
+         <column name="project_id"/>
+
+          <sql excludeProjects="EuPathDB">
             <![CDATA[
-select distinct pa.* --da.district_in_uganda
-                  from ApidbTuning.PersonAttributes pa 
-               --        ,ApidbTuning.DwellingAttributes da
-               --  where pa.parent_id = da.source_id
+                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.participantattributes d
+            ]]>
+          </sql>  
+         </sqlQuery>
+
+       <sqlQuery name="ParticipantAttributesMeta" isCacheable="false">
+          <column name="name" />
+          <column name="display_name" />
+          <column name="help" />
+          <column name="plugin_name" />
+          <column name="plugin_display" />
+          <column name="plugin_description" />
+          <column name="plugin_implementation" />
+          <column name="plugin_view" />
+          <column name="plugin_properties" />
+         <sql>
+            <![CDATA[
+                     select meta.display_name, meta.name, meta.help, 
+                            decode(meta.type, 'string', 'wordCloud', 'number', 'histogram', null) as plugin_name,
+                            decode(meta.type, 'string', 'Word Cloud', 'number', 'Histogram', null) as plugin_display,
+                            decode(meta.type, 'string', 'Display the terms in the attribute as word clouds', 'number', 'Display a histogram of the values', null) as plugin_description,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
+                            decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
+                            decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
+                     from (select distinct ot.name as display_name, 'c_' || ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'study participant information'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select distinct ot.name as display_name, 'p_' || ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'study participant information'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
+                           ) meta
+            ]]>
+         </sql>
+
+         </sqlQuery>
+
+
+       <sqlQuery name="Parent" isCacheable="false">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="parent_id"/>
+         <column name="c_EUPATH_0000054"/>
+         <sql>
+            <![CDATA[
+                     select pa.name as source_id, '@PROJECT_ID@' as project_id, da.name as parent_id, da.c_EUPATH_0000054
+                     from APIDBTUNING.PROTOCOLAPPNODEIO io, apidbtuning.participantattributes pa, apidbtuning.dwellingattributes da
+                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
+                     and io.input_node_id = da.PROTOCOL_APP_NODE_ID (+)
             ]]>
          </sql>
 
          </sqlQuery>
       </querySet>   
+
+
     <querySet name="ParticipantTables" queryType="table" 
               isCacheable='false'
               excludeProjects="TrichDB">

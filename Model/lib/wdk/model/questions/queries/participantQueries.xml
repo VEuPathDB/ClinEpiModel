@@ -18,8 +18,8 @@
        <column name="project_id"/>
       <sql>
            <![CDATA[
- Select distinct pa.source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.PERSONATTRIBUTES pa,
- ($$participantsBySourceID$$) ds where pa.source_id = ds.source_id
+ Select distinct pa.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.participantATTRIBUTES pa,
+ ($$participantsBySourceID$$) ds where pa.name = ds.source_id
                 ]]>   
         </sql>
      </sqlQuery>
@@ -43,6 +43,7 @@
        <paramRef ref="participantParams.min_visits" groupRef="metaDataGroups.summary_params"/>
        <paramRef ref="participantParams.max_visits" groupRef="metaDataGroups.summary_params"/>
        <column name="source_id"/>
+       <column name="project_id"/>
        <column name="ave_anoph"/>
        <column name="avg_hemo"/>
        <column name="avg_weight"/>
@@ -53,7 +54,7 @@
        <column name="time_of_obs"/>
          <sql>
            <![CDATA[
-select 1006 as source_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as ave_para_density, 
+select 1006 as source_id, '@PROJECT_ID@' as project_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as ave_para_density, 
 3 as ave_age_visit, 3 as visit_count,3 as visits_per_year_obs, 3 as time_of_obs from dual
                 ]]>   
         </sql>
@@ -75,6 +76,7 @@ select 1006 as source_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as a
        <paramRef ref="participantParams.min_visits" groupRef="metaDataGroups.summary_params"/>
        <paramRef ref="participantParams.max_visits" groupRef="metaDataGroups.summary_params"/>
        <column name="source_id"/>
+       <column name="project_id"/>
        <column name="ave_anoph"/>
        <column name="avg_hemo"/>
        <column name="avg_weight"/>
@@ -85,7 +87,7 @@ select 1006 as source_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as a
        <column name="time_of_obs"/>
          <sql>
            <![CDATA[
-                    select round(count(*) / (to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$,'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365),1) as visits_per_year_obs,
+                    select '@PROJECT_ID@' as project_id, round(count(*) / (to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$,'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365),1) as visits_per_year_obs,
                     round(to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365,1) as time_of_obs,
                     count(*) as visit_count, pa.source_id, lt.ave_anoph, 
    round(exp(avg(case when ASEXUAL_PARASITE_DENSITY > 0.0 then ln(ASEXUAL_PARASITE_DENSITY) else ln(0.00000000000001) end)),1) as ave_para_density,
@@ -137,6 +139,7 @@ select 1006 as source_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as a
        <paramRef ref="participantParams.min_visits" groupRef="metaDataGroups.summary_params"/>
        <paramRef ref="participantParams.max_visits" groupRef="metaDataGroups.summary_params"/>
        <column name="source_id"/>
+       <column name="project_id"/>
        <column name="ave_anoph"/>
        <column name="avg_hemo"/>
        <column name="avg_weight"/>
@@ -147,7 +150,7 @@ select 1006 as source_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as a
        <column name="time_of_obs"/>
          <sql>
            <![CDATA[
-                    select round(count(*) / (to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$,'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365),1) as visits_per_year_obs,
+                    select '@PROJECT_ID@' as project_id, round(count(*) / (to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$,'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365),1) as visits_per_year_obs,
                     round(to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$, 'DD-MON-YYYY'), to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365,1) as time_of_obs,
                     count(*) as visit_count, pa.source_id, lt.ave_anoph, 
    round(exp(avg(case when ASEXUAL_PARASITE_DENSITY > 0.0 then ln(ASEXUAL_PARASITE_DENSITY) else ln(0.00000000000001) end)),1) as ave_para_density,
@@ -199,6 +202,7 @@ select 1006 as source_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as a
        <paramRef ref="participantParams.min_visits"/>
        <paramRef ref="participantParams.max_visits"/>
        <column name="source_id"/>
+       <column name="project_id"/>
        <column name="visits_per_year_obs"/>
        <column name="ave_parasite_density"/>
        <column name="time_of_obs"/>
@@ -207,7 +211,7 @@ select 1006 as source_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as a
        <column name="avg_weight"/>
     -->     <sql>
            <![CDATA[
- select main.source_id,main.ave_parasite_density, main.num_visits as visit_count,
+ select '@PROJECT_ID@' as project_id,main.source_id,main.ave_parasite_density, main.num_visits as visit_count,
  round(main.num_visits / (to_number(least(to_date(pa.last_date_observed,'YYYYMMDD'), to_date($$end_date$$,'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( ma.max_age * 365)) - greatest(pa.app_date, to_date($$start_date$$, 'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365),1) as visits_per_year_obs,
  round(to_number(least(to_date(pa.last_date_observed,'YYYYMMDD'), to_date($$end_date$$,'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( ma.max_age * 365)) - greatest(pa.app_date, to_date($$start_date$$, 'DD-MON-YYYY'), to_date(pa.date_of_birth,'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365,1) as time_of_obs
  from (
