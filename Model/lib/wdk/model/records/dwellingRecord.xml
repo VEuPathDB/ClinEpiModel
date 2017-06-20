@@ -323,19 +323,35 @@ select count(*) from apidbtuning.DwellingAttributes
           <column name="name" />
           <column name="display_name" />
           <column name="help" />
+          <column name="plugin_name" />
+          <column name="plugin_display" />
+          <column name="plugin_description" />
+          <column name="plugin_implementation" />
+          <column name="plugin_view" />
+          <column name="plugin_properties" />
          <sql>
             <![CDATA[
-                     select distinct ot.name as displayName, 'c_' || ot.source_id as name, ot.DEFINITION as help
-                     from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot
-                     where m.protocol_app_node_type = 'dwelling'
-                     and ot.ontology_term_id = m.TERM_ID
-                     union
-                     select distinct ot.name as displayName, 'p_' || ot.source_id as name, ot.DEFINITION as help
-                     from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot
-                     where m.protocol_app_node_type = 'dwelling'
-                     and ot.ontology_term_id = m.TERM_ID
-                     union
-                     select 'Name' as displayName, 'name' as name, '' as help from dual
+                     select meta.display_name, meta.name, meta.help, 
+                            decode(meta.type, 'string', 'wordCloud', 'number', 'histogram', null) as plugin_name,
+                            decode(meta.type, 'string', 'Word Cloud', 'number', 'Histogram', null) as plugin_display,
+                            decode(meta.type, 'string', 'Display the terms in the attribute as word clouds', 'number', 'Display a histogram of the values', null) as plugin_description,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
+                            decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
+                            decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
+                     from (select distinct ot.name as display_name, 'c_' || ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'dwelling'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select distinct ot.name as display_name, 'p_' || ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'dwelling'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
+                           ) meta
                      
             ]]>
          </sql>
