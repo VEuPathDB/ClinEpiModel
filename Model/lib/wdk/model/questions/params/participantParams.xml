@@ -48,10 +48,10 @@
        <filterParamNew name="dwellings_nf" 
                       metadataQueryRef="ParticipantVQ.DwellingMetaData"
                       ontologyQueryRef="ParticipantVQ.DwellingOntology"
+                      backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd"
                       prompt="Participants"
                       dependedParamRef="clinicalVisitParams.minAgeAtVisit,clinicalVisitParams.maxAgeAtVisit,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,participantParams.geographic_region"
                       trimMetadataTerms="false">
-         <!--  backgroundQueryRef="background query ... metadata query without dependencies" -->
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -71,11 +71,11 @@
        <filterParamNew name="visits_nf" 
                       metadataQueryRef="ParticipantVQ.VisitMetaData"
                       ontologyQueryRef="ParticipantVQ.VisitOntology"
-                      prompt="Participants"
+                      prompt="Visits"
                       trimMetadataTerms="false"
                       dependedParamRef="clinicalVisitParams.minAgeAtVisit,clinicalVisitParams.maxAgeAtVisit,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
          <help>
-              Select participants based on their characteristics. 
+              Select participants based on their visit characteristics. 
          </help>
        </filterParamNew>
 
@@ -399,13 +399,27 @@ select distinct * from (
      <column name="is_range"/>
     <sql>
          <![CDATA[
-                  select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+/*                  select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'study participant information') md
  where o.ontology_term_name = md.term
+*/
+with leaf as ( select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o, 
+(select distinct term
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and category = 'study participant information') md
+ where o.ontology_term_name = md.term)
+ select * from leaf
+ union
+ select distinct parent_ontology_term_name as ontology_term_name, null as parent_ontology_term_name, parent_ontology_term_name as diaplay_name,
+ null as description, null as units, null as type, null as is_range, null as precision
+ from leaf
+ where parent_ontology_term_name is not null
          ]]>
     </sql>
    </sqlQuery>
@@ -464,11 +478,12 @@ from apidbtuning.metadata m
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct Part.Input_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
+--TODO: use participantAttributes to make part more efficient
+select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m,
- (select distinct io.input_node_id
-  from apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
-  where io.output_node_id = pa.protocol_app_node_id
+ (select distinct io.output_node_id,io.input_node_id
+  from apidbtuning.protocolappnodeio io --, apidbtuning.participantattributes pa
+  where io.output_node_id in (select distinct protocol_app_node_id from apidbtuning.metadata where category = 'study participant information') --= pa.protocol_app_node_id
   ) part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'dwelling'
@@ -495,13 +510,28 @@ select distinct Part.Input_Node_Id as internal, term as ontology_term_name, stri
         <column name="is_range"/>
     <sql>
 --TODO:  union in light trap summary ontology
-                  select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+/*
+select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'dwelling') md
  where o.ontology_term_name = md.term
+*/
+  with leaf as (select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o, 
+(select distinct term
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and category = 'dwelling') md
+ where o.ontology_term_name = md.term)
+ select * from leaf
+ union
+ select distinct parent_ontology_term_name as ontology_term_name, null as parent_ontology_term_name, parent_ontology_term_name as diaplay_name,
+ null as description, null as units, null as type, null as is_range, null as precision
+ from leaf
+ where parent_ontology_term_name is not null
     </sql>
     </sqlQuery>
 
@@ -521,11 +551,39 @@ from apidbtuning.metadataontology o,
          <![CDATA[
 --TODO .. add in the light trap based on dates ... another table that then join with the following
 --ALSO: need to add dependent params for participant (all 5) as should only return participants who meet those.
-select distinct Part.Input_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m,
- (select distinct io.input_node_id
+ (select distinct io.input_node_id, io.output_node_id
   from apidbtuning.protocolappnodeio io
   where io.output_node_id in ($$geographic_region$$)
+  ) part
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'dwelling'
+ and part.input_node_id = m.protocol_app_node_id
+          ]]>
+    </sql>    
+
+    </sqlQuery>
+
+    <sqlQuery name="DwellingMetaDataBkgd">
+      <paramRef ref="clinicalVisitParams.minAgeAtVisit" />
+      <paramRef ref="clinicalVisitParams.maxAgeAtVisit" />
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="participantParams.duration_observation" />  
+      <paramRef ref="participantParams.geographic_region" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m,
+ (select distinct io.input_node_id, io.output_node_id
+  from apidbtuning.protocolappnodeio io
+  where io.output_node_id in (select distinct protocol_app_node_id from apidbtuning.metadata where category = 'study participant information')
   ) part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'dwelling'
@@ -554,13 +612,19 @@ select distinct Part.Input_Node_Id as internal, term as ontology_term_name, stri
      <column name="is_range"/>
     <sql>
          <![CDATA[
-                       select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+with leaf as ( select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'clinical visit information') md
- where o.ontology_term_name = md.term 
+ where o.ontology_term_name = md.term)
+ select * from leaf
+ union
+ select distinct parent_ontology_term_name as ontology_term_name, null as parent_ontology_term_name, parent_ontology_term_name as diaplay_name,
+ null as description, null as units, null as type, null as is_range, null as precision
+ from leaf
+ where parent_ontology_term_name is not null 
          ]]>
     </sql>
    </sqlQuery>
@@ -582,11 +646,11 @@ from apidbtuning.metadataontology o,
          <sql>
            <![CDATA[
 --TODO:  deal with dates and visits using the visit_age_nf once implemented
-select distinct io.input_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct io.output_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'clinical visit information'
- and io.input_Node_Id = m.protocol_app_node_id
+ and io.output_Node_Id = m.protocol_app_node_id
  and io.input_node_id in ($$participants_nf$$)
           ]]>
     </sql>
