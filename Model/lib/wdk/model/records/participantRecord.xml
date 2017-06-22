@@ -67,7 +67,7 @@
 
              <text>
                   <![CDATA[
-                  Participant <i>$$source_id$$</i> from Household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$parent_id$$">$$parent_id$$</a> in subcounty $$c_EUPATH_0000054$$.
+                  Participant <i>$$source_id$$</i> from Household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$EUPATH_0000094$$">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
                   ]]>
              </text>
           </textAttribute>
@@ -75,15 +75,6 @@
 
 
          <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
-
-
-         <!-- TODO:  The special column here will need to change when we add GATES data; Should make this dynamic columns too and parameterize by source_id somehow -->
-         <attributeQueryRef ref="ParticipantAttributes.Parent">
-            <columnAttribute name="parent_id" displayName="Dwelling" />
-            <columnAttribute name="c_EUPATH_0000054" displayName="subcounty in Uganda" />
-
-         </attributeQueryRef>
-
 
 <!--
         <table name="Characteristics"
@@ -228,10 +219,16 @@ select count(*) from apidbtuning.ParticipantAttributes
        <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
-
+         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054]]></sqlParamValue>
           <sql excludeProjects="EuPathDB">
             <![CDATA[
-                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.participantattributes d
+                     select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
+                     da.*
+                     from APIDBTUNING.PROTOCOLAPPNODEIO io
+                        , apidbtuning.participantattributes pa
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.dwellingattributes) da
+                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
+                     and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
           </sql>  
          </sqlQuery>
@@ -246,6 +243,7 @@ select count(*) from apidbtuning.ParticipantAttributes
           <column name="plugin_implementation" />
           <column name="plugin_view" />
           <column name="plugin_properties" />
+          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000054']]></sqlParamValue>
          <sql>
             <![CDATA[
                      select meta.display_name, meta.name, meta.help, 
@@ -255,19 +253,21 @@ select count(*) from apidbtuning.ParticipantAttributes
                             decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
-                     from (select distinct ot.name as display_name, 'c_' || ot.source_id as name, ot.DEFINITION as help, mt.type
+                     from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
                            where m.protocol_app_node_type = 'study participant information'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            union
-                           select distinct ot.name as display_name, 'p_' || ot.source_id as name, ot.DEFINITION as help, mt.type
+                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
                            where m.protocol_app_node_type = 'study participant information'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            union
-                           select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
+                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
+                           union
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.metadatatype mt, sres.ontologyterm ot where ot.source_id = mt.source_id and mt.source_id in (&&dwellingSourceIds&&)
                            ) meta
             ]]>
          </sql>
@@ -275,21 +275,6 @@ select count(*) from apidbtuning.ParticipantAttributes
          </sqlQuery>
 
 
-       <sqlQuery name="Parent" isCacheable="false">
-         <column name="source_id"/>
-         <column name="project_id"/>
-         <column name="parent_id"/>
-         <column name="c_EUPATH_0000054"/>
-         <sql>
-            <![CDATA[
-                     select pa.name as source_id, '@PROJECT_ID@' as project_id, da.name as parent_id, da.c_EUPATH_0000054
-                     from APIDBTUNING.PROTOCOLAPPNODEIO io, apidbtuning.participantattributes pa, apidbtuning.dwellingattributes da
-                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
-                     and io.input_node_id = da.PROTOCOL_APP_NODE_ID (+)
-            ]]>
-         </sql>
-
-         </sqlQuery>
       </querySet>   
 
 
