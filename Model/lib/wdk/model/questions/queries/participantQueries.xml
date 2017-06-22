@@ -31,8 +31,7 @@
        <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="clinicalVisitParams.minAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
-       <paramRef ref="clinicalVisitParams.maxAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
+       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.age_at_visit"/>
        <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="participantParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
