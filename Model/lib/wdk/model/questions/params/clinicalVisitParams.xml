@@ -44,8 +44,9 @@
        <filterParamNew name="visits_visitage_metadata_nf" 
                       metadataQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetadataNf"
                       ontologyQueryRef="ClinicalVisitVQ.ClinicalVisitAgeOntologyNf"
+                      backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetadataBkgdNf"
                       prompt="ClinicalVisits"
-                      dependedParamRef="participantParams.start_date,participantParams.end_date,participantParams.duration_observation"
+                      dependedParamRef="participantParams.geographic_region"
                       trimMetadataTerms="false">
          <help>
               Select reference samples. 
@@ -347,9 +348,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
    </sqlQuery>
 
    <sqlQuery name="ClinicalVisitAgeOntologyNf">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
-     <paramRef ref="participantParams.duration_observation" /> 
+      <paramRef ref="participantParams.geographic_region" /> 
         <column name="ontology_term_name"/>
         <column name="parent_ontology_term_name"/>
         <column name="display_name"/>
@@ -360,21 +359,41 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
         <column name="is_range"/>
         <sql>
            <![CDATA[
-                       select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
-from apidbtuning.metadataontology o, 
-(select distinct term
- from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'clinical visit information') md
- where o.ontology_term_name = md.term               
+                       select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o
+where ontology_term_name = 'age since birth at time of visit'
+union
+                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                 null as precision from dual
     ]]>   
         </sql>
       </sqlQuery>
           
    <sqlQuery name="ClinicalVisitAgeMetadataNf">
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
-      <paramRef ref="participantParams.duration_observation" /> 
+      <paramRef ref="participantParams.geographic_region" /> 
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m,
+ (select distinct io.input_node_id, io.output_node_id
+  from apidbtuning.protocolappnodeio io
+  where io.input_node_id in ($$geographic_region$$)
+  ) pa
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'clinical visit information'
+ and m.term = 'age since birth at time of visit'
+ and pa.output_node_id = m.protocol_app_node_id
+         ]]>   
+      </sql>
+   </sqlQuery>
+
+      <sqlQuery name="ClinicalVisitAgeMetadataBkgdNf">
+      <paramRef ref="participantParams.geographic_region" /> 
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -386,7 +405,8 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'clinical visit information'
-         ]]>   
+ and term = 'age since birth at time of visit'
+          ]]>   
       </sql>
    </sqlQuery>
    
