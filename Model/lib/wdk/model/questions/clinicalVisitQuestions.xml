@@ -16,7 +16,7 @@
 
 
         <attributesList 
-            summary="visit_date,parent_id,age_since_birth_at_time_of_vi,visit_type"
+            summary="EUPATH_0000091,parent_id,EUPATH_0000113,EUPATH_0000311"
         /> 
  
        
@@ -47,10 +47,11 @@
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass">
 
 
- 
+
         <attributesList 
-            summary="visit_date,parent_id,age_since_birth_at_time_of_vi,visit_type"
+            summary="EUPATH_0000091,parent_id,EUPATH_0000113,EUPATH_0000311"
         /> 
+ 
 
         <summary>
             <![CDATA[ 
@@ -75,7 +76,7 @@
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass">
 
         <attributesList 
-            summary="visit_date,parent_id,age_since_birth_at_time_of_vi,visit_type,min_days_between,num_matching_visits"        
+            summary="EUPATH_0000091,parent_id,EUPATH_0000113,EUPATH_0000311,min_days_between,num_matching_visits"        
         /> 
         <dynamicAttributes>
 	  <columnAttribute name="min_days_between" displayName="Min days between visits" help="Reports the minimum days between any matching visits and the visit returned" align="center">
@@ -116,8 +117,8 @@
 	      recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass"
 	      noSummaryOnSingleRecord="true">
       <attributesList
-	 summary="visit_date,participant,age_since_birth_at_time_of_vi"
-	 sorting="particpant DESC"
+	 summary="EUPATH_0000091,participant,EUPATH_0000113,EUPATH_0000311"
+	 sorting="participant DESC"
 	
 	 />
       <dynamicAttributes>
