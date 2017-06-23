@@ -11,9 +11,9 @@
     		queryRef="LightTrapId.LightTrapDataByMetadataCross"
     		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
 
-<!--    		
-          <attributesList summary="parent_id,subcounty_in_uganda,anopheles_other,total_anopheles_tested,total_anopheles_positive,parous,nulliparous" />
--->
+
+          <attributesList summary="EUPATH_0000054,EUPATH_0000094,EUPATH_0000217,EUPATH_0000218" />
+
  
           <dynamicAttributes>
             <columnAttribute name="ave_num_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time fra\
@@ -44,9 +44,10 @@ me specified" align="center">
     		queryRef="LightTrapId.LightTrapDataByMetadataCross_"
     		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
 
-<!--
-        <attributesList summary="parent_id,subcounty_in_uganda,anopheles_other,total_anopheles_tested,total_anopheles_positive,parous,nulliparous" />
--->           
+
+          <attributesList summary="EUPATH_0000054,EUPATH_0000094,EUPATH_0000217,EUPATH_0000218" />
+
+
  
           <dynamicAttributes>
             <columnAttribute name="ave_num_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time fra\
@@ -102,12 +103,8 @@ me specified" align="center">
               recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
               noSummaryOnSingleRecord="true">
     
-<!--
-    <attributesList
-            summary="discparity,parous,nulliparous"
-            sorting ="date_of_visit desc"
-        />
--->
+
+
        <!-- <dynamicAttributes>
              <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with th\
 is dwelling" align="center">
