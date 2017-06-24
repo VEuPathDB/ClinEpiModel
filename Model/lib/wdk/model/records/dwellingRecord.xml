@@ -26,8 +26,8 @@
 -->
 
 <!-- JB: missing "num_anopheles_collections"... couldn't work out what that is;  avg mos counts are light trap attributes i think?-->
-            <attributesList summary="c_EUPATH_0000054"
-                            sorting="c_EUPATH_0000054 DESC"         
+            <attributesList summary="EUPATH_0000054"
+                            sorting="EUPATH_0000054 DESC"         
             />
 
 
@@ -67,7 +67,7 @@
                          inReportMaker="false" internal="true">
            <text>
               <![CDATA[
-                  Subcounty: $$c_EUPATH_0000054$$<br>
+                  Subcounty: $$EUPATH_0000054$$<br>
               ]]>
            </text>
          </textAttribute>
@@ -338,13 +338,13 @@ select count(*) from apidbtuning.DwellingAttributes
                             decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
-                     from (select distinct ot.name as display_name, 'c_' || ot.source_id as name, ot.DEFINITION as help, mt.type
+                     from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
                            where m.protocol_app_node_type = 'dwelling'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            union
-                           select distinct ot.name as display_name, 'p_' || ot.source_id as name, ot.DEFINITION as help, mt.type
+                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
                            where m.protocol_app_node_type = 'dwelling'
                            and ot.ontology_term_id = m.TERM_ID

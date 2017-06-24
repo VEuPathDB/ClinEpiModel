@@ -53,8 +53,32 @@
        <column name="time_of_obs"/>
          <sql>
            <![CDATA[
-select 1006 as source_id, '@PROJECT_ID@' as project_id, 3 as ave_anoph, 3 as ave_hemo, 3 as ave_weight, 3 as ave_para_density, 
-3 as ave_age_visit, 3 as visit_count,3 as visits_per_year_obs, 3 as time_of_obs from dual
+--TODO: implement observed time (will need to get min and max ages like in dwelling search)
+--including the group by clause at end to get visits / year observed
+-- also should use dates and get the average mosquitos ... will also add this to dwellings filter
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
+/* round(count(*) / (to_number(least(to_date(max(pa.EUPATH_0000152),'YYYY-MM-DD'), to_date($$end_date$$, 'DD-MON-YYYY'), 
+       to_date(max(pa.EUPATH_0000032),'YYYY-MM-DD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$,'DD-MON-YYYY'), 
+       to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365),1) as visits_per_year_obs,
+                    round(to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'),
+                    to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$, 'DD-MON-YYYY'), 
+                    to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365,1) as time_of_obs, */
+                    count(*) as visit_count,-- lt.ave_anoph, 
+   round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) as ave_para_density,
+   round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
+   round(avg(ca.EUPATH_0000047),1) as avg_hemo,
+   round(avg(ca.IAO_0000414),1) as avg_weight
+from apidbtuning.clinicalvisitattributes ca, apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
+where ca.protocol_app_node_id in ($$visits_nf$$)
+and to_date(ca.EUPATH_0000091,'YYYY-MM-DD') >= to_date($$start_date$$, 'DD-MON-YYYY') --TODO: remove to_date from db
+and to_date(ca.EUPATH_0000091,'YYYY-MM-DD') <= to_date($$end_date$$, 'DD-MON-YYYY')
+and ca.protocol_app_node_id = io.output_node_id
+and pa.protocol_app_node_id = io.input_node_id
+group by pa.name
+having count(*) >= $$min_visits$$  --TODO: implement visits/time observed/year like following query
+ and count(*) <= $$max_visits$$    --TODO: currently just count of visits
+ and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) >= $$min_para_density$$
+ and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) <= $$max_para_density$$
                 ]]>   
         </sql>
      </sqlQuery>

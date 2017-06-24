@@ -14,11 +14,10 @@
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
 
 
-<!--
+
         <attributesList 
             summary="ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
--->
 
 	<dynamicAttributes>
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of visits meeting search criteria over the time frame specified" align="center"> 
@@ -105,12 +104,11 @@
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
 
 
-<!--
+
         <attributesList 
-            summary="subcounty_in_uganda,parent_id,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
+            summary="EUPATH_0000054,EUPATH_0000094,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
 
--->
 	<dynamicAttributes>
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of visits meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -189,11 +187,10 @@
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
 
 
-<!--
+
         <attributesList 
-            summary="subcounty_in_uganda,parent_id,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
+            summary="EUPATH_0000054,EUPATH_0000094,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
--->
 
 	<dynamicAttributes>
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of visits meeting search criteria over the time frame specified" align="center"> 
@@ -291,11 +288,11 @@ These papers provide more detailed information (<a href="communityDownload.do?fn
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass">
 
 
-<!--
+
         <attributesList 
-            summary="subcounty_in_uganda,parent_id,ave_parasite_density,time_of_obs,visit_count,visits_per_year_obs"        
+            summary="EUPATH_0000054,EUPATH_0000094,ave_parasite_density,time_of_obs,visit_count,visits_per_year_obs"        
         /> 
--->
+
 
         <summary>
             <![CDATA[ 
@@ -360,12 +357,12 @@ These papers provide more detailed information (<a href="communityDownload.do?fn
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
               noSummaryOnSingleRecord="true">
 
-<!-- 
+
         <attributesList 
-            summary="dwelling,subcounty_in_uganda,age_since_birth_at_time_of_en"   
-            sorting="subcounty_in_uganda desc"
+            summary="dwelling,EUPATH_0000054"   
+            sorting="EUPATH_0000054 desc"
         /> 
--->
+
 	<dynamicAttributes>
 	     <columnAttribute name="dwelling" displayName="Dwelling Transformed" help="Dwelling Participant is associated with" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -393,12 +390,12 @@ These papers provide more detailed information (<a href="communityDownload.do?fn
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
               noSummaryOnSingleRecord="true">
 
-<!-- 
+
         <attributesList 
-            summary="num_of_visits,subcounty_in_uganda,age_since_birth_at_time_of_en"   
+            summary="num_of_visits,EUPATH_0000054"   
             sorting="num_of_visits desc"
         /> 
--->
+
 
 	<dynamicAttributes>
 	     <columnAttribute name="num_of_visits" displayName="Clincal Visits Transformed" help="Clinicals visits associated with the participant" align="center"> 
@@ -427,13 +424,11 @@ These papers provide more detailed information (<a href="communityDownload.do?fn
              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
              noSummaryOnSingleRecord="true">
 
-<!-- 
+
         <attributesList 
             summary="source_id"   
             sorting="source_id desc"
         /> 
--->	
-
              <summary>
              Find participant by source id.
              </summary>

@@ -37,6 +37,7 @@ Select distinct cv.source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLI
       <paramRef ref="participantParams.participants_by_all_metadata" groupRef="metaDataGroups.visit_part_characteristics"/>
      <paramRef ref="clinicalVisitParams.visits_by_metadata" groupRef="metaDataGroups.visit_visit_characteristics"/>
       <column name="source_id"/>
+      <column name="project_id"/>
         <sql>
           <![CDATA[
 select ca.source_id
@@ -63,6 +64,7 @@ and ca.parent_id = pa.source_id
       <paramRef ref="clinicalVisitParams.dateOperator" groupRef="metaDataGroups.relative_visits"/>
       <paramRef ref="clinicalVisitParams.visits_by_metadata_2" groupRef="metaDataGroups.relative_visits"/>
       <column name="source_id"/>
+      <column name="project_id"/>
       <column name="visit_date"/>
       <column name="participant_id"/>
       <column name="min_days_between"/>

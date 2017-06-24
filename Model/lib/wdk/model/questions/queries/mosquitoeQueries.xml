@@ -14,6 +14,7 @@
       <paramRef ref="participantParams.end_date"/>
       <paramRef ref="lighttrapParams.lighttraps_by_all_metadata" />
       <column name="source_id"/>
+      <column name="project_id"/>
       <column name="ave_num_anoph"/>
         <sql>
           <![CDATA[
@@ -35,6 +36,7 @@
       <paramRef ref="dwellingParams.dwellings_by_all_metadata"/>
       <paramRef ref="mosquitoParams.lighttraps_by_all_metadata"/>
       <column name="source_id"/>
+      <column name="project_id"/>
       <column name="ave_num_anoph"/>
         <sql>
           <![CDATA[

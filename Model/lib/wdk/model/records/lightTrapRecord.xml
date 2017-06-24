@@ -7,6 +7,7 @@
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="LightTrapAttributes.LightTrapAlias">
                 <columnRef>source_id</columnRef>
+                <columnRef>project_id</columnRef>
               </primaryKey>
 
               <idAttribute name="primary_key" displayName="Collection Barcode">
@@ -26,11 +27,14 @@
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
+<!--
+
           <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
                     implementation="org.gusdb.wdk.model.report.AttributesTabularReporter"/>
 
           <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
                     implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
+-->
 
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
@@ -38,155 +42,13 @@
   <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB" internal="true" inReportMaker="false">
     <text>
       <![CDATA[
-       Lighttrap <i>$$source_id$$<i> from household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$parent_id$$">$$parent_id$$</a> in $$subcounty_in_uganda$$ subcounty.
+       Lighttrap <i>$$source_id$$<i> from household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$EUPATH_0000094$$">$$EUPATH_0000094$$</a> in $$EUPATH_0000054$$ subcounty.
 ]]>
     </text>
   </textAttribute>
-	  <attributeQueryRef ref="LightTrapAttributes.All">
-<columnAttribute name="anopheles_other" displayName="Anopheles Other"  help="Number of other female Anopheles species">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="date_of_visit" displayName="Date Of Visit"  help="Month and year">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="discparity" displayName="Discparity">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="enrollment_date" displayName="Enrollment Date"  help="Date household first enrolled in study">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="fed_a_funestus" displayName="Fed A. Funestus"  help="Number of female Anopheles funestus with a recent blood meal">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="fed_a_gambiae" displayName="Fed A. Gambiae"  help="Number of female Anopheles gambiae with a recent blood meal">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="gravid_a_funestus" displayName="Gravid A. Funestus"  help="Number of gravid or semi-gravid Anopheles funestus">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="gravid_a_gambiae" displayName="Gravid A. Gambiae"  help="Number of gravid or semi-gravid Anopheles gambiae">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="nulliparous" displayName="Nulliparous">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="parent_id" displayName="Household ID">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="parous" displayName="Parous">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="subcounty_in_uganda" displayName="Subcounty In Uganda"  help="Subcounty in Uganda (Walukuba&lt;Jinja, Kihihi&lt;Kanungu, Nagongera&lt;Tororo)">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="sum_female_As_funestus_in_a_c" displayName="# A. Funestus"  help="Number of female Anopheles funestus collected">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="sum_female_As_gambiae_in_a_co" displayName="# A. Gambiae"  help="Number of female Anopheles gambiae collected">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="sum_female_As_in_a_collection" displayName="# Female Anopheles Collected"  help="Total # female Anopheles collected">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="total_anopheles_positive" displayName="Total Anopheles Positive"  help="Total number of Anopheles with Plasmodium sporozoites">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="total_anopheles_tested" displayName="Total Anopheles Tested"  help="Total number of Anopheles examined for sporozoites">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="unable_to_assess_a_funestus" displayName="Unable To Assess A. Funestus"  help="Number of Anopheles gambiae that could not be assessed">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="unable_to_assess_a_gambiae" displayName="Unable To Assess A. Gambiae"  help="Number of Anopheles funestus that could not be assessed">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="unfed_a_funestus" displayName="Unfed A. Funestus"  help="Number of female Anopheles funestus without a recent blood meal">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="unfed_a_gambiae" displayName="Unfed A. Gambiae"  help="Number of female Anopheles gambiae without a recent blood meal">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-</attributeQueryRef>
 
+
+  <attributeQueryRef ref="LightTrapAttributes.LightTrapAttributes" attributeMetaQueryRef="LightTrapAttributes.LightTrapAttributesMeta"/>
 
         <table name="Characteristics"
                displayName="Lighttrap Characteristics"
@@ -231,38 +93,73 @@ select count(*) from apidbtuning.LightTrapAttributes
              SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.LightTrapAttributes
          </sql>
        </sqlQuery>
-       <sqlQuery name="All" isCacheable="false">
+
+       <sqlQuery name="LightTrapAttributes" attributeMetaQueryRef="LightTrapAttributes.LightTrapAttributesMeta">
          <column name="source_id"/>
-         <column name="name"/>
-<column name="anopheles_other"/>
-<column name="date_of_visit"/>
-<column name="discparity"/>
-<column name="enrollment_date"/>
-<column name="fed_a_funestus"/>
-<column name="fed_a_gambiae"/>
-<column name="gravid_a_funestus"/>
-<column name="gravid_a_gambiae"/>
-<column name="nulliparous"/>
-<column name="parent_id"/>
-<column name="parous"/>
-<column name="subcounty_in_uganda"/>
-<column name="sum_female_As_funestus_in_a_c"/>
-<column name="sum_female_As_gambiae_in_a_co"/>
-<column name="sum_female_As_in_a_collection"/>
-<column name="total_anopheles_positive"/>
-<column name="total_anopheles_tested"/>
-<column name="unable_to_assess_a_funestus"/>
-<column name="unable_to_assess_a_gambiae"/>
-<column name="unfed_a_funestus"/>
-<column name="unfed_a_gambiae"/>
+         <column name="project_id"/>
+
+         <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
+         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054]]></sqlParamValue>
+
+          <sql excludeProjects="EuPathDB">
+            <![CDATA[
+                     select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
+                     da.*
+                     from APIDBTUNING.PROTOCOLAPPNODEIO io
+                        , apidbtuning.lighttrapattributes pa
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.dwellingattributes) da
+                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
+                     and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
+            ]]>
+          </sql>  
+         </sqlQuery>
+
+       <sqlQuery name="LightTrapAttributesMeta" isCacheable="false">
+          <column name="name" />
+          <column name="display_name" />
+          <column name="help" />
+          <column name="plugin_name" />
+          <column name="plugin_display" />
+          <column name="plugin_description" />
+          <column name="plugin_implementation" />
+          <column name="plugin_view" />
+          <column name="plugin_properties" />
+
+         <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
+          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000054']]></sqlParamValue>
 
          <sql>
             <![CDATA[
-select distinct lta.*, to_char(collection_date,'dd-Mon-YYYY') as cdate 
-	          from ApidbTuning.LightTrapAttributes lta
+                     select meta.display_name, meta.name, meta.help, 
+                            decode(meta.type, 'string', 'wordCloud', 'number', 'histogram', null) as plugin_name,
+                            decode(meta.type, 'string', 'Word Cloud', 'number', 'Histogram', null) as plugin_display,
+                            decode(meta.type, 'string', 'Display the terms in the attribute as word clouds', 'number', 'Display a histogram of the values', null) as plugin_description,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
+                            decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
+                            decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
+                     from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'CDC light trap assay'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'CDC light trap assay'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
+                           union
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.metadatatype mt, sres.ontologyterm ot where ot.source_id = mt.source_id and mt.source_id in (&&dwellingSourceIds&&)
+                           ) meta
             ]]>
-       </sql>
-       </sqlQuery>
+         </sql>
+
+         </sqlQuery>
+
+
+
     </querySet>
 
 
@@ -272,6 +169,7 @@ select distinct lta.*, to_char(collection_date,'dd-Mon-YYYY') as cdate
       
       <sqlQuery name="Characteristics"  isCacheable='false'>
             <column name="source_id"/>
+         <column name="project_id"/>
             <column name="name"/>
             <column name="parent_category"/>
             <column name="category"/>
@@ -331,6 +229,7 @@ select distinct lta.*, to_char(collection_date,'dd-Mon-YYYY') as cdate
 <!--      
       <sqlQuery name="UnCategorisedCharacteristics"  isCacheable='false'>
             <column name="source_id"/>
+         <column name="project_id"/>
             <column name="name"/>
             <column name="category"/>
             <column name="value"/>

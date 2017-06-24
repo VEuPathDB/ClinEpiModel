@@ -565,13 +565,13 @@ from apidbtuning.metadataontology o,
 select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m,
   ( select distinct io.input_node_id, io.output_node_id 
-  from (select min(to_number(C_EUPATH_0000113)) as min_age, max(to_number(C_EUPATH_0000113)) as max_age
+  from (select min(to_number(EUPATH_0000113)) as min_age, max(to_number(EUPATH_0000113)) as max_age
    from apidbtuning.clinicalvisitattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)) age,
    apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$geographic_region$$)
-   AND least(to_date(pa.C_EUPATH_0000152,'YYYY-MM-DD'), to_date($$end_date$$,'DD-MON-YYYY'), to_date(pa.C_EUPATH_0000032,'YYYY-MM-DD') + ( age.max_age * 365)) - 
- greatest(to_date(pa.C_EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), to_date(pa.C_EUPATH_0000032,'YYYY-MM-DD') + ( age.min_age * 365)) + 1 >= $$duration_observation$$
+   AND least(to_date(pa.EUPATH_0000152,'YYYY-MM-DD'), to_date($$end_date$$,'DD-MON-YYYY'), to_date(pa.EUPATH_0000032,'YYYY-MM-DD') + ( age.max_age * 365)) - 
+ greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), to_date(pa.EUPATH_0000032,'YYYY-MM-DD') + ( age.min_age * 365)) + 1 >= $$duration_observation$$
  and pa.protocol_app_node_id = io.output_node_id) part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'dwelling'
@@ -666,8 +666,8 @@ select distinct va.protocol_app_node_id as internal, term as ontology_term_name,
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
  and io.output_Node_Id = va.protocol_app_node_id
  and io.input_node_id in ($$participants_nf$$)
- and to_date(va.C_EUPATH_0000091,'YYYY-MM-DD') >= $$start_date$$
- and to_date(va.C_EUPATH_0000091,'YYYY-MM-DD') <= $$end_date$$
+ and to_date(va.EUPATH_0000091,'YYYY-MM-DD') >= $$start_date$$
+ and to_date(va.EUPATH_0000091,'YYYY-MM-DD') <= $$end_date$$
           ]]>
     </sql>
     </sqlQuery>    
