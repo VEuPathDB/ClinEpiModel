@@ -35,8 +35,8 @@
        <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="participantParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
-       <paramRef ref="participantParams.min_anoph" groupRef="metaDataGroups.summary_params"/>
-       <paramRef ref="participantParams.max_anoph" groupRef="metaDataGroups.summary_params"/>
+       <!--paramRef ref="participantParams.min_anoph" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.max_anoph" groupRef="metaDataGroups.summary_params"/ -->
        <paramRef ref="participantParams.min_para_density" groupRef="metaDataGroups.summary_params"/>
        <paramRef ref="participantParams.max_para_density" groupRef="metaDataGroups.summary_params"/>
        <paramRef ref="participantParams.min_visits" groupRef="metaDataGroups.summary_params"/>
@@ -53,30 +53,41 @@
        <column name="time_of_obs"/>
          <sql>
            <![CDATA[
---TODO: implement observed time (will need to get min and max ages like in dwelling search)
---including the group by clause at end to get visits / year observed
--- also should use dates and get the average mosquitos ... will also add this to dwellings filter
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
-/* round(count(*) / (to_number(least(to_date(max(pa.EUPATH_0000152),'YYYY-MM-DD'), to_date($$end_date$$, 'DD-MON-YYYY'), 
-       to_date(max(pa.EUPATH_0000032),'YYYY-MM-DD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$,'DD-MON-YYYY'), 
-       to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365),1) as visits_per_year_obs,
-                    round(to_number(least(to_date(max(pa.last_date_observed),'YYYYMMDD'), to_date($$end_date$$, 'DD-MON-YYYY'),
-                    to_date(max(pa.date_of_birth),'YYYYMMDD') + ( ma.max_age * 365)) - greatest(max(pa.app_date), to_date($$start_date$$, 'DD-MON-YYYY'), 
-                    to_date(max(pa.date_of_birth),'YYYYMMDD') + ( $$minAgeAtVisit$$ * 365)) + 1) / 365,1) as time_of_obs, */
-                    count(*) as visit_count,-- lt.ave_anoph, 
+--TODO:  should use dates and get the average mosquitos ... this has been added to the dwelling filter but put here for dynamic column
+select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
+ round(count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
+                    round((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
+                    count(*) as visit_count, mos.ave_anoph, 
    round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) as ave_para_density,
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
    round(avg(ca.EUPATH_0000047),1) as avg_hemo,
    round(avg(ca.IAO_0000414),1) as avg_weight
-from apidbtuning.clinicalvisitattributes ca, apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
-where ca.protocol_app_node_id in ($$visits_nf$$)
-and to_date(ca.EUPATH_0000091,'YYYY-MM-DD') >= to_date($$start_date$$, 'DD-MON-YYYY') --TODO: remove to_date from db
-and to_date(ca.EUPATH_0000091,'YYYY-MM-DD') <= to_date($$end_date$$, 'DD-MON-YYYY')
+from apidbtuning.clinicalvisitattributes ca, apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io,
+   (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
+   from apidbtuning.clinicalvisitattributes 
+   where protocol_app_node_id in (SELECT distinct md.internal FROM ($$visits_visitage_metadata_nf$$) md)
+   ) age,
+   (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
+  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  where da.protocol_app_node_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  group by da.protocol_app_node_id) mos, apidbtuning.protocolappnodeio iom
+where ca.protocol_app_node_id in (SELECT distinct md.internal FROM ($$visits_nf$$) md)
+and ca.EUPATH_0000091 >= to_date($$start_date$$, 'DD-MON-YYYY') 
+and ca.EUPATH_0000091 <= to_date($$end_date$$, 'DD-MON-YYYY')
 and ca.protocol_app_node_id = io.output_node_id
 and pa.protocol_app_node_id = io.input_node_id
-group by pa.name
-having count(*) >= $$min_visits$$  --TODO: implement visits/time observed/year like following query
- and count(*) <= $$max_visits$$    --TODO: currently just count of visits
+and iom.output_node_id = pa.protocol_app_node_id
+and iom.input_node_id = mos.protocol_app_node_id(+)
+group by pa.name, pa.EUPATH_0000152, pa.EUPATH_0000032, pa.EUPATH_0000151,age.max_age,age.min_age,mos.ave_anoph 
+having count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) >= $$min_visits$$
+ and count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) <= $$max_visits$$
  and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) >= $$min_para_density$$
  and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) <= $$max_para_density$$
                 ]]>   
