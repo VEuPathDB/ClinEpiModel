@@ -53,7 +53,6 @@
        <column name="time_of_obs"/>
          <sql>
            <![CDATA[
---TODO:  should use dates and get the average mosquitos ... this has been added to the dwelling filter but put here for dynamic column
 select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
  round(count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
        greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
