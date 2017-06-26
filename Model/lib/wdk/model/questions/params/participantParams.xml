@@ -544,6 +544,10 @@ from apidbtuning.metadataontology o,
  null as description, null as units, null as type, null as is_range, null as precision
  from leaf
  where parent_ontology_term_name is not null
+ union
+ select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
+ null as precision from dual
+ 
     </sql>
     </sqlQuery>
 
@@ -560,22 +564,32 @@ from apidbtuning.metadataontology o,
       <column name="string_value"/>
       <sql>
          <![CDATA[
---TODO .. add in the light trap based on dates ... another table that then join with the following
---TODO once dates correct type remove to_date for attribute columns
-select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m,
-  ( select distinct io.input_node_id, io.output_node_id 
-  from (select min(to_number(EUPATH_0000113)) as min_age, max(to_number(EUPATH_0000113)) as max_age
+--TODO once dates correct type remove to_date for attribute columns and to_number for age column
+with part as ( select distinct io.input_node_id, io.output_node_id 
+  from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
-   where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)) age,
+   where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
+   ) age,
    apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$geographic_region$$)
-   AND least(to_date(pa.EUPATH_0000152,'YYYY-MM-DD'), to_date($$end_date$$,'DD-MON-YYYY'), to_date(pa.EUPATH_0000032,'YYYY-MM-DD') + ( age.max_age * 365)) - 
- greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), to_date(pa.EUPATH_0000032,'YYYY-MM-DD') + ( age.min_age * 365)) + 1 >= $$duration_observation$$
- and pa.protocol_app_node_id = io.output_node_id) part
+   AND least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= 1
+ and pa.protocol_app_node_id = io.output_node_id)
+ select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'dwelling'
  and part.input_node_id = m.protocol_app_node_id
+ union
+ select part.output_node_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  where da.protocol_app_node_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  group by da.protocol_app_node_id) mos, part
+ where part.input_node_id = mos.protocol_app_node_id(+)
           ]]>
     </sql>    
 
@@ -594,15 +608,24 @@ select distinct Part.output_Node_Id as internal, term as ontology_term_name, str
       <column name="string_value"/>
       <sql>
          <![CDATA[
+ with part as (
+select io.input_node_id, io.output_node_id
+  from apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
+  where io.output_node_id = pa.protocol_app_node_id
+)
 select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m,
- (select distinct io.input_node_id, io.output_node_id
-  from apidbtuning.protocolappnodeio io
-  where io.output_node_id in (select distinct protocol_app_node_id from apidbtuning.metadata where category = 'study participant information')
-  ) part
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ from apidbtuning.metadata m, part
+  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'dwelling'
  and part.input_node_id = m.protocol_app_node_id
+ union
+ select part.output_node_id as internal, 'average anopheles' as ontology_term_name, null as string_value, mos.avg_anoph as number_value, null as date_value
+ from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  where da.protocol_app_node_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  group by da.protocol_app_node_id) mos, part
+  where part.input_node_id = mos.protocol_app_node_id(+)
           ]]>
     </sql>    
 
@@ -666,8 +689,8 @@ select distinct va.protocol_app_node_id as internal, term as ontology_term_name,
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
  and io.output_Node_Id = va.protocol_app_node_id
  and io.input_node_id in ($$participants_nf$$)
- and to_date(va.EUPATH_0000091,'YYYY-MM-DD') >= $$start_date$$
- and to_date(va.EUPATH_0000091,'YYYY-MM-DD') <= $$end_date$$
+ and va.EUPATH_0000091 >= to_date($$start_date$$,'DD-MON-YYYY')
+ and va.EUPATH_0000091 <= to_date($$end_date$$,'DD-MON-YYYY')
           ]]>
     </sql>
     </sqlQuery>    
