@@ -69,17 +69,6 @@
          </help>
        </filterParamNew>
 
-       <filterParamNew name="visits_nf" 
-                      metadataQueryRef="ParticipantVQ.VisitMetaData"
-                      ontologyQueryRef="ParticipantVQ.VisitOntology"
-                      backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd"
-                      prompt="Visits"
-                      trimMetadataTerms="false"
-                      dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
-         <help>
-              Select participants based on their visit characteristics. 
-         </help>
-       </filterParamNew>
 
     
     <datasetParam name="participantsBySourceID" 
@@ -629,93 +618,6 @@ select distinct Part.output_Node_Id as internal, term as ontology_term_name, str
           ]]>
     </sql>    
 
-    </sqlQuery>
-
-   <sqlQuery name="VisitOntology">
-      <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
-     <paramRef ref="participantParams.duration_observation" />  
-     <paramRef ref="participantParams.dwellings_nf" />  
-     <paramRef ref="participantParams.geographic_region" />  
-     <paramRef ref="participantParams.participants_nf" />  
-     <column name="ontology_term_name"/>
-     <column name="parent_ontology_term_name"/>
-     <column name="display_name"/>
-     <column name="description"/>
-     <column name="type"/>
-     <column name="units"/>
-     <column name="precision"/>
-     <column name="is_range"/>
-    <sql>
-         <![CDATA[
-with leaf as ( select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
-from apidbtuning.metadataontology o, 
-(select distinct term
- from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'clinical visit information') md
- where o.ontology_term_name = md.term)
- select * from leaf
- union
- select distinct parent_ontology_term_name as ontology_term_name, null as parent_ontology_term_name, parent_ontology_term_name as diaplay_name,
- null as description, null as units, null as type, null as is_range, null as precision
- from leaf
- where parent_ontology_term_name is not null 
-         ]]>
-    </sql>
-   </sqlQuery>
-
-       <sqlQuery name="VisitMetaData">
-         <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-         <paramRef ref="participantParams.start_date" />
-         <paramRef ref="participantParams.end_date" />
-         <paramRef ref="participantParams.duration_observation" />  
-         <paramRef ref="participantParams.dwellings_nf" />  
-         <paramRef ref="participantParams.geographic_region" />  
-         <paramRef ref="participantParams.participants_nf" />  
-         <column name="ontology_term_name"/>
-         <column name="internal"/>
-         <column name="number_value"/>
-         <column name="date_value"/>
-         <column name="string_value"/>
-         <sql>
-           <![CDATA[
-select distinct va.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes va
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'clinical visit information'
- and m.protocol_app_node_id = va.protocol_app_node_id
- and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
- and io.output_Node_Id = va.protocol_app_node_id
- and io.input_node_id in ($$participants_nf$$)
- and va.EUPATH_0000091 >= to_date($$start_date$$,'DD-MON-YYYY')
- and va.EUPATH_0000091 <= to_date($$end_date$$,'DD-MON-YYYY')
-          ]]>
-    </sql>
-    </sqlQuery>    
-
-    <sqlQuery name="VisitMetaDataBkgd">
-         <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-         <paramRef ref="participantParams.start_date" />
-         <paramRef ref="participantParams.end_date" />
-         <paramRef ref="participantParams.duration_observation" />  
-         <paramRef ref="participantParams.dwellings_nf" />  
-         <paramRef ref="participantParams.geographic_region" />  
-         <paramRef ref="participantParams.participants_nf" />  
-         <column name="ontology_term_name"/>
-         <column name="internal"/>
-         <column name="number_value"/>
-         <column name="date_value"/>
-         <column name="string_value"/>
-         <sql>
-           <![CDATA[
- select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata 
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'clinical visit information'
-          ]]>
-    </sql>
     </sqlQuery>
 
   </querySet>    
