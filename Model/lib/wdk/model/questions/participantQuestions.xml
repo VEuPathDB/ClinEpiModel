@@ -96,6 +96,97 @@
  
     </question>
 
+    <question name="ParticipantsByCharStepsRelVis" newBuild="2"
+              searchCategory="Participant"
+              displayName="Select a Set of Participants based on Relative Visits"
+              shortDisplayName="Part by Rel Visits"
+              queryRef="ParticipantId.ParticipantsByCharWizRelVis" 
+              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
+
+
+
+        <attributesList 
+            summary="ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
+        /> 
+
+
+	<dynamicAttributes>
+	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of visits meeting search criteria over the time frame specified" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>     
+             <columnAttribute name="avg_weight" displayName="Avg Weight" help="Average weight of visits meeting search criteria over the time frame specified" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>   
+             
+	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this participants dwelling over the time frame specified" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+            <columnAttribute name="ave_para_density" displayName="Geo Mean Parasite Density" help="Average parasite density of participant in visits meeting search criteria" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="visits_per_year_obs" displayName="Matching Visits / Year" align="center" help="Number of visits matching search criteria / year of observation for this participant"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="visit_count" displayName="# matching visits" align="center" help="Number of visits visits matching the search criteria for this participant"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="time_of_obs" displayName="Years of Observation" align="center" help="Number of years this person was observed matching date and age ranges"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="ave_age_visit" displayName="Avg age at visit" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	</dynamicAttributes>
+          
+
+        <summary>
+            <![CDATA[
+            In this search, you will build a set of Participants and you can further restrict the participants returned based on the relationship of two different selected visits.  You can use the wealth of data in the PRISM study to find Participants with scientifically interesting patterns.
+            More here...
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+        <description>
+            <![CDATA[
+             Find participants based on metadata characteristics. <br />
+            ]]>
+        </description>
+ 
+    </question>
+
    <question name="ParticipantsByCharacteristicIntersection" newBuild="22"
               searchCategory="Participant"
               displayName="Dwelling, Individual and Visit Details"
