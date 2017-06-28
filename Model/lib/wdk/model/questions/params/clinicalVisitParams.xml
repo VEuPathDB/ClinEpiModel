@@ -510,19 +510,30 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
      <column name="is_range"/>
     <sql>
          <![CDATA[
-with leaf as ( select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'clinical visit information') md
- where o.ontology_term_name = md.term)
+ where o.ontology_term_name = md.term),
+first as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ where o.ontology_term_name = par.parent_ontology_term_name),
+ second as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ where o.ontology_term_name = gpar.parent_ontology_term_name)
  select * from leaf
  union
- select distinct parent_ontology_term_name as ontology_term_name, null as parent_ontology_term_name, parent_ontology_term_name as diaplay_name,
- null as description, null as units, null as type, null as is_range, null as precision
- from leaf
- where parent_ontology_term_name is not null 
+ select * from first
+ union
+ select * from second
+ union
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ where o.ontology_term_name = ggpar.parent_ontology_term_name
          ]]>
     </sql>
    </sqlQuery>
@@ -548,6 +559,7 @@ select distinct va.protocol_app_node_id as internal, term as ontology_term_name,
  and m.category = 'clinical visit information'
  and m.protocol_app_node_id = va.protocol_app_node_id
  and io.output_Node_Id = va.protocol_app_node_id
+ and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
  and io.input_node_id in ($$participants_nf$$)
  and va.EUPATH_0000091 >= to_date($$start_date$$,'DD-MON-YYYY')
  and va.EUPATH_0000091 <= to_date($$end_date$$,'DD-MON-YYYY')

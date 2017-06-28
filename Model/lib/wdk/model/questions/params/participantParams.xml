@@ -389,27 +389,31 @@ select distinct * from (
      <column name="is_range"/>
     <sql>
          <![CDATA[
-/*                  select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+with leaf as ( 
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'study participant information') md
- where o.ontology_term_name = md.term
-*/
-with leaf as ( select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
-from apidbtuning.metadataontology o, 
-(select distinct term
- from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'study participant information') md
- where o.ontology_term_name = md.term)
+ where o.ontology_term_name = md.term),
+first as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ where o.ontology_term_name = par.parent_ontology_term_name),
+ second as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ where o.ontology_term_name = gpar.parent_ontology_term_name)
  select * from leaf
  union
- select distinct parent_ontology_term_name as ontology_term_name, null as parent_ontology_term_name, parent_ontology_term_name as diaplay_name,
- null as description, null as units, null as type, null as is_range, null as precision
- from leaf
- where parent_ontology_term_name is not null
+ select * from first
+ union
+ select * from second
+ union
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ where o.ontology_term_name = ggpar.parent_ontology_term_name
          ]]>
     </sql>
    </sqlQuery>
@@ -518,25 +522,34 @@ select distinct Part.output_Node_Id as internal, term as ontology_term_name, str
         <column name="precision"/>
         <column name="is_range"/>
     <sql>
---TODO:  union in light trap summary ontology
---TODO:  put in proper recursive search against ontology to get parent tree
-  with leaf as (select o.ontology_term_name, o.parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+   with leaf as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'dwelling') md
- where o.ontology_term_name = md.term)
+ where o.ontology_term_name = md.term),
+first as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ where o.ontology_term_name = par.parent_ontology_term_name),
+ second as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ where o.ontology_term_name = gpar.parent_ontology_term_name)
  select * from leaf
  union
- select distinct parent_ontology_term_name as ontology_term_name, null as parent_ontology_term_name, parent_ontology_term_name as diaplay_name,
- null as description, null as units, null as type, null as is_range, null as precision
- from leaf
- where parent_ontology_term_name is not null
+ select * from first
  union
- select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
+ select * from second
+ union
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ where o.ontology_term_name = ggpar.parent_ontology_term_name
+ union
+ select 'average anopheles' as ontology_term_name, 'Thing' as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
  null as precision from dual
- 
     </sql>
     </sqlQuery>
 
