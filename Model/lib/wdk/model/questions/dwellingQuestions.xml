@@ -7,6 +7,7 @@
     <!-- ************************************************************ -->
 
 
+<!--
    <question name="DwellingsByCharacteristicIntersection" newBuild="22"
               searchCategory="Dwelling"
               displayName="Dwelling and Participant Details"
@@ -56,6 +57,7 @@
         </description>
  
     </question>
+-->
 
     <!--Find records by Source ID-->
    <question name="DwellingsBySourceID" newBuild="22"
