@@ -27,28 +27,8 @@ Select distinct cv.source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLI
     </sqlQuery>
 
 
-    <sqlQuery name="ClinicalVisitsByMetadataCross"
-         isCacheable="true">
-      <paramRef ref="clinicalVisitParams.minAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
-      <paramRef ref="clinicalVisitParams.maxAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
-      <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
-      <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
-      <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-      <paramRef ref="participantParams.participants_by_all_metadata" groupRef="metaDataGroups.visit_part_characteristics"/>
-     <paramRef ref="clinicalVisitParams.visits_by_metadata" groupRef="metaDataGroups.visit_visit_characteristics"/>
-      <column name="source_id"/>
-      <column name="project_id"/>
-        <sql>
-          <![CDATA[
-select ca.source_id
-from APIDBTUNING.PERSONATTRIBUTES pa, apidbtuning.clinicalvisitattributes ca
-where pa.source_id in ($$participants_by_all_metadata$$)
-and ca.source_id in ($$visits_by_metadata$$) 
-and ca.parent_id = pa.source_id
-               ]]>   
-       </sql>
-    </sqlQuery>
 
+<!--
        <sqlQuery name="VisitByRelativeDate"
          isCacheable="true">
       <paramRef ref="clinicalVisitParams.minAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
@@ -105,6 +85,7 @@ group by source_id,parent_id,visit_date
                ]]>   
        </sql>
     </sqlQuery>                
+-->
        
        <sqlQuery name="VisitsByParticipantIds" doNotTest="true" displayName="ID"
          isCacheable="true">
