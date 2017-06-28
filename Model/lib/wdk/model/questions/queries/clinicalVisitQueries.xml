@@ -26,66 +26,6 @@ Select distinct cv.source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLI
        </sql>
     </sqlQuery>
 
-
-
-<!--
-       <sqlQuery name="VisitByRelativeDate"
-         isCacheable="true">
-      <paramRef ref="clinicalVisitParams.minAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
-      <paramRef ref="clinicalVisitParams.maxAgeAtVisit" groupRef="metaDataGroups.age_at_visit"/>
-      <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
-      <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
-      <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-      <paramRef ref="participantParams.participants_by_all_metadata" groupRef="metaDataGroups.visit_part_characteristics"/>
-      <paramRef ref="clinicalVisitParams.visits_by_metadata" groupRef="metaDataGroups.visit_visit_characteristics"/>
-      <paramRef ref="clinicalVisitParams.minDaysBetween" groupRef="metaDataGroups.relative_visits"/>
-      <paramRef ref="clinicalVisitParams.maxDaysBetween" groupRef="metaDataGroups.relative_visits"/>
-      <paramRef ref="clinicalVisitParams.date_direction" groupRef="metaDataGroups.relative_visits"/>
-      <paramRef ref="clinicalVisitParams.dateOperator" groupRef="metaDataGroups.relative_visits"/>
-      <paramRef ref="clinicalVisitParams.visits_by_metadata_2" groupRef="metaDataGroups.relative_visits"/>
-      <column name="source_id"/>
-      <column name="project_id"/>
-      <column name="visit_date"/>
-      <column name="participant_id"/>
-      <column name="min_days_between"/>
-      <column name="num_matching_visits"/>
-        <sql>
-          <![CDATA[
-select source_id,parent_id as participant_id,visit_date,CASE when min(days_between) > 0 then min(days_between) else null end as min_days_between,CASE WHEN'$$dateOperator$$' = 'MINUS' THEN null else count(*) end as num_matching_visits
-from (
-select visits.source_id,visits.parent_id,visits.visit_date, abs(setb.visit_date - visits.visit_date) as days_between
-from (
-select ca.source_id, ca.parent_id ,ca.visit_date 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca, apidbtuning.personattributes pa
-where ca.source_id in ($$visits_by_metadata$$)
-and ca.parent_id = pa.source_id
-and pa.source_id in ($$participants_by_all_metadata$$)
-$$dateOperator$$ 
-select seta.source_id,seta.parent_id,seta.visit_date
-from APIDBTUNING.CLINICALVISITATTRIBUTES seta, APIDBTUNING.CLINICALVISITATTRIBUTES setb
-where seta.source_id in ($$visits_by_metadata$$)
-and setb.source_id in ($$visits_by_metadata_2$$)
-and seta.parent_id = setb.parent_id
-and seta.source_id != setb.source_id
-and setb.visit_date $$date_direction$$ seta.visit_date
-and abs(setb.visit_date - seta.visit_date) >= $$minDaysBetween$$
-and abs(setb.visit_date - seta.visit_date) <= $$maxDaysBetween$$) visits, 
-APIDBTUNING.CLINICALVISITATTRIBUTES setb
-where ('$$dateOperator$$' = 'MINUS'
-and setb.source_id in ($$visits_by_metadata$$)
-and setb.source_id = visits.source_id )
-or (setb.source_id in ($$visits_by_metadata_2$$)
-and visits.parent_id = setb.parent_id
-and visits.source_id != setb.source_id
-and setb.visit_date $$date_direction$$ visits.visit_date
-and abs(setb.visit_date - visits.visit_date) >= $$minDaysBetween$$
-and abs(setb.visit_date - visits.visit_date) <= $$maxDaysBetween$$)
-)
-group by source_id,parent_id,visit_date
-               ]]>   
-       </sql>
-    </sqlQuery>                
--->
      <sqlQuery name="ClinicalVisitsByRelativeVisits"
           isCacheable="true">
        <paramRef ref="participantParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
@@ -144,6 +84,28 @@ and abs(setb.EUPATH_0000091 - visits.EUPATH_0000091) >= $$minDaysBetween$$
 and abs(setb.EUPATH_0000091 - visits.EUPATH_0000091) <= $$maxDaysBetween$$)
 )
 group by name,parent_id,EUPATH_0000091
+                ]]>   
+        </sql>
+     </sqlQuery>
+
+
+     <sqlQuery name="ClinicalVisitsByAllData"
+          isCacheable="true">
+       <paramRef ref="participantParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
+       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.age_at_visit"/>
+       <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
+       <paramRef ref="participantParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <sql>
+           <![CDATA[
+select name as source_id,'ClinEpiDB' as project_id
+from APIDBTUNING.CLINICALVISITATTRIBUTES
+where protocol_app_node_id in ($$visits_nf$$)
                 ]]>   
         </sql>
      </sqlQuery>
