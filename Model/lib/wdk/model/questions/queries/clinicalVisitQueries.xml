@@ -48,42 +48,49 @@ Select distinct cv.source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLI
        <column name="num_matching_visits"/> 
        <sql>
            <![CDATA[
-select name as source_id,'ClinEpiDB' as project_id,
-CASE when min(days_between) > 0 then min(days_between) else null end as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null else count(*) end as num_matching_visits
-from (
-select visits.protocol_app_node_id,visits.name,visits.input_node_id as parent_id,visits.EUPATH_0000091, abs(setb.EUPATH_0000091 - visits.EUPATH_0000091) as days_between
-from (
-select ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000091 
+with vis as (
+select distinct ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000091 
 from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.protocolappnodeio io
 where ca.protocol_app_node_id in ($$visits_nf$$)
 and ca.protocol_app_node_id = io.output_node_id
+),
+relvis as (
+select distinct ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000091 
+from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.protocolappnodeio io
+where ca.protocol_app_node_id in ($$relative_visits_nf$$)
+and ca.protocol_app_node_id = io.output_node_id
+),
+visits as (
+select * from vis
 $$dateOperator_fv$$
-select seta.protocol_app_node_id,seta.name, ioa.input_node_id,seta.EUPATH_0000091
-from APIDBTUNING.CLINICALVISITATTRIBUTES seta, APIDBTUNING.CLINICALVISITATTRIBUTES setb,
-    apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob
-where seta.protocol_app_node_id in ($$visits_nf$$)
-and $$use_relative_visits$$ = 1
-and setb.protocol_app_node_id in ($$relative_visits_nf$$)
-and seta.protocol_app_node_id = ioa.output_node_id
-and setb.protocol_app_node_id = iob.output_node_id
-and ioa.input_node_id = iob.input_node_id
-and seta.protocol_app_node_id != setb.protocol_app_node_id
-and setb.EUPATH_0000091 $$date_direction_fv$$ seta.EUPATH_0000091
-and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$minDaysBetween$$
-and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$maxDaysBetween$$) visits, 
-APIDBTUNING.CLINICALVISITATTRIBUTES setb, apidbtuning.protocolappnodeio iob
-where ('$$dateOperator_fv$$' = 'MINUS'
-and setb.protocol_app_node_id in ($$visits_nf$$)
-and setb.protocol_app_node_id = visits.protocol_app_node_id )
-or (setb.protocol_app_node_id in ($$relative_visits_nf$$)
-and visits.input_node_id = iob.input_node_id
-and setb.protocol_app_node_id = iob.output_node_id
-and visits.protocol_app_node_id != setb.protocol_app_node_id
-and setb.EUPATH_0000091 $$date_direction_fv$$ visits.EUPATH_0000091
-and abs(setb.EUPATH_0000091 - visits.EUPATH_0000091) >= $$minDaysBetween$$
-and abs(setb.EUPATH_0000091 - visits.EUPATH_0000091) <= $$maxDaysBetween$$)
+select vis.protocol_app_node_id,vis.name, vis.input_node_id,vis.EUPATH_0000091
+from vis, relvis rv
+where $$use_relative_visits$$ = 1
+and vis.input_node_id = rv.input_node_id
+and vis.protocol_app_node_id != rv.protocol_app_node_id
+and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
+and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$minDaysBetween$$
+and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$maxDaysBetween$$
 )
-group by name,parent_id,EUPATH_0000091
+select name as source_id,'ClinEpiDB' as project_id
+, CASE when min(days_between) > 0 then min(days_between) else null end as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null else count(*) end as num_matching_visits
+from (
+select visits.protocol_app_node_id,visits.name,visits.input_node_id as parent_id,visits.EUPATH_0000091, abs(inter.EUPATH_0000091 - visits.EUPATH_0000091) as days_between
+from (
+select * from vis
+INTERSECT
+select vis.protocol_app_node_id,vis.name, vis.input_node_id,vis.EUPATH_0000091
+from vis, relvis rv
+where $$use_relative_visits$$ = 1
+and vis.input_node_id = rv.input_node_id
+and vis.protocol_app_node_id != rv.protocol_app_node_id
+and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
+and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$minDaysBetween$$
+and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$maxDaysBetween$$
+) inter, visits
+where visits.protocol_app_node_id = inter.protocol_app_node_id(+)
+)
+group by name
                 ]]>   
         </sql>
      </sqlQuery>
