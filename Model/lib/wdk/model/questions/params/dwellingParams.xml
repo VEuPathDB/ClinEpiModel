@@ -135,7 +135,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'dwelling') md
+ and category = 'Dwelling type') md
  where o.ontology_term_name = md.term
          ]]>
     </sql>
@@ -156,7 +156,7 @@ from apidbtuning.metadataontology o,
 select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'dwelling'
+ and m.category = 'Dwelling type'
  and m.protocol_app_node_id in ($$geographic_region$$)
           ]]>
     </sql>
@@ -173,11 +173,11 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
      <column name="is_range"/>
     <sql>
          <![CDATA[
- select o.ontology_term_name, 'dwelling' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_name, 'Dwelling type' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o 
  where o.ontology_term_name = 'subcounty in Uganda'
  union
- select 'dwelling' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+ select 'Dwelling type' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling type' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
  null as precision from dual
          ]]>
     </sql>
@@ -194,7 +194,7 @@ from apidbtuning.metadataontology o
 select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'dwelling'
+ and category = 'Dwelling type'
  and term = 'subcounty in Uganda'
           ]]>
     </sql>
@@ -231,7 +231,7 @@ select distinct * from (
             end) as value
   from ApidbTuning.AppNodeCharacteristics
      
-where type = 'dwelling'
+where type = 'Dwelling type'
 and ontology_term_source_id  in (select distinct property 
                        from ApidbTuning.MetadataSpec
                       
@@ -251,7 +251,7 @@ from ApidbTuning.AppNodeCharacteristics person,
      APIDBTUNING.PANAssociations pan
      
 where  person.type = 'person'
-  and  dwelling.type ='dwelling'
+  and  dwelling.type ='Dwelling type'
   and person.SOURCE_ID = pan.associated_node_source_id
   and dwelling.source_id = pan.node_source_id
 and person.ontology_term_source_id  in (select distinct property 
@@ -273,7 +273,7 @@ where value is not null
            ontology_term_source_id as property,
            value as value
   from ApidbTuning.AppNodeCharacteristics
-where type = 'dwelling'
+where type = 'Dwelling type'
 and value is not null
 ]]>
             </sql>
@@ -288,7 +288,7 @@ and value is not null
          <![CDATA[
 select distinct property, spec_property, spec_value
   from ApidbTuning.MetadataSpec
- where entity_type ='dwelling'
+ where entity_type ='Dwelling type'
     or entity_type ='all' 
         ]]>
      </sql>
@@ -303,7 +303,7 @@ select distinct property, spec_property, spec_value
     with mds as (
  select distinct property, spec_property, spec_value
   from ApidbTuning.MetadataSpec
-  where ( entity_type in 'person' or entity_type = 'dwelling')
+  where ( entity_type in 'person' or entity_type = 'Dwelling type')
   and property not in  (select distinct property
                                        from Apidbtuning.metadataspec
                                      where lower(spec_value) = 'do not display'
