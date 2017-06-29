@@ -6,7 +6,7 @@
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
 
-   <question name="ParticipantsByCharStepsNoRelVis" newBuild="22"
+   <question name="ParticipantsByAllData" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants"
               shortDisplayName="Part Details"
@@ -96,7 +96,7 @@
  
     </question>
 
-    <question name="ParticipantsByCharSteps" newBuild="2"
+    <question name="ParticipantsByRelativeVisits" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants based on Relative Visits"
               shortDisplayName="Part by Rel Visits"
