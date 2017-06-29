@@ -275,17 +275,10 @@ from apidbtuning.metadata m
       <column name="string_value"/>
       <sql>
         <![CDATA[
---TODO: use participantAttributes to make part more efficient
-select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m,
- (select distinct io.output_node_id,io.input_node_id
-  from apidbtuning.protocolappnodeio io --, apidbtuning.participantattributes pa
-  where io.output_node_id in (select distinct protocol_app_node_id from apidbtuning.metadata where category = 'study participant information') --= pa.protocol_app_node_id
-  ) part
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'dwelling'
- and m.term = 'subcounty in Uganda'
- and part.input_node_id = m.protocol_app_node_id
+ select pa.protocol_app_node_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value, cast(null as number) as number_value, cast(null as date) as date_value
+ from apidbtuning.participantattributes pa, apidbtuning.dwellingattributes da, apidbtuning.metadatatype mt
+ where pa.EUPATH_0000094 = da.name
+ and mt.source_id = 'EUPATH_0000054'
         ]]>
       </sql>
     </sqlQuery>

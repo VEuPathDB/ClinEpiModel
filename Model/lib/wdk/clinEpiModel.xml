@@ -25,7 +25,9 @@
 
   <uiConfig showStratPanelByDefault="false"/>
 
-  <ontology name="Categories" pluginClass="org.gusdb.wdk.model.ontology.TestOntologyPlugin" useAsWdkCategories="true" />
+
+    <!-- Categories -->
+    <import file="model/questions/categories.xml"/>
 
     <import file="ebrcModelCommon.xml"/>
 
