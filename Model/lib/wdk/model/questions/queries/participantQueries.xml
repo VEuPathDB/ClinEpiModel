@@ -194,8 +194,8 @@ SELECT DISTINCT pana.associated_node_source_id as source_id , '@PROJECT_ID@' as 
        pana.node_source_id as dwelling, wdk_weight
 FROM ($$dwelling_result$$) source_set, ApidbTuning.PANAssociations pana
 WHERE source_set.source_id = pana.node_source_id
-  AND node_type='dwelling'
-  and associated_node_type = 'person'
+  AND node_type='Dwelling type'
+  and associated_node_type = 'Participant'
              ]]>
         </sql>
     </sqlQuery>

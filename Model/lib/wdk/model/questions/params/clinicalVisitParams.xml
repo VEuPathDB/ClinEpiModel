@@ -236,7 +236,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'clinical visit information') md
+ and category = 'Visit') md
  where o.ontology_term_name = md.term               
     ]]>   
         </sql>
@@ -258,7 +258,7 @@ from apidbtuning.metadataontology o,
 select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'clinical visit information'
+ and category = 'Visit'
          ]]>   
       </sql>
    </sqlQuery>
@@ -277,7 +277,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
            <![CDATA[
                        select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
-where ontology_term_name = 'age since birth at time of visit'
+where ontology_term_name = 'Age at time of visit'
 union
                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
@@ -301,8 +301,8 @@ select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.s
   where io.input_node_id in ($$geographic_region$$)
   ) pa
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'clinical visit information'
- and m.term = 'age since birth at time of visit'
+ and m.category = 'Visit'
+ and m.term = 'Age at time of visit'
  and pa.output_node_id = m.protocol_app_node_id
          ]]>   
       </sql>
@@ -320,8 +320,8 @@ select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.s
 select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'clinical visit information'
- and term = 'age since birth at time of visit'
+ and category = 'Visit'
+ and term = 'Age at time of visit'
           ]]>   
       </sql>
    </sqlQuery>
@@ -349,7 +349,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'clinical visit information') md
+ and category = 'Visit') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -390,7 +390,7 @@ first as (
 select distinct va.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes va
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'clinical visit information'
+ and m.category = 'Visit'
  and m.protocol_app_node_id = va.protocol_app_node_id
  and io.output_Node_Id = va.protocol_app_node_id
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
@@ -419,7 +419,7 @@ select distinct va.protocol_app_node_id as internal, term as ontology_term_name,
 select distinct va.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes va
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'clinical visit information'
+ and m.category = 'Visit'
  and m.protocol_app_node_id = va.protocol_app_node_id
  and io.output_Node_Id = va.protocol_app_node_id
  and io.input_node_id in ($$participants_nf$$)
@@ -445,7 +445,7 @@ select distinct va.protocol_app_node_id as internal, term as ontology_term_name,
  select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata 
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'clinical visit information'
+ and category = 'Visit'
           ]]>
     </sql>
     </sqlQuery>
