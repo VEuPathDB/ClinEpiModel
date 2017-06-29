@@ -277,7 +277,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
            <![CDATA[
                        select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
-where ontology_term_name = 'age since birth at time of visit'
+where ontology_term_name = 'Age at time of visit'
 union
                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
@@ -302,7 +302,7 @@ select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.s
   ) pa
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Visit'
- and m.term = 'age since birth at time of visit'
+ and m.term = 'Age at time of visit'
  and pa.output_node_id = m.protocol_app_node_id
          ]]>   
       </sql>
@@ -321,7 +321,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'Visit'
- and term = 'age since birth at time of visit'
+ and term = 'Age at time of visit'
           ]]>   
       </sql>
    </sqlQuery>

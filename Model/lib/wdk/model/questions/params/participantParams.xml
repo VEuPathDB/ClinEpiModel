@@ -259,9 +259,9 @@ from apidbtuning.metadata m
         <![CDATA[
                  select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
                  from apidbtuning.metadataontology o 
-                 where o.ontology_term_name = 'subcounty in Uganda'
+                 where o.ontology_term_name = 'Subcounty in Uganda'
                  union
-                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling type' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
         ]]>
       </sql>
@@ -304,7 +304,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'dwelling') md
+ and category = 'Dwelling type') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -356,7 +356,7 @@ with part as ( select distinct io.input_node_id, io.output_node_id
  select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'dwelling'
+ and m.category = 'Dwelling type'
  and part.input_node_id = m.protocol_app_node_id
  union
  select part.output_node_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
@@ -394,7 +394,7 @@ select io.input_node_id, io.output_node_id
 select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m, part
   where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'dwelling'
+ and m.category = 'Dwelling type'
  and part.input_node_id = m.protocol_app_node_id
  union
  select part.output_node_id as internal, 'average anopheles' as ontology_term_name, null as string_value, mos.avg_anoph as number_value, null as date_value
