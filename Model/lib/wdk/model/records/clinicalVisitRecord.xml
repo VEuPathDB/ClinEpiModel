@@ -47,8 +47,7 @@
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
- <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB"
-                         internal="true" inReportMaker="false">
+ <textAttribute name="record_overview" displayName="Overview">
 
              <text>
                   <![CDATA[
@@ -79,17 +78,17 @@
             <columnAttribute name="category" displayName="Category"/>
             <columnAttribute name="value" displayName="Value"/>
         </table>
-
-        <table name="SamplesCollected"
+-->
+        <table name="Samples"
                displayName="Samples Collected During Visit"
-               queryRef="ClinicalVisitTables.SamplesCollected">
+               queryRef="ClinicalVisitTables.Samples">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
-            <columnAttribute name="name" inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="sample_id" displayName="Sample ID"/>
-            <columnAttribute name="specimen_type" displayName="Specimen Type"/>
+            <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
 
--->
+
     </recordClass>
     </recordClassSet>
 
@@ -111,11 +110,9 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ClinicalVisitAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ClinicalVisitAttributes
          </sql>
        </sqlQuery>
-
-
 
 
 
@@ -130,8 +127,7 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
           <sql excludeProjects="EuPathDB">
             <![CDATA[
  select cva.name as source_id, '@PROJECT_ID@' as project_id, cva.*,
-                     da.*,
-                     cva.*
+                     da.*, pa.*
                      from APIDBTUNING.PROTOCOLAPPNODEIO io1
                         , APIDBTUNING.PROTOCOLAPPNODEIO io2
                         , apidbtuning.clinicalvisitattributes cva
@@ -141,7 +137,6 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
                      and io1.input_node_id = pa.p_PROTOCOL_APP_NODE_ID
                      and pa.p_PROTOCOL_APP_NODE_ID = io2.OUTPUT_NODE_ID
                      and io2.input_node_id = da.hh_PROTOCOL_APP_NODE_ID
-                     )
             ]]>
           </sql>  
          </sqlQuery>
@@ -276,17 +271,28 @@ select distinct source_id,
             </sql>
         </sqlQuery>
 
-      <sqlQuery name="SamplesCollected"  isCacheable='false'>
+      <sqlQuery name="Samples"  isCacheable='false'>
             <column name="source_id"/>
-            <column name="name"/>
+            <column name="project_id"/>
             <column name="sample_id"/>
-            <column name="specimen_type"/>
+
+            <!-- TODO: should be dynamic -->
+            <column name="OBI_0100051"/>
+
+            <sqlParamValue name="sampleSourceIds"><![CDATA[OBI_0100051]]></sqlParamValue>
+            <sqlParamValue name="orderBy"><![CDATA[OBI_0100051]]></sqlParamValue>
             <sql>
-              select distinct cv.source_id, cv.name, sa.name as sample_id, sa.specimen_type
-                       from ApidbTuning.CLINICALVISITATTRIBUTES cv, apidbtuning.SampleAttributes sa  
-                      where cv.parent_id = sa.parent_id 
-                        and cv.visit_date = sa.collection_date
-                  order by cv.source_id, sa.SPECIMEN_TYPE,sa.name
+
+                 <![CDATA[
+select cv.name as source_id,
+        '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, cv.name as sample_id
+              from ApidbTuning.ClinicalVisitAttributes cv
+              , apidbtuning.sampleattributes sa
+              , apidbtuning.protocolappnodeio io
+              where sa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
+              and io.INPUT_NODE_ID = cv.PROTOCOL_APP_NODE_ID
+              order by &&orderBy&&
+                  ]]>
             </sql>
         </sqlQuery>
       </querySet>

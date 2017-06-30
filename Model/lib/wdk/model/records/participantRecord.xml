@@ -307,7 +307,7 @@ select count(*) from apidbtuning.ParticipantAttributes
             <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&visitSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name as link
+                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link
               from ApidbTuning.ClinicalVisitAttributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.protocolappnodeio io
@@ -335,7 +335,7 @@ select pa.name as source_id,
                  <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name as link, sa.name as sample_id
+                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
               from ApidbTuning.ClinicalVisitAttributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.sampleattributes sa
