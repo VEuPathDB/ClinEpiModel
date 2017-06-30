@@ -19,3 +19,4 @@ ParticipantRecordClasses.ParticipantRecordClass.ParticipantQuestions.Participant
 ParticipantAttributes.ParticipantAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attributeMetaQuery	ParticipantAttributesMeta				gene		results	download	
 ParticipantRecordClasses.ParticipantRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	record_overview						record-internal	record
 ParticipantRecordClasses.ParticipantRecordClass.Visits	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Visits					2	record	download		
+ParticipantRecordClasses.ParticipantRecordClass.Samples	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Samples					2	record	download		

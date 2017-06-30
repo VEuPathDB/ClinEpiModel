@@ -4,7 +4,6 @@
 
       <recordClass name="ParticipantRecordClass" urlName="participant" displayName="Participant"> 
 
-
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="ParticipantAttributes.ParticipantAlias">
                 <columnRef>source_id</columnRef>
@@ -18,8 +17,6 @@
                     ]]>
                 </text>                
             </idAttribute>
-
-           
 
       <!-- =============================================================== -->
       <!--  Summary & record views -->
@@ -85,14 +82,6 @@
             <columnAttribute name="category" displayName="Characteristic"/>
             <columnAttribute name="value" displayName="Value"/>
         </table>
-        <table name="UncategorizedCharacteristics"
-               displayName="Uncategorized Participant Characteristics"
-               queryRef="ParticipantTables.UncategorizedCharacteristics">
-            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="category" displayName="Category"/>
-            <columnAttribute name="value" displayName="Value"/>
-        </table>
 -->
 
          <table name="Visits"
@@ -118,27 +107,28 @@
             <columnAttribute name="EUPATH_0000092" displayName="Asexual parasite density"/>
             <columnAttribute name="EUPATH_0000100" displayName="Fever (subjective)"/>
           </table>
-<!--
+
 
         <table name="Samples"
                displayName="Samples Collected From Participant"
                queryRef="ParticipantTables.Samples">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
-            <columnAttribute name="name" inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="link" internal="true"/>
-            <columnAttribute name="collection_date" internal="true"/>
             <linkAttribute name="db_link" displayName="Date of Sample Collection" inReportMaker="false">
                  <displayText>
                     <![CDATA[
-                    $$collection_date$$
+                    $$EUPATH_0000091$$
                     ]]>
                  </displayText>
                  <url>$$link$$</url>
             </linkAttribute>
+
             <columnAttribute name="sample_id" displayName="Sample ID"/>
-            <columnAttribute name="specimen_type" displayName="Specimen Type"/>
+            <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
+            <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
--->
+
     </recordClass>
     </recordClassSet>
 
@@ -293,30 +283,6 @@ select count(*) from apidbtuning.ParticipantAttributes
             </sql>
         </sqlQuery>
 
-      <sqlQuery name="UncategorizedCharacteristics"  isCacheable='false'>
-            <column name="source_id"/>
-            <column name="name"/>
-            <column name="category"/>
-            <column name="value"/>
-            <sql>
-            <![CDATA[
-          select distinct 
-                 anc.source_id, 
-                 anc.source_id as name,
-                 anc.value,
-                 anc.category
-            from ApidbTuning.AppNodeCharacteristics anc
-                 ,ApidbTuning.MetaDataSpec mds
-           where anc.type = 'person'
-             and anc.ontology_term_source_id = mds.property
-             and mds.spec_property = 'categorized'
-             and mds.spec_value = 'false'   
-             and anc.category != 'hhid'
-           order by source_id, category
-            ]]>
-            </sql>
-        </sqlQuery>
-
 
 
       <sqlQuery name="Visits"  isCacheable='false'>
@@ -339,10 +305,9 @@ select count(*) from apidbtuning.ParticipantAttributes
          <sqlParamValue name="orderBy"><![CDATA[EUPATH_0000091]]></sqlParamValue>
             <sql>
             <![CDATA[
-
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&visitSourceIds&&, 
-                   'todo'||cv.name as link
+                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name as link
               from ApidbTuning.ClinicalVisitAttributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.protocolappnodeio io
@@ -355,26 +320,32 @@ select pa.name as source_id,
 
       <sqlQuery name="Samples"  isCacheable='false'>
             <column name="source_id"/>
-            <column name="name"/>
-            <column name="sample_id"/>
-            <column name="collection_date"/>
-            <column name="visit_id"/>
-            <column name="specimen_type"/>
+            <column name="project_id"/>
             <column name="link"/>
+            <column name="sample_id"/>
+
+            <!-- TODO: make these dynamic -->
+            <column name="EUPATH_0000091"/>
+            <column name="OBI_0100051"/>
+
+         <sqlParamValue name="sampleSourceIds"><![CDATA[cv.EUPATH_0000091,OBI_0100051]]></sqlParamValue>
+         <sqlParamValue name="orderBy"><![CDATA[cv.EUPATH_0000091]]></sqlParamValue>
+
             <sql>
                  <![CDATA[
-                                 select distinct pa.source_id, 
-                                  pa.name, 
-                                  sa.source_id as sample_id,
-                                  to_char(sa.collection_date, 'MONTH DD, YYYY') as collection_date,
-                                  cv.source_id as visit_id,
-                                  sa.specimen_type,
-                   'showRecord.do?name=ClinicalVisitRecordClasses.ClinicalVisitRecordClass&project_id=@PROJECT_ID@&primary_key='||cv.source_id as link
-                       from ApidbTuning.CLINICALVISITATTRIBUTES cv, apidbtuning.SampleAttributes sa, apidbtuning.personAttributes pa 
-                      where cv.parent_id = sa.parent_id 
-                        and sa.parent_id = pa.source_id
-                        and cv.visit_date (+) = sa.collection_date
-                  order by sa.collection_date, sa.SPECIMEN_TYPE
+select pa.name as source_id,
+        '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
+                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name as link, sa.name as sample_id
+              from ApidbTuning.ClinicalVisitAttributes cv
+              , apidbtuning.participantattributes pa
+              , apidbtuning.sampleattributes sa
+              , apidbtuning.protocolappnodeio io
+              , apidbtuning.protocolappnodeio io2
+              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
+              and io.INPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
+              and sa.protocol_app_node_id = io2.output_node_id
+              and io2.INPUT_NODE_ID = cv.PROTOCOL_APP_NODE_ID
+              order by &&orderBy&&
                   ]]>
             </sql>
         </sqlQuery>    
