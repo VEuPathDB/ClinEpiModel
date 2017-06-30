@@ -63,8 +63,8 @@
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <!-- overview -->  
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-         <textAttribute name="overview" displayName="Overview"
-                         inReportMaker="false" internal="true">
+         <textAttribute name="record_overview" displayName="Overview">
+
            <text>
               <![CDATA[
                   Subcounty: $$EUPATH_0000054$$<br>

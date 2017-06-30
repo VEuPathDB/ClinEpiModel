@@ -63,7 +63,7 @@
 
              <text>
                   <![CDATA[
-                  Participant <i>$$source_id$$</i> from Household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$EUPATH_0000094$$">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
+                  Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/dwelling/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
                   ]]>
              </text>
           </textAttribute>

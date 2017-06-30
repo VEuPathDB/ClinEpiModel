@@ -51,7 +51,7 @@
 
              <text>
                   <![CDATA[
-                  Visit from <i>$$EUPATH_0000091$$</i> for Participant <a href="showRecord.do?name=ParticipantRecordClasses.ParticipantRecordClass&project_id=@PROJECT_ID@&primary_key=$$parent_id$$">$$parent_id$$</a>.
+                  Visit from <i>$$EUPATH_0000091$$</i> for Participant <a href="@WEBAPP_BASE_URL@/record/participant/$$parent_id$$/@PROJECT_ID@">$$parent_id$$</a>.
                   ]]>
              </text>
           </textAttribute>
