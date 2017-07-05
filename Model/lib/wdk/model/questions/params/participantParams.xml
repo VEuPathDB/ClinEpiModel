@@ -324,7 +324,7 @@ first as (
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
  union
- select 'average anopheles' as ontology_term_name, 'Thing' as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
+ select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
  null as precision from dual
     </sql>
     </sqlQuery>

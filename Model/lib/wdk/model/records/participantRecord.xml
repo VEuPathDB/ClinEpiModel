@@ -4,7 +4,6 @@
 
       <recordClass name="ParticipantRecordClass" urlName="participant" displayName="Participant"> 
 
-
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="ParticipantAttributes.ParticipantAlias">
                 <columnRef>source_id</columnRef>
@@ -18,8 +17,6 @@
                     ]]>
                 </text>                
             </idAttribute>
-
-           
 
       <!-- =============================================================== -->
       <!--  Summary & record views -->
@@ -62,12 +59,11 @@
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
- <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB"
-                         internal="true" inReportMaker="false">
+ <textAttribute name="record_overview" displayName="Overview">
 
              <text>
                   <![CDATA[
-                  Participant <i>$$source_id$$</i> from Household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$EUPATH_0000094$$">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
+                  Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/dwelling/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
                   ]]>
              </text>
           </textAttribute>
@@ -86,87 +82,30 @@
             <columnAttribute name="category" displayName="Characteristic"/>
             <columnAttribute name="value" displayName="Value"/>
         </table>
-        <table name="UncategorizedCharacteristics"
-               displayName="Uncategorized Participant Characteristics"
-               queryRef="ParticipantTables.UncategorizedCharacteristics">
-            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="category" displayName="Category"/>
-            <columnAttribute name="value" displayName="Value"/>
-        </table>
+-->
+
          <table name="Visits"
                  displayName="Clinical Visits"
-                 queryRef="ParticipantTables.Visits" excludeProjects="TriTrypDB,TrichDB">
-            <columnAttribute name="visit_id" internal="true"/>
+                 queryRef="ParticipantTables.Visits">
             <columnAttribute name="source_id" internal="true"/>
+            <columnAttribute name="project_id" internal="true"/>
             <columnAttribute name="link" internal="true"/>
-            <columnAttribute name="visit_date" internal="true"/>
             <linkAttribute name="db_link" displayName="Date of Visit" inReportMaker="false">
                  <displayText>
                     <![CDATA[
-                    $$visit_date$$
+                    $$EUPATH_0000091$$
                     ]]>
                  </displayText>
                  <url>$$link$$</url>
             </linkAttribute>
-<columnAttribute name="age_since_birth_at_time_of_vi" displayName="Age At Time Of Visit">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="asexual_parasite_density" displayName="Asexual Parasite Density"  help="Number of asexual parasites in the blood (counts per microliter)">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
-<columnAttribute name="visit_type" displayName="Visit Type"  help="classification of clinical visit based on reason for the visit">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="malaria_diagnosis_and_parasit" displayName="Malaria Diagnosis And Parasite Status"  help="Malaria cat">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="complicated_malaria" displayName="Complicated Malaria"  help="Diagnosis of malaria with danger signs including inability to sit up or stand, vomiting, unable to breastfeed or drink and lethargy, or criteria for severe malaria.">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="fever_subjective_" displayName="Fever (subjective)"  help="Subjective fever, as reported by the study participant or their parent/guardian">
-              <plugin name="wordCloud" display="Word Cloud"
-                      description="Display the terms in the attribute as word clouds"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin"
-                      view="/wdk/jsp/results/wordCloud.jsp">
-                      <property name="min-word-length">1</property>
-                      <property name="common-words"></property>
-                      <property name="exclude-numbers">false</property>
-              </plugin>
-</columnAttribute>
-<columnAttribute name="temperature" displayName="Temperature"  help="Temperature (in degrees Celsius)">
-                            <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-</columnAttribute>
+            <columnAttribute name="EUPATH_0000040" displayName="Complicated malaria"/>
+            <columnAttribute name="EUPATH_0000338" displayName="Malaria diagnosis and parasite status"/>
+            <columnAttribute name="EUPATH_0000311" displayName="Visit type"/>
+            <columnAttribute name="EUPATH_0000113" displayName="Age at time of visit"/>
+            <columnAttribute name="EUPATH_0000110" displayName="Temperature"/>
+            <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
+            <columnAttribute name="EUPATH_0000092" displayName="Asexual parasite density"/>
+            <columnAttribute name="EUPATH_0000100" displayName="Fever (subjective)"/>
           </table>
 
 
@@ -174,21 +113,22 @@
                displayName="Samples Collected From Participant"
                queryRef="ParticipantTables.Samples">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
-            <columnAttribute name="name" inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="link" internal="true"/>
-            <columnAttribute name="collection_date" internal="true"/>
             <linkAttribute name="db_link" displayName="Date of Sample Collection" inReportMaker="false">
                  <displayText>
                     <![CDATA[
-                    $$collection_date$$
+                    $$EUPATH_0000091$$
                     ]]>
                  </displayText>
                  <url>$$link$$</url>
             </linkAttribute>
+
             <columnAttribute name="sample_id" displayName="Sample ID"/>
-            <columnAttribute name="specimen_type" displayName="Specimen Type"/>
+            <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
+            <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
--->
+
     </recordClass>
     </recordClassSet>
 
@@ -211,7 +151,7 @@ select count(*) from apidbtuning.ParticipantAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ParticipantAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ParticipantAttributes
          </sql>
        </sqlQuery>
 
@@ -343,86 +283,69 @@ select count(*) from apidbtuning.ParticipantAttributes
             </sql>
         </sqlQuery>
 
-      <sqlQuery name="UncategorizedCharacteristics"  isCacheable='false'>
-            <column name="source_id"/>
-            <column name="name"/>
-            <column name="category"/>
-            <column name="value"/>
-            <sql>
-            <![CDATA[
-          select distinct 
-                 anc.source_id, 
-                 anc.source_id as name,
-                 anc.value,
-                 anc.category
-            from ApidbTuning.AppNodeCharacteristics anc
-                 ,ApidbTuning.MetaDataSpec mds
-           where anc.type = 'person'
-             and anc.ontology_term_source_id = mds.property
-             and mds.spec_property = 'categorized'
-             and mds.spec_value = 'false'   
-             and anc.category != 'hhid'
-           order by source_id, category
-            ]]>
-            </sql>
-        </sqlQuery>
-
 
 
       <sqlQuery name="Visits"  isCacheable='false'>
             <column name="source_id"/>
-            <column name="visit_id"/>
-            <column name="visit_date"/>
-            <column name="age_since_birth_at_time_of_vi"/>
-            <column name="visit_type"/>
-            <column name="asexual_parasite_density"/>
-            <column name="malaria_diagnosis_and_parasit"/> 
-            <column name="fever_subjective_"/>
-            <column name="temperature"/> 
-            <column name="complicates_malaria"/>
-            <column name="link"/>
+            <column name="project_id"/>
+
+            <!-- These to be made dynamic -->
+            <column name="EUPATH_0000091"/>
+            <column name="EUPATH_0000113"/>
+            <column name="EUPATH_0000311"/>
+            <column name="EUPATH_0000338"/>
+            <column name="EUPATH_0000100"/>
+            <column name="EUPATH_0000110"/>
+            <column name="EUPATH_0000092"/>
+            <column name="EUPATH_0000040"/>
+
+           <column name="link"/>
+
+         <sqlParamValue name="visitSourceIds"><![CDATA[EUPATH_0000091,EUPATH_0000113,EUPATH_0000311,EUPATH_0000338,EUPATH_0000100,EUPATH_0000110,EUPATH_0000092,EUPATH_0000040]]></sqlParamValue>
+         <sqlParamValue name="orderBy"><![CDATA[EUPATH_0000091]]></sqlParamValue>
             <sql>
             <![CDATA[
-            select parent_id as source_id,
-                   to_char(visit_date, 'MONTH DD, YYYY') as visit_date,
-                   visit_date as sorting_date,
-                   source_id as visit_id,
-                   age_since_birth_at_time_of_vi,
-                   visit_type,
-                  malaria_diagnosis_and_parasit, 
-                   fever_subjective_,
-                   temperature,
-                   ASEXUAL_PARASITE_DENSITY,
-                   complicated_malaria,
-                   'showRecord.do?name=ClinicalVisitRecordClasses.ClinicalVisitRecordClass&project_id=@PROJECT_ID@&primary_key='||source_id as link
-              from ApidbTuning.ClinicalVisitAttributes
-              order by sorting_date
+select pa.name as source_id,
+        '@PROJECT_ID@' as project_id, &&visitSourceIds&&, 
+                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link
+              from ApidbTuning.ClinicalVisitAttributes cv
+              , apidbtuning.participantattributes pa
+              , apidbtuning.protocolappnodeio io
+              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
+              and io.INPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
+              order by &&orderBy&&
             ]]>
             </sql>
         </sqlQuery>
 
       <sqlQuery name="Samples"  isCacheable='false'>
             <column name="source_id"/>
-            <column name="name"/>
-            <column name="sample_id"/>
-            <column name="collection_date"/>
-            <column name="visit_id"/>
-            <column name="specimen_type"/>
+            <column name="project_id"/>
             <column name="link"/>
+            <column name="sample_id"/>
+
+            <!-- TODO: make these dynamic -->
+            <column name="EUPATH_0000091"/>
+            <column name="OBI_0100051"/>
+
+         <sqlParamValue name="sampleSourceIds"><![CDATA[cv.EUPATH_0000091,OBI_0100051]]></sqlParamValue>
+         <sqlParamValue name="orderBy"><![CDATA[cv.EUPATH_0000091]]></sqlParamValue>
+
             <sql>
                  <![CDATA[
-                                 select distinct pa.source_id, 
-                                  pa.name, 
-                                  sa.source_id as sample_id,
-                                  to_char(sa.collection_date, 'MONTH DD, YYYY') as collection_date,
-                                  cv.source_id as visit_id,
-                                  sa.specimen_type,
-                   'showRecord.do?name=ClinicalVisitRecordClasses.ClinicalVisitRecordClass&project_id=@PROJECT_ID@&primary_key='||cv.source_id as link
-                       from ApidbTuning.CLINICALVISITATTRIBUTES cv, apidbtuning.SampleAttributes sa, apidbtuning.personAttributes pa 
-                      where cv.parent_id = sa.parent_id 
-                        and sa.parent_id = pa.source_id
-                        and cv.visit_date (+) = sa.collection_date
-                  order by sa.collection_date, sa.SPECIMEN_TYPE
+select pa.name as source_id,
+        '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
+                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
+              from ApidbTuning.ClinicalVisitAttributes cv
+              , apidbtuning.participantattributes pa
+              , apidbtuning.sampleattributes sa
+              , apidbtuning.protocolappnodeio io
+              , apidbtuning.protocolappnodeio io2
+              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
+              and io.INPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
+              and sa.protocol_app_node_id = io2.output_node_id
+              and io2.INPUT_NODE_ID = cv.PROTOCOL_APP_NODE_ID
+              order by &&orderBy&&
                   ]]>
             </sql>
         </sqlQuery>    
