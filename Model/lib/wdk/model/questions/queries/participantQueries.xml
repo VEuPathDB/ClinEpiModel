@@ -70,8 +70,8 @@ from apidbtuning.clinicalvisitattributes ca, apidbtuning.participantattributes p
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+--  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+--  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
   group by da.protocol_app_node_id) mos, apidbtuning.protocolappnodeio iom
 where ca.protocol_app_node_id in ($$visits_nf$$)
 and ca.protocol_app_node_id = io.output_node_id
@@ -157,8 +157,8 @@ APIDBTUNING.CLINICALVISITATTRIBUTES ca, apidbtuning.participantattributes pa,
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+--  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+--  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
   group by da.protocol_app_node_id) mos, apidbtuning.protocolappnodeio iom
 where ca.protocol_app_node_id = main.output_node_id
 and pa.protocol_app_node_id = main.input_node_id

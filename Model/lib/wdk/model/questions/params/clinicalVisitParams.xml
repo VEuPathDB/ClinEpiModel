@@ -572,8 +572,8 @@ with part as ( select distinct io.input_node_id, io.output_node_id
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+--  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+--  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
   group by da.protocol_app_node_id) mos, part
  where part.input_node_id = mos.protocol_app_node_id(+)
           ]]>
@@ -617,8 +617,8 @@ with part as ( select distinct io.input_node_id, io.output_node_id
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+--  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+--  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
   group by da.protocol_app_node_id) mos, part
   where part.input_node_id = mos.protocol_app_node_id(+)
   ) p, apidbtuning.protocolappnodeio io
