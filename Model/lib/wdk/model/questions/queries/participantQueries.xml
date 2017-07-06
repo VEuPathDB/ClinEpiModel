@@ -53,9 +53,9 @@
            <![CDATA[
 select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
  round(count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
+       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
                     round((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
+       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
                     count(*) as visit_count, mos.ave_anoph, 
    round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) as ave_para_density,
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
@@ -166,9 +166,9 @@ and iom.output_node_id = pa.protocol_app_node_id
 and iom.input_node_id = mos.protocol_app_node_id(+)
 group by pa.name, pa.EUPATH_0000152, pa.EUPATH_0000032, pa.EUPATH_0000151,age.max_age,age.min_age,mos.ave_anoph 
 having count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) >= $$min_visits$$
+       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) >= $$min_visits$$
  and count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) <= $$max_visits$$
+       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) <= $$max_visits$$
  and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) >= $$min_para_density$$
  and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) <= $$max_para_density$$
                 ]]>   

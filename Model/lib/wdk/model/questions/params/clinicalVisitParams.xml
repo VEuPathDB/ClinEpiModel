@@ -559,7 +559,7 @@ with part as ( select distinct io.input_node_id, io.output_node_id
    apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$geographic_region$$)
    AND least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= 1
+       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= 1
  and pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m, part
@@ -602,7 +602,7 @@ with part as ( select distinct io.input_node_id, io.output_node_id
    apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$geographic_region$$)
    AND least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(to_date(pa.EUPATH_0000151,'YYYY-MM-DD'), to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= 1
+       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= 1
  and pa.protocol_app_node_id = io.output_node_id)
  select io.output_node_id as internal, p.ontology_term_name,p.string_value,p.number_value,p.date_value
  from (
