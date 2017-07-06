@@ -39,6 +39,9 @@
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
+
+
+
   <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB" internal="true" inReportMaker="false">
     <text>
       <![CDATA[
