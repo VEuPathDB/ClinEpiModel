@@ -11,9 +11,9 @@
     		queryRef="LightTrapId.LightTrapDataByMetadataCross"
     		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
 
-<!--
+
           <attributesList summary="EUPATH_0000054,EUPATH_0000094,EUPATH_0000217,EUPATH_0000218" />
--->
+
  
           <dynamicAttributes>
             <columnAttribute name="ave_num_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time fra\
@@ -44,9 +44,9 @@ me specified" align="center">
     		queryRef="LightTrapId.LightTrapDataByMetadataCross_"
     		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
 
-<!--
+
           <attributesList summary="EUPATH_0000054,EUPATH_0000094,EUPATH_0000217,EUPATH_0000218" />
--->
+
 
  
           <dynamicAttributes>
@@ -80,9 +80,9 @@ me specified" align="center">
               queryRef="LightTrapId.CollectionsBySourceID"
               recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
               >
-<!--
+
          <attributesList summary="source_id" />
--->
+
         <summary>
             <![CDATA[
            Find Households based on Sourcd ID.
