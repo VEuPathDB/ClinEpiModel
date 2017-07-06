@@ -39,6 +39,9 @@
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
+
+
+<!--
   <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB" internal="true" inReportMaker="false">
     <text>
       <![CDATA[
@@ -46,10 +49,20 @@
 ]]>
     </text>
   </textAttribute>
+-->
 
+  <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB" internal="true" inReportMaker="false">
+    <text>
+      <![CDATA[
 
+TODO: use the one above
+]]>
+    </text>
+  </textAttribute>
+
+<!--
   <attributeQueryRef ref="LightTrapAttributes.LightTrapAttributes" attributeMetaQueryRef="LightTrapAttributes.LightTrapAttributesMeta"/>
-
+-->
         <table name="Characteristics"
                displayName="Lighttrap Characteristics"
                queryRef="LightTrapTables.Characteristics">
