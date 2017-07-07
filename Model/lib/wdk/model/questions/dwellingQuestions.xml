@@ -62,8 +62,8 @@
     <!--Find records by Source ID-->
    <question name="DwellingsBySourceID" newBuild="22"
               searchCategory="Dwelling"
-              displayName="Dwelling ID"
-              shortDisplayName="Dwelling ID"
+              displayName="Household ID"
+              shortDisplayName="Household ID"
               queryRef="DwellingId.DwellingsBySourceID" 
               recordClassRef="DwellingRecordClasses.DwellingRecordClass"
              >
@@ -87,8 +87,8 @@
     </question>
    
    <question name="DwellingsByParticipantId"   newBuild="1" 
-              displayName="Transform to Dwellings"
-              shortDisplayName="participant->dwelling"
+              displayName="Transform to Households"
+              shortDisplayName="participant->household"
               queryRef="DwellingId.DwellingsByParticipantIds" 
               recordClassRef="DwellingRecordClasses.DwellingRecordClass"
               noSummaryOnSingleRecord="true">
@@ -127,8 +127,8 @@
     </question>
     
     <question name="DwellingsByLightTrapId"   newBuild="1"
-              displayName="Transform to Dwellings"
-              shortDisplayName="lighttrap->dwelling"
+              displayName="Transform to Households"
+              shortDisplayName="lighttrap->households"
               queryRef="DwellingId.DwellingsByLightTrapIds"
               recordClassRef="DwellingRecordClasses.DwellingRecordClass"
               noSummaryOnSingleRecord="true">

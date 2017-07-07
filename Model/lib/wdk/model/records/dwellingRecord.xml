@@ -1,7 +1,7 @@
 <wdkModel>
     <recordClassSet name="DwellingRecordClasses">
 
-      <recordClass name="DwellingRecordClass" urlName="dwelling" displayName="Dwelling"> 
+      <recordClass name="DwellingRecordClass" urlName="household" displayName="Household"> 
 
 
             <!-- primary key definition -->
