@@ -189,6 +189,7 @@ select count(*) from apidbtuning.ParticipantAttributes
 
          <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
           <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000054']]></sqlParamValue>
+          <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EUPATH_0000032']]></sqlParamValue>
 
          <sql>
             <![CDATA[
@@ -204,15 +205,17 @@ select count(*) from apidbtuning.ParticipantAttributes
                            where m.protocol_app_node_type = 'Participant'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
+                           and ot.source_id not in (&&excludeParticipantSourceIds&&)
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
                            where m.protocol_app_node_type = 'Participant'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
+                           and ot.source_id not in (&&excludeParticipantSourceIds&&)
                            union
-                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
-                           union
+--                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
+--                           union
                            select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.metadatatype mt, sres.ontologyterm ot where ot.source_id = mt.source_id and mt.source_id in (&&dwellingSourceIds&&)
                            ) meta
             ]]>
