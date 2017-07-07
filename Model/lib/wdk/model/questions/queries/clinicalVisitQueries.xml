@@ -20,8 +20,8 @@
       <column name="project_id"/>
      <sql>
           <![CDATA[
-Select distinct cv.source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLINICALVISITATTRIBUTES cv,
-($$clinical_visits_by_sourceid$$) cs where cv.source_id = cs.source_id
+Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLINICALVISITATTRIBUTES cv,
+($$clinical_visits_by_sourceid$$) cs where cv.name = cs.source_id
                ]]>   
        </sql>
     </sqlQuery>
