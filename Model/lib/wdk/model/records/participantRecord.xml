@@ -33,7 +33,7 @@
       <!-- =============================================================== -->
 
       <!--       <stepAnalysisRef name="transcript-length-dist" excludeProjects="EuPathDB"/> -->
-            <stepAnalysisRef name="person-graph-analysis" excludeProjects="EuPathDB"/>
+            <stepAnalysisRef name="person-graph-analysis"/>
       
       <!-- =============================================================== -->
       <!--   Reporters -->  
@@ -139,7 +139,7 @@
       <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <querySet name="ParticipantAttributes" queryType="attribute" doNotTest="true"  
               isCacheable='false'
-              excludeProjects="TrichDB">
+              >
 
       <testRowCountSql>
 select count(*) from apidbtuning.ParticipantAttributes
@@ -163,7 +163,7 @@ select count(*) from apidbtuning.ParticipantAttributes
          <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
          <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054]]></sqlParamValue>
 
-          <sql excludeProjects="EuPathDB">
+          <sql>
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
@@ -225,8 +225,7 @@ select count(*) from apidbtuning.ParticipantAttributes
 
 
     <querySet name="ParticipantTables" queryType="table" 
-              isCacheable='false'
-              excludeProjects="TrichDB">
+              isCacheable='false'>
 
       <sqlQuery name="Characteristics"  isCacheable='false'>
             <column name="source_id"/>
