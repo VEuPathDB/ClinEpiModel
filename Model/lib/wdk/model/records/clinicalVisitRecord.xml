@@ -285,7 +285,7 @@ select distinct source_id,
 
                  <![CDATA[
 select cv.name as source_id,
-        '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, cv.name as sample_id
+        '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, sa.name as sample_id
               from ApidbTuning.ClinicalVisitAttributes cv
               , apidbtuning.sampleattributes sa
               , apidbtuning.protocolappnodeio io
