@@ -724,7 +724,7 @@ You can further restrict the participants returned in your search by setting sum
                 ]]>
             </description>
         </group>
-        <group name="relative_visits" displayName="Relative visits (Optional)" displayType="ShowHide">
+        <group name="relative_visits" displayName="Relative visits" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can further restrict the visits you have selected above by removing (or keeping) those visits based on a relative visit you define below.  For example, you may want to only keep visits with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a visit where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove visits where diagnosis of malaria = yes.
