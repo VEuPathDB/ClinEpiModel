@@ -114,21 +114,24 @@ where protocol_app_node_id in ($$visits_nf$$)
         </sql>
      </sqlQuery>
 
-       
-       <sqlQuery name="VisitsByParticipantIds" doNotTest="true" displayName="ID"
-         isCacheable="true">
-      <paramRef ref="participantParams.participant_result"/>
-      <column name="project_id"/>
-      <column name="source_id"/>     
-      <column name="participant"/>
-      <column name="wdk_weight"/>
+
+     <!-- Transform -->
+     
+     <sqlQuery name="VisitsByParticipantIds" doNotTest="true" displayName="ID"
+               isCacheable="true">
+       <paramRef ref="participantParams.participant_result"/>
+       <column name="project_id"/>
+       <column name="source_id"/>     
+       <column name="participant"/>
+       <column name="wdk_weight"/>
 
         <sql>
           <![CDATA[
-          SELECT DISTINCT pana.associated_node_source_id as source_id, '@PROJECT_ID@' as project_id,pana.node_source_id as participant,wdk_weight
-          FROM ($$participant_result$$) source_set , ApidbTuning.panassociations pana
-          WHERE source_set.source_id = pana.node_source_id AND node_type='person' AND associated_node_type='clinical_visit_data'
-         
+ SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
+              FROM ($$participant_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes cva, apidbtuning.participantattributes pa
+              WHERE source_set.source_id = pa.name 
+              AND pa.protocol_app_node_id = io.input_node_id
+              AND  io.output_node_id = cva.protocol_app_node_id
                ]]>   
        </sql>
     </sqlQuery>                

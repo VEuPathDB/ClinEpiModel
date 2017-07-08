@@ -135,8 +135,23 @@
     
 
     <attributesList
-            summary="EUPATH_0000054"
+            summary="EUPATH_0000054,lt_count,ave_anoph"
         />
+
+	<dynamicAttributes>
+	     <columnAttribute name="lt_count" displayName="# Collections" help="number of light trap collections from transformed result set associated with this dwelling" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="ave_anoph" displayName="Average Anopheles" help="Average of the anopheles collected from the transformed collections for this dwelling" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	</dynamicAttributes>
 
              <summary>
              Find dwellings by light trap collections from the dwelling.

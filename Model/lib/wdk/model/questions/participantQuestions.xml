@@ -166,32 +166,9 @@
         <summary>
             <![CDATA[
             In this search, you will build a set of Participants and you can further restrict the participants returned based on the relationship of two different selected visits.  You can use the wealth of data in the PRISM study to find Participants with scientifically interesting patterns.
-            More here...
+            More here...  
             ]]>
         </summary>
-         <description>
-            <![CDATA[
-             Find participants based on metadata characteristics. <p />
-<p />
-<b>Brief summary of PRISM cohort studies and entomological surveys</b>
-<p />
-Surveillance studies are being conducted in 3 sub-counties in Uganda: Walukuba, Jinja District; Kihihi, Kanungu District, and Nagongera, Tororo District. These areas were purposively chosen to represent varied malaria transmission settings.  Walukuba is a relatively low transmission, peri-urban area near Lake Victoria in the south-central part of the country.  Kihihi is a rural area with moderate transmission intensity which borders a national park in the south-western part of the country. Nagongera is a rural area with high transmission intensity in the south-eastern part of the country near the border with Kenya.
-<p />
-All households within each of the 3 sub-counties were enumerated and mapped. A household was defined as any single permanent or semi-permanent dwelling acting as the primary residence for a person or group of people that generally cook and eat together. Random samples of households were enrolled into both the cohort studies and entomologic surveys if they met the following criteria: 1) at least one household resident 0.5-10 years of age, and 2) at least one adult resident available for providing informed consent. Enrollment was done in 2 phases: 300 households (100 per site) were enrolled August-September 2011 and then an additional 31 households were enrolled August-September 2013 to replace households which had been withdrawn during the 1st 2 years of follow-up. At the time of enrollment a household survey was done to collect data on household demographics, characteristics and socioeconomic factors. 
-<p />
-<b>Enrollment and follow-up of cohort study participants.</b> All children and up to 1 primary care giver from each household were enrolled into the cohort study if they met the following eligibility criteria: 1) documented age between 6 months and less than 10 years for children, 2) full time resident of the household, 3) no intention to move out of the sub-county for the next two years, 4) agreement to come to a dedicated study clinic located within the sub-county for any febrile illness, 5) agreement to avoid antimalarial medications administered outside the study, and 6) provision of written informed consent from parent or guardian. The cohorts are dynamic, such that all newly eligible children are enrolled and study participants who reached 11 years of age are excluded from further follow-up. At enrollment, all study participants and their parents/guardians are given a long lasting insecticide treated bednet (ITN) and undergo a standardized evaluation including a history, physical examination, and collection of blood for hemoglobin measurement and thick/thin blood smear. 
-Cohort study participants receive all medical care free of charge at a designated study clinic open every day. Study participants are encouraged to come to the clinic any time they are ill. Study participants who present with a documented fever (tympanic temperature > 38.0˚C) or history of fever in the previous 24 hours have blood obtained by finger prick for a thick blood smear. If the smear is positive, the patient is diagnosed with malaria and a hemoglobin measurement and thin blood smear for parasite species identification performed. Episodes of uncomplicated malaria are treated with artemether- lumefantrine (AL). Episodes of complicated malaria (severe malaria or danger signs) or recurrent malaria occurring within 14 days of prior therapy are treated with quinine or IV artesunate. Routine evaluations, including thick blood smears and hemoglobin measurements, are done approximately every 3 months. In subset of children from December 2014 through November 2015 routine blood smears were done every 1 month. Study participants were withdrawn from the study for 1) permanent movement out of the sub-county, 2) inability to be located for > 4 months, 3) withdrawal of informed consent, 4) inability to comply with the study schedule and procedures, or 5) reaching 11 years of age. A household is withdrawn when all cohort study participants from the household are withdrawn. 
-<p />
-<b>Entomologic surveys.</b> Entomological surveys are conducted once a month in each household participating in the cohort studies using miniature CDC light traps with the light positioned 1 meter above the floor at the foot end of the bed where a cohort study participant slept. Traps are set at 19.00h and collected at 07.00h the following morning by field workers. Female Anopheles mosquitoes are counted and identified taxonomically to species level (A. gambia s.l, A. funestus, or “other”) based on morphological criteria according to established taxonomic keys. In a random subset of female Anopheles mosquitoes the proportion infected with sporozoites are measured using an ELISA technique. 
-<p />
-<b>Study sites:</b><br />
-<img src="/documents/StudyAreas.jpg" />
-<p />
-<img src="/documents/StudyFlow.jpg" />
-<p />
-These papers provide more detailed information (<a href="communityDownload.do?fname=PRISM_EIR_3Sites.pdf">EIR Rates</a>, <a href="communityDownload.do?fname=PRISM_cohort_study_AJTMH.pdf">Cohort Study</a>, <a href="communityDownload.do?fname=PRISM_cross_sectional_survey.pdf">Cross Sectional Survey</a>, <a href="communityDownload.do?fname=PRISM_house_structure.pdf">House Structure</a>)
-            ]]>
-</description>
 
         <propertyList name="organism">
            <value>H. sapien</value>
@@ -214,7 +191,7 @@ These papers provide more detailed information (<a href="communityDownload.do?fn
 
 
         <attributesList 
-            summary="dwelling,EUPATH_0000054"   
+            summary="EUPATH_0000054,dwelling"   
             sorting="EUPATH_0000054 desc"
         /> 
 

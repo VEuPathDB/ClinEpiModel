@@ -62,8 +62,8 @@
 
        <question name="ClinicalVisitsByAllData" newBuild="2"
               searchCategory="Clinical Visit"
-              displayName="Select a Set of Visits"
-              shortDisplayName="Clinical Visits"
+              displayName="Select a Set of Visits (no relative visits)"
+              shortDisplayName="Clinical Visits noRel"
               queryRef="ClinicalVisitId.ClinicalVisitsByAllData" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 

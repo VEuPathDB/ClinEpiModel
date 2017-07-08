@@ -73,7 +73,7 @@
                       ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetadataBkgdNf"
                       prompt="Visits"
-                      dependedParamRef="participantParams.geographic_region"
+                      dependedParamRef="participantParams.geographic_region,participantParams.start_date,participantParams.end_date"
                       trimMetadataTerms="false">
          <help>
               Select reference samples. 
@@ -296,7 +296,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Visit') md
+ and category in ('Visit','Specimen type')) md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -342,8 +342,6 @@ select distinct va.protocol_app_node_id as internal, term as ontology_term_name,
  and io.output_Node_Id = va.protocol_app_node_id
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
  and io.input_node_id in ($$participants_nf$$)
- and va.EUPATH_0000091 >= to_date($$start_date$$,'DD-MON-YYYY')
- and va.EUPATH_0000091 <= to_date($$end_date$$,'DD-MON-YYYY')
           ]]>
     </sql>
     </sqlQuery>    
@@ -371,8 +369,6 @@ select distinct io.input_node_id as internal, term as ontology_term_name, string
  and io.output_Node_Id = va.protocol_app_node_id
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
  and io.input_node_id in ($$participants_nf$$)
- and va.EUPATH_0000091 >= to_date($$start_date$$,'DD-MON-YYYY')
- and va.EUPATH_0000091 <= to_date($$end_date$$,'DD-MON-YYYY')
           ]]>
     </sql>
     </sqlQuery>
@@ -401,16 +397,18 @@ select distinct io.input_node_id as internal, term as ontology_term_name, string
     </sqlQuery>
 
        <sqlQuery name="ClinicalVisitAgeOntologyNf">
-      <paramRef ref="participantParams.geographic_region" /> 
-        <column name="ontology_term_name"/>
-        <column name="parent_ontology_term_name"/>
-        <column name="display_name"/>
-        <column name="description"/>
-        <column name="type"/>
-        <column name="units"/>
-        <column name="precision"/>
-        <column name="is_range"/>
-        <sql>
+         <paramRef ref="participantParams.geographic_region" /> 
+         <paramRef ref="participantParams.start_date" />
+         <paramRef ref="participantParams.end_date" />
+         <column name="ontology_term_name"/>
+         <column name="parent_ontology_term_name"/>
+         <column name="display_name"/>
+         <column name="description"/>
+         <column name="type"/>
+         <column name="units"/>
+         <column name="precision"/>
+         <column name="is_range"/>
+         <sql>
            <![CDATA[
                        select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
@@ -424,6 +422,8 @@ union
           
    <sqlQuery name="ClinicalVisitAgeMetadataNf">
       <paramRef ref="participantParams.geographic_region" /> 
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -432,21 +432,26 @@ union
       <sql>
         <![CDATA[
 select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m,
+ from apidbtuning.metadata m, apidbtuning.clinicalvisitattributes cva,
  (select distinct io.input_node_id, io.output_node_id
   from apidbtuning.protocolappnodeio io
   where io.input_node_id in ($$geographic_region$$)
   ) pa
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Visit'
- and m.term = 'Age at time of visit'
+ and m.source_id = 'EUPATH_0000113'
  and pa.output_node_id = m.protocol_app_node_id
+ and pa.output_node_id = cva.protocol_app_node_id
+ and cva.EUPATH_0000091 >= to_date($$start_date$$,'DD-MON-YYYY')
+ and cva.EUPATH_0000091 <= to_date($$end_date$$,'DD-MON-YYYY')
          ]]>   
       </sql>
    </sqlQuery>
 
    <sqlQuery name="SummaryClinicalVisitAgeMetadataNf" >
       <paramRef ref="participantParams.geographic_region" /> 
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -455,21 +460,26 @@ select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.s
       <sql>
         <![CDATA[
 select distinct pa.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m,
+ from apidbtuning.metadata m, apidbtuning.clinicalvisitattributes cva,
  (select distinct io.input_node_id, io.output_node_id
   from apidbtuning.protocolappnodeio io
   where io.input_node_id in ($$geographic_region$$)
   ) pa
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Visit'
- and m.term = 'Age at time of visit'
+ and m.source_id = 'EUPATH_0000113'
  and pa.output_node_id = m.protocol_app_node_id
+ and pa.output_node_id = cva.protocol_app_node_id
+ and cva.EUPATH_0000091 >= to_date($$start_date$$,'DD-MON-YYYY')
+ and cva.EUPATH_0000091 <= to_date($$end_date$$,'DD-MON-YYYY')
          ]]>   
       </sql>
    </sqlQuery>
 
       <sqlQuery name="ClinicalVisitAgeMetadataBkgdNf" >
       <paramRef ref="participantParams.geographic_region" /> 
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -481,7 +491,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'Visit'
- and term = 'Age at time of visit'
+ and source_id = 'EUPATH_0000113'
           ]]>   
       </sql>
    </sqlQuery>
@@ -583,17 +593,18 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
---TODO once dates correct type remove to_date for attribute columns and to_number for age column
 with part as ( select distinct io.input_node_id, io.output_node_id 
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
    ) age,
-   apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
+   apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio iov
    where pa.protocol_app_node_id in ($$geographic_region$$)
    AND least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= 1
- and pa.protocol_app_node_id = io.output_node_id)
+       and pa.protocol_app_node_id = io.output_node_id
+       and pa.protocol_app_node_id = iov.input_node_id
+       and iov.output_node_id in ($$visits_visitage_metadata_nf$$))
  select distinct Part.output_Node_Id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'

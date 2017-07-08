@@ -39,11 +39,14 @@
 
         <sql>
             <![CDATA[
-              SELECT DISTINCT pana.node_source_id as source_id , '@PROJECT_ID@' as project_id,  count(distinct source_set.source_id) as participant_count,
-                listagg (pana.associated_node_source_id, ',') WITHIN GROUP (order by pana.associated_node_source_id )  as participants, max(source_set.wdk_weight) as wdk_weight
-              FROM ($$participant_result$$) source_set, ApidbTuning.PANAssociations pana
-              WHERE source_set.source_id = pana.associated_node_source_id AND associated_node_type='person' and node_type = 'dwelling'
-              GROUP BY pana.node_source_id
+SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct source_set.source_id) as participant_count,
+ listagg (pa.name, ',') WITHIN GROUP (order by pa.name )  as participants,
+ max(source_set.wdk_weight) as wdk_weight
+              FROM ($$participant_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.dwellingattributes da, apidbtuning.participantattributes pa
+              WHERE source_set.source_id = pa.name 
+              AND pa.protocol_app_node_id = io.output_node_id
+              AND  io.input_node_id = da.protocol_app_node_id
+              GROUP BY da.name
              ]]>
         </sql>
     </sqlQuery>
@@ -53,14 +56,19 @@
       <paramRef ref="lighttrapParams.lighttrap_result"/>
         <column name="project_id"/>
         <column name="source_id"/>
+        <column name="ave_anoph"/>
+        <column name="lt_count"/>
         <column name="wdk_weight"/>
 
         <sql>
             <![CDATA[
-              SELECT DISTINCT pana.node_source_id as source_id , '@PROJECT_ID@' as project_id, max(source_set.wdk_weight) as wdk_weight
-              FROM ($$lighttrap_result$$) source_set, ApidbTuning.PANAssociations pana
-              WHERE source_set.source_id = pana.associated_node_source_id AND associated_node_type='light_trap_data' and node_type = 'dwelling'
-              GROUP BY pana.node_source_id
+                     SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, max(source_set.wdk_weight) as wdk_weight, count(*) as lt_count,
+                      round(avg(nvl(avg(lta.EUPATH_0000192),0)+nvl(avg(lta.EUPATH_0000193),0)+nvl(avg(lta.EUPATH_0000204),0)+nvl(avg(lta.EUPATH_0000205),0)),1) as ave_anoph
+              FROM ($$lighttrap_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.dwellingattributes da, apidbtuning.lighttrapattributes lta
+              WHERE source_set.source_id = lta.name 
+              AND lta.protocol_app_node_id = io.output_node_id
+              AND  io.input_node_id = da.protocol_app_node_id
+              GROUP BY da.name
              ]]>
         </sql>
     </sqlQuery>

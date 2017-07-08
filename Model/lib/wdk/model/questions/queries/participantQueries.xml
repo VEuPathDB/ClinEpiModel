@@ -186,12 +186,11 @@ having count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY')
 
         <sql>
             <![CDATA[
-SELECT DISTINCT pana.associated_node_source_id as source_id , '@PROJECT_ID@' as project_id,
-       pana.node_source_id as dwelling, wdk_weight
-FROM ($$dwelling_result$$) source_set, ApidbTuning.PANAssociations pana
-WHERE source_set.source_id = pana.node_source_id
-  AND node_type='Dwelling type'
-  and associated_node_type = 'Participant'
+SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as dwelling, wdk_weight
+              FROM ($$dwelling_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.dwellingattributes da, apidbtuning.participantattributes pa
+              WHERE source_set.source_id = da.name 
+              AND da.protocol_app_node_id = io.input_node_id
+              AND  io.output_node_id = pa.protocol_app_node_id
              ]]>
         </sql>
     </sqlQuery>
@@ -206,10 +205,12 @@ WHERE source_set.source_id = pana.node_source_id
 
         <sql>
             <![CDATA[
-              SELECT   pana.node_source_id as source_id , '@PROJECT_ID@' as project_id, count(*) as num_of_visits , max(source_set.wdk_weight) as wdk_weight
-              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.PANAssociations pana
-              WHERE source_set.source_id = pana.associated_node_source_id AND associated_node_type='clinical_visit_data' AND  node_type = 'person'
-              GROUP BY pana.node_source_id
+SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, count(*) as num_of_visits , max(source_set.wdk_weight) as wdk_weight
+              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes cva, apidbtuning.participantattributes pa
+              WHERE source_set.source_id = cva.name 
+              AND cva.protocol_app_node_id = io.output_node_id
+              AND  io.input_node_id = pa.protocol_app_node_id
+              GROUP BY pa.name
              ]]>
         </sql>
     </sqlQuery>
