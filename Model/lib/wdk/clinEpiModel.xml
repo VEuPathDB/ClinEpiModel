@@ -47,10 +47,9 @@
 
     <!-- Light Trap record -->
     <import file="model/records/lightTrapRecord.xml"/>
-    <import file="model/questions/queries/mosquitoeQueries.xml"/>
-    <import file="model/questions/mosquitoeQuestions.xml"/> 
-    <import file="model/questions/params/mosquitoParams.xml"/>
-    <import file="model/questions/params/lighttrapParams.xml"/>
+    <import file="model/questions/queries/lightTrapQueries.xml"/>
+    <import file="model/questions/lightTrapQuestions.xml"/> 
+    <import file="model/questions/params/lightTrapParams.xml"/>
 
 
     <!-- Clinical Visits record -->

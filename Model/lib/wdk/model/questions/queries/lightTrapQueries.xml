@@ -37,8 +37,8 @@
       <column name="project_id" />
       <sql>
 
-	<![CDATA[select distinct lta.source_id, '@PROJECT_ID@' as project_id from APIDBTUNING.LIGHTTRAPATTRIBUTES lta,
-        ($$collectionsBySourceID$$) ds WHERE lta.source_id=ds.source_id]]>
+	<![CDATA[select distinct lta.name, '@PROJECT_ID@' as project_id from APIDBTUNING.LIGHTTRAPATTRIBUTES lta,
+        ($$collectionsBySourceID$$) ds WHERE lta.name = ds.source_id]]>
       </sql>
     </sqlQuery>
       
@@ -50,12 +50,11 @@
 
         <sql>
             <![CDATA[
-               SELECT DISTINCT pana.associated_node_source_id as source_id , '@PROJECT_ID@' as project_id, max(source_set.wdk_weight) as wdk_weight
-              FROM ($$dwelling_result$$) source_set, ApidbTuning.PANAssociations pana
-              where source_set.source_id = pana.node_source_id AND node_type='dwelling' and associated_node_type = 'light_trap_data'
-              GROUP BY pana.associated_node_source_id
-
-              
+SELECT   lta.name as source_id , '@PROJECT_ID@' as project_id, da.name as dwelling, wdk_weight
+              FROM ($$dwelling_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.dwellingattributes da, apidbtuning.lighttrapattributes lta
+              WHERE source_set.source_id = da.name 
+              AND da.protocol_app_node_id = io.input_node_id
+              AND  io.output_node_id = lta.protocol_app_node_id
              ]]>
         </sql>
     </sqlQuery>
