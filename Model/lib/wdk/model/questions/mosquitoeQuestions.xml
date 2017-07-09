@@ -37,6 +37,7 @@ me specified" align="center">
             ]]>
         </description>
     	</question>
+<!--
     	<question name="CollectionsByCharacteristics_" newBuild="22"
     		searchCategory="Lighttraps"
     		displayName="Mosquito Characteristics2"
@@ -71,6 +72,7 @@ me specified" align="center">
             ]]>
         </description>
     	</question>
+-->
         
          <!--Find records by Source ID-->
         <question name="CollectionsBySourceID" newBuild="22"

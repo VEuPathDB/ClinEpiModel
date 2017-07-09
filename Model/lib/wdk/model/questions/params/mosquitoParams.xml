@@ -16,19 +16,6 @@
       </enumList>
     </enumParam>
 
-    <filterParam name="dwellings_by_metadata"
-                 queryRef="DwellingVQ.Dwellings"
-                 metadataQueryRef="DwellingVQ.DwellingMetadata"
-                 metadataSpecQueryRef="DwellingVQ.NodeMetadataSpec"
-                 prompt="Dwellings"
-                 multiPick="true"
-                 quote="true"
-                 suppressNode="false">
-         <help>
-              Select dwellings based on Characteristics. 
-         </help>
-         <!-- <suggest selectMode="all" /> -->
-       </filterParam>
 
     <filterParam name="lighttraps_by_all_metadata"
                  queryRef="msVQ.Lighttraps"

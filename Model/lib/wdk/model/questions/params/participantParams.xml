@@ -22,7 +22,7 @@
 
        <filterParamNew name="geographic_region" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData"
-                       ontologyQueryRef="ParticipantVQ.RegionOntology"
+                       ontologyQueryRef="DwellingVQ.RegionOntology"
                        prompt="Participants"
                        trimMetadataTerms="false">
          <help>
@@ -68,10 +68,10 @@
     </filterParamNew>
 
     <filterParamNew name="visits_visitage_metadata_nf" 
-                      metadataQueryRef="ParticipantVQ.ClinicalVisitAgeMetadataNf"
-                      summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetadataNf"
+                      metadataQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataNf"
+                      summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf"
                       ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf"
-                      backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetadataBkgdNf"
+                      backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf"
                       prompt="Visits"
                       dependedParamRef="participantParams.geographic_region,participantParams.start_date,participantParams.end_date"
                       trimMetadataTerms="false">
@@ -227,7 +227,7 @@ first as (
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="ParticipantMetaData" >
+       <sqlQuery name="ParticipantMetaData" isCacheable="true">
          <paramRef ref="participantParams.visits_visitage_metadata_nf" />
          <paramRef ref="participantParams.start_date" />
          <paramRef ref="participantParams.end_date" />
@@ -319,7 +319,7 @@ first as (
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="VisitMetaData" >
+       <sqlQuery name="VisitMetaData" isCacheable="true">
          <paramRef ref="participantParams.visits_visitage_metadata_nf" />
          <paramRef ref="participantParams.start_date" />
          <paramRef ref="participantParams.end_date" />
@@ -346,7 +346,7 @@ select distinct va.protocol_app_node_id as internal, term as ontology_term_name,
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitSummaryMetaData" >
+    <sqlQuery name="VisitSummaryMetaData" isCacheable="true">
          <paramRef ref="participantParams.visits_visitage_metadata_nf" />
          <paramRef ref="participantParams.start_date" />
          <paramRef ref="participantParams.end_date" />
@@ -420,7 +420,7 @@ union
         </sql>
       </sqlQuery>
           
-   <sqlQuery name="ClinicalVisitAgeMetadataNf">
+   <sqlQuery name="ClinicalVisitAgeMetaDataNf" isCacheable="true">
       <paramRef ref="participantParams.geographic_region" /> 
       <paramRef ref="participantParams.start_date" />
       <paramRef ref="participantParams.end_date" />
@@ -448,7 +448,7 @@ select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.s
       </sql>
    </sqlQuery>
 
-   <sqlQuery name="SummaryClinicalVisitAgeMetadataNf" >
+   <sqlQuery name="SummaryClinicalVisitAgeMetaDataNf" isCacheable="true">
       <paramRef ref="participantParams.geographic_region" /> 
       <paramRef ref="participantParams.start_date" />
       <paramRef ref="participantParams.end_date" />
@@ -476,7 +476,7 @@ select distinct pa.input_node_id as internal, m.term as ontology_term_name, m.st
       </sql>
    </sqlQuery>
 
-      <sqlQuery name="ClinicalVisitAgeMetadataBkgdNf" >
+      <sqlQuery name="ClinicalVisitAgeMetaDataBkgdNf" >
       <paramRef ref="participantParams.geographic_region" /> 
       <paramRef ref="participantParams.start_date" />
       <paramRef ref="participantParams.end_date" />
@@ -496,28 +496,6 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
       </sql>
    </sqlQuery>
 
-
-    <sqlQuery name="RegionOntology">
-      <column name="ontology_term_name"/>
-      <column name="parent_ontology_term_name"/>
-      <column name="display_name"/>
-      <column name="description"/>
-      <column name="type"/>
-      <column name="units"/>
-      <column name="precision"/>
-      <column name="is_range"/>
-      <sql>
-        <![CDATA[
-                 select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
-                 from apidbtuning.metadataontology o 
-                 where o.ontology_term_name = 'Subcounty in Uganda'
-                 union
-                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling type' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-                 null as precision from dual
-        ]]>
-      </sql>
-    </sqlQuery>
-    
     <sqlQuery name="RegionMetaData" >
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -580,7 +558,7 @@ first as (
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaData" >
+    <sqlQuery name="DwellingMetaData" isCacheable="true">
       <paramRef ref="participantParams.visits_visitage_metadata_nf" />
       <paramRef ref="participantParams.start_date" />
       <paramRef ref="participantParams.end_date" />
@@ -593,6 +571,7 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
+select * from (
 with part as ( select distinct io.input_node_id, io.output_node_id 
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
@@ -620,6 +599,7 @@ with part as ( select distinct io.input_node_id, io.output_node_id
   and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
   group by da.protocol_app_node_id) mos, part
  where part.input_node_id = mos.protocol_app_node_id(+)
+)
           ]]>
     </sql>    
 
@@ -638,6 +618,7 @@ with part as ( select distinct io.input_node_id, io.output_node_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
+select * from (
  with part as (
 select io.input_node_id, io.output_node_id
   from apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
@@ -656,6 +637,7 @@ select distinct Part.output_Node_Id as internal, term as ontology_term_name, str
   and la.protocol_app_node_id = io.output_node_id
   group by da.protocol_app_node_id) mos, part
   where part.input_node_id = mos.protocol_app_node_id(+)
+)
           ]]>
     </sql>    
 

@@ -4,6 +4,7 @@ ClinicalVisitRecordClasses.ClinicalVisitRecordClass.ClinicalVisitQuestions.Clini
 ClinicalVisitRecordClasses.ClinicalVisitRecordClass.ClinicalVisitQuestions.ClinicalVisitBySourceID	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	search	ClinicalVisitQuestions.ClinicalVisitBySourceID						menu	webservice	
 ClinicalVisitRecordClasses.ClinicalVisitRecordClass.ClinicalVisitQuestions.ClinicalVisitsByRelativeVisits	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	search	ClinicalVisitQuestions.ClinicalVisitsByRelativeVisits						menu	webservice	
 ClinicalVisitRecordClasses.ClinicalVisitRecordClass.ClinicalVisitQuestions.ClinicalVisitsByParticipants	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass		ClinicalVisitQuestions.ClinicalVisitsByParticipants						menu	webservice	
+DwellingRecordClasses.DwellingRecordClass.DwellingQuestions.DwellingsByCharacteristics	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	search	DwellingQuestions.DwellingsByCharacteristics						menu	webservice	
 DwellingRecordClasses.DwellingRecordClass.DwellingQuestions.DwellingsBySourceID	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	search	DwellingQuestions.DwellingsBySourceID						menu	webservice	
 DwellingRecordClasses.DwellingRecordClass.DwellingQuestions.DwellingsByParticipantId	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass		DwellingQuestions.DwellingsByParticipantId						menu	webservice	
 DwellingRecordClasses.DwellingRecordClass.DwellingQuestions.DwellingsByLightTrapId	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass		DwellingQuestions.DwellingsByLightTrapId						menu	webservice	
@@ -17,12 +18,12 @@ ParticipantRecordClasses.ParticipantRecordClass.ParticipantQuestions.Participant
 ParticipantRecordClasses.ParticipantRecordClass.ParticipantQuestions.ParticipantsByClinicalVisit	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	search	ParticipantQuestions.ParticipantsByClinicalVisit							webservice	
 ParticipantRecordClasses.ParticipantRecordClass.ParticipantQuestions.ParticipantsBySourceID	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	search	ParticipantQuestions.ParticipantsBySourceID						menu	webservice	
 ParticipantAttributes.ParticipantAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attributeMetaQuery	ParticipantAttributesMeta				gene		results	download	
-ParticipantRecordClasses.ParticipantRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	record_overview						record-internal	
-ParticipantRecordClasses.ParticipantRecordClass.Visits	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Visits					2	record	download		
-ParticipantRecordClasses.ParticipantRecordClass.Samples	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Samples					2	record	download		
-
-ClinicalVisitRecordClasses.ClinicalVisitRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	attribute	record_overview						record-internal	
-ClinicalVisitRecordClasses.ClinicalVisitRecordClass.Samples	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	table	Samples					2	record	download		
+ParticipantRecordClasses.ParticipantRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	record_overview						record-internal		
+ParticipantRecordClasses.ParticipantRecordClass.Visits	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Visits					2	record	download	
+ParticipantRecordClasses.ParticipantRecordClass.Samples	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Samples					2	record	download	
+													
+ClinicalVisitRecordClasses.ClinicalVisitRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	attribute	record_overview						record-internal		
+ClinicalVisitRecordClasses.ClinicalVisitRecordClass.Samples	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	table	Samples					2	record	download	
 ClinicalVisitAttributes.ClinicalVisitAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	attributeMetaQuery	ClinicalVisitAttributesMeta				gene		results	download	
-
-DwellingRecordClasses.DwellingRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	attribute	record_overview						record-internal	
+													
+DwellingRecordClasses.DwellingRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	attribute	record_overview						record-internal		

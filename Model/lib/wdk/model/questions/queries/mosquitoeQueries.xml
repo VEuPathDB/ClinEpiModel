@@ -29,28 +29,6 @@
        </sql>
     </sqlQuery>
 
-        <sqlQuery name="LightTrapDataByMetadataCross_"
-         isCacheable="true">
-      <paramRef ref="participantParams.start_date"/>
-      <paramRef ref="participantParams.end_date"/>
-      <paramRef ref="dwellingParams.dwellings_by_all_metadata"/>
-      <paramRef ref="mosquitoParams.lighttraps_by_all_metadata"/>
-      <column name="source_id"/>
-      <column name="project_id"/>
-      <column name="ave_num_anoph"/>
-        <sql>
-          <![CDATA[
-           select lta.source_id, round(avg(SUM_FEMALE_AS_IN_A_COLLECTION),1) as ave_num_anoph
-       from apidbtuning.lighttrapattributes lta
-       where lta.source_id in  ($$lighttraps_by_all_metadata$$)
-       and lta.parent_id in ($$dwellings_by_all_metadata$$)
-       and lta.collection_date(+) >= to_date($$start_date$$, 'DD-MON-YYYY')
-       and lta.collection_date(+) <= to_date($$end_date$$, 'DD-MON-YYYY')
-       group by lta.source_id
-             ]]>
-       </sql>
-    </sqlQuery>
-
 
     <sqlQuery name="CollectionsBySourceID"
 	      isCacheable="true">
