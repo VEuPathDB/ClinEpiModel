@@ -254,7 +254,7 @@
 	     shortDisplayName="Participant ID"
 	     queryRef="ParticipantId.ParticipantsBySourceID" 
              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
-             noSummaryOnSingleRecord="true">
+             noSummaryOnSingleRecord="false">
 
 
         <attributesList 

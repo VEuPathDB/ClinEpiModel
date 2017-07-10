@@ -68,7 +68,7 @@
               shortDisplayName="dwellings->lighttraps"
               queryRef="LightTrapId.LightTrapsByDwellingIds"
               recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
-              noSummaryOnSingleRecord="true">
+              noSummaryOnSingleRecord="false">
     
 
 

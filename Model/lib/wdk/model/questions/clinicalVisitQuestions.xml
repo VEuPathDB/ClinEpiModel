@@ -136,7 +136,7 @@
 	      shortDisplayName="participants->clinicalvisits"
 	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
 	      recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass"
-	      noSummaryOnSingleRecord="true">
+	      noSummaryOnSingleRecord="false">
       <attributesList
 	 summary="EUPATH_0000091,participant,EUPATH_0000113,EUPATH_0000311"
 	 sorting="participant DESC"
