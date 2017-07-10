@@ -42,11 +42,11 @@
 
 
 
-  <textAttribute name="overview" displayName="Overview" excludeProjects="EuPathDB" internal="true" inReportMaker="false">
+  <textAttribute name="record_overview" displayName="Overview" excludeProjects="EuPathDB" internal="true" inReportMaker="false">
     <text>
       <![CDATA[
-       Lighttrap <i>$$source_id$$<i> from household <a href="showRecord.do?name=DwellingRecordClasses.DwellingRecordClass&project_id=@PROJECT_ID@&primary_key=$$EUPATH_0000094$$">$$EUPATH_0000094$$</a> in $$EUPATH_0000054$$ subcounty.
-]]>
+       Lighttrap <i>$$source_id$$<i> from household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in $$EUPATH_0000054$$ subcounty.
+      ]]>
     </text>
   </textAttribute>
 
@@ -57,21 +57,11 @@
                displayName="Lighttrap Characteristics"
                queryRef="LightTrapTables.Characteristics">
 
-            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
-             <columnAttribute name="parent_category" displayName="Category"/>
-            <columnAttribute name="category" displayName="Characteristic"/>
-            <columnAttribute name="value" displayName="Value"/>
-        </table>
-<!--
-        <table name="UnCategorisedCharacteristics"
-               displayName="Lighttrap Characteristics"
-               queryRef="LightTrapTables.UnCategorisedCharacteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="category" displayName="Category"/>
-            <columnAttribute name="value" displayName="Value"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="term" displayName="Value"/>
+            <columnAttribute name="parentTerm" displayName="Category"/>
         </table>
--->
     </recordClass>
     </recordClassSet>
 
@@ -93,7 +83,7 @@ select count(*) from apidbtuning.LightTrapAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT source_id, '@PROJECT_ID@' AS project_id, source_id as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.LightTrapAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.LightTrapAttributes
          </sql>
        </sqlQuery>
 
@@ -101,16 +91,13 @@ select count(*) from apidbtuning.LightTrapAttributes
          <column name="source_id"/>
          <column name="project_id"/>
 
-         <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
-         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054]]></sqlParamValue>
-
           <sql excludeProjects="EuPathDB">
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
                      from APIDBTUNING.PROTOCOLAPPNODEIO io
                         , apidbtuning.lighttrapattributes pa
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.dwellingattributes) da
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent from apidbtuning.dwellingattributes) da
                      where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
                      and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
@@ -151,10 +138,10 @@ select count(*) from apidbtuning.LightTrapAttributes
                            where m.protocol_app_node_type = 'CDC light trap assay'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
-                           union
-                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
-                           union
-                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.metadatatype mt, sres.ontologyterm ot where ot.source_id = mt.source_id and mt.source_id in (&&dwellingSourceIds&&)
+--                           union
+--                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
+--                           union
+--                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.metadatatype mt, sres.ontologyterm ot where ot.source_id = mt.source_id and mt.source_id in (&&dwellingSourceIds&&)
                            ) meta
             ]]>
          </sql>
@@ -179,84 +166,26 @@ select count(*) from apidbtuning.LightTrapAttributes
             <column name="value"/>
        <sql>
           <![CDATA[
-   select distinct 
-                 anc.source_id, 
-                 anc.source_id as name,
-                 anc.value,
-                 pc.parent_category,
-                nvl(os.ontology_synonym,anc.category) as category
-            from ApidbTuning.AppNodeCharacteristics anc
-                 ,ApidbTuning.MetaDataSpec mds
-                 ,Sres.OntologySynonym os
-                 ,( select listagg(display.spec_value,' : ') within group (order by tier desc) as parent_category,
-                           root as ontology_term_id
-                      from ( select distinct property as term, 
-                                             ontology_term_id, 
-                                             spec_value as parent_term,
-                                             connect_by_root ontology_term_id as root,
-                                             to_number(level) as  tier
-                               from (select * from apidbtuning.metadataspec  where spec_property = 'parent' ) mds
-                              start with property in ( select distinct property from ApidbTuning.metadataspec where spec_property = 'leaf' )
-                            connect by prior spec_value = property
-                            )mds, 
-                            (select distinct property,
-                                             ontology_term_id,
-                                             spec_value 
-                              from ApidbTuning.metadataspec 
-                             where spec_property = 'display' )display
-                    where tier != 1 
-                      and mds.ontology_term_id = display.ontology_term_id
-                    group by root) pc
-                    
-              where anc.type = 'light_trap_data'
-             and anc.category = mds.property
-             and anc.category != 'parent_id'
-             and anc.category != 'information content entity'
-              and lower(os.ontology_synonym) not like '%do not display%'
-              and lower(anc.category) not like '%do not display%'
-             and anc.ontology_term_id = os.ontology_term_id (+)
-             and pc.ontology_term_id(+) = anc.ontology_term_id
-                       union
-           select distinct source_id,
-                  source_id as name,
-                  value,
-                  'dwelling' as parent_category,
-                  'household id' as category
-            from ApidbTuning.AppNodeCharacteristics
-           where category = 'parent_id'
-           and type = 'light_trap_data'
-           order by source_id, parent_category, category
+SELECT pan_name  AS source_id,
+  '@PROJECT_ID@' AS project_id,
+  term           AS parentTerm,
+  string_value   AS term
+FROM apidbtuning.metadata
+WHERE dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+AND category       = 'CDC light trap assay'
+/** TODO:  add this back in when we can make this a tree on the record page
+UNION
+SELECT pa.name                AS source_id,
+  '@PROJECT_ID@'              AS project_id,
+  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
+  ontology_term_name          AS term
+FROM apidbtuning.metadataontology o,
+  apidbtuning.lighttrapattributes pa
+WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+**/
             ]]>
         </sql>
       </sqlQuery>
-<!--      
-      <sqlQuery name="UnCategorisedCharacteristics"  isCacheable='false'>
-            <column name="source_id"/>
-         <column name="project_id"/>
-            <column name="name"/>
-            <column name="category"/>
-            <column name="value"/>
-            <sql>
-            <![CDATA[
-              select distinct
-                 anc.source_id,
-                 anc.source_id as name,
-                 anc.value,
-                 anc.category
-            from ApidbTuning.AppNodeCharacteristics anc
-                 ,ApidbTuning.MetaDataSpec mds
-           where anc.type = 'light_trap_data'
-             and anc.category = mds.property
-             and mds.spec_property = 'categorized'
-             and mds.spec_value = 'false'
-             and anc.category != 'parent_id'
-           order by source_id, category
-
-            ]]>
-            </sql>
-        </sqlQuery>
--->
-
     </querySet>
 
 </wdkModel>

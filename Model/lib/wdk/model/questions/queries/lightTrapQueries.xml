@@ -15,7 +15,7 @@
       <column name="project_id" />
       <sql>
 
-	<![CDATA[select distinct lta.name, '@PROJECT_ID@' as project_id from APIDBTUNING.LIGHTTRAPATTRIBUTES lta,
+	<![CDATA[select distinct lta.name as source_id, '@PROJECT_ID@' as project_id from APIDBTUNING.LIGHTTRAPATTRIBUTES lta,
         ($$collectionsBySourceID$$) ds WHERE lta.name = ds.source_id]]>
       </sql>
     </sqlQuery>
