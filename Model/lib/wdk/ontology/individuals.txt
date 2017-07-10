@@ -28,3 +28,6 @@ ClinicalVisitRecordClasses.ClinicalVisitRecordClass.Samples	http://edamontology.
 ClinicalVisitAttributes.ClinicalVisitAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	attributeMetaQuery	ClinicalVisitAttributesMeta				gene		results	download	
 													
 DwellingRecordClasses.DwellingRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	attribute	record_overview						record-internal		
+DwellingRecordClasses.DwellingRecordClass.Characteristics	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	table	Characteristics					2	record		
+DwellingRecordClasses.DwellingRecordClass.LightTraps	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	table	LightTraps					2	record		
+DwellingRecordClasses.DwellingRecordClass.HouseholdeMembers	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	table	HouseholdMembers					2	record		

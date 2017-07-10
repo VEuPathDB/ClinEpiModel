@@ -68,16 +68,7 @@
             <columnAttribute name="term" displayName="Value"/>
             <columnAttribute name="parentTerm" displayName="Category"/>
         </table>
-<!--
-        <table name="UncategorizedCharacteristics"
-               displayName="Uncategorized Clinical Visit Characteristics"
-               queryRef="ClinicalVisitTables.UncategorizedCharacteristics">
-            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="category" displayName="Category"/>
-            <columnAttribute name="value" displayName="Value"/>
-        </table>
--->
+
         <table name="Samples"
                displayName="Samples Collected During Visit"
                queryRef="ClinicalVisitTables.Samples">
@@ -207,7 +198,7 @@ SELECT pan_name  AS source_id,
 FROM apidbtuning.metadata
 WHERE dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 AND category       = 'Visit'
-/**
+/** TODO:  add this back in when we can make this a tree on the record page
 UNION
 SELECT a.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
@@ -221,27 +212,6 @@ WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
             </sql>
        </sqlQuery>
 
-      <sqlQuery name="UncategorizedCharacteristics"  isCacheable='false'>
-            <column name="source_id"/>
-            <column name="name"/>
-            <column name="category"/>
-            <column name="value"/>
-            <sql>
-            <![CDATA[
-select distinct source_id, 
-       source_id as name,
-       anc.category,
-       anc.value
-  from Apidbtuning.AppNodeCharacteristics anc
-             ,ApidbTuning.MetaDataSpec mds
-           where anc.type = 'clinical_visit_data'
-             and anc.category = mds.property
-             and mds.spec_property = 'categorized'
-             and mds.spec_value = 'false'    
-           order by source_id, category
-            ]]>
-            </sql>
-        </sqlQuery>
 
       <sqlQuery name="Samples"  isCacheable='false'>
             <column name="source_id"/>
