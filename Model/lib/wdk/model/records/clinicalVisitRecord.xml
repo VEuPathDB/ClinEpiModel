@@ -59,17 +59,16 @@
 
          <attributeQueryRef ref="ClinicalVisitAttributes.ClinicalVisitAttributes" attributeMetaQueryRef="ClinicalVisitAttributes.ClinicalVisitAttributesMeta"/>
 
-<!--
+
         <table name="Characteristics"
                displayName="Clinical Visit Characteristics"
                queryRef="ClinicalVisitTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="name"  inReportMaker="false" internal="true"/>
-             <columnAttribute name="parent_category" displayName="Category"/>
-            <columnAttribute name="category" displayName="Characteristic"/>
-            <columnAttribute name="value" displayName="Value"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="term" displayName="Value"/>
+            <columnAttribute name="parentTerm" displayName="Category"/>
         </table>
-
+<!--
         <table name="UncategorizedCharacteristics"
                displayName="Uncategorized Clinical Visit Characteristics"
                queryRef="ClinicalVisitTables.UncategorizedCharacteristics">
@@ -196,55 +195,28 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
 
       <sqlQuery name="Characteristics"  isCacheable='false'>
             <column name="source_id"/>
-            <column name="name"/>
-            <column name="parent_category"/>
-            <column name="category"/>
-            <column name="value"/>
+            <column name="project_id"/>
+            <column name="term"/>
+            <column name="parentTerm"/>
             <sql>
             <![CDATA[
-        select distinct 
-                 anc.source_id, 
-                 anc.source_id as name,
-                 anc.value,
-                 pc.parent_category,
-                nvl(os.ontology_synonym,anc.category) as category
-            from ApidbTuning.AppNodeCharacteristics anc
-                 ,ApidbTuning.MetaDataSpec mds
-                 ,Sres.OntologySynonym os
-                 ,( select listagg(display.spec_value,' : ') within group (order by tier desc) as parent_category,
-                           root as ontology_term_id
-                      from ( select distinct property as term, 
-                                             ontology_term_id, 
-                                             spec_value as parent_term,
-                                             connect_by_root ontology_term_id as root,
-                                             to_number(level) as  tier
-                               from (select * from apidbtuning.metadataspec  where spec_property = 'parent' ) mds
-                              start with property in ( select distinct property from ApidbTuning.metadataspec where spec_property = 'leaf' )
-                            connect by prior spec_value = property
-                            )mds, 
-                            (select distinct property,
-                                             ontology_term_id,
-                                             spec_value 
-                              from ApidbTuning.metadataspec 
-                             where spec_property = 'display' )display
-                    where tier != 1 
-                      and mds.ontology_term_id = display.ontology_term_id
-                    group by root) pc
-                    
-              where anc.type = 'clinical_visit_data'
-             and anc.ontology_term_source_id = mds.property
-             and anc.ontology_term_id = os.ontology_term_id (+)
-             and pc.ontology_term_id(+) = anc.ontology_term_id
-          union
-           select distinct source_id,
-                  source_id as name,
-                  value,
-                  'participant' as parent_category,
-                  'participant id' as category
-            from ApidbTuning.AppNodeCharacteristics
-           where category = 'parent_id'
-           and type = 'clinical_visit_data'
-           order by source_id, parent_category, category
+SELECT pan_name  AS source_id,
+  '@PROJECT_ID@' AS project_id,
+  term           AS parentTerm,
+  string_value   AS term
+FROM apidbtuning.metadata
+WHERE dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+AND category       = 'Visit'
+/**
+UNION
+SELECT a.name                AS source_id,
+  '@PROJECT_ID@'              AS project_id,
+  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
+  ontology_term_name          AS term
+FROM apidbtuning.metadataontology o,
+  apidbtuning.clinicalvisitattributes a
+WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+**/
             ]]>
             </sql>
        </sqlQuery>
