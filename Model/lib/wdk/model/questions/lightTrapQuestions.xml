@@ -4,75 +4,40 @@
 	<!-- ************************************************************ -->
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
+
     	<question name="CollectionsByCharacteristics" newBuild="22"
     		searchCategory="Lighttraps"
-    		displayName="Mosquito Characteristics"
-    		shortDisplayName="Mosquito Characteristics"
-    		queryRef="LightTrapId.LightTrapDataByMetadataCross"
+    		displayName="Light Trap Collections"
+    		shortDisplayName="Light Traps"
+    		queryRef="LightTrapId.LightTrapsByCharacteristics"
     		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
 
 
-          <attributesList summary="EUPATH_0000054,EUPATH_0000094,EUPATH_0000217,EUPATH_0000218" />
+          <attributesList summary="EUPATH_0000094,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
 
  
           <dynamicAttributes>
-            <columnAttribute name="ave_num_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time fra\
-me specified" align="center">
-                  <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
           </dynamicAttributes>
  
     	  <summary>
     			<![CDATA[Light traps by lighttrap and dwelling details]]>
     	  </summary>
-             <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <description>
+
+          <propertyList name="organism">
+            <value>H. sapien</value>
+          </propertyList>
+          <propertyList name="websiteProperties">
+            <value>useWizard</value>
+            <value>hideOperation</value>
+            <value>hideTitle</value>
+            <value>hideAttrDescr</value>
+          </propertyList>
+          <description>
             <![CDATA[
-             Find dwellings based on details of the dwelling itself and the participants participants who live there.
+             Find light trap collections based on details of the dwelling, participants who live there and the light trap collections themselves.
             ]]>
         </description>
     	</question>
-<!--
-    	<question name="CollectionsByCharacteristics_" newBuild="22"
-    		searchCategory="Lighttraps"
-    		displayName="Mosquito Characteristics2"
-    		shortDisplayName="Mosquito Characteristics2"
-    		queryRef="LightTrapId.LightTrapDataByMetadataCross_"
-    		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
-
-
-          <attributesList summary="EUPATH_0000054,EUPATH_0000094,EUPATH_0000217,EUPATH_0000218" />
-
-
- 
-          <dynamicAttributes>
-            <columnAttribute name="ave_num_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time fra\
-me specified" align="center">
-                  <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-          </dynamicAttributes>
- 
-    	  <summary>
-    			<![CDATA[Light traps by lighttrap and dwelling details]]>
-    	  </summary>
-             <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <description>
-            <![CDATA[
-             Find dwellings based on details of the dwelling itself and the participants participants who live there.
-            ]]>
-        </description>
-    	</question>
--->
         
          <!--Find records by Source ID-->
         <question name="CollectionsBySourceID" newBuild="22"

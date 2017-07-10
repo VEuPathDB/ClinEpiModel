@@ -661,6 +661,13 @@ Filter participants based on the date range they were observed and the number of
                 ]]>
             </description>
         </group>
+        <group name="lighttrap_characteristics" displayName="Light Trap Collections" displayType="ShowHide">
+            <description>
+                <![CDATA[
+		       Filter light trap collections based on their characteristics.
+                ]]>
+            </description>
+        </group>
         <group name="part_characteristics" displayName="Personal characteristics" displayType="ShowHide">
             <description>
                 <![CDATA[

@@ -8,31 +8,9 @@
     <!-- Source id  -->
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-     <sqlQuery name="LightTrapDataByMetadataCross"
-         isCacheable="true">
-      <paramRef ref="participantParams.start_date"/>
-      <paramRef ref="participantParams.end_date"/>
-      <paramRef ref="lighttrapParams.lighttraps_by_all_metadata" />
-      <column name="source_id"/>
-      <column name="project_id"/>
-      <column name="ave_num_anoph"/>
-        <sql>
-          <![CDATA[
-     select lta.source_id, round(avg(SUM_FEMALE_AS_IN_A_COLLECTION),1) as ave_num_anoph
-       from apidbtuning.lighttrapattributes lta, apidbtuning.dwellingattributes da
-       where lta.source_id in  ($$lighttraps_by_all_metadata$$)
-       and da.source_id = lta.parent_id(+)
-       and lta.collection_date(+) >= to_date($$start_date$$, 'DD-MON-YYYY')
-       and lta.collection_date(+) <= to_date($$end_date$$, 'DD-MON-YYYY')
-       group by lta.source_id, da.subcounty_in_uganda
-            ]]>
-       </sql>
-    </sqlQuery>
-
-
     <sqlQuery name="CollectionsBySourceID"
 	      isCacheable="true">
-      <paramRef ref="lighttrapParams.collectionsBySourceID" />
+      <paramRef ref="lightTrapParams.collectionsBySourceID" />
       <column name="source_id" />
       <column name="project_id" />
       <sql>
@@ -41,6 +19,27 @@
         ($$collectionsBySourceID$$) ds WHERE lta.name = ds.source_id]]>
       </sql>
     </sqlQuery>
+
+    <sqlQuery name="LightTrapsByCharacteristics"
+              isCacheable="true">
+       <paramRef ref="lightTrapParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="lightTrapParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
+       <paramRef ref="lightTrapParams.lighttraps_nf" groupRef="metaDataGroups.lighttrap_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select lta.name as source_id, 'ClinEpiDB' as project_id
+from apidbtuning.lighttrapattributes lta
+where lta.protocol_app_node_id in ($$lighttraps_nf$$)
+                ]]>   
+        </sql>
+     </sqlQuery>
+
+
+    <!-- Transforms -->
       
     <sqlQuery name="LightTrapsByDwellingIds" doNotTest="true" displayName="ID" isCacheable="true">
     <paramRef ref="dwellingParams.dwelling_result"/>

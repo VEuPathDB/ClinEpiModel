@@ -1,6 +1,6 @@
 <wdkModel>
 
-  <paramSet name="lighttrapParams">
+  <paramSet name="lightTrapParams">
     
     <enumParam name="type"
                prompt="type"
@@ -16,20 +16,43 @@
       </enumList>
     </enumParam>
 
-    <filterParam name="lighttraps_by_all_metadata"
-                 queryRef="ltsVQ.Lighttraps"
-                 metadataQueryRef="ltsVQ.LighttrapMetadataCross"
-                 metadataSpecQueryRef="ltsVQ.NodeMetadataSpecCross"
-                 prompt="Mosquito Collections"
-                 multiPick="true"
-                 quote="true"
-                 dependedParamRef="participantParams.start_date,participantParams.end_date"
-                 suppressNode="true">
-         <help>
-              Select dwellings based on Characteristics. 
-         </help>
-         <!-- <suggest selectMode="all" /> -->
-       </filterParam>
+
+    <filterParamNew name="geographic_region" 
+                    metadataQueryRef="DwellingVQ.RegionMetaData"
+                    summaryMetadataQueryRef="lightTrapVQ.SummaryRegionMetaData"
+                    ontologyQueryRef="DwellingVQ.RegionOntology"
+                    prompt="Dwelling"
+                    trimMetadataTerms="false">
+      <help>
+        Select light trap collections based on geographic region. 
+      </help>
+     </filterParamNew>
+     
+     <filterParamNew name="dwellings_nf" 
+                    ontologyQueryRef="lightTrapVQ.DwellingOntology"
+                    metadataQueryRef="lightTrapVQ.DwellingMetaData"
+                    summaryMetadataQueryRef="lightTrapVQ.SummaryDwellingMetaData"
+                    backgroundQueryRef="lightTrapVQ.DwellingMetaDataBkgd"
+                    prompt="Dwelling"
+                    trimMetadataTerms="false"
+                    dependedParamRef="lightTrapParams.geographic_region,participantParams.start_date,participantParams.end_date">
+      <help>
+        Select light trap collections based on the characteristics of the dwelling where collection was performed. 
+      </help>
+    </filterParamNew>
+
+    <filterParamNew name="lighttraps_nf" 
+                    ontologyQueryRef="lightTrapVQ.LightTrapOntology"
+                    metadataQueryRef="lightTrapVQ.LightTrapMetaData"
+                    backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd"
+                    prompt="Dwelling"
+                    trimMetadataTerms="false"
+                    dependedParamRef="lightTrapParams.geographic_region,participantParams.start_date,participantParams.end_date,lightTrapParams.dwellings_nf">
+      <help>
+        Select light trap collections based on the characteristics of the dwelling where collection was performed. 
+      </help>
+    </filterParamNew>
+
 
     <datasetParam name="collectionsBySourceID"
 		  recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
@@ -80,156 +103,253 @@
     <!--  Vocab queries-->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
- <querySet name="ltsVQ" queryType="vocab" isCacheable="true">
-   <sqlQuery name="Lighttraps" excludeProjects="TrichDB,EuPathDB">
-            <paramRef ref="participantParams.start_date" />
-            <paramRef ref="participantParams.end_date" />
-            <column name="internal"/>
-            <column name="term"/>
-            <sql>
+ <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true">
+
+      <sqlQuery name="SummaryRegionMetaData">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+                 select distinct lta.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'Dwelling type'
+ and m.source_id = 'EUPATH_0000054'
+ and m.protocol_app_node_id = io.input_node_id
+ and io.output_node_id = lta.protocol_app_node_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+   <sqlQuery name="DwellingOntology">
+     <paramRef ref="participantParams.start_date" />
+     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="lightTrapParams.geographic_region" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
          <![CDATA[
-          select 
-         nvl(pan.source_id,pan.name)  as term,
-         nvl(pan.source_id,pan.name)  as internal
-  from ApidbTuning.LighttrapAttributes pan
-  where pan.collection_date between to_date($$start_date$$,'DD-MON-YYYY') and to_date($$end_date$$,'DD-MON-YYYY')
+   with leaf as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o, 
+(select distinct term
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and category = 'Dwelling type') md
+ where o.ontology_term_name = md.term),
+first as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ where o.ontology_term_name = par.parent_ontology_term_name),
+ second as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ where o.ontology_term_name = gpar.parent_ontology_term_name)
+ select * from leaf
+ union
+ select * from first
+ union
+ select * from second
+ union
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ where o.ontology_term_name = ggpar.parent_ontology_term_name
+ union
+ select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
+ null as precision from dual
          ]]>
-            </sql>
+    </sql>
    </sqlQuery>
-
-   <sqlQuery name="LighttrapMetadataCross">
-            <paramRef ref="participantParams.start_date" />
-            <paramRef ref="participantParams.end_date" />
-            <column name="term"/>
-            <column name="property"/>
-            <column name="value"/>
-            <sql>
+          
+    <sqlQuery name="DwellingMetaDataBkgd">
+     <paramRef ref="participantParams.start_date" />
+     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="lightTrapParams.geographic_region" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
          <![CDATA[
-          select * from (
-           select name as term,
-           ontology_term_source_id as property,
-                      (case when ontology_term_source_id in ( select distinct property 
-                                     from apidbtuning.metadataspec
-                                    where spec_property = 'type'
-                                      and spec_value = 'date' )
-                then substr(value,1,4) || '-' || substr(value,5,2)|| '-' || substr(value,7,2)
-                else value
-            end) as value
-  from ApidbTuning.AppNodeCharacteristics
-where type = 'light_trap_data'
-and ontology_term_source_id in (select distinct property
-                       from ApidbTuning.MetadataSpec
-                      )
-union
-select lts.name as term,
-             dwelling.ontology_term_source_id as property,
-               (case when dwelling.ontology_term_source_id in ( select distinct property 
-                                     from apidbtuning.metadataspec
-                                    where spec_property = 'type'
-                                      and spec_value = 'date' )
-                then substr(dwelling.value,1,4) || '-' || substr(dwelling.value,5,2)|| '-' || substr(dwelling.value,7,2)
-                else dwelling.value
-            end) as value
+select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'Dwelling type'
+ union
+ select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
+  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  where da.protocol_app_node_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  group by da.protocol_app_node_id
+          ]]>
+    </sql>
+    </sqlQuery>
 
-from ApidbTuning.AppNodeCharacteristics dwelling,
-     ApidbTuning.AppNodeCharacteristics lts,
-     APIDBTUNING.PANAssociations pan
-
-where  dwelling.type = 'dwelling'
-and  lts.type ='light_trap_data'
-  and dwelling.SOURCE_ID = pan.node_source_id
-  and lts.source_id = pan.associated_node_source_id
-)
-where value is not null 
-         ]]>
-            </sql>
-   </sqlQuery>
-
-   <sqlQuery name="DwellingMetadata">
-            <column name="term"/>
-            <column name="property"/>
-            <column name="value"/>
-            <sql>
+    <sqlQuery name="DwellingMetaData" isCacheable="false">
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="lightTrapParams.geographic_region" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
          <![CDATA[
-   select name as term,
-           ontology_term_source_id as property,
-           value as value
-  from ApidbTuning.AppNodeCharacteristics
-where type = 'dwelling'
-and value is not null
-]]>
-            </sql>
-   </sqlQuery>
+select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m
+ where m.protocol_app_node_id in ($$geographic_region$$)
+ union
+ select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
+  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  where da.protocol_app_node_id in ($$geographic_region$$)
+  and da.protocol_app_node_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  group by da.protocol_app_node_id
+          ]]>
+    </sql>
+    </sqlQuery>
 
-
-   <sqlQuery name="NodeMetadataSpec">
-            <column name="property"/>
-            <column name="spec_property"/>
-            <column name="spec_value"/>
-            <sql>
+    <sqlQuery name="SummaryDwellingMetaData" isCacheable="false">
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="lightTrapParams.geographic_region" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
          <![CDATA[
-select distinct property, spec_property, spec_value
-  from ApidbTuning.MetadataSpec
- where entity_type ='dwelling'
-    or entity_type ='all' 
+ select distinct lta.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
+ where m.protocol_app_node_id in ($$geographic_region$$)
+ and m.protocol_app_node_id = io.input_node_id
+ and io.output_node_id = lta.protocol_app_node_id
+ and lta.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+ and lta.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY')
+ union
+ select lta.protocol_app_node_id, mos.ontology_term_name, mos.string_value,mos.number_value,mos.date_value
+ from
+ (select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
+  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  where da.protocol_app_node_id in ($$geographic_region$$)
+  and da.protocol_app_node_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  group by da.protocol_app_node_id) mos, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
+  where mos.protocol_app_node_id = io.input_node_id
+  and io.output_node_id = lta.protocol_app_node_id
+  and lta.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+  and lta.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY')
+          ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="LightTrapOntology">
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="lightTrapParams.geographic_region" />  
+      <paramRef ref="lightTrapParams.dwellings_nf" />  
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+        <![CDATA[
+   with leaf as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o, 
+(select distinct term
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and category = 'CDC light trap assay') md
+ where o.ontology_term_name = md.term),
+first as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ where o.ontology_term_name = par.parent_ontology_term_name),
+ second as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ where o.ontology_term_name = gpar.parent_ontology_term_name)
+ select * from leaf
+ union
+ select * from first
+ union
+ select * from second
+ union
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ where o.ontology_term_name = ggpar.parent_ontology_term_name
         ]]>
-     </sql>
-   </sqlQuery>
+      </sql>
+    </sqlQuery>
 
-   <sqlQuery name="NodeMetadataSpecCross">
-            <column name="property"/>
-            <column name="spec_property"/>
-            <column name="spec_value"/>
-            <sql>
-         <![CDATA[
-select distinct * from (
-            Select mds.* from (
-select distinct property, spec_property, spec_value
-  from ApidbTuning.MetadataSpec
-  where entity_type in 'dwelling' or entity_type = 'light_trap_data'
-Union
-select distinct property, 'parent' as spec_property, 'Characteristics' as spec_value
-from    ( select distinct spec_value as property
-    from apidbtuning.metadataspec
-    where spec_property = 'parent'
-    and (entity_type in 'dwelling' or entity_type = 'light_trap_data')
-    and spec_value not in
-        (select distinct property
-           from Apidbtuning.metadataspec
-          where spec_property = 'parent'
-            and lower(spec_value) != 'do not display'))
-union
-select distinct property, 'parent' as spec_property, 'Characteristics' as spec_value
-from apidbtuning.metadataspec
-where lower(property) in ('district in uganda','age at time of visit')
-
-union
-select 'Characteristics' as property, 'display' as spec_property, 'Characteristics' as spec_value
-from dual
-union
-select distinct property, 'parent' as spec_property, 'Uncategorized Characteristics' as spec_value from ApidbTuning.Metadataspec where
-property not in ( select property from ApidbTuning.Metadataspec
-                   where Spec_Property = 'parent'
-                   union
-                  select spec_value from ApidbTuning.Metadataspec
-                   where Spec_Property = 'parent'
-                   union
-                  select distinct property
-                    from apidbtuning.metadataspec
-                   where lower(property) in ('district in uganda','age at time of visit'))
-and (entity_type in 'light_trap_data' or entity_type = 'dwelling')
-union
-select distinct 'Uncategorized Characteristics', 'display' as spec_property, 'Uncategorized Characteristics' as spec_value from dual
-)mds,
-  ( select property, nvl(spec_value, 9999999999) as ord_num from apidbtuning.metadataspec
-     where spec_property = 'order_num') ord_num
-     where mds.property = ord_num.property (+)
-     and mds.spec_property not like 'order_num'
-    order by to_number(ord_num), mds.property)
- 
+    <sqlQuery name="LightTrapMetaData">
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="lightTrapParams.geographic_region" />  
+      <paramRef ref="lightTrapParams.dwellings_nf" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'CDC light trap assay'
+ and m.protocol_app_node_id = lta.protocol_app_node_id
+ and lta.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+ and lta.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+ and m.protocol_app_node_id = io.output_node_id
+ and io.input_node_id in ($$dwellings_nf$$)
         ]]>
-     </sql>
-   </sqlQuery>   
+      </sql>
+    </sqlQuery>
+
+        <sqlQuery name="LightTrapMetaDataBkgd">
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="lightTrapParams.geographic_region" />  
+      <paramRef ref="lightTrapParams.dwellings_nf" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'CDC light trap assay'
+        ]]>
+      </sql>
+    </sqlQuery>
 
  </querySet>
 
