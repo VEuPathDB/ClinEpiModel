@@ -8,8 +8,8 @@
 
    <question name="ClinicalVisitsByRelativeVisits" newBuild="2"
               searchCategory="Clinical Visit"
-              displayName="Select a Set of Visits (Relative Visits)"
-              shortDisplayName="Visits by Rel Visits"
+              displayName="Select a Set of Clinical Visits"
+              shortDisplayName="Clinical Visits"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
@@ -62,7 +62,7 @@
 
        <question name="ClinicalVisitsByAllData" newBuild="2"
               searchCategory="Clinical Visit"
-              displayName="Select a Set of Visits (no relative visits)"
+              displayName="Select a Set of Clinical Visits (no Relative Visits)"
               shortDisplayName="Clinical Visits noRel"
               queryRef="ClinicalVisitId.ClinicalVisitsByAllData" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >

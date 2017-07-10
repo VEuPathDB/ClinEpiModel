@@ -453,7 +453,6 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select * from (
 with part as ( select distinct iod.input_node_id as dwelling_id,pa.protocol_app_node_id as part_id, iop.output_node_id as cv_id 
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
@@ -471,7 +470,7 @@ with part as ( select distinct iod.input_node_id as dwelling_id,pa.protocol_app_
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
- and m.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
+ and part.cv_id in ($$visits_visitage_metadata_nf$$)
  union
  select part.cv_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
@@ -483,7 +482,6 @@ with part as ( select distinct iod.input_node_id as dwelling_id,pa.protocol_app_
   group by da.protocol_app_node_id) mos, part
   where part.dwelling_id = mos.protocol_app_node_id(+)
   and Part.cv_id in ($$visits_visitage_metadata_nf$$)
-  )
           ]]>
     </sql>    
 
