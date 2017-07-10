@@ -9,8 +9,8 @@
 
    <question name="DwellingsByCharacteristics" newBuild="1"
               searchCategory="Dwelling"
-              displayName="Dwelling and Participant Details"
-              shortDisplayName="Dwelling Details"
+              displayName="Household and Participant Details"
+              shortDisplayName="Household Details"
               queryRef="DwellingId.DwellingsByCharacteristics" 
               recordClassRef="DwellingRecordClasses.DwellingRecordClass">
 
