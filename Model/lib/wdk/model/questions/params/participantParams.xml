@@ -204,7 +204,8 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Participant') md
+ and category = 'Participant'
+ and source_id != 'EUPATH_0000032') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -296,7 +297,8 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category in ('Visit','Specimen type')) md
+ and category in ('Visit','Specimen type')
+ and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -342,6 +344,16 @@ select distinct va.protocol_app_node_id as internal, term as ontology_term_name,
  and io.output_Node_Id = va.protocol_app_node_id
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
  and io.input_node_id in ($$participants_nf$$)
+  union
+ select ios.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+from apidbtuning.metadata m, apidbtuning.protocolappnodeio iov, apidbtuning.protocolappnodeio ios
+where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+and m.category = 'Specimen type' 
+and m.term = 'Specimen type'
+and ios.output_node_id = m.protocol_app_node_id
+and ios.input_node_id in ($$visits_visitage_metadata_nf$$)
+and iov.output_node_id = ios.input_node_id
+and iov.input_node_id in ($$participants_nf$$)
           ]]>
     </sql>
     </sqlQuery>    
@@ -369,6 +381,16 @@ select distinct io.input_node_id as internal, term as ontology_term_name, string
  and io.output_Node_Id = va.protocol_app_node_id
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
  and io.input_node_id in ($$participants_nf$$)
+  union
+ select iov.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+from apidbtuning.metadata m, apidbtuning.protocolappnodeio iov, apidbtuning.protocolappnodeio ios
+where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+and m.category = 'Specimen type' 
+and m.term = 'Specimen type'
+and ios.output_node_id = m.protocol_app_node_id
+and ios.input_node_id in ($$visits_visitage_metadata_nf$$)
+and iov.output_node_id = ios.input_node_id
+and iov.input_node_id in ($$participants_nf$$)
           ]]>
     </sql>
     </sqlQuery>
@@ -392,6 +414,13 @@ select distinct io.input_node_id as internal, term as ontology_term_name, string
  from apidbtuning.metadata 
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'Visit'
+ union
+ select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+and m.category = 'Specimen type' 
+and m.term = 'Specimen type'
+and io.output_node_id = m.protocol_app_node_id
           ]]>
     </sql>
     </sqlQuery>
@@ -533,7 +562,8 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Dwelling type') md
+ and category = 'Dwelling type'
+ and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision

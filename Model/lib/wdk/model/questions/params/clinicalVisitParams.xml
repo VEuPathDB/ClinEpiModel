@@ -36,7 +36,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd"
                     prompt="Visits"
                     trimMetadataTerms="false"
-                    dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
+                    dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.dwellings_nf,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf">
       <help>
         Select visits based on their visit characteristics. 
       </help>
@@ -48,7 +48,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd"
                     prompt="Relative Visits"
                     trimMetadataTerms="false"
-                    dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
+                    dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.dwellings_nf,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf">
       <help>
         Select relative visits based on their visit characteristics. 
       </help>
@@ -59,7 +59,7 @@
                       ontologyQueryRef="ClinicalVisitVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetadataBkgdNf"
                       prompt="ClinicalVisits"
-                      dependedParamRef="participantParams.geographic_region,participantParams.start_date,participantParams.end_date,participantParams.duration_observation"
+                      dependedParamRef="clinicalVisitParams.geographic_region,participantParams.start_date,participantParams.end_date,participantParams.duration_observation"
                       trimMetadataTerms="false">
          <help>
               Select the age of the participants at the time of their clinical visits.
@@ -415,7 +415,8 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Dwelling type') md
+ and category = 'Dwelling type'
+ and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -549,7 +550,8 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Participant') md
+ and category = 'Participant'
+ and source_id != 'EUPATH_0000032') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -644,7 +646,8 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category in ('Visit','Specimen type')) md
+ and category in ('Visit','Specimen type')
+ and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -690,38 +693,11 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
  union
  select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
-where m.category = 'Specimen type' 
+where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
 and io.output_node_id = m.protocol_app_node_id
 and io.input_node_id in ($$participants_nf$$)
-          ]]>
-    </sql>
-    </sqlQuery>    
-
-    <sqlQuery name="VisitMetaDataRelVis" >
-         <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-         <paramRef ref="participantParams.start_date" />
-         <paramRef ref="participantParams.end_date" />
-         <paramRef ref="participantParams.duration_observation" />  
-         <paramRef ref="clinicalVisitParams.dwellings_nf" />  
-         <paramRef ref="clinicalVisitParams.geographic_region" />  
-         <paramRef ref="clinicalVisitParams.participants_nf" />  
-         <column name="ontology_term_name"/>
-         <column name="internal"/>
-         <column name="number_value"/>
-         <column name="date_value"/>
-         <column name="string_value"/>
-         <sql>
-           <![CDATA[
- select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Visit'
- and m.protocol_app_node_id = io.output_node_id
- and io.input_Node_Id in (select distinct iob.input_node_id from
- apidbtuning.protocolappnodeio iob, apidbtuning.clinicalvisitattributes cva
- where cva.protocol_app_node_id in ($$participants_nf$$)
- and cva.protocol_app_node_id = iob.output_node_id)
           ]]>
     </sql>
     </sqlQuery>    
@@ -745,6 +721,13 @@ and io.input_node_id in ($$participants_nf$$)
  from apidbtuning.metadata 
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'Visit'
+ union
+ select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+and m.category = 'Specimen type' 
+and m.term = 'Specimen type'
+and io.output_node_id = m.protocol_app_node_id
           ]]>
     </sql>
     </sqlQuery>
