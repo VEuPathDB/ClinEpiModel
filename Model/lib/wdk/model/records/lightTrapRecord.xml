@@ -21,7 +21,7 @@
       <!--  Step Analysis Plugins -->
       <!-- =============================================================== -->
 
-             <stepAnalysisRef name="light-trap-plots" excludeProjects="EuPathDB"/> 
+             <stepAnalysisRef name="light-trap-plots"/> 
 
       <!-- =============================================================== -->
       <!--   Reporters -->  
@@ -42,7 +42,7 @@
 
 
 
-  <textAttribute name="record_overview" displayName="Overview" excludeProjects="EuPathDB" internal="true" inReportMaker="false">
+  <textAttribute name="record_overview" displayName="Overview" internal="true" inReportMaker="false">
     <text>
       <![CDATA[
        Lighttrap <i>$$source_id$$<i> from household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in $$EUPATH_0000054$$ subcounty.
@@ -71,8 +71,8 @@
       <!-- Attribute queries -->  
       <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <querySet name="LightTrapAttributes" queryType="attribute" doNotTest="true"  
-              isCacheable='false'
-              excludeProjects="TrichDB">
+              isCacheable='false'>
+
       
       <testRowCountSql>
 select count(*) from apidbtuning.LightTrapAttributes
@@ -91,7 +91,7 @@ select count(*) from apidbtuning.LightTrapAttributes
          <column name="source_id"/>
          <column name="project_id"/>
 
-          <sql excludeProjects="EuPathDB">
+          <sql>
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
@@ -154,8 +154,8 @@ select count(*) from apidbtuning.LightTrapAttributes
 
 
     <querySet name="LightTrapTables" queryType="table" 
-              isCacheable='false'
-              excludeProjects="TrichDB">
+              isCacheable='false'>
+
       
       <sqlQuery name="Characteristics"  isCacheable='false'>
             <column name="source_id"/>

@@ -28,7 +28,7 @@
       <!--  Step Analysis Plugins -->
       <!-- =============================================================== -->
 
-             <stepAnalysisRef name="clinical-visit-dist" excludeProjects="EuPathDB"/>
+             <stepAnalysisRef name="clinical-visit-dist"/>
 
      
  <!-- =============================================================== -->
@@ -88,8 +88,8 @@
       <!-- Attribute queries -->  
       <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <querySet name="ClinicalVisitAttributes" queryType="attribute" doNotTest="true"  
-              isCacheable='false'
-              excludeProjects="TrichDB">
+              isCacheable='false'>
+
 
       <testRowCountSql>
 select count(*) from apidbtuning.ClinicalVisitAttributes
@@ -114,7 +114,7 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
          <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id</sqlParamValue>
          <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054]]></sqlParamValue>
 
-          <sql excludeProjects="EuPathDB">
+          <sql>
             <![CDATA[
  select cva.name as source_id, '@PROJECT_ID@' as project_id, cva.*,
                      da.*, pa.*
@@ -181,8 +181,8 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
 
 
     <querySet name="ClinicalVisitTables" queryType="table" 
-              isCacheable='false'
-              excludeProjects="TrichDB">
+              isCacheable='false'>
+
 
       <sqlQuery name="Characteristics"  isCacheable='false'>
             <column name="source_id"/>

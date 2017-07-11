@@ -25,7 +25,6 @@
              Its possible that not all the IDs in the list will be found in the database
              due to anumber of reasons such as unavailable ID mapping. It is currenly not
              possible to inform which IDs did not match anything in the database]]> </help>
-     <suggest includeProjects="INIT" default="FILL" />
      <suggest default="100118844" />
       
     </datasetParam>

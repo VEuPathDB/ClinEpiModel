@@ -1,6 +1,6 @@
 <wdkModel>
 
-	<questionSet name="LighttrapQuestions" displayName="Search Light Trap Data" excludeProjects="TrichDB">
+	<questionSet name="LighttrapQuestions" displayName="Search Light Trap Data">
 	<!-- ************************************************************ -->
     <!-- Characteristics -->  
     <!-- ************************************************************ -->

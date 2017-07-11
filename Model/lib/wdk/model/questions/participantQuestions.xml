@@ -1,6 +1,6 @@
 <wdkModel>
 
-  <questionSet name="ParticipantQuestions" displayName="Search for participants" excludeProjects="TrichDB">
+  <questionSet name="ParticipantQuestions" displayName="Search for participants">
 
     <!-- ************************************************************ -->
     <!-- Characteristics -->  

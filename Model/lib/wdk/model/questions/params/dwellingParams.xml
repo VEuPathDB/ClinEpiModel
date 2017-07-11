@@ -62,7 +62,6 @@
                Its possible that not all ID's in the list will be found in the database
                due to a number of reasons such as unavailable ID maping. Its also currently not
                possible to inform which ID's did not match anything in the database]]></help>
-      <suggest includeProjects="INIT" default="FILL" />
       <suggest default="HH101009801" />
       
     </datasetParam>

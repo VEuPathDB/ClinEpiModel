@@ -2,7 +2,7 @@
 
   <!-- notes-->
 
-  <querySet name="LightTrapId" queryType="id" isCacheable="false" excludeProjects="TrichDB">
+  <querySet name="LightTrapId" queryType="id" isCacheable="false">
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!-- Source id  -->
