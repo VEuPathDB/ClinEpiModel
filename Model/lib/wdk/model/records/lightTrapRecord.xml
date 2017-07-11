@@ -27,14 +27,20 @@
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
-<!--
 
-          <reporter name="tabular" displayName="Summary - tab delimited" scopes=""
-                    implementation="org.gusdb.wdk.model.report.AttributesTabularReporter"/>
 
-          <reporter name="fullRecord" displayName="Text: choose from columns and/or tables"  scopes=""
-                    implementation="org.gusdb.wdk.model.report.FullRecordReporter"/>
--->
+      <reporter name="attributesTabular" displayName="%%attributesReporterDisplayName%%" scopes="results"
+                implementation="org.gusdb.wdk.model.report.AttributesTabularReporter">
+        <property name="page_size">500</property>
+      </reporter>
+
+      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
+                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
+             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
+      </reporter>
+
+      <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
+                implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
 
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->

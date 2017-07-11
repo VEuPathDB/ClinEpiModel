@@ -33,3 +33,5 @@ DwellingRecordClasses.DwellingRecordClass.LightTraps	http://edamontology.org/top
 DwellingRecordClasses.DwellingRecordClass.HouseholdeMembers	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	table	HouseholdMembers					2	record		
 LightTrapRecordClasses.LightTrapRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	LightTrapRecordClasses.LightTrapRecordClass	attribute	record_overview						record-internal		
 LightTrapRecordClasses.LightTrapRecordClass.Characteristics	http://edamontology.org/topic_3305	Epidemiology	LightTrapRecordClasses.LightTrapRecordClass	table	Characteristics					2	record		
+LightTrapAttributes.LightTrapAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	LightTrapRecordClasses.LightTrapRecordClass	attributeMetaQuery	LightTrapAttributes.LightTrapAttributesMeta				gene		results	download	
+DwellingAttributes.DwellingAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	attributeMetaQuery	DwellingAttributes.DwellingAttributesMeta				gene		results	download	

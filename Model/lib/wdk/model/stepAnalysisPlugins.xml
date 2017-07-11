@@ -53,7 +53,8 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/App-1-cv]]></property>
-      <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property>
+      <property name="attributesToExtract">EUPATH_0000311,EUPATH_0000338,EUPATH_0000054,EUPATH_0000097,EUPATH_0000047,EUPATH_0000092,EUPATH_0000048,EUPATH_0000113,EUPATH_0000091</property>
+<!--      <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property> -->
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1000</property>
       <property name="iframeLengthPx">800</property>
