@@ -687,7 +687,7 @@ Filter participants based on the date range they were observed and the number of
         <group name="age_at_visit" displayName="Age" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on their age at one or more visits. The study included participants from age 0.5 to 11 years, and from 18 to 75 years of age.
+    Filter participants based on their age at visits. Participants are removed if they have any visits within the previously selected Time Period where they were not within this Age range.  (The study included participants from age 0.5 to 11 years, and from 18 to 75 years of age.)
                 ]]>
             </description>
         </group>

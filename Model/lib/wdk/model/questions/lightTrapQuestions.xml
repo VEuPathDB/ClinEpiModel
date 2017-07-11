@@ -7,7 +7,7 @@
 
     	<question name="CollectionsByCharacteristics" newBuild="22"
     		searchCategory="Lighttraps"
-    		displayName="Light Trap Collections"
+    		displayName="Select a Set of Light Trap Collections"
     		shortDisplayName="Light Traps"
     		queryRef="LightTrapId.LightTrapsByCharacteristics"
     		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
