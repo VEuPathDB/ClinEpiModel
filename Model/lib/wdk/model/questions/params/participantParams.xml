@@ -34,11 +34,11 @@
                       metadataQueryRef="ParticipantVQ.DwellingMetaData"
                       ontologyQueryRef="ParticipantVQ.DwellingOntology"
                       backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd"
-                      prompt="Participants"
+                      prompt="Households"
                       dependedParamRef="participantParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,participantParams.geographic_region"
                       trimMetadataTerms="false">
          <help>
-              Select participants based on their characteristics. 
+              Select participants based on the characteristics of the household where they live. 
          </help>
        </filterParamNew>
 
@@ -59,7 +59,7 @@
                     summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData"
                     ontologyQueryRef="ParticipantVQ.VisitOntology"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd"
-                    prompt="Visits"
+                    prompt="Clincial Visits"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
       <help>
@@ -72,7 +72,7 @@
                       summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf"
                       ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf"
-                      prompt="Visits"
+                      prompt="Age at visit"
                       dependedParamRef="participantParams.geographic_region,participantParams.start_date,participantParams.end_date"
                       trimMetadataTerms="false">
          <help>

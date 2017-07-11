@@ -34,7 +34,7 @@
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData"
                     ontologyQueryRef="ClinicalVisitVQ.VisitOntology"
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd"
-                    prompt="Visits"
+                    prompt="Clincial Visits"
                     trimMetadataTerms="false"
                     dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.dwellings_nf,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf">
       <help>
@@ -58,7 +58,7 @@
                       metadataQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetadataNf"
                       ontologyQueryRef="ClinicalVisitVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetadataBkgdNf"
-                      prompt="ClinicalVisits"
+                      prompt="Age at visit"
                       dependedParamRef="clinicalVisitParams.geographic_region,participantParams.start_date,participantParams.end_date,participantParams.duration_observation"
                       trimMetadataTerms="false">
          <help>
@@ -80,11 +80,11 @@
                       metadataQueryRef="ClinicalVisitVQ.DwellingMetaData"
                       ontologyQueryRef="ClinicalVisitVQ.DwellingOntology"
                       backgroundQueryRef="ClinicalVisitVQ.DwellingMetaDataBkgd"
-                      prompt="Participants"
+                      prompt="Households"
                       dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.geographic_region"
                       trimMetadataTerms="false">
          <help>
-              Select visits based on the dwelling characteristics where the participants live. 
+              Select visits based on the household characteristics where the participants live. 
          </help>
        </filterParamNew>
 
