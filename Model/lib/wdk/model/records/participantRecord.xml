@@ -159,7 +159,7 @@ select count(*) from apidbtuning.ParticipantAttributes
          <column name="project_id"/>
 
          <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
-         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054]]></sqlParamValue>
+         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
 
           <sql>
             <![CDATA[
@@ -186,7 +186,7 @@ select count(*) from apidbtuning.ParticipantAttributes
           <column name="plugin_properties" />
 
          <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
-          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000054']]></sqlParamValue>
+          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000054', 'EUPATH_0000002']]></sqlParamValue>
           <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EUPATH_0000032']]></sqlParamValue>
 
          <sql>
