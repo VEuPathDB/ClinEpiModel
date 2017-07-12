@@ -196,7 +196,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaData" isCacheable="false">
+    <sqlQuery name="DwellingMetaData" isCacheable="true">
       <paramRef ref="participantParams.start_date" />
       <paramRef ref="participantParams.end_date" />
       <paramRef ref="lightTrapParams.geographic_region" />  
@@ -283,7 +283,8 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'CDC light trap assay') md
+ and category = 'CDC light trap assay'
+  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision

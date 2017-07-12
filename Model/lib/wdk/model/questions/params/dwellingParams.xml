@@ -174,7 +174,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sql>
     </sqlQuery>
 
-        <sqlQuery name="DwellingMetaData" isCacheable="false">
+        <sqlQuery name="DwellingMetaData" isCacheable="true">
      <paramRef ref="participantParams.start_date" />
      <paramRef ref="participantParams.end_date" />
      <paramRef ref="dwellingParams.geographic_region" />  
@@ -284,7 +284,7 @@ first as (
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData" isCacheable="false">
+   <sqlQuery name="ParticipantMetaData" isCacheable="true">
      <paramRef ref="participantParams.start_date" />
      <paramRef ref="participantParams.end_date" />
      <paramRef ref="dwellingParams.dwellings_nf" />  
