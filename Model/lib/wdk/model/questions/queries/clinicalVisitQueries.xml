@@ -32,7 +32,7 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
        <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.age_at_visit"/>
+       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
@@ -99,7 +99,7 @@ group by name
        <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.age_at_visit"/>
+       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>

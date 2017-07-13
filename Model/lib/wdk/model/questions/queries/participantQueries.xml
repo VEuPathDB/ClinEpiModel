@@ -31,7 +31,7 @@
        <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="participantParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.age_at_visit"/>
+       <paramRef ref="participantParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="participantParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
@@ -95,7 +95,7 @@ having count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY')
        <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="participantParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.age_at_visit"/>
+       <paramRef ref="participantParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="participantParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>

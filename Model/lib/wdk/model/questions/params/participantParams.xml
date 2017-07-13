@@ -345,7 +345,7 @@ first as (
 with valid as (
 select distinct io.output_node_id as visit_id, io.input_node_id as part_id
 from apidbtuning.protocolappnodeio io
-where io.input_node_id in ($$participants_nf$$)
+where io.input_node_id in ($$dwellings_nf$$)
 and io.output_node_id in ($$visits_visitage_metadata_nf$$)
 )
 select distinct valid.visit_id as internal, term as ontology_term_name, string_value, number_value, date_value
@@ -387,7 +387,7 @@ select distinct io.input_node_id as internal, term as ontology_term_name, string
  and m.protocol_app_node_id = va.protocol_app_node_id
  and io.output_Node_Id = va.protocol_app_node_id
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
- and io.input_node_id in ($$participants_nf$$)
+ and io.input_node_id in ($$dwellings_nf$$)
   union
  select iov.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio iov, apidbtuning.protocolappnodeio ios
@@ -397,7 +397,7 @@ and m.term = 'Specimen type'
 and ios.output_node_id = m.protocol_app_node_id
 and ios.input_node_id in ($$visits_visitage_metadata_nf$$)
 and iov.output_node_id = ios.input_node_id
-and iov.input_node_id in ($$participants_nf$$)
+and iov.input_node_id in ($$dwellings_nf$$)
           ]]>
     </sql>
     </sqlQuery>
@@ -673,10 +673,10 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 
       <groupSet name="metaDataGroups">
         
-        <group name="daterange" displayName="Time period" displayType="ShowHide">
+        <group name="daterange" displayName="Time period / age at visit" displayType="ShowHide">
             <description>
                 <![CDATA[
-Filter participants based on the date range they were observed and the number of days they were observed in that period. Study data is available from 05-AUG-2011 to 30-JUN-2016.
+Filter participants based on the date range they were observed, the number of days they were observed in that period, and their age at each observation (ie clinical visit). Study data is available from 05-AUG-2011 to 30-JUN-2016.
                 ]]>
             </description>
         </group>
