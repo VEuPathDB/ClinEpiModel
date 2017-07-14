@@ -66,7 +66,9 @@
 
        <filterParamNew name="geographic_region" 
                        metadataQueryRef="ClinicalVisitVQ.RegionMetaData"
+                       summaryMetadataQueryRef="ClinicalVisitVQ.RegionMetaDataSummary"
                        ontologyQueryRef="DwellingVQ.RegionOntology"
+                       useSummaryMetadataQueryForInternalValue="true"
                        prompt="Participant"
                        trimMetadataTerms="false">
          <help>
@@ -76,8 +78,10 @@
 
        <filterParamNew name="dwellings_nf" 
                       metadataQueryRef="ClinicalVisitVQ.DwellingMetaData"
+                      summaryMetadataQueryRef="ClinicalVisitVQ.DwellingMetaDataSummary"
                       ontologyQueryRef="ClinicalVisitVQ.DwellingOntology"
                       backgroundQueryRef="ClinicalVisitVQ.DwellingMetaDataBkgd"
+                      useSummaryMetadataQueryForInternalValue="true"
                       prompt="Households"
                       dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf"
                       trimMetadataTerms="false">
@@ -88,8 +92,10 @@
 
        <filterParamNew name="participants_nf" 
                       metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData"
+                      summaryMetadataQueryRef="ClinicalVisitVQ.ParticipantMetaDataSummary"
                       ontologyQueryRef="ClinicalVisitVQ.ParticipantOntology"
                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd"
+                      useSummaryMetadataQueryForInternalValue="true"
                       prompt="Participants"
                       trimMetadataTerms="false"
                       dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.geographic_region">
@@ -99,7 +105,7 @@
        </filterParamNew>
         
 
-<!--  NOTE: this is development yet to be done so commenting out for now as grandparent dependencies in flux
+<!--  NOTE: this is development yet to be done so commenting out for now 
        <flatVocabParam name="min_age_at_visit"
                prompt="Age at visit &gt;= "
                multiPick="false"
@@ -372,7 +378,7 @@ select distinct cva.protocol_app_node_id as internal, m.property as ontology_ter
       </sql>
       </sqlQuery>
 
-    <sqlQuery name="RegionMetaData" >
+    <sqlQuery name="RegionMetaDataSummary" >
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -381,6 +387,26 @@ select distinct cva.protocol_app_node_id as internal, m.property as ontology_ter
       <sql>
         <![CDATA[
 select cva.protocol_app_node_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value,
+cast(null as number) as number_value, cast(null as date) as date_value
+from apidbtuning.dwellingattributes da,apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob,
+apidbtuning.clinicalvisitattributes cva,apidbtuning.metadatatype mt
+where da.protocol_app_node_id = ioa.input_node_id
+and ioa.output_node_id = iob.input_node_id
+and iob.output_node_id = cva.protocol_app_node_id
+and mt.source_id = 'EUPATH_0000054'
+        ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="RegionMetaData" >
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct ioa.output_node_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value,
 cast(null as number) as number_value, cast(null as date) as date_value
 from apidbtuning.dwellingattributes da,apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob,
 apidbtuning.clinicalvisitattributes cva,apidbtuning.metadatatype mt
@@ -440,7 +466,7 @@ first as (
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaData" >
+    <sqlQuery name="DwellingMetaDataSummary" >
       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
       <paramRef ref="participantParams.start_date" />
       <paramRef ref="participantParams.end_date" />
@@ -480,6 +506,46 @@ with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protoc
 
     </sqlQuery>
 
+    <sqlQuery name="DwellingMetaData" >
+      <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="participantParams.duration_observation" />  
+      <paramRef ref="clinicalVisitParams.geographic_region" />  
+      <paramRef ref="clinicalVisitParams.participants_nf" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protocol_app_node_id as part_id
+  from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio iov, apidbtuning.dwellingattributes dw
+   where iov.output_node_id in ($$participants_nf$$)
+       and pa.protocol_app_node_id = iov.input_node_id
+       and pa.protocol_app_node_id = io.output_node_id
+       and io.input_node_id = dw.protocol_app_node_id)
+ select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, part
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'Dwelling type'
+ and part.dwelling_id = m.protocol_app_node_id
+ union
+ select distinct part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  where da.protocol_app_node_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  group by da.protocol_app_node_id) mos, part
+  where part.dwelling_id = mos.protocol_app_node_id(+)
+          ]]>
+    </sql>    
+
+    </sqlQuery>
+
     <sqlQuery name="DwellingMetaDataBkgd">
       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
       <paramRef ref="participantParams.start_date" />
@@ -494,7 +560,7 @@ with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protoc
       <column name="string_value"/>
       <sql>
          <![CDATA[
-with part as ( select distinct iod.input_node_id as dwelling_id,pa.protocol_app_node_id as part_id, iop.output_node_id as cv_id 
+with part as ( select distinct iod.input_node_id as dwelling_id,pa.protocol_app_node_id as part_id
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
    ) age,
@@ -502,13 +568,13 @@ with part as ( select distinct iod.input_node_id as dwelling_id,pa.protocol_app_
    where pa.protocol_app_node_id = iop.input_node_id
    and pa.protocol_app_node_id = iod.output_node_id
 )
- select distinct Part.cv_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
  from apidbtuning.metadata m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
  union
- select part.cv_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select distinct part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
@@ -566,18 +632,18 @@ first as (
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="ParticipantMetaData" >
-         <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-         <paramRef ref="participantParams.start_date" />
-         <paramRef ref="participantParams.end_date" />
-         <paramRef ref="participantParams.duration_observation" />  
-         <paramRef ref="clinicalVisitParams.geographic_region" />  
+   <sqlQuery name="ParticipantMetaDataSummary" >
+     <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
+     <paramRef ref="participantParams.start_date" />
+     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="participantParams.duration_observation" />  
+     <paramRef ref="clinicalVisitParams.geographic_region" />  
      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
+     <column name="internal"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
          <![CDATA[
  select distinct io.output_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
@@ -597,6 +663,37 @@ where io.output_node_id in ($$geographic_region$$)
     </sql>
     </sqlQuery>
 
+    <sqlQuery name="ParticipantMetaData" >
+      <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="participantParams.duration_observation" />  
+      <paramRef ref="clinicalVisitParams.geographic_region" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct pa.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
+   from apidbtuning.clinicalvisitattributes 
+   where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
+   ) age, apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
+where io.output_node_id in ($$geographic_region$$)
+   and io.input_node_id = pa.protocol_app_node_id
+   AND least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
+       and pa.protocol_app_node_id = io.input_node_id
+       and io.output_node_id in ($$visits_visitage_metadata_nf$$)
+       and pa.protocol_app_node_id = m.protocol_app_node_id
+ and m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'Participant'
+          ]]>
+    </sql>
+    </sqlQuery>
+ 
     <sqlQuery name="ParticipantMetaDataBkgd">
          <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
          <paramRef ref="participantParams.start_date" />
@@ -610,12 +707,10 @@ where io.output_node_id in ($$geographic_region$$)
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct io.output_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m,apidbtuning.protocolappnodeio io
+select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+from apidbtuning.metadata m
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Participant'
- and io.output_node_id in (select protocol_app_node_id from apidbtuning.clinicalvisitattributes)
- and m.protocol_app_node_id = io.input_node_id
           ]]>
     </sql>
     </sqlQuery>

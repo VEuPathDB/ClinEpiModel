@@ -32,8 +32,10 @@
 
        <filterParamNew name="dwellings_nf" 
                       metadataQueryRef="ParticipantVQ.DwellingMetaData"
+                      summaryMetadataQueryRef="ParticipantVQ.DwellingMetaDataSummary"
                       ontologyQueryRef="ParticipantVQ.DwellingOntology"
                       backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd"
+                      useSummaryMetadataQueryForInternalValue="true"
                       prompt="Households"
                       dependedParamRef="participantParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,participantParams.geographic_region,participantParams.participants_nf"
                       trimMetadataTerms="false">
@@ -596,7 +598,7 @@ first as (
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaData" isCacheable="true">
+    <sqlQuery name="DwellingMetaDataSummary" isCacheable="true">
       <paramRef ref="participantParams.visits_visitage_metadata_nf" />
       <paramRef ref="participantParams.start_date" />
       <paramRef ref="participantParams.end_date" />
@@ -634,6 +636,44 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 
     </sqlQuery>
 
+    <sqlQuery name="DwellingMetaData" isCacheable="true">
+      <paramRef ref="participantParams.visits_visitage_metadata_nf" />
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="participantParams.duration_observation" />  
+      <paramRef ref="participantParams.geographic_region" />  
+      <paramRef ref="participantParams.participants_nf" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+  from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
+   where pa.protocol_app_node_id in ($$participants_nf$$)
+       and pa.protocol_app_node_id = io.output_node_id)
+ select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, part
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'Dwelling type'
+ and part.dwelling_id = m.protocol_app_node_id
+ union
+ select part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  where da.protocol_app_node_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  group by da.protocol_app_node_id) mos, part
+  where part.dwelling_id = mos.protocol_app_node_id(+)
+          ]]>
+    </sql>    
+
+    </sqlQuery>
+
     <sqlQuery name="DwellingMetaDataBkgd">
       <paramRef ref="participantParams.visits_visitage_metadata_nf" />
       <paramRef ref="participantParams.start_date" />
@@ -651,13 +691,13 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
  from apidbtuning.metadata m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
  union
- select part.part_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
