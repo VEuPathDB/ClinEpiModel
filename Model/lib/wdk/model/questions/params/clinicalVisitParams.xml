@@ -210,6 +210,7 @@
                multiPick="false"
                quote="false"
                visible="true"
+               dependedParamRef="clinicalVisitParams.use_relative_visits"
                queryRef="ClinicalVisitVQ.dateOperator">
       <help>Choose how to compare these two visits.  Do you want to remove visits that have another visit within the specified time frame or keep them.</help>
     </flatVocabParam>
@@ -251,18 +252,21 @@
         </sqlQuery>
 
         <sqlQuery name="dateOperator">
-            <column name="internal" />
-            <column name="term" />
-            <sql>
+          <paramRef ref="clinicalVisitParams.use_relative_visits" />  
+          <column name="internal" />
+          <column name="term" />
+          <sql>
             <![CDATA[
                      SELECT * from (
                      SELECT 'remove' as term, 'MINUS' as internal from dual
                      UNION
-                     SELECT 'keep' as term, 'INTERSECT' as internal from dual )
+                     SELECT 'keep' as term, 'INTERSECT' as internal from dual
+                     /* where $$use_relative_visits$$ = 1 */ )
                      ORDER by term desc
             ]]>
             </sql>
         </sqlQuery>
+
 
         <sqlQuery name="useRelativeVisits">
             <column name="internal" />
@@ -763,7 +767,7 @@ first as (
     </sql>
    </sqlQuery>
 
-         <sqlQuery name="RelVisitOntology">
+   <sqlQuery name="RelVisitOntology">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -867,14 +871,14 @@ and io.output_node_id = m.protocol_app_node_id
     </sql>
     </sqlQuery>
 
-        <sqlQuery name="RelVisitMetaData">
-         <column name="ontology_term_name"/>
-         <column name="internal"/>
-         <column name="number_value"/>
-         <column name="date_value"/>
-         <column name="string_value"/>
-         <sql>
-           <![CDATA[
+    <sqlQuery name="RelVisitMetaData">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
  select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata 
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
