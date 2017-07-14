@@ -32,6 +32,7 @@
 
        <filterParamNew name="dwellings_nf" 
                       metadataQueryRef="ParticipantVQ.DwellingMetaData"
+                      summaryMetadataQueryRef="ParticipantVQ.SummaryDwellingMetaData"
                       ontologyQueryRef="ParticipantVQ.DwellingOntology"
                       backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd"
                       prompt="Households"
@@ -343,9 +344,11 @@ first as (
          <sql>
            <![CDATA[
 with valid as (
-select distinct io.output_node_id as visit_id, io.input_node_id as part_id
-from apidbtuning.protocolappnodeio io
-where io.input_node_id in ($$dwellings_nf$$)
+select distinct io.output_node_id as visit_id, io.input_node_id as part_id, iod.input_node_id as dwelling_id
+from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio iod
+where iod.input_node_id in ($$dwellings_nf$$)
+and iod.output_node_id in ($$participants_nf$$)
+and io.input_node_id = iod.output_node_id
 and io.output_node_id in ($$visits_visitage_metadata_nf$$)
 )
 select distinct valid.visit_id as internal, term as ontology_term_name, string_value, number_value, date_value
@@ -380,24 +383,27 @@ and ios.input_node_id = valid.visit_id
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct io.input_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes va
+with valid as (
+select distinct io.output_node_id as visit_id, io.input_node_id as part_id, iod.input_node_id as dwelling_id
+from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio iod 
+where iod.input_node_id in ($$dwellings_nf$$)
+and iod.output_node_id in ($$participants_nf$$)
+and io.input_node_id = iod.output_node_id
+and io.output_node_id in ($$visits_visitage_metadata_nf$$)
+)
+select distinct valid.part_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m, valid
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Visit'
- and m.protocol_app_node_id = va.protocol_app_node_id
- and io.output_Node_Id = va.protocol_app_node_id
- and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
- and io.input_node_id in ($$dwellings_nf$$)
+ and m.protocol_app_node_id = valid.visit_id
   union
- select iov.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, apidbtuning.protocolappnodeio iov, apidbtuning.protocolappnodeio ios
+ select valid.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+from apidbtuning.metadata m, valid, apidbtuning.protocolappnodeio ios
 where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
 and ios.output_node_id = m.protocol_app_node_id
-and ios.input_node_id in ($$visits_visitage_metadata_nf$$)
-and iov.output_node_id = ios.input_node_id
-and iov.input_node_id in ($$dwellings_nf$$)
+and ios.input_node_id = valid.visit_id
           ]]>
     </sql>
     </sqlQuery>
@@ -610,6 +616,44 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
+with part as ( select distinct io.input_node_id as dwelling_id
+  from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
+   where pa.protocol_app_node_id in ($$participants_nf$$)
+       and pa.protocol_app_node_id = io.output_node_id)
+ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, part
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ and m.category = 'Dwelling type'
+ and part.dwelling_id = m.protocol_app_node_id
+ union
+ select part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ from (select part.dwelling_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la, part
+  where part.dwelling_id = io.input_node_id
+  and la.protocol_app_node_id = io.output_node_id
+  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  group by part.dwelling_id) mos, part
+  where part.dwelling_id = mos.dwelling_id(+)
+          ]]>
+    </sql>    
+
+    </sqlQuery>
+
+    <sqlQuery name="SummaryDwellingMetaData" isCacheable="true">
+      <paramRef ref="participantParams.visits_visitage_metadata_nf" />
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="participantParams.duration_observation" />  
+      <paramRef ref="participantParams.geographic_region" />  
+      <paramRef ref="participantParams.participants_nf" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
 with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$participants_nf$$)
@@ -648,22 +692,22 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
       <column name="string_value"/>
       <sql>
          <![CDATA[
-with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+with part as ( select distinct io.input_node_id as dwelling_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
  from apidbtuning.metadata m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
  union
- select part.part_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
-  where da.protocol_app_node_id = io.input_node_id
+ select part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ from (select part.dwelling_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la, part
+  where part.dwelling_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  group by da.protocol_app_node_id) mos, part
-  where part.dwelling_id = mos.protocol_app_node_id(+)
+  group by part.dwelling_id) mos, part
+  where part.dwelling_id = mos.dwelling_id(+)
           ]]>
     </sql>    
 
@@ -677,6 +721,13 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
             <description>
                 <![CDATA[
 Filter participants based on the date range they were observed, the number of days they were observed in that period, and their age at each observation (ie clinical visit). Study data is available from 05-AUG-2011 to 30-JUN-2016.
+                ]]>
+            </description>
+        </group>
+        <group name="household_daterange" displayName="Time period" displayType="ShowHide">
+            <description>
+                <![CDATA[
+Filter households based on the date range they were in the study.  Note that the Average Anopheles is computed from monthly CDC light trap collections within this time frame.  
                 ]]>
             </description>
         </group>

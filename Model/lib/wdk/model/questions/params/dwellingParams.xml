@@ -20,7 +20,7 @@
                     ontologyQueryRef="DwellingVQ.DwellingOntology"
                     metadataQueryRef="DwellingVQ.DwellingMetaData"
                     backgroundQueryRef="DwellingVQ.DwellingMetaDataBkgd"
-                    prompt="Dwelling"
+                    prompt="Households"
                     trimMetadataTerms="false"
                     dependedParamRef="dwellingParams.geographic_region,participantParams.start_date,participantParams.end_date">
       <help>
@@ -174,10 +174,10 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sql>
     </sqlQuery>
 
-        <sqlQuery name="DwellingMetaData" isCacheable="true">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
-     <paramRef ref="dwellingParams.geographic_region" />  
+    <sqlQuery name="DwellingMetaData" isCacheable="true">
+      <paramRef ref="participantParams.start_date" />
+      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="dwellingParams.geographic_region" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
