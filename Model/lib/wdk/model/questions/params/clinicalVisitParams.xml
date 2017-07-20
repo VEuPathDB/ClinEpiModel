@@ -261,7 +261,7 @@
                      SELECT 'remove' as term, 'MINUS' as internal from dual
                      UNION
                      SELECT 'keep' as term, 'INTERSECT' as internal from dual
-                     /* where $$use_relative_visits$$ = 1 */ )
+                     where $$use_relative_visits$$ = 1  )
                      ORDER by term desc
             ]]>
             </sql>
