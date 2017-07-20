@@ -21,7 +21,7 @@
       <!--  Step Analysis Plugins -->
       <!-- =============================================================== -->
 
-             <stepAnalysisRef name="light-trap-plots"/> 
+<!--             <stepAnalysisRef name="light-trap-plots"/>  -->
 
       <!-- =============================================================== -->
       <!--   Reporters -->  

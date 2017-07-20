@@ -32,8 +32,7 @@
       <!--  Step Analysis Plugins -->
       <!-- =============================================================== -->
 
-      <!--       <stepAnalysisRef name="transcript-length-dist" excludeProjects="EuPathDB"/> -->
-            <stepAnalysisRef name="person-graph-analysis"/>
+<!--            <stepAnalysisRef name="person-graph-analysis"/>  -->
       
       <!-- =============================================================== -->
       <!--   Reporters -->  
