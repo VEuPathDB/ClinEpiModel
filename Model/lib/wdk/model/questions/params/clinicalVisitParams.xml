@@ -35,7 +35,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd"
                     prompt="Clincial Visits"
                     trimMetadataTerms="false"
-                    dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.dwellings_nf,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf">
+                    dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.dwellings_nf,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf">
       <help>
         Select visits based on their visit characteristics. 
       </help>
@@ -57,7 +57,7 @@
                       ontologyQueryRef="ClinicalVisitVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetadataBkgdNf"
                       prompt="Age at visit"
-                      dependedParamRef="clinicalVisitParams.geographic_region,participantParams.start_date,participantParams.end_date,participantParams.duration_observation"
+                      dependedParamRef="clinicalVisitParams.geographic_region,clinicalVisitParams.visit_date,participantParams.duration_observation"
                       trimMetadataTerms="false">
          <help>
               Select the age of the participants at the time of their clinical visits.
@@ -83,7 +83,7 @@
                       backgroundQueryRef="ClinicalVisitVQ.DwellingMetaDataBkgd"
                       useSummaryMetadataQueryForInternalValue="true"
                       prompt="Households"
-                      dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf"
+                      dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf"
                       trimMetadataTerms="false">
          <help>
               Select visits based on the household characteristics where the participants live. 
@@ -98,11 +98,22 @@
                       useSummaryMetadataQueryForInternalValue="true"
                       prompt="Participants"
                       trimMetadataTerms="false"
-                      dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,participantParams.start_date,participantParams.end_date,participantParams.duration_observation,clinicalVisitParams.geographic_region">
+                      dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.geographic_region">
          <help>
               Select participants based on their characteristics. 
          </help>
        </filterParamNew>
+
+       <dateRangeParam name="visit_date"
+                       prompt="Choose start and end dates "
+                       minDate="2011-01-01"
+                       maxDate="2016-12-30">
+         <help>"select the earliest and latest dates to include for identifying visits and computing mosquito counts."</help>
+<!--         <suggest default="{'min':}" \> -->
+         <suggest default="{'min': '2011-08-05', 'max': '2016-06-30'}" /> 
+
+       </dateRangeParam>
+
         
 
 <!--  NOTE: this is development yet to be done so commenting out for now 
@@ -312,8 +323,7 @@ select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal
 
    <sqlQuery name="ClinicalVisitAgeOntologyNf">
       <paramRef ref="clinicalVisitParams.geographic_region" /> 
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
         <column name="ontology_term_name"/>
         <column name="parent_ontology_term_name"/>
@@ -337,8 +347,7 @@ union
           
    <sqlQuery name="ClinicalVisitAgeMetadataNf">
       <paramRef ref="clinicalVisitParams.geographic_region" /> 
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -350,21 +359,20 @@ union
 select distinct cva.protocol_app_node_id as internal, m.property as ontology_term_name, '1' as string_value, cva.EUPATH_0000113 as number_value, cast(null as date) as date_value
  from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes cva, apidbtuning.metadatatype m
  where cva.protocol_app_node_id in ($$geographic_region$$)
- and cva.EUPATH_0000091 >= to_date($$start_date$$,'DD-MON-YYYY')
- and cva.EUPATH_0000091 <= to_date($$end_date$$,'DD-MON-YYYY')
+ and cva.EUPATH_0000091 >= $$visit_date.min$$
+ and cva.EUPATH_0000091 <= $$visit_date.max$$
  and io.output_node_id = cva.protocol_app_node_id
  and pa.protocol_app_node_id = io.input_node_id
  and m.source_id = 'EUPATH_0000113'
- AND least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY')) - 
- greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY')) + 1 >= $$duration_observation$$
+ AND least(pa.EUPATH_0000152, $$visit_date.max$$) - 
+ greatest(pa.EUPATH_0000151, $$visit_date.min$$) + 1 >= $$duration_observation$$
          ]]>   
       </sql>
    </sqlQuery>
 
       <sqlQuery name="ClinicalVisitAgeMetadataBkgdNf" >
       <paramRef ref="clinicalVisitParams.geographic_region" /> 
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -424,8 +432,7 @@ and mt.source_id = 'EUPATH_0000054'
 
        <sqlQuery name="DwellingOntology">
          <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-         <paramRef ref="participantParams.start_date" />
-         <paramRef ref="participantParams.end_date" />
+         <paramRef ref="clinicalVisitParams.visit_date" /> 
          <paramRef ref="participantParams.duration_observation" />  
          <paramRef ref="clinicalVisitParams.geographic_region" />  
          <paramRef ref="clinicalVisitParams.participants_nf" />  
@@ -472,8 +479,7 @@ first as (
 
     <sqlQuery name="DwellingMetaDataSummary" >
       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
       <paramRef ref="clinicalVisitParams.geographic_region" />  
       <paramRef ref="clinicalVisitParams.participants_nf" />  
@@ -501,8 +507,8 @@ with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protoc
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 >= $$visit_date.min$$ 
+  and la.OBI_0001619 <= $$visit_date.max$$ 
   group by da.protocol_app_node_id) mos, part
   where part.dwelling_id = mos.protocol_app_node_id(+)
           ]]>
@@ -512,8 +518,7 @@ with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protoc
 
     <sqlQuery name="DwellingMetaData" >
       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
       <paramRef ref="clinicalVisitParams.geographic_region" />  
       <paramRef ref="clinicalVisitParams.participants_nf" />  
@@ -541,8 +546,8 @@ with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protoc
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 >= $$visit_date.min$$ 
+  and la.OBI_0001619 <= $$visit_date.max$$ 
   group by da.protocol_app_node_id) mos, part
   where part.dwelling_id = mos.protocol_app_node_id(+)
           ]]>
@@ -552,8 +557,7 @@ with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protoc
 
     <sqlQuery name="DwellingMetaDataBkgd">
       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
       <paramRef ref="clinicalVisitParams.geographic_region" />  
       <paramRef ref="clinicalVisitParams.participants_nf" />  
@@ -592,8 +596,7 @@ with part as ( select distinct iod.input_node_id as dwelling_id,pa.protocol_app_
 
     <sqlQuery name="ParticipantOntology">
       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
       <paramRef ref="clinicalVisitParams.geographic_region" />  
       <column name="ontology_term_name"/>
@@ -638,8 +641,7 @@ first as (
 
    <sqlQuery name="ParticipantMetaDataSummary" >
      <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="clinicalVisitParams.visit_date" /> 
      <paramRef ref="participantParams.duration_observation" />  
      <paramRef ref="clinicalVisitParams.geographic_region" />  
      <column name="ontology_term_name"/>
@@ -656,8 +658,8 @@ from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    ) age, apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
 where io.output_node_id in ($$geographic_region$$)
    and io.input_node_id = pa.protocol_app_node_id
-   AND least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
+   AND least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
        and pa.protocol_app_node_id = io.input_node_id
        and io.output_node_id in ($$visits_visitage_metadata_nf$$)
        and pa.protocol_app_node_id = m.protocol_app_node_id
@@ -669,8 +671,7 @@ where io.output_node_id in ($$geographic_region$$)
 
     <sqlQuery name="ParticipantMetaData" >
       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
       <paramRef ref="clinicalVisitParams.geographic_region" />  
       <column name="ontology_term_name"/>
@@ -687,8 +688,8 @@ from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    ) age, apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
 where io.output_node_id in ($$geographic_region$$)
    and io.input_node_id = pa.protocol_app_node_id
-   AND least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
+   AND least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
        and pa.protocol_app_node_id = io.input_node_id
        and io.output_node_id in ($$visits_visitage_metadata_nf$$)
        and pa.protocol_app_node_id = m.protocol_app_node_id
@@ -700,8 +701,7 @@ where io.output_node_id in ($$geographic_region$$)
  
     <sqlQuery name="ParticipantMetaDataBkgd">
          <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-         <paramRef ref="participantParams.start_date" />
-         <paramRef ref="participantParams.end_date" />
+         <paramRef ref="clinicalVisitParams.visit_date" /> 
          <paramRef ref="participantParams.duration_observation" />  
          <paramRef ref="clinicalVisitParams.geographic_region" />  
      <column name="ontology_term_name"/>
@@ -722,8 +722,7 @@ from apidbtuning.metadata m
 
       <sqlQuery name="VisitOntology">
       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
+      <paramRef ref="clinicalVisitParams.visit_date" /> 
      <paramRef ref="participantParams.duration_observation" />  
      <paramRef ref="clinicalVisitParams.dwellings_nf" />  
      <paramRef ref="clinicalVisitParams.geographic_region" />  
@@ -809,8 +808,7 @@ first as (
 
        <sqlQuery name="VisitMetaData" >
          <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-         <paramRef ref="participantParams.start_date" />
-         <paramRef ref="participantParams.end_date" />
+         <paramRef ref="clinicalVisitParams.visit_date" /> 
          <paramRef ref="participantParams.duration_observation" />  
          <paramRef ref="clinicalVisitParams.dwellings_nf" />  
          <paramRef ref="clinicalVisitParams.geographic_region" />  
@@ -843,8 +841,7 @@ and io.input_node_id in ($$dwellings_nf$$)
 
     <sqlQuery name="VisitMetaDataBkgd">
          <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" />
-         <paramRef ref="participantParams.start_date" />
-         <paramRef ref="participantParams.end_date" />
+         <paramRef ref="clinicalVisitParams.visit_date" /> 
          <paramRef ref="participantParams.duration_observation" />  
          <paramRef ref="clinicalVisitParams.dwellings_nf" />  
          <paramRef ref="clinicalVisitParams.geographic_region" />  

@@ -29,8 +29,7 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
      <sqlQuery name="ClinicalVisitsByRelativeVisits"
           isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
@@ -96,8 +95,7 @@ group by name
      <sqlQuery name="ClinicalVisitsByAllData"
           isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
