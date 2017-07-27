@@ -35,7 +35,7 @@
                     backgroundQueryRef="lightTrapVQ.DwellingMetaDataBkgd"
                     prompt="Dwelling"
                     trimMetadataTerms="false"
-                    dependedParamRef="lightTrapParams.geographic_region,participantParams.start_date,participantParams.end_date">
+                    dependedParamRef="lightTrapParams.geographic_region,dwellingParams.date_range">
       <help>
         Select light trap collections based on the characteristics of the dwelling where collection was performed. 
       </help>
@@ -47,7 +47,7 @@
                     backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd"
                     prompt="Dwelling"
                     trimMetadataTerms="false"
-                    dependedParamRef="lightTrapParams.geographic_region,participantParams.start_date,participantParams.end_date,lightTrapParams.dwellings_nf">
+                    dependedParamRef="lightTrapParams.geographic_region,dwellingParams.date_range,lightTrapParams.dwellings_nf">
       <help>
         Select light trap collections based on the characteristics of the dwelling where collection was performed. 
       </help>
@@ -125,8 +125,7 @@
     </sqlQuery>
 
    <sqlQuery name="DwellingOntology">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="lightTrapParams.geographic_region" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
@@ -171,8 +170,7 @@ first as (
    </sqlQuery>
           
     <sqlQuery name="DwellingMetaDataBkgd">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="lightTrapParams.geographic_region" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -197,8 +195,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaData" isCacheable="true">
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -217,16 +214,15 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
   where da.protocol_app_node_id in ($$geographic_region$$)
   and da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 >= $$date_range.min$$
+  and la.OBI_0001619 <= $$date_range.max$$ 
   group by da.protocol_app_node_id
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="SummaryDwellingMetaData" isCacheable="false">
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -240,8 +236,8 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
  where m.protocol_app_node_id in ($$geographic_region$$)
  and m.protocol_app_node_id = io.input_node_id
  and io.output_node_id = lta.protocol_app_node_id
- and lta.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
- and lta.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY')
+ and lta.OBI_0001619 >= $$date_range.min$$
+ and lta.OBI_0001619 <= $$date_range.max$$ 
  union
  select lta.protocol_app_node_id, mos.ontology_term_name, mos.string_value,mos.number_value,mos.date_value
  from
@@ -251,20 +247,19 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
   where da.protocol_app_node_id in ($$geographic_region$$)
   and da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 >= $$date_range.min$$
+  and la.OBI_0001619 <= $$date_range.max$$ 
   group by da.protocol_app_node_id) mos, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
   where mos.protocol_app_node_id = io.input_node_id
   and io.output_node_id = lta.protocol_app_node_id
-  and lta.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and lta.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY')
+  and lta.OBI_0001619 >= $$date_range.min$$
+  and lta.OBI_0001619 <= $$date_range.max$$ 
           ]]>
       </sql>
     </sqlQuery>
 
     <sqlQuery name="LightTrapOntology">
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <paramRef ref="lightTrapParams.dwellings_nf" />  
       <column name="ontology_term_name"/>
@@ -308,8 +303,7 @@ first as (
     </sqlQuery>
 
     <sqlQuery name="LightTrapMetaData">
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <paramRef ref="lightTrapParams.dwellings_nf" />  
       <column name="ontology_term_name"/>
@@ -324,17 +318,16 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'CDC light trap assay'
  and m.protocol_app_node_id = lta.protocol_app_node_id
- and lta.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
- and lta.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+ and lta.OBI_0001619 >= $$date_range.min$$
+ and lta.OBI_0001619 <= $$date_range.max$$ 
  and m.protocol_app_node_id = io.output_node_id
  and io.input_node_id in ($$dwellings_nf$$)
         ]]>
       </sql>
     </sqlQuery>
 
-        <sqlQuery name="LightTrapMetaDataBkgd">
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+    <sqlQuery name="LightTrapMetaDataBkgd">
+      <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <paramRef ref="lightTrapParams.dwellings_nf" />  
       <column name="ontology_term_name"/>

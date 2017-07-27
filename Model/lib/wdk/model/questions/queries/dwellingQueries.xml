@@ -26,8 +26,7 @@
 
     <sqlQuery name="DwellingsByCharacteristics" isCacheable="true">
        <paramRef ref="dwellingParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="dwellingParams.date_range" groupRef="metaDataGroups.household_daterange"/>
        <paramRef ref="dwellingParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="dwellingParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <column name="source_id"/>
@@ -47,8 +46,8 @@ group by da.protocol_app_node_id,da.name
 ) dwpct, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where  dwpct.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 >= $$date_range.min$$
+  and la.OBI_0001619 <= $$date_range.max$$ 
   group by dwpct.name,dwpct.part_count
                 ]]>   
         </sql>

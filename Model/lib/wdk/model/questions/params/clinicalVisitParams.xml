@@ -106,11 +106,10 @@
 
        <dateRangeParam name="visit_date"
                        prompt="Choose start and end dates "
-                       minDate="2011-01-01"
-                       maxDate="2016-12-30">
+                       minDate="2011-08-01"
+                       maxDate="2016-06-30">
          <help>"select the earliest and latest dates to include for identifying visits and computing mosquito counts."</help>
-<!--         <suggest default="{'min':}" \> -->
-         <suggest default="{'min': '2011-08-05', 'max': '2016-06-30'}" /> 
+<!--         <suggest default="{'min': '2011-08-05', 'max': '2016-06-30'}" />  -->
 
        </dateRangeParam>
 
@@ -153,6 +152,16 @@
       <suggest default="1"/>
       <regex>\d\d*</regex>
     </stringParam>
+
+    <numberRangeParam name="days_between"
+                       prompt="Days between visits: "
+                       integer="true"
+                       min="1"
+                       max="1000">
+         <help>Set the range of days between visits to compare to visits selected in the previous step</help>
+         <suggest default="{'min': '1', 'max': '10'}" />  
+
+       </numberRangeParam> 
 
    <stringParam name="minAgeAtVisit"
 		 prompt="Age at visit &gt;= "
@@ -876,11 +885,6 @@ and io.output_node_id = m.protocol_app_node_id
       <column name="string_value"/>
       <sql>
         <![CDATA[
-          with
-          metadata_rows
-          -- core metadata query, to which imputed nulls must be added
-          as (
-              -- start of core metadata query
                 select distinct protocol_app_node_id as internal, term as ontology_term_name,
                        string_value, number_value, date_value
                 from apidbtuning.metadata 
@@ -894,32 +898,6 @@ and io.output_node_id = m.protocol_app_node_id
                   and m.category = 'Specimen type' 
                   and m.term = 'Specimen type'
                   and io.output_node_id = m.protocol_app_node_id
-              -- end of core metadata query
-          ),
---          metadata_duplicates
---          -- for debugging: duplicated (entity, property) pairs
---          as (select count(*) duplicate_count, internal, ontology_term_name
---              from metadata_rows
---              group by internal, ontology_term_name
---              having count(*) > 1),
-          entity_set
-          -- distinct entities
-          as (select distinct internal
-              from metadata_rows),
-          property_set
-          -- distinct properties
-          as (select distinct ontology_term_name
-              from metadata_rows),
-          entities_cross_properties
-          -- cross product: (distinct entities) X (distinct properties)
-          as (select es.internal, ps.ontology_term_name
-              from entity_set es, property_set ps)
-          -- end of WITH clauses
-          select ecp.internal, ecp.ontology_term_name,
-                 mr.string_value, mr.number_value, mr.date_value
-          from entities_cross_properties ecp, metadata_rows mr
-          where ecp.internal = mr.internal(+)
-            and ecp.ontology_term_name = mr.ontology_term_name(+)
           ]]>
     </sql>
     </sqlQuery>

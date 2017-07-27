@@ -23,8 +23,7 @@
     <sqlQuery name="LightTrapsByCharacteristics"
               isCacheable="true">
        <paramRef ref="lightTrapParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="dwellingParams.date_range" groupRef="metaDataGroups.household_daterange"/>
        <paramRef ref="lightTrapParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="lightTrapParams.lighttraps_nf" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>

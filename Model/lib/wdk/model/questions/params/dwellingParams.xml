@@ -16,13 +16,22 @@
       </enumList>
     </enumParam>
 
+       <dateRangeParam name="date_range"
+                       prompt="Choose start and end dates "
+                       minDate="2011-08-01"
+                       maxDate="2016-06-30">
+         <help>"select the earliest and latest dates to include for computing mosquito counts."</help>
+<!--         <suggest default="{'min': '2011-08-05', 'max': '2016-06-30'}" />  -->
+
+       </dateRangeParam>    
+
     <filterParamNew name="dwellings_nf" 
                     ontologyQueryRef="DwellingVQ.DwellingOntology"
                     metadataQueryRef="DwellingVQ.DwellingMetaData"
                     backgroundQueryRef="DwellingVQ.DwellingMetaDataBkgd"
                     prompt="Households"
                     trimMetadataTerms="false"
-                    dependedParamRef="dwellingParams.geographic_region,participantParams.start_date,participantParams.end_date">
+                    dependedParamRef="dwellingParams.geographic_region,dwellingParams.date_range">
       <help>
         Select participants based on their characteristics. 
       </help>
@@ -45,7 +54,7 @@
                       backgroundQueryRef="DwellingVQ.ParticipantMetaDataBkgd"
                       prompt="Participants"
                       trimMetadataTerms="false"
-                      dependedParamRef="participantParams.start_date,participantParams.end_date,dwellingParams.dwellings_nf,dwellingParams.geographic_region">
+                      dependedParamRef="dwellingParams.date_range,dwellingParams.dwellings_nf,dwellingParams.geographic_region">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -103,8 +112,7 @@
  <querySet name="DwellingVQ" queryType="vocab" isCacheable="true">
 
    <sqlQuery name="DwellingOntology">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.geographic_region" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
@@ -149,8 +157,7 @@ first as (
    </sqlQuery>
           
     <sqlQuery name="DwellingMetaDataBkgd">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.geographic_region" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -175,8 +182,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaData" isCacheable="true">
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+      <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="dwellingParams.geographic_region" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -195,8 +201,8 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
   where da.protocol_app_node_id in ($$geographic_region$$)
   and da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 >= $$date_range.min$$
+  and la.OBI_0001619 <= $$date_range.max$$ 
   group by da.protocol_app_node_id
           ]]>
     </sql>
@@ -241,9 +247,8 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
     </sqlQuery>
     
    <sqlQuery name="ParticipantOntology">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
      <paramRef ref="dwellingParams.dwellings_nf" />  
+     <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.geographic_region" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
@@ -285,8 +290,7 @@ first as (
    </sqlQuery>
 
    <sqlQuery name="ParticipantMetaData" isCacheable="true">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.dwellings_nf" />  
      <paramRef ref="dwellingParams.geographic_region" />  
      <column name="ontology_term_name"/>
@@ -307,8 +311,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
     </sqlQuery>
 
     <sqlQuery name="ParticipantSummaryMetaData" isCacheable="false">
-     <paramRef ref="participantParams.start_date" />
-     <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.dwellings_nf" />  
      <paramRef ref="dwellingParams.geographic_region" />  
      <column name="ontology_term_name"/>
@@ -329,8 +332,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd">
-      <paramRef ref="participantParams.start_date" />
-      <paramRef ref="participantParams.end_date" />
+     <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="dwellingParams.dwellings_nf" />  
       <paramRef ref="dwellingParams.geographic_region" />  
       <column name="ontology_term_name"/>
