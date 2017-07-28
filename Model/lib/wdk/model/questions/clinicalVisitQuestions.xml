@@ -14,10 +14,11 @@
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000091,num_matching_visits,min_days_between"
         /> 
+-->
 
         <dynamicAttributes>
 	  <columnAttribute name="min_days_between" displayName="Min days between visits" help="Reports the minimum days between any matching visits and the visit returned" align="center">
@@ -68,10 +69,11 @@
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000091"
         /> 
+-->
 
         <dynamicAttributes>
 	</dynamicAttributes>
@@ -110,11 +112,11 @@
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass">
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000091,parent_id,EUPATH_0000113,EUPATH_0000311"
         /> 
- 
+--> 
 
         <summary>
             <![CDATA[ 
@@ -137,11 +139,14 @@
 	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
 	      recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass"
 	      noSummaryOnSingleRecord="false">
+
+<!--
       <attributesList
 	 summary="EUPATH_0000091,participant,EUPATH_0000113,EUPATH_0000311"
 	 sorting="participant DESC"
 	
 	 />
+-->
       <dynamicAttributes>
 	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical visits are associated with" align="center">
 	  <plugin name="histogram" display="Histogram"

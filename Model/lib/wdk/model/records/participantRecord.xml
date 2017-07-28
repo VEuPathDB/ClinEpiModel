@@ -56,6 +56,8 @@
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
+
+<!--
  <textAttribute name="record_overview" displayName="Overview">
 
              <text>
@@ -64,7 +66,7 @@
                   ]]>
              </text>
           </textAttribute>
-
+-->
 
 
          <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
@@ -80,7 +82,7 @@
             <columnAttribute name="parentTerm" displayName="Category"/>
         </table>
 
-
+<!--
          <table name="Visits"
                  displayName="Clinical Visits"
                  queryRef="ParticipantTables.Visits">
@@ -125,7 +127,7 @@
             <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
             <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
-
+-->
     </recordClass>
     </recordClassSet>
 
@@ -158,15 +160,17 @@ select count(*) from apidbtuning.ParticipantAttributes
          <column name="project_id"/>
 
          <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
+         <!--
          <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
-
+         -->
+         <sqlParamValue name="dwellingSourceIds"><![CDATA[OBI_0001627]]></sqlParamValue>
           <sql>
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
                      from APIDBTUNING.PROTOCOLAPPNODEIO io
                         , apidbtuning.participantattributes pa
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.dwellingattributes) da
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.householdattributes) da
                      where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
                      and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
@@ -185,7 +189,11 @@ select count(*) from apidbtuning.ParticipantAttributes
           <column name="plugin_properties" />
 
          <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
-          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000054', 'EUPATH_0000002']]></sqlParamValue>
+
+
+
+          <sqlParamValue name="dwellingSourceIds"><![CDATA['OBI_0001627']]></sqlParamValue>
+<!--          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000054', 'EUPATH_0000002']]></sqlParamValue> -->
           <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EUPATH_0000032']]></sqlParamValue>
 
          <sql>
@@ -280,7 +288,7 @@ WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&visitSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link
-              from ApidbTuning.ClinicalVisitAttributes cv
+              from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.protocolappnodeio io
               where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
@@ -308,7 +316,7 @@ select pa.name as source_id,
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
-              from ApidbTuning.ClinicalVisitAttributes cv
+              from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.sampleattributes sa
               , apidbtuning.protocolappnodeio io

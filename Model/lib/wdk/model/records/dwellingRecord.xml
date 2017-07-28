@@ -26,10 +26,11 @@
 -->
 
 <!-- JB: missing "num_anopheles_collections"... couldn't work out what that is;  avg mos counts are light trap attributes i think?-->
+<!--
             <attributesList summary="EUPATH_0000054"
                             sorting="EUPATH_0000054 DESC"         
             />
-
+-->
 
 
 
@@ -68,6 +69,9 @@
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <!-- overview -->  
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+<!--
          <textAttribute name="record_overview" displayName="Overview">
 
            <text>
@@ -76,7 +80,7 @@
               ]]>
            </text>
          </textAttribute>
-
+-->
 
          <attributeQueryRef ref="DwellingAttributes.DwellingAttributes" attributeMetaQueryRef="DwellingAttributes.DwellingAttributesMeta"/>
 
@@ -96,7 +100,8 @@
 
          <table name="HouseholdMembers"
                  displayName="Household Members"
-                 queryRef="DwellingTables.HouseholdMembers">
+                 queryRef="DwellingTables.HouseholdMembers"
+                 attributeMetaQueryRef="DwellingTables.HouseholdMembersColumnAttributes">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="participant" inReportMaker="true" internal="true"/>
@@ -109,18 +114,15 @@
                  </displayText>
                  <url>@WEBAPP_BASE_URL@/record/participant/$$participant$$/@PROJECT_ID@</url>
             </linkAttribute>
-            <columnAttribute name="EUPATH_0000033" displayName="G6PD Genotype"/>
-            <columnAttribute name="EUPATH_0000034" displayName="HbS Genotype"/>
-            <columnAttribute name="EUPATH_0000035" displayName="A-Thalassemia Genotype"/>
           </table>
 
-
+<!--
 	  <table name="LightTraps"
                  displayName="Mosquitoe Light Trap Collections"
                  queryRef="DwellingTables.LightTraps">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
-            <!-- TODO:  These should be dynamic -->
+
             <columnAttribute name="OBI_0001619" displayName="Specimen Collection Date"/>
             <columnAttribute name="EUPATH_0000218" displayName="Total Anopheles positive"/>
             <columnAttribute name="EUPATH_0000217" displayName="Total Anopheles tested"/>
@@ -138,7 +140,7 @@
             <columnAttribute name="EUPATH_0000205" displayName="Unfed A. gambiae"/>
 
     </table>
-
+-->
 
     </recordClass>
     </recordClassSet>
@@ -153,7 +155,7 @@
               
 
       <testRowCountSql>
-select count(*) from apidbtuning.DwellingAttributes
+select count(*) from apidbtuning.householdattributes
        </testRowCountSql>
 
        <sqlQuery name="DwellingAlias" doNotTest="true">
@@ -162,7 +164,7 @@ select count(*) from apidbtuning.DwellingAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.DwellingAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM Apidbtuning.Householdattributes
          </sql>
        </sqlQuery>
 
@@ -174,7 +176,7 @@ select count(*) from apidbtuning.DwellingAttributes
 
           <sql>
             <![CDATA[
-                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.dwellingattributes d
+                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.householdattributes d
             ]]>
           </sql>  
          </sqlQuery>
@@ -200,13 +202,13 @@ select count(*) from apidbtuning.DwellingAttributes
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Dwelling type'
+                           where m.protocol_app_node_type = 'Household'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Dwelling type'
+                           where m.protocol_app_node_type = 'Household'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            union
@@ -223,6 +225,21 @@ select count(*) from apidbtuning.DwellingAttributes
               isCacheable='false'>
 
 
+      <sqlQuery name="HouseholdMembersColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+          <sqlParamValue name="householdMemberColumns"><![CDATA['EUPATH_0000033','EUPATH_0000034','EUPATH_0000035' ]]></sqlParamValue>
+          <sql>
+            <![CDATA[
+                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&householdMemberColumns&&)
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+
+
+
       <sqlQuery name="Characteristics"  isCacheable='false'>
             <column name="source_id"/>
             <column name="project_id"/>
@@ -236,7 +253,7 @@ SELECT pan_name  AS source_id,
   string_value   AS term
 FROM apidbtuning.metadata
 WHERE dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
-AND category       = 'Dwelling type'
+AND category       = 'Household'
 /** TODO:  add this back in when we can make this a tree on the record page
 UNION
 SELECT a.name                AS source_id,
@@ -244,7 +261,7 @@ SELECT a.name                AS source_id,
   o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
   ontology_term_name          AS term
 FROM apidbtuning.metadataontology o,
-  apidbtuning.dwellingattributes a
+  apidbtuning.householdattributes a
 WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 **/
             ]]>
@@ -252,21 +269,18 @@ WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
         </sqlQuery>
 
 
-      <sqlQuery name="HouseholdMembers"  isCacheable='false'>
+      <sqlQuery name="HouseholdMembers"  isCacheable='false' attributeMetaQueryRef="DwellingTables.HouseholdMembersColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="participant"/>
-            <column name="EUPATH_0000033"/>
-            <column name="EUPATH_0000034"/>
-            <column name="EUPATH_0000035"/>
+
+            <sqlParamValue name="householdMemberColumns"><![CDATA[EUPATH_0000033,EUPATH_0000034,EUPATH_0000035 ]]></sqlParamValue>
             <sql>
             <![CDATA[
 SELECT pa.EUPATH_0000094 AS source_id,
   '@PROJECT_ID@'         AS project_id,
   pa.name as participant,
-  pa.EUPATH_0000033,
-  pa.EUPATH_0000035,
-  pa.EUPATH_0000034
+  &&householdMemberColumns&&
 FROM apidbtuning.PARTICIPANTATTRIBUTES pa
 order by source_id
             ]]>

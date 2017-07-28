@@ -14,11 +14,11 @@
               queryRef="DwellingId.DwellingsByCharacteristics" 
               recordClassRef="DwellingRecordClasses.DwellingRecordClass">
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,part_count,EUPATH_0000019"        
         /> 
-
+-->
 
 	<dynamicAttributes>
 	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time frame specified" align="center"> 
@@ -108,12 +108,12 @@
               noSummaryOnSingleRecord="false">
  
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000054,participants,participant_count"   
             sorting ="participant_count desc"
         /> 
-
+-->
 	<dynamicAttributes>
 	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this dwelling" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -147,11 +147,11 @@
               recordClassRef="DwellingRecordClasses.DwellingRecordClass"
               noSummaryOnSingleRecord="true">
     
-
+<!--
     <attributesList
             summary="EUPATH_0000054,lt_count,ave_anoph"
         />
-
+-->
 	<dynamicAttributes>
 	     <columnAttribute name="lt_count" displayName="# Collections" help="number of light trap collections from transformed result set associated with this dwelling" align="center"> 
               <plugin name="histogram" display="Histogram"

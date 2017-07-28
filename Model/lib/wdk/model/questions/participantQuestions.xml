@@ -14,11 +14,11 @@
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
-
+-->
 	<dynamicAttributes>
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of visits meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -103,11 +103,11 @@ Use the filters above to select a set of Participants or to explore the data.  S
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000054,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight,avg_hemo"        
         /> 
-
+-->
 
 	<dynamicAttributes>
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of visits meeting search criteria over the time frame specified" align="center"> 
@@ -187,12 +187,12 @@ Use the filters above to select a set of Participants or to explore the data.  S
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
               noSummaryOnSingleRecord="true">
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000054,dwelling"   
             sorting="EUPATH_0000054 desc"
         /> 
-
+-->
 	<dynamicAttributes>
 	     <columnAttribute name="dwelling" displayName="Dwelling Transformed" help="Dwelling Participant is associated with" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -220,12 +220,12 @@ Use the filters above to select a set of Participants or to explore the data.  S
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
               noSummaryOnSingleRecord="true">
 
-
+<!--
         <attributesList 
             summary="num_of_visits,EUPATH_0000054"   
             sorting="num_of_visits desc"
         /> 
-
+-->
 
 	<dynamicAttributes>
 	     <columnAttribute name="num_of_visits" displayName="Clincal Visits Transformed" help="Clinicals visits associated with the participant" align="center"> 

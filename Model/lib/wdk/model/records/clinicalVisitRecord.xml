@@ -61,7 +61,10 @@
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
+
+<!--
  <textAttribute name="record_overview" displayName="Overview">
+
 
              <text>
                   <![CDATA[
@@ -69,7 +72,7 @@
                   ]]>
              </text>
           </textAttribute>
-
+-->
 
          <attributeQueryRef ref="ClinicalVisitAttributes.ClinicalVisitAttributes" attributeMetaQueryRef="ClinicalVisitAttributes.ClinicalVisitAttributesMeta"/>
 
@@ -83,6 +86,7 @@
             <columnAttribute name="parentTerm" displayName="Category"/>
         </table>
 
+<!--
         <table name="Samples"
                displayName="Samples Collected During Visit"
                queryRef="ClinicalVisitTables.Samples">
@@ -91,7 +95,7 @@
             <columnAttribute name="sample_id" displayName="Sample ID"/>
             <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
-
+-->
 
     </recordClass>
     </recordClassSet>
@@ -106,7 +110,7 @@
 
 
       <testRowCountSql>
-select count(*) from apidbtuning.ClinicalVisitAttributes
+select count(*) from apidbtuning.eventattributes
        </testRowCountSql>
        <sqlQuery name="VisitsAlias" doNotTest="true">
          <column name="source_id"/>
@@ -114,7 +118,7 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ClinicalVisitAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM Apidbtuning.Eventattributes
          </sql>
        </sqlQuery>
 
@@ -125,8 +129,14 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
          <column name="project_id"/>
 
          <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
+
+<!--
          <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id,PATO_0000047, EUPATH_0000033, EUPATH_0000035, EUPATH_0000034</sqlParamValue>
          <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
+-->
+
+         <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id</sqlParamValue>
+         <sqlParamValue name="dwellingSourceIds"><![CDATA[OBI_0001627]]></sqlParamValue>
 
           <sql>
             <![CDATA[
@@ -134,8 +144,8 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
                      da.*, pa.*
                      from APIDBTUNING.PROTOCOLAPPNODEIO io1
                         , APIDBTUNING.PROTOCOLAPPNODEIO io2
-                        , apidbtuning.clinicalvisitattributes cva
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, &&dwellingSourceIds&& from apidbtuning.dwellingattributes) da
+                        , apidbtuning.eventattributes cva
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, &&dwellingSourceIds&& from apidbtuning.householdattributes) da
                         , (select protocol_app_node_id as p_protocol_app_node_id, &&participantSourceIds&& from apidbtuning.participantattributes) pa
                      where cva.PROTOCOL_APP_NODE_ID = io1.OUTPUT_NODE_ID
                      and io1.input_node_id = pa.p_PROTOCOL_APP_NODE_ID
@@ -157,8 +167,10 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
           <column name="plugin_properties" />
 
          <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
+         <!--
           <sqlParamValue name="participantAndDwellingSourceIds"><![CDATA['EUPATH_0000054','EUPATH_0000002', 'PATO_0000047', 'EUPATH_0000033', 'EUPATH_0000035', 'EUPATH_0000034']]></sqlParamValue>
-
+-->
+          <sqlParamValue name="participantAndDwellingSourceIds"><![CDATA['OBI_0001627']]></sqlParamValue>
          <sql>
             <![CDATA[
                      select meta.display_name, meta.name, meta.help, 
@@ -219,7 +231,7 @@ SELECT a.name                AS source_id,
   o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
   ontology_term_name          AS term
 FROM apidbtuning.metadataontology o,
-  apidbtuning.clinicalvisitattributes a
+  apidbtuning.eventattributes a
 WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 **/
             ]]>
@@ -242,7 +254,7 @@ WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
                  <![CDATA[
 select cv.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, sa.name as sample_id
-              from ApidbTuning.ClinicalVisitAttributes cv
+              from Apidbtuning.Eventattributes cv
               , apidbtuning.sampleattributes sa
               , apidbtuning.protocolappnodeio io
               where sa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
