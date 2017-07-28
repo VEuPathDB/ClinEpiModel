@@ -125,8 +125,8 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
          <column name="project_id"/>
 
          <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
-         <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id</sqlParamValue>
-         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054]]></sqlParamValue>
+         <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id,PATO_0000047, EUPATH_0000033, EUPATH_0000035, EUPATH_0000034</sqlParamValue>
+         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
 
           <sql>
             <![CDATA[
@@ -157,7 +157,7 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
           <column name="plugin_properties" />
 
          <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
-          <sqlParamValue name="participantAndDwellingSourceIds"><![CDATA['EUPATH_0000054']]></sqlParamValue>
+          <sqlParamValue name="participantAndDwellingSourceIds"><![CDATA['EUPATH_0000054','EUPATH_0000002', 'PATO_0000047', 'EUPATH_0000033', 'EUPATH_0000035', 'EUPATH_0000034']]></sqlParamValue>
 
          <sql>
             <![CDATA[

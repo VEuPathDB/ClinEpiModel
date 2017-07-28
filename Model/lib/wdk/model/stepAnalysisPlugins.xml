@@ -16,7 +16,7 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/App-2-ps]]></property>
-      <property name="attributesToExtract">source_id,avg_hemo,avg_weight,ave_anoph,ave_para_density,visits_per_year_obs,visit_count,time_of_obs,ave_age_visit,age_since_birth_at_time_of_en,a_thalassemia_genotype,avg_parasite_density__asympto,avg_parasite_density__malaria,subcounty_in_uganda,g6pd_genotype,hbs_genotype,avg_annual_visits_with__asymp,avg_annual_visits_with__malar,sex</property>
+      <property name="attributesToExtract">name,avg_hemo,avg_weight,ave_anoph,ave_para_density,visits_per_year_obs,visit_count,time_of_obs,ave_age_visit,EUPATH_0000034,EUPATH_0000054,EUPATH_0000033,EUPATH_0000035,PATO_0000047,EUPATH_0000002</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1000</property>
       <property name="iframeLengthPx">800</property>

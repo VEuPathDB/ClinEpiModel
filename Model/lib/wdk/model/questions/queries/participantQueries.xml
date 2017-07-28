@@ -28,12 +28,11 @@
      <sqlQuery name="ParticipantsByCharWiz"
           isCacheable="true">
        <paramRef ref="participantParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="participantParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.age_at_visit"/>
-       <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
+       <paramRef ref="participantParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="participantParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
        <paramRef ref="participantParams.min_para_density" groupRef="metaDataGroups.summary_params"/>
        <paramRef ref="participantParams.max_para_density" groupRef="metaDataGroups.summary_params"/>
@@ -52,10 +51,10 @@
          <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
- round(count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
-                    round((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
+ round(count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
+                    round((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
                     count(*) as visit_count, mos.ave_anoph, 
    round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) as ave_para_density,
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
@@ -70,8 +69,8 @@ from apidbtuning.clinicalvisitattributes ca, apidbtuning.participantattributes p
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 >= $$visit_date.min$$ 
+  and la.OBI_0001619 <= $$visit_date.max$$ 
   group by da.protocol_app_node_id) mos, apidbtuning.protocolappnodeio iom
 where ca.protocol_app_node_id in ($$visits_nf$$)
 and ca.protocol_app_node_id = io.output_node_id
@@ -79,10 +78,10 @@ and pa.protocol_app_node_id = io.input_node_id
 and iom.output_node_id = pa.protocol_app_node_id
 and iom.input_node_id = mos.protocol_app_node_id(+)
 group by pa.name, pa.EUPATH_0000152, pa.EUPATH_0000032, pa.EUPATH_0000151,age.max_age,age.min_age,mos.ave_anoph 
-having count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) >= $$min_visits$$
- and count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) <= $$max_visits$$
+having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) >= $$min_visits$$
+ and count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) <= $$max_visits$$
  and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) >= $$min_para_density$$
  and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) <= $$max_para_density$$
                 ]]>   
@@ -92,23 +91,19 @@ having count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY')
      <sqlQuery name="ParticipantsByCharWizRelVis"
           isCacheable="true">
        <paramRef ref="participantParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.start_date" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="participantParams.end_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="participantParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.age_at_visit"/>
-       <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
+       <paramRef ref="participantParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
        <paramRef ref="participantParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="clinicalVisitParams.minDaysBetween" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="clinicalVisitParams.maxDaysBetween" groupRef="metaDataGroups.relative_visits"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="participantParams.min_para_density" groupRef="metaDataGroups.summary_params"/>
-       <paramRef ref="participantParams.max_para_density" groupRef="metaDataGroups.summary_params"/>
-       <paramRef ref="participantParams.min_visits" groupRef="metaDataGroups.summary_params"/>
-       <paramRef ref="participantParams.max_visits" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.parasite_density" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.summary_params"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_anoph"/>
@@ -122,10 +117,10 @@ having count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY')
          <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
-round(count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) -
-greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
-                    round((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
+round(count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) -
+greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
+                    round((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
                     count(*) as visit_count, mos.ave_anoph, 
    round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) as ave_para_density,
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
@@ -145,8 +140,8 @@ and setb.protocol_app_node_id = iob.output_node_id
 and ioa.input_node_id = iob.input_node_id
 and seta.protocol_app_node_id != setb.protocol_app_node_id
 and setb.EUPATH_0000091 $$date_direction_fv$$ seta.EUPATH_0000091  
-and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$minDaysBetween$$
-and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$maxDaysBetween$$
+and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$days_between.min$$
+and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$days_between.max$$
 ) main,
 APIDBTUNING.CLINICALVISITATTRIBUTES ca, apidbtuning.participantattributes pa,
    (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
@@ -157,20 +152,20 @@ APIDBTUNING.CLINICALVISITATTRIBUTES ca, apidbtuning.participantattributes pa,
   from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= to_date($$start_date$$,'DD-MON-YYYY') 
-  and la.OBI_0001619 <= to_date($$end_date$$,'DD-MON-YYYY') 
+  and la.OBI_0001619 >= $$visit_date.min$$ 
+  and la.OBI_0001619 <= $$visit_date.max$$ 
   group by da.protocol_app_node_id) mos, apidbtuning.protocolappnodeio iom
 where ca.protocol_app_node_id = main.output_node_id
 and pa.protocol_app_node_id = main.input_node_id
 and iom.output_node_id = pa.protocol_app_node_id
 and iom.input_node_id = mos.protocol_app_node_id(+)
 group by pa.name, pa.EUPATH_0000152, pa.EUPATH_0000032, pa.EUPATH_0000151,age.max_age,age.min_age,mos.ave_anoph 
-having count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) >= $$min_visits$$
- and count(*) / ((least(pa.EUPATH_0000152, to_date($$end_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, to_date($$start_date$$,'DD-MON-YYYY'), pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) <= $$max_visits$$
- and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) >= $$min_para_density$$
- and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) <= $$max_para_density$$
+having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) >= $$visits_per_year.min$$
+ and count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) <= $$visits_per_year.max$$
+ and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) >= $$parasite_density.min$$
+ and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) <= $$parasite_density.max$$
                 ]]>   
         </sql>
      </sqlQuery>

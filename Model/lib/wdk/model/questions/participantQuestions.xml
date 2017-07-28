@@ -16,7 +16,7 @@
 
 
         <attributesList 
-            summary="EUPATH_0000054,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
+            summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
 
 	<dynamicAttributes>
