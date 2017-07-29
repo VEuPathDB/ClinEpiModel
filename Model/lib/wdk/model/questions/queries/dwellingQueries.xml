@@ -25,6 +25,7 @@
     </sqlQuery>
 
     <sqlQuery name="DwellingsByCharacteristics" isCacheable="true">
+       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
        <paramRef ref="dwellingParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="dwellingParams.date_range" groupRef="metaDataGroups.household_daterange"/>
        <paramRef ref="dwellingParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>

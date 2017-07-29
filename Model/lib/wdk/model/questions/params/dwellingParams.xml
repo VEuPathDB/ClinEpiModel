@@ -31,7 +31,7 @@
                     backgroundQueryRef="DwellingVQ.DwellingMetaDataBkgd"
                     prompt="Households"
                     trimMetadataTerms="false"
-                    dependedParamRef="dwellingParams.geographic_region,dwellingParams.date_range">
+                    dependedParamRef="participantParams.dataset,dwellingParams.geographic_region,dwellingParams.date_range">
       <help>
         Select participants based on their characteristics. 
       </help>
@@ -41,6 +41,7 @@
                     metadataQueryRef="DwellingVQ.RegionMetaData"
                     ontologyQueryRef="DwellingVQ.RegionOntology"
                     prompt="Dwelling"
+                    dependedParamRef="participantParams.dataset"
                     trimMetadataTerms="false">
       <help>
         Select dwellngs based on geographic region. 
@@ -54,7 +55,7 @@
                       backgroundQueryRef="DwellingVQ.ParticipantMetaDataBkgd"
                       prompt="Participants"
                       trimMetadataTerms="false"
-                      dependedParamRef="dwellingParams.date_range,dwellingParams.dwellings_nf,dwellingParams.geographic_region">
+                      dependedParamRef="participantParams.dataset,dwellingParams.date_range,dwellingParams.dwellings_nf,dwellingParams.geographic_region">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -114,6 +115,7 @@
    <sqlQuery name="DwellingOntology">
      <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.geographic_region" />  
+     <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -129,7 +131,7 @@
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where dataset_name = $$dataset$$
  and category = 'Dwelling type') md
  where o.ontology_term_name = md.term),
 first as (
@@ -159,6 +161,7 @@ first as (
     <sqlQuery name="DwellingMetaDataBkgd">
      <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.geographic_region" />  
+     <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -168,7 +171,7 @@ first as (
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where m.dataset_name = $$dataset$$
  and m.category = 'Dwelling type'
  union
  select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
@@ -184,6 +187,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     <sqlQuery name="DwellingMetaData" isCacheable="true">
       <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="dwellingParams.geographic_region" />  
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -209,6 +213,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sqlQuery>
 
    <sqlQuery name="RegionOntology">
+     <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -219,17 +224,21 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
      <column name="is_range"/>
     <sql>
          <![CDATA[
-                 select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
-                 from apidbtuning.metadataontology o 
-                 where o.ontology_term_name = 'Subcounty in Uganda'
-                 union
-                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling type' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-                 null as precision from dual
+                  select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+                  from apidbtuning.metadataontology o, (select distinct source_id
+                  from apidbtuning.metadata
+                  where /* dataset_name = $$dataset$$ 
+                  and */ source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')) ds
+                  where ds.source_id = o.ontology_term_source_id
+                  union
+                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                  null as precision from dual
          ]]>
     </sql>
    </sqlQuery>
    
    <sqlQuery name="RegionMetaData">
+     <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -239,9 +248,9 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
          <![CDATA[
 select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Dwelling type'
- and source_id = 'EUPATH_0000054'
+ where dataset_name = $$dataset$$
+ and category in ('Dwelling type','Household')
+ and source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
           ]]>
     </sql>
     </sqlQuery>
@@ -250,6 +259,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
      <paramRef ref="dwellingParams.dwellings_nf" />  
      <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.geographic_region" />  
+     <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -265,7 +275,7 @@ with leaf as (
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where dataset_name = $$dataset$$
  and category = 'Participant') md
  where o.ontology_term_name = md.term),
 first as (
@@ -293,6 +303,7 @@ first as (
      <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.dwellings_nf" />  
      <paramRef ref="dwellingParams.geographic_region" />  
+     <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="internal"/>
      <column name="number_value"/>
@@ -302,7 +313,7 @@ first as (
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
  and io.input_node_id in ($$dwellings_nf$$)
@@ -314,6 +325,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
      <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="dwellingParams.dwellings_nf" />  
      <paramRef ref="dwellingParams.geographic_region" />  
+     <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="internal"/>
      <column name="number_value"/>
@@ -323,7 +335,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
          <![CDATA[
 select distinct io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
  and io.input_node_id in ($$dwellings_nf$$)
@@ -335,6 +347,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
      <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="dwellingParams.dwellings_nf" />  
       <paramRef ref="dwellingParams.geographic_region" />  
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -344,7 +357,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
  and io.input_node_id in (select protocol_app_node_id from apidbtuning.dwellingattributes)

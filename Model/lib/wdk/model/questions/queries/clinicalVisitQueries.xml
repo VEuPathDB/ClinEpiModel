@@ -28,6 +28,7 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
 
      <sqlQuery name="ClinicalVisitsByRelativeVisits"
           isCacheable="true">
+       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
        <paramRef ref="clinicalVisitParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
@@ -93,6 +94,7 @@ group by name
 
      <sqlQuery name="ClinicalVisitsByAllData"
           isCacheable="true">
+       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
        <paramRef ref="clinicalVisitParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
