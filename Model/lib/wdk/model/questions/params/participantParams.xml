@@ -468,8 +468,6 @@ and io.output_node_id = m.protocol_app_node_id
     </sqlQuery>
 
        <sqlQuery name="ClinicalVisitAgeOntologyNf">
-         <paramRef ref="participantParams.geographic_region" /> 
-         <paramRef ref="clinicalVisitParams.visit_date" /> 
          <column name="ontology_term_name"/>
          <column name="parent_ontology_term_name"/>
          <column name="display_name"/>
@@ -955,8 +953,6 @@ and io.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
     </sqlQuery>
 
     <sqlQuery name="ClinicalVisitAgeOntologyNf_maled">
-      <paramRef ref="participantParams.geographic_region_maled" /> 
-      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -970,7 +966,7 @@ and io.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
                        select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
 where ontology_term_source_id in ('EUPATH_0000113','EUPATH_0000644')
-and dataset_name = $$dataset$$
+and dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
 union
                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
