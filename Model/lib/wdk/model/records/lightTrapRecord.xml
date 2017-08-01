@@ -177,6 +177,8 @@ select count(*) from apidbtuning.LightTrapAttributes
             <column name="parent_category"/>
             <column name="category"/>
             <column name="value"/>
+<!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
+         <sqlParamValue name="datasetName"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></sqlParamValue>
        <sql>
           <![CDATA[
 SELECT pan_name  AS source_id,
@@ -184,7 +186,7 @@ SELECT pan_name  AS source_id,
   term           AS parentTerm,
   string_value   AS term
 FROM apidbtuning.metadata
-WHERE dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+WHERE dataset_name = '&&datasetName&&'
 AND category       = 'CDC light trap assay'
 /** TODO:  add this back in when we can make this a tree on the record page
 UNION
@@ -194,7 +196,7 @@ SELECT pa.name                AS source_id,
   ontology_term_name          AS term
 FROM apidbtuning.metadataontology o,
   apidbtuning.lighttrapattributes pa
-WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+WHERE o.dataset_name = '&&datasetName&&'
 **/
             ]]>
         </sql>
