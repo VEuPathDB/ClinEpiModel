@@ -127,9 +127,6 @@
     </sqlQuery>
 
    <sqlQuery name="DwellingOntology">
-     <paramRef ref="dwellingParams.date_range" />  
-     <paramRef ref="lightTrapParams.geographic_region" />  
-     <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -145,7 +142,7 @@
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
  and category = 'Dwelling type') md
  where o.ontology_term_name = md.term),
 first as (
@@ -265,10 +262,6 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sqlQuery>
 
     <sqlQuery name="LightTrapOntology">
-      <paramRef ref="dwellingParams.date_range" />  
-      <paramRef ref="lightTrapParams.geographic_region" />  
-      <paramRef ref="lightTrapParams.dwellings_nf" />  
-      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -284,7 +277,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
  and category = 'CDC light trap assay'
   and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),

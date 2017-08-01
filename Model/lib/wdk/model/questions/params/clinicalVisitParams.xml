@@ -260,8 +260,7 @@
                     metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     ontologyQueryRef="ClinicalVisitVQ.RelVisitOntology_maled"
                     prompt="Relative Visits"
-                    trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset">
+                    trimMetadataTerms="false" >
       <help>
         Select relative visits based on their visit characteristics. 
       </help>
@@ -823,7 +822,7 @@ with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_nam
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = $$dataset$$
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
  and category in ('Visit','Specimen type')
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
@@ -924,13 +923,13 @@ and io.output_node_id = m.protocol_app_node_id
                 select distinct protocol_app_node_id as internal, term as ontology_term_name,
                        string_value, number_value, date_value
                 from apidbtuning.metadata 
-                where dataset_name = $$dataset$$
+                where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
                   and category = 'Visit'
               union
                 select io.input_node_id as internal, m.term as ontology_term_name,
                        m.string_value, m.number_value, m.date_value
                 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
-                where dataset_name = $$dataset$$
+                where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
                   and m.category = 'Specimen type' 
                   and m.term = 'Specimen type'
                   and io.output_node_id = m.protocol_app_node_id
@@ -943,7 +942,6 @@ and io.output_node_id = m.protocol_app_node_id
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
     <sqlQuery name="RelVisitOntology_maled">
-     <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -984,7 +982,6 @@ first as (
    </sqlQuery>
 
    <sqlQuery name="RelVisitMetaData_maled">
-      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>

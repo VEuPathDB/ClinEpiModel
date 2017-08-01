@@ -40,7 +40,7 @@
                       prompt="Number of Matching Visits: "
                       integer="true"
                       min="1"
-                      max="100">
+                      max="1000">
       <help>Set the range of number of visits that match your search criteria.</help>
       <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
     </numberRangeParam>
@@ -234,10 +234,6 @@
     <!--************************************************************-->
 
    <sqlQuery name="ParticipantOntology">
-     <paramRef ref="participantParams.visits_visitage_metadata_nf" />
-     <paramRef ref="clinicalVisitParams.visit_date" /> 
-     <paramRef ref="participantParams.duration_observation" />  
-     <paramRef ref="participantParams.geographic_region" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -330,12 +326,6 @@ from apidbtuning.metadata m
 
     
     <sqlQuery name="VisitOntology">
-      <paramRef ref="participantParams.visits_visitage_metadata_nf" />
-      <paramRef ref="clinicalVisitParams.visit_date" /> 
-     <paramRef ref="participantParams.duration_observation" />  
-     <paramRef ref="participantParams.dwellings_nf" />  
-     <paramRef ref="participantParams.geographic_region" />  
-     <paramRef ref="participantParams.participants_nf" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -613,11 +603,6 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
     </sqlQuery>
 
        <sqlQuery name="DwellingOntology">
-         <paramRef ref="participantParams.visits_visitage_metadata_nf" />
-         <paramRef ref="clinicalVisitParams.visit_date" /> 
-         <paramRef ref="participantParams.duration_observation" />  
-         <paramRef ref="participantParams.geographic_region" />  
-         <paramRef ref="participantParams.participants_nf" />  
         <column name="ontology_term_name"/>
         <column name="parent_ontology_term_name"/>
         <column name="display_name"/>
@@ -772,9 +757,6 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
     <!--************************************************************-->
 
    <sqlQuery name="ParticipantOntology_maled">
-     <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
-     <paramRef ref="participantParams.geographic_region_maled" />  
-     <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -790,7 +772,7 @@ with leaf as (
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = $$dataset$$
+ where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
  and category = 'Participant'
  and source_id != 'EUPATH_0000032') md
  where o.ontology_term_name = md.term),
@@ -827,15 +809,10 @@ first as (
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-  from /* (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
-   from apidbtuning.clinicalvisitattributes 
-   where protocol_app_node_id in ($$visits_visitage_metadata_nf_maled$$)
-   ) age, */
-   apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio iov, apidbtuning.metadata m
-   where pa.protocol_app_node_id in ($$geographic_region_maled$$)
-       and pa.protocol_app_node_id = iov.input_node_id
-       and iov.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
-       and pa.protocol_app_node_id = m.protocol_app_node_id
+  from apidbtuning.protocolappnodeio iov, apidbtuning.metadata m
+   where iov.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
+       and iov.input_type_source_id = 'EUPATH_0000096'
+       and iov.input_node_id = m.protocol_app_node_id
        and m.dataset_name = $$dataset$$
        and m.category = 'Participant'
           ]]>
@@ -863,11 +840,6 @@ from apidbtuning.metadata m
 
     
     <sqlQuery name="VisitOntology_maled">
-      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
-      <paramRef ref="participantParams.dwellings_nf_maled" />  
-      <paramRef ref="participantParams.geographic_region_maled" />  
-      <paramRef ref="participantParams.participants_nf_maled" />  
-      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -882,7 +854,7 @@ with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_nam
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = $$dataset$$
+ where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
  and category = 'Event'
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
@@ -1084,8 +1056,9 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
                   select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
                   from apidbtuning.metadataontology o, (select distinct source_id
                   from apidbtuning.metadata
-                  where /* dataset_name = $$dataset$$ 
-                  and*/ source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')) ds
+                  where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
+                  and source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+                  and category = 'Household') ds
                   where ds.source_id = o.ontology_term_source_id
                   union
                   select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
@@ -1115,10 +1088,6 @@ select io.output_node_id as internal, m.term as ontology_term_name, m.string_val
     </sqlQuery>
 
     <sqlQuery name="DwellingOntology_maled">
-      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
-      <paramRef ref="participantParams.geographic_region_maled" />  
-      <paramRef ref="participantParams.participants_nf_maled" />  
-      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -1133,7 +1102,7 @@ select io.output_node_id as internal, m.term as ontology_term_name, m.string_val
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = $$dataset$$
+ where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
  and category = 'Household'
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
