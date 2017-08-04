@@ -21,7 +21,7 @@
             <textAttribute name="demo_plot_compact" displayName="Weight for Height Z - DEMO Graph"  truncateTo="100000">
               <text>
               <![CDATA[
-                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&thumb=1&compact=1"/>
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&thumb=1"/>
                     ]]>
               </text>
             </textAttribute>
