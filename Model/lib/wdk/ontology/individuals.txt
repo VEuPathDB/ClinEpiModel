@@ -22,6 +22,7 @@ ParticipantAttributes.ParticipantAttributesMeta	http://edamontology.org/topic_33
 ParticipantRecordClasses.ParticipantRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	record_overview						record-internal		
 ParticipantRecordClasses.ParticipantRecordClass.Visits	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Visits					2	record	download	
 ParticipantRecordClasses.ParticipantRecordClass.Characteristics	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Characteristics					2	record	record	
+ParticipantRecordClasses.ParticipantRecordClass.EventGraph	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	EventGraph					2	record	record	
 ParticipantRecordClasses.ParticipantRecordClass.Samples	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Samples					2	record	download	
 													
 ClinicalVisitRecordClasses.ClinicalVisitRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	attribute	record_overview						record-internal		
