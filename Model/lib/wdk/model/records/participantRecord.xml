@@ -27,16 +27,6 @@
             </textAttribute>
 
       <!-- =============================================================== -->
-      <!--  Summary & record views -->
-      <!-- =============================================================== -->
-
-<!-- TODO: why do we need this?
-      <summaryView name="isolate-view" display="Participants Geographical Location"
-            jsp="/wdkCustomization/jsp/results/participant-geographical-view.jsp"
-          handlerClass="org.clinepi.model.view.GeoParticipantViewHandler"/>
--->
-
-      <!-- =============================================================== -->
       <!--  Step Analysis Plugins -->
       <!-- =============================================================== -->
 
@@ -106,13 +96,16 @@
             <columnAttribute name="parentTerm" displayName="Category"/>
         </table>
 
-<!--
+
          <table name="Visits"
                  displayName="Clinical Visits"
                  queryRef="ParticipantTables.Visits">
             <columnAttribute name="source_id" internal="true"/>
             <columnAttribute name="project_id" internal="true"/>
             <columnAttribute name="link" internal="true"/>
+
+
+            <!-- TODO:  this needs to be a property -->
             <linkAttribute name="db_link" displayName="Date of Visit" inReportMaker="false">
                  <displayText>
                     <![CDATA[
@@ -121,6 +114,7 @@
                  </displayText>
                  <url>$$link$$</url>
             </linkAttribute>
+<!--
             <columnAttribute name="EUPATH_0000040" displayName="Complicated malaria"/>
             <columnAttribute name="EUPATH_0000338" displayName="Malaria diagnosis and parasite status"/>
             <columnAttribute name="EUPATH_0000311" displayName="Visit type"/>
@@ -129,6 +123,7 @@
             <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
             <columnAttribute name="EUPATH_0000092" displayName="Asexual parasite density"/>
             <columnAttribute name="EUPATH_0000100" displayName="Fever (subjective)"/>
+-->
           </table>
 
 
@@ -151,7 +146,7 @@
             <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
             <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
--->
+
     </recordClass>
     </recordClassSet>
 
@@ -339,7 +334,7 @@ WHERE o.dataset_name = '&&datasetName&&'
             <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&visitSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link
+                   '@WEBAPP_BASE_URL@/record/event/'||cv.name||'/@PROJECT_ID@' as link
               from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.protocolappnodeio io
@@ -367,7 +362,7 @@ select pa.name as source_id,
                  <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
+                   '@WEBAPP_BASE_URL@/record/event/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
               from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.sampleattributes sa
