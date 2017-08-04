@@ -18,6 +18,14 @@
                 </text>                
             </idAttribute>
 
+            <textAttribute name="demo_plot_compact" displayName="Participant Event Summary">
+              <text>
+              <![CDATA[
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&compact=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734">
+                    ]]>
+              </text>
+            </textAttribute>
+
       <!-- =============================================================== -->
       <!--  Summary & record views -->
       <!-- =============================================================== -->
@@ -68,10 +76,26 @@
           </textAttribute>
 -->
 
+       <table name="EventGraph"
+              displayName="Event Summary Graph"
+              queryRef="ParticipantTables.EventGraph">
+            <textAttribute name="demo_plot" displayName="Participant Event Summary">
+              <text>
+              <![CDATA[
+                   <object
+                      data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&compact=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734"/
+                      type='image/svg+xml'
+                   </object>
+                    ]]>
+              </text>
+            </textAttribute>
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+       </table>
+
 
          <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
 
-         
 
         <table name="Characteristics"
                displayName="Participant Characteristics"
@@ -248,6 +272,32 @@ SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
   term           AS parentTerm,
   string_value   AS term
+FROM apidbtuning.metadata
+WHERE dataset_name = '&&datasetName&&'
+AND category       = 'Participant'
+/** TODO:  add this back in when we can make this a tree on the record page
+UNION
+SELECT pa.name                AS source_id,
+  '@PROJECT_ID@'              AS project_id,
+  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
+  ontology_term_name          AS term
+FROM apidbtuning.metadataontology o,
+  apidbtuning.participantattributes pa
+WHERE o.dataset_name = '&&datasetName&&'
+**/
+            ]]>
+            </sql>
+        </sqlQuery>
+
+      <sqlQuery name="EventGraph"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="project_id"/>
+<!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
+         <sqlParamValue name="datasetName"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></sqlParamValue>
+            <sql>
+            <![CDATA[
+SELECT pan_name  AS source_id,
+  '@PROJECT_ID@' AS project_id,
 FROM apidbtuning.metadata
 WHERE dataset_name = '&&datasetName&&'
 AND category       = 'Participant'
