@@ -1,7 +1,7 @@
 <wdkModel>
     <recordClassSet name="ClinicalVisitRecordClasses">
 
-      <recordClass name="ClinicalVisitRecordClass" urlName="clinical-visit" displayName="Clinical Visit"> 
+      <recordClass name="ClinicalVisitRecordClass" urlName="clinical-visit" displayName="Event"> 
 
 
             <!-- primary key definition -->

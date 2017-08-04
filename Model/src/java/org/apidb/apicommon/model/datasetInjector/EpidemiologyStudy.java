@@ -19,6 +19,9 @@ public class EpidemiologyStudy extends DatasetInjector {
       addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "question", "ParticipantQuestions.ParticipantsByRelativeVisits"); 
       addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "question", "ParticipantQuestions.ParticipantsByClinicalVisit"); 
       addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "question", "ParticipantQuestions.ParticipantsBySourceID"); 
+      /* MAL-ED */
+      addWdkReference("ClinicalVisitRecordClasses.ClinicalVisitRecordClass", "question", "ClinicalVisitQuestions.ClinicalVisitsByRelativeVisits_maled"); 
+      addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "question", "ParticipantQuestions.ParticipantsByRelativeVisits_maled"); 
 
       addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "table", "Visits");
       addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "table", "Samples");

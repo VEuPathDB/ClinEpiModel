@@ -144,7 +144,7 @@
                        min="0"
                        max="1000">
          <help>Set the range of days between visits to compare to visits selected in the previous step</help>
-         <suggest default="{'min': '1', 'max': '10'}" />  
+         <suggest default="{'min': '0', 'max': '10'}" />  
 
        </numberRangeParam> 
 
@@ -242,7 +242,7 @@
                       ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf_maled"
                       backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetaDataBkgdNf_maled"
                       useSummaryMetadataQueryForInternalValue="true"
-                      prompt="Age at visit"
+                      prompt="Age (visit count)"
                       dependedParamRef="participantParams.dataset,clinicalVisitParams.geographic_region_maled"
                       trimMetadataTerms="false">
          <help>

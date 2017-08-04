@@ -18,7 +18,7 @@
                 </text>                
             </idAttribute>
 
-            <textAttribute name="demo_plot_compact" displayName="Participant Event Summary">
+            <textAttribute name="demo_plot_compact" displayName="Weight for Height Z">
               <text>
               <![CDATA[
                   <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&compact=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734">

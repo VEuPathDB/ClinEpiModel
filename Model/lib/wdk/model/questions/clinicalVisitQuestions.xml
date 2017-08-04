@@ -1,6 +1,6 @@
 <wdkModel>
 
-  <questionSet name="ClinicalVisitQuestions" displayName="Search for Clinical Visits" excludeProjects="TrichDB">
+  <questionSet name="ClinicalVisitQuestions" displayName="Search for Events">
 
     <!-- ************************************************************ -->
     <!-- Characteristics -->  
@@ -62,9 +62,9 @@
     </question>
 
     <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1"
-              searchCategory="Clinical Visit"
-              displayName="Select a Set of Clinical Visits (MAL-ED)"
-              shortDisplayName="Clinical Visits"
+              searchCategory="Event"
+              displayName="Select a Set of Events (MAL-ED)"
+              shortDisplayName="Events"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_maled" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
