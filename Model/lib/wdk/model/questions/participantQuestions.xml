@@ -190,7 +190,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
 
         <attributesList 
-            summary="visit_count,ave_age_visit"        
+            summary="OBI_0001627,PATO_0000047,EUPATH_0000743,EUPATH_0000742,visit_count,demo_plot_compact"        
         /> 
 
 
