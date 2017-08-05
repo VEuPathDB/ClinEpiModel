@@ -70,7 +70,7 @@
 
 
         <attributesList 
-            summary="parent_id,OBI_0001627,num_matching_visits,min_days_between"
+            summary="parent_id,num_matching_visits,min_days_between"
         /> 
 
         <dynamicAttributes>
