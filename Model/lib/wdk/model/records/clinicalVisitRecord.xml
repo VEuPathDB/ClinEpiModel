@@ -5,7 +5,7 @@
 
 
             <!-- primary key definition -->
-            <primaryKey aliasQueryRef="ClinicalVisitAttributes.VisitsAlias">
+            <primaryKey aliasQueryRef="eventattributes.VisitsAlias">
               <columnRef>source_id</columnRef>
               <columnRef>project_id</columnRef>
             </primaryKey>
@@ -71,7 +71,7 @@
           </textAttribute>
 
 
-         <attributeQueryRef ref="ClinicalVisitAttributes.ClinicalVisitAttributes" attributeMetaQueryRef="ClinicalVisitAttributes.ClinicalVisitAttributesMeta"/>
+         <attributeQueryRef ref="eventattributes.eventattributes" attributeMetaQueryRef="eventattributes.eventattributesMeta"/>
 
 
         <table name="Characteristics"
@@ -101,12 +101,12 @@
       <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
       <!-- Attribute queries -->  
       <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-    <querySet name="ClinicalVisitAttributes" queryType="attribute" doNotTest="true"  
+    <querySet name="eventattributes" queryType="attribute" doNotTest="true"  
               isCacheable='false'>
 
 
       <testRowCountSql>
-select count(*) from apidbtuning.ClinicalVisitAttributes
+select count(*) from apidbtuning.eventattributes
        </testRowCountSql>
        <sqlQuery name="VisitsAlias" doNotTest="true">
          <column name="source_id"/>
@@ -114,13 +114,13 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ClinicalVisitAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.eventattributes
          </sql>
        </sqlQuery>
 
 
 
-       <sqlQuery name="ClinicalVisitAttributes" attributeMetaQueryRef="ClinicalVisitAttributes.ClinicalVisitAttributesMeta">
+       <sqlQuery name="eventattributes" attributeMetaQueryRef="eventattributes.eventattributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
 
@@ -134,8 +134,8 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
                      da.*, pa.*
                      from APIDBTUNING.PROTOCOLAPPNODEIO io1
                         , APIDBTUNING.PROTOCOLAPPNODEIO io2
-                        , apidbtuning.clinicalvisitattributes cva
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, &&dwellingSourceIds&& from apidbtuning.dwellingattributes) da
+                        , apidbtuning.eventattributes cva
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, &&dwellingSourceIds&& from apidbtuning.householdattributes) da
                         , (select protocol_app_node_id as p_protocol_app_node_id, &&participantSourceIds&& from apidbtuning.participantattributes) pa
                      where cva.PROTOCOL_APP_NODE_ID = io1.OUTPUT_NODE_ID
                      and io1.input_node_id = pa.p_PROTOCOL_APP_NODE_ID
@@ -145,7 +145,7 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
           </sql>  
          </sqlQuery>
 
-       <sqlQuery name="ClinicalVisitAttributesMeta" isCacheable="false">
+       <sqlQuery name="eventattributesMeta" isCacheable="false">
           <column name="name" />
           <column name="display_name" />
           <column name="help" />
@@ -170,13 +170,13 @@ select count(*) from apidbtuning.ClinicalVisitAttributes
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Visit'
+                           where m.protocol_app_node_type = 'Event'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Visit'
+                           where m.protocol_app_node_type = 'Event'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            union
@@ -210,8 +210,8 @@ SELECT pan_name  AS source_id,
   term           AS parentTerm,
   string_value   AS term
 FROM apidbtuning.metadata
-WHERE dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
-AND category       = 'Visit'
+WHERE dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+AND category       = 'Event'
 /** TODO:  add this back in when we can make this a tree on the record page
 UNION
 SELECT a.name                AS source_id,
@@ -219,8 +219,8 @@ SELECT a.name                AS source_id,
   o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
   ontology_term_name          AS term
 FROM apidbtuning.metadataontology o,
-  apidbtuning.clinicalvisitattributes a
-WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+  apidbtuning.eventattributes a
+WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
 **/
             ]]>
             </sql>
@@ -242,7 +242,7 @@ WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
                  <![CDATA[
 select cv.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, sa.name as sample_id
-              from ApidbTuning.ClinicalVisitAttributes cv
+              from ApidbTuning.eventattributes cv
               , apidbtuning.sampleattributes sa
               , apidbtuning.protocolappnodeio io
               where sa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID

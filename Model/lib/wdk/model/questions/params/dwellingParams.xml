@@ -129,8 +129,8 @@
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Dwelling type') md
+ where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and category = 'Household') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -168,12 +168,12 @@ first as (
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Dwelling type'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and m.category = 'Household'
  union
  select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   group by da.protocol_app_node_id
@@ -197,7 +197,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
  union
  select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id in ($$geographic_region$$)
   and da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
@@ -223,7 +223,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
                  from apidbtuning.metadataontology o 
                  where o.ontology_term_name = 'Subcounty in Uganda'
                  union
-                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling type' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
          ]]>
     </sql>
@@ -239,8 +239,8 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
          <![CDATA[
 select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Dwelling type'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and category = 'Household'
  and source_id = 'EUPATH_0000054'
           ]]>
     </sql>
@@ -265,7 +265,7 @@ with leaf as (
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and category = 'Participant') md
  where o.ontology_term_name = md.term),
 first as (
@@ -302,7 +302,7 @@ first as (
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
  and io.input_node_id in ($$dwellings_nf$$)
@@ -323,7 +323,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
          <![CDATA[
 select distinct io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
  and io.input_node_id in ($$dwellings_nf$$)
@@ -344,10 +344,10 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
- and io.input_node_id in (select protocol_app_node_id from apidbtuning.dwellingattributes)
+ and io.input_node_id in (select protocol_app_node_id from apidbtuning.householdattributes)
           ]]>
     </sql>
     </sqlQuery>

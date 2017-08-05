@@ -20,7 +20,7 @@
       <column name="project_id"/>
      <sql>
           <![CDATA[
-Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLINICALVISITATTRIBUTES cv,
+Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.eventattributes cv,
 ($$clinical_visits_by_sourceid$$) cs where cv.name = cs.source_id
                ]]>   
        </sql>
@@ -48,13 +48,13 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
            <![CDATA[
 with vis as (
 select distinct ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000091 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.protocolappnodeio io
+from APIDBTUNING.eventattributes ca,apidbtuning.protocolappnodeio io
 where ca.protocol_app_node_id in ($$visits_nf$$)
 and ca.protocol_app_node_id = io.output_node_id
 ),
 relvis as (
 select distinct ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000091 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.protocolappnodeio io
+from APIDBTUNING.eventattributes ca,apidbtuning.protocolappnodeio io
 where ca.protocol_app_node_id in ($$relative_visits_nf$$)
 and ca.protocol_app_node_id = io.output_node_id
 ),
@@ -105,7 +105,7 @@ group by name
        <sql>
            <![CDATA[
 select name as source_id,'ClinEpiDB' as project_id
-from APIDBTUNING.CLINICALVISITATTRIBUTES
+from APIDBTUNING.eventattributes
 where protocol_app_node_id in ($$visits_nf$$)
                 ]]>   
         </sql>
@@ -125,7 +125,7 @@ where protocol_app_node_id in ($$visits_nf$$)
         <sql>
           <![CDATA[
  SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
-              FROM ($$participant_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes cva, apidbtuning.participantattributes pa
+              FROM ($$participant_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.eventattributes cva, apidbtuning.participantattributes pa
               WHERE source_set.source_id = pa.name 
               AND pa.protocol_app_node_id = io.input_node_id
               AND  io.output_node_id = cva.protocol_app_node_id

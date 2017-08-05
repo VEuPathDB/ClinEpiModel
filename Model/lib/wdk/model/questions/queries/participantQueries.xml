@@ -60,13 +60,13 @@ select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id,
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
    round(avg(ca.EUPATH_0000047),1) as avg_hemo,
    round(avg(ca.IAO_0000414),1) as avg_weight
-from apidbtuning.clinicalvisitattributes ca, apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io,
+from apidbtuning.eventattributes ca, apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io,
    (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
-   from apidbtuning.clinicalvisitattributes 
+   from apidbtuning.eventattributes 
    where protocol_app_node_id in (SELECT distinct md.internal FROM ($$visits_visitage_metadata_nf$$) md)
    ) age,
    (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   and la.OBI_0001619 >= $$visit_date.min$$ 
@@ -126,12 +126,12 @@ greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_ag
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
    round(avg(ca.EUPATH_0000047),1) as avg_hemo,
    round(avg(ca.IAO_0000414),1) as avg_weight
-from (select distinct io.input_node_id,io.output_node_id from apidbtuning.clinicalvisitattributes ca, apidbtuning.protocolappnodeio io
+from (select distinct io.input_node_id,io.output_node_id from apidbtuning.eventattributes ca, apidbtuning.protocolappnodeio io
       where ca.protocol_app_node_id in ($$visits_nf$$)
       and ca.protocol_app_node_id = io.output_node_id
 $$dateOperator_fv$$
  select distinct ioa.input_node_id,ioa.output_node_id
- from APIDBTUNING.CLINICALVISITATTRIBUTES seta, APIDBTUNING.CLINICALVISITATTRIBUTES setb, apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob
+ from APIDBTUNING.eventattributes seta, APIDBTUNING.eventattributes setb, apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob
  where seta.protocol_app_node_id in ($$visits_nf$$)
 and $$use_relative_visits$$ = 1
 and setb.protocol_app_node_id in ($$relative_visits_nf$$)
@@ -143,13 +143,13 @@ and setb.EUPATH_0000091 $$date_direction_fv$$ seta.EUPATH_0000091
 and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$days_between.min$$
 and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$days_between.max$$
 ) main,
-APIDBTUNING.CLINICALVISITATTRIBUTES ca, apidbtuning.participantattributes pa,
+APIDBTUNING.eventattributes ca, apidbtuning.participantattributes pa,
    (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
-   from apidbtuning.clinicalvisitattributes 
+   from apidbtuning.eventattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
    ) age,
    (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   and la.OBI_0001619 >= $$visit_date.min$$ 
@@ -184,7 +184,7 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_00000
         <sql>
             <![CDATA[
 SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as dwelling, wdk_weight
-              FROM ($$dwelling_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.dwellingattributes da, apidbtuning.participantattributes pa
+              FROM ($$dwelling_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.householdattributes da, apidbtuning.participantattributes pa
               WHERE source_set.source_id = da.name 
               AND da.protocol_app_node_id = io.input_node_id
               AND  io.output_node_id = pa.protocol_app_node_id
@@ -203,7 +203,7 @@ SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as dwellin
         <sql>
             <![CDATA[
 SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, count(*) as num_of_visits , max(source_set.wdk_weight) as wdk_weight
-              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes cva, apidbtuning.participantattributes pa
+              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.eventattributes cva, apidbtuning.participantattributes pa
               WHERE source_set.source_id = cva.name 
               AND cva.protocol_app_node_id = io.output_node_id
               AND  io.input_node_id = pa.protocol_app_node_id

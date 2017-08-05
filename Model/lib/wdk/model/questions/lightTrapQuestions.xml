@@ -13,7 +13,9 @@
     		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
 
 
+<!--
           <attributesList summary="EUPATH_0000094,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
+-->
 
  
           <dynamicAttributes>

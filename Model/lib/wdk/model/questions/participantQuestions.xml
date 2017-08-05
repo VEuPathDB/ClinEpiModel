@@ -15,8 +15,13 @@
 
 
 
+<!--
         <attributesList 
             summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
+        /> 
+-->
+        <attributesList 
+            summary="ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
 
 	<dynamicAttributes>
@@ -104,8 +109,13 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
 
 
+<!--
         <attributesList 
             summary="EUPATH_0000054,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight,avg_hemo"        
+        /> 
+-->
+        <attributesList 
+            summary="EUPATH_0000054,ave_anoph,time_of_obs,visit_count,visits_per_year_obs,avg_weight,ave_para_density,avg_hemo"        
         /> 
 
 
@@ -189,8 +199,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
 
         <attributesList 
-            summary="EUPATH_0000054,dwelling"   
-            sorting="EUPATH_0000054 desc"
+            summary="dwelling"   
         /> 
 
 	<dynamicAttributes>
@@ -222,7 +231,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
 
         <attributesList 
-            summary="num_of_visits,EUPATH_0000054"   
+            summary="num_of_visits"   
             sorting="num_of_visits desc"
         /> 
 

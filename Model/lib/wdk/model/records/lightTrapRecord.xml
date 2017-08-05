@@ -103,7 +103,7 @@ select count(*) from apidbtuning.LightTrapAttributes
                      da.*
                      from APIDBTUNING.PROTOCOLAPPNODEIO io
                         , apidbtuning.lighttrapattributes pa
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.dwellingattributes) da
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.householdattributes) da
                      where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
                      and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
@@ -177,7 +177,7 @@ SELECT pan_name  AS source_id,
   term           AS parentTerm,
   string_value   AS term
 FROM apidbtuning.metadata
-WHERE dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+WHERE dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
 AND category       = 'CDC light trap assay'
 /** TODO:  add this back in when we can make this a tree on the record page
 UNION
@@ -187,7 +187,7 @@ SELECT pa.name                AS source_id,
   ontology_term_name          AS term
 FROM apidbtuning.metadataontology o,
   apidbtuning.lighttrapattributes pa
-WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
 **/
             ]]>
         </sql>

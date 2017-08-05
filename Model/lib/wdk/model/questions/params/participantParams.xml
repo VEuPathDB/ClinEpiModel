@@ -225,7 +225,7 @@ with leaf as (
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and category = 'Participant'
  and source_id != 'EUPATH_0000032') md
  where o.ontology_term_name = md.term),
@@ -264,7 +264,7 @@ first as (
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
-   from apidbtuning.clinicalvisitattributes 
+   from apidbtuning.eventattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
    ) age,
    apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio iov, apidbtuning.metadata m
@@ -274,7 +274,7 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
        and pa.protocol_app_node_id = iov.input_node_id
        and iov.output_node_id in ($$visits_visitage_metadata_nf$$)
        and pa.protocol_app_node_id = m.protocol_app_node_id
-       and m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+       and m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
        and m.category = 'Participant'
           ]]>
     </sql>
@@ -294,7 +294,7 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and m.category = 'Participant'
           ]]>
     </sql>
@@ -322,8 +322,8 @@ with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_nam
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category in ('Visit','Specimen type')
+ where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and category in ('Event','Specimen')
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
@@ -369,15 +369,15 @@ and io.output_node_id in ($$visits_visitage_metadata_nf$$)
 )
 select distinct valid.visit_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata m, valid
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Visit'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and m.category = 'Event'
  and m.protocol_app_node_id = valid.visit_id
   union
  select valid.visit_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, valid, apidbtuning.protocolappnodeio ios
-where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
-and m.category = 'Specimen type' 
-and m.term = 'Specimen type'
+where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+and m.category = 'Specimen' 
+and m.term = 'Specimen'
 and ios.output_node_id = m.protocol_app_node_id
 and ios.input_node_id = valid.visit_id
           ]]>
@@ -399,9 +399,9 @@ and ios.input_node_id = valid.visit_id
          <sql>
            <![CDATA[
 select distinct io.input_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes va
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Visit'
+ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.eventattributes va
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and m.category = 'Event'
  and m.protocol_app_node_id = va.protocol_app_node_id
  and io.output_Node_Id = va.protocol_app_node_id
  and va.protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
@@ -409,9 +409,9 @@ select distinct io.input_node_id as internal, term as ontology_term_name, string
   union
  select iov.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio iov, apidbtuning.protocolappnodeio ios
-where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
-and m.category = 'Specimen type' 
-and m.term = 'Specimen type'
+where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+and m.category = 'Specimen' 
+and m.term = 'Specimen'
 and ios.output_node_id = m.protocol_app_node_id
 and ios.input_node_id in ($$visits_visitage_metadata_nf$$)
 and iov.output_node_id = ios.input_node_id
@@ -436,14 +436,14 @@ and iov.input_node_id in ($$dwellings_nf$$)
            <![CDATA[
  select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata 
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Visit'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and category = 'Event'
  union
  select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
-where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
-and m.category = 'Specimen type' 
-and m.term = 'Specimen type'
+where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+and m.category = 'Specimen' 
+and m.term = 'Specimen'
 and io.output_node_id = m.protocol_app_node_id
           ]]>
     </sql>
@@ -466,7 +466,7 @@ and io.output_node_id = m.protocol_app_node_id
 from apidbtuning.metadataontology o
 where ontology_term_name = 'Age at time of visit'
 union
-                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
     ]]>   
         </sql>
@@ -483,13 +483,13 @@ union
       <sql>
         <![CDATA[
 select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, apidbtuning.clinicalvisitattributes cva,
+ from apidbtuning.metadata m, apidbtuning.eventattributes cva,
  (select distinct io.input_node_id, io.output_node_id
   from apidbtuning.protocolappnodeio io
   where io.input_node_id in ($$geographic_region$$)
   ) pa
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Visit'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and m.category = 'Event'
  and m.source_id = 'EUPATH_0000113'
  and pa.output_node_id = m.protocol_app_node_id
  and pa.output_node_id = cva.protocol_app_node_id
@@ -510,13 +510,13 @@ select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.s
       <sql>
         <![CDATA[
 select distinct pa.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, apidbtuning.clinicalvisitattributes cva,
+ from apidbtuning.metadata m, apidbtuning.eventattributes cva,
  (select distinct io.input_node_id, io.output_node_id
   from apidbtuning.protocolappnodeio io
   where io.input_node_id in ($$geographic_region$$)
   ) pa
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Visit'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and m.category = 'Event'
  and m.source_id = 'EUPATH_0000113'
  and pa.output_node_id = m.protocol_app_node_id
  and pa.output_node_id = cva.protocol_app_node_id
@@ -538,8 +538,8 @@ select distinct pa.input_node_id as internal, m.term as ontology_term_name, m.st
         <![CDATA[
 select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Visit'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and category = 'Event'
  and source_id = 'EUPATH_0000113'
           ]]>   
       </sql>
@@ -554,7 +554,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
       <sql>
         <![CDATA[
  select pa.protocol_app_node_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value, cast(null as number) as number_value, cast(null as date) as date_value
- from apidbtuning.participantattributes pa, apidbtuning.dwellingattributes da, apidbtuning.metadatatype mt
+ from apidbtuning.participantattributes pa, apidbtuning.householdattributes da, apidbtuning.metadatatype mt
  where pa.EUPATH_0000094 = da.name
  and mt.source_id = 'EUPATH_0000054'
         ]]>
@@ -581,8 +581,8 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Dwelling type'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and category = 'Household'
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
@@ -627,13 +627,13 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
        and pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
  from apidbtuning.metadata m, part
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Dwelling type'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and m.category = 'Household'
  and part.dwelling_id = m.protocol_app_node_id
  union
  select part.part_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   and la.OBI_0001619 >= $$visit_date.min$$ 
@@ -664,13 +664,13 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
        and pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
  from apidbtuning.metadata m, part
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Dwelling type'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and m.category = 'Household'
  and part.dwelling_id = m.protocol_app_node_id
  union
  select part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   and la.OBI_0001619 >= $$visit_date.min$$ 
@@ -700,13 +700,13 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
    where pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
  from apidbtuning.metadata m, part
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Dwelling type'
+ where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
+ and m.category = 'Household'
  and part.dwelling_id = m.protocol_app_node_id
  union
  select part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   group by da.protocol_app_node_id) mos, part

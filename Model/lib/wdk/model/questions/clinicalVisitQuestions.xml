@@ -14,9 +14,13 @@
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000091,num_matching_visits,min_days_between"
+        /> 
+-->
+        <attributesList 
+            summary="parent_id,EUPATH_0000054,EUPATH_0000113,num_matching_visits,min_days_between"
         /> 
 
         <dynamicAttributes>
@@ -69,9 +73,11 @@
 
 
 
+<!--
         <attributesList 
-            summary="EUPATH_0000091"
+            summary=""
         /> 
+-->
 
         <dynamicAttributes>
 	</dynamicAttributes>
@@ -111,8 +117,13 @@
 
 
 
+<!--
         <attributesList 
             summary="EUPATH_0000091,parent_id,EUPATH_0000113,EUPATH_0000311"
+        /> 
+-->
+        <attributesList 
+            summary="parent_id"
         /> 
  
 
@@ -137,11 +148,18 @@
 	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
 	      recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass"
 	      noSummaryOnSingleRecord="false">
+
+<!--
       <attributesList
 	 summary="EUPATH_0000091,participant,EUPATH_0000113,EUPATH_0000311"
 	 sorting="participant DESC"
-	
 	 />
+-->
+      <attributesList
+	 summary="participant"
+	 sorting="participant DESC"
+	 />
+
       <dynamicAttributes>
 	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical visits are associated with" align="center">
 	  <plugin name="histogram" display="Histogram"

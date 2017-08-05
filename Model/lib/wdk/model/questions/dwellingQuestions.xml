@@ -15,8 +15,14 @@
               recordClassRef="DwellingRecordClasses.DwellingRecordClass">
 
 
+<!--
         <attributesList 
             summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,part_count,EUPATH_0000019"        
+        /> 
+-->
+
+        <attributesList 
+            summary="ave_anoph,part_count"        
         /> 
 
 
@@ -110,7 +116,7 @@
 
 
         <attributesList 
-            summary="EUPATH_0000054,participants,participant_count"   
+            summary="participants,participant_count"   
             sorting ="participant_count desc"
         /> 
 
@@ -149,7 +155,7 @@
     
 
     <attributesList
-            summary="EUPATH_0000054,lt_count,ave_anoph"
+            summary="lt_count,ave_anoph"
         />
 
 	<dynamicAttributes>
