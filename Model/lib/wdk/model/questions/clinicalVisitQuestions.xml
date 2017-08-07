@@ -1,6 +1,6 @@
 <wdkModel>
 
-  <questionSet name="ClinicalVisitQuestions" displayName="Search for Clinical Visits" excludeProjects="TrichDB">
+  <questionSet name="ClinicalVisitQuestions" displayName="Search for Events">
 
     <!-- ************************************************************ -->
     <!-- Characteristics -->  
@@ -8,16 +8,17 @@
 
    <question name="ClinicalVisitsByRelativeVisits" newBuild="2"
               searchCategory="Clinical Visit"
-              displayName="Select a Set of Clinical Visits"
+              displayName="Select a Set of Clinical Visits (PRISM)"
               shortDisplayName="Clinical Visits"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000091,num_matching_visits,min_days_between"
         /> 
+-->
 
         <dynamicAttributes>
 	  <columnAttribute name="min_days_between" displayName="Min days between visits" help="Reports the minimum days between any matching visits and the visit returned" align="center">
@@ -60,6 +61,59 @@
  
     </question>
 
+    <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1"
+              searchCategory="Event"
+              displayName="Select a Set of Events (MAL-ED)"
+              shortDisplayName="Events"
+              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_maled" 
+              recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
+
+
+        <attributesList 
+            summary="parent_id,num_matching_visits,min_days_between"
+        /> 
+
+        <dynamicAttributes>
+	  <columnAttribute name="min_days_between" displayName="Min days between events" help="Reports the minimum days between any matching events and the event returned" align="center">
+	    <plugin name="histogram" display="Histogram"
+		    description="Display a histogram of the values"
+		    implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+		    view="/wdk/jsp/results/histogram.jsp" />
+	  </columnAttribute>
+	  <columnAttribute name="num_matching_visits" displayName="# matching relative events" help="Count of the matching events any one of which would cause this event to be removed or retained, depending on the parameters of the search" align="center">
+	    <plugin name="histogram" display="Histogram"
+		    description="Display a histogram of the values"
+		    implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+		    view="/wdk/jsp/results/histogram.jsp" />
+	  </columnAttribute>
+	</dynamicAttributes>
+          
+
+        <summary>
+            <![CDATA[
+            In this search, you will build a set of Visits and you can further restrict the visits returned based on the relationship of two different selected visits.  You can use the wealth of data in the PRISM study to find Visits with clinically interesting patterns.
+            More here...
+            ]]>
+        </summary>
+         <description>
+            <![CDATA[
+            In this search, you will build a set of Visits and you can further restrict the visits returned based on the relationship of two different selected visits.  You can use the wealth of data in the PRISM study to find Visits with clinically interesting patterns.
+            More here...
+            ]]>
+</description>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+ 
+    </question>
+
        <question name="ClinicalVisitsByAllData" newBuild="2"
               searchCategory="Clinical Visit"
               displayName="Select a Set of Clinical Visits (no Relative Visits)"
@@ -68,10 +122,11 @@
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000091"
         /> 
+-->
 
         <dynamicAttributes>
 	</dynamicAttributes>
@@ -110,11 +165,11 @@
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass">
 
 
-
+<!--
         <attributesList 
             summary="EUPATH_0000091,parent_id,EUPATH_0000113,EUPATH_0000311"
         /> 
- 
+--> 
 
         <summary>
             <![CDATA[ 
@@ -137,11 +192,14 @@
 	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
 	      recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass"
 	      noSummaryOnSingleRecord="false">
+
+<!--
       <attributesList
 	 summary="EUPATH_0000091,participant,EUPATH_0000113,EUPATH_0000311"
 	 sorting="participant DESC"
 	
 	 />
+-->
       <dynamicAttributes>
 	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical visits are associated with" align="center">
 	  <plugin name="histogram" display="Histogram"

@@ -22,7 +22,8 @@
                     summaryMetadataQueryRef="lightTrapVQ.SummaryRegionMetaData"
                     ontologyQueryRef="DwellingVQ.RegionOntology"
                     prompt="Dwelling"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.dataset">
       <help>
         Select light trap collections based on geographic region. 
       </help>
@@ -35,7 +36,7 @@
                     backgroundQueryRef="lightTrapVQ.DwellingMetaDataBkgd"
                     prompt="Dwelling"
                     trimMetadataTerms="false"
-                    dependedParamRef="lightTrapParams.geographic_region,dwellingParams.date_range">
+                    dependedParamRef="participantParams.dataset,lightTrapParams.geographic_region,dwellingParams.date_range">
       <help>
         Select light trap collections based on the characteristics of the dwelling where collection was performed. 
       </help>
@@ -47,7 +48,7 @@
                     backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd"
                     prompt="Dwelling"
                     trimMetadataTerms="false"
-                    dependedParamRef="lightTrapParams.geographic_region,dwellingParams.date_range,lightTrapParams.dwellings_nf">
+                    dependedParamRef="participantParams.dataset,lightTrapParams.geographic_region,dwellingParams.date_range,lightTrapParams.dwellings_nf">
       <help>
         Select light trap collections based on the characteristics of the dwelling where collection was performed. 
       </help>
@@ -105,13 +106,14 @@
 
  <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true">
 
-      <sqlQuery name="SummaryRegionMetaData">
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
+   <sqlQuery name="SummaryRegionMetaData">
+     <paramRef ref="participantParams.dataset" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
         <![CDATA[
                  select distinct lta.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
  from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
@@ -125,8 +127,6 @@
     </sqlQuery>
 
    <sqlQuery name="DwellingOntology">
-     <paramRef ref="dwellingParams.date_range" />  
-     <paramRef ref="lightTrapParams.geographic_region" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -142,7 +142,7 @@
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
  and category = 'Dwelling type') md
  where o.ontology_term_name = md.term),
 first as (
@@ -172,6 +172,7 @@ first as (
     <sqlQuery name="DwellingMetaDataBkgd">
      <paramRef ref="dwellingParams.date_range" />  
      <paramRef ref="lightTrapParams.geographic_region" />  
+     <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -197,6 +198,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     <sqlQuery name="DwellingMetaData" isCacheable="true">
       <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -224,6 +226,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     <sqlQuery name="SummaryDwellingMetaData" isCacheable="false">
       <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -259,9 +262,6 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sqlQuery>
 
     <sqlQuery name="LightTrapOntology">
-      <paramRef ref="dwellingParams.date_range" />  
-      <paramRef ref="lightTrapParams.geographic_region" />  
-      <paramRef ref="lightTrapParams.dwellings_nf" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -277,7 +277,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+ where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
  and category = 'CDC light trap assay'
   and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
@@ -306,6 +306,7 @@ first as (
       <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <paramRef ref="lightTrapParams.dwellings_nf" />  
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -330,6 +331,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <paramRef ref="dwellingParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <paramRef ref="lightTrapParams.dwellings_nf" />  
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>

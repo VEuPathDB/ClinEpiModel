@@ -22,6 +22,7 @@
 
     <sqlQuery name="LightTrapsByCharacteristics"
               isCacheable="true">
+       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
        <paramRef ref="lightTrapParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="dwellingParams.date_range" groupRef="metaDataGroups.household_daterange"/>
        <paramRef ref="lightTrapParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>

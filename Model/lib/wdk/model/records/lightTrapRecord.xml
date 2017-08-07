@@ -47,7 +47,7 @@
       <!-- =================================================================== -->
 
 
-
+<!--
   <textAttribute name="record_overview" displayName="Overview" internal="true" inReportMaker="false">
     <text>
       <![CDATA[
@@ -55,7 +55,7 @@
       ]]>
     </text>
   </textAttribute>
-
+-->
 
   <attributeQueryRef ref="LightTrapAttributes.LightTrapAttributes" attributeMetaQueryRef="LightTrapAttributes.LightTrapAttributesMeta"/>
 
@@ -96,14 +96,19 @@ select count(*) from apidbtuning.LightTrapAttributes
        <sqlQuery name="LightTrapAttributes" attributeMetaQueryRef="LightTrapAttributes.LightTrapAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
+
+          <sqlParamValue name="dwellingSourceIds"><![CDATA[OBI_0001627]]></sqlParamValue>
+<!--
           <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000002]]></sqlParamValue>
+-->
+
           <sql>
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
                      from APIDBTUNING.PROTOCOLAPPNODEIO io
                         , apidbtuning.lighttrapattributes pa
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.dwellingattributes) da
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&dwellingSourceIds&& from apidbtuning.householdattributes) da
                      where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
                      and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
@@ -122,8 +127,10 @@ select count(*) from apidbtuning.LightTrapAttributes
           <column name="plugin_properties" />
 
          <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
+<!--
           <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000002']]></sqlParamValue>
-
+-->
+          <sqlParamValue name="dwellingSourceIds"><![CDATA['OBI_0001627']]></sqlParamValue>
          <sql>
             <![CDATA[
                      select meta.display_name, meta.name, meta.help, 
@@ -170,6 +177,8 @@ select count(*) from apidbtuning.LightTrapAttributes
             <column name="parent_category"/>
             <column name="category"/>
             <column name="value"/>
+<!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
+         <sqlParamValue name="datasetName"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></sqlParamValue>
        <sql>
           <![CDATA[
 SELECT pan_name  AS source_id,
@@ -177,7 +186,7 @@ SELECT pan_name  AS source_id,
   term           AS parentTerm,
   string_value   AS term
 FROM apidbtuning.metadata
-WHERE dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+WHERE dataset_name = '&&datasetName&&'
 AND category       = 'CDC light trap assay'
 /** TODO:  add this back in when we can make this a tree on the record page
 UNION
@@ -187,7 +196,7 @@ SELECT pa.name                AS source_id,
   ontology_term_name          AS term
 FROM apidbtuning.metadataontology o,
   apidbtuning.lighttrapattributes pa
-WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
+WHERE o.dataset_name = '&&datasetName&&'
 **/
             ]]>
         </sql>

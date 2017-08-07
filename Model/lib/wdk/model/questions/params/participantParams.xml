@@ -20,9 +20,78 @@
       </enumList>
     </enumParam>
 
+    <stringParam name="dataset"
+		 prompt="Study: "
+		 number="false">
+      <help>Specify the dataset for this study</help>
+      <suggest default="Default Study"/>
+    </stringParam>
+
+    <numberParam name="duration_observation"
+		 prompt="Days of observation &gt;= "
+		 integer="true"
+                 min="1"
+                 max="2000">
+      <help>Specify the minimum number of days that the participant was observed (ie, met the age/date criteria).</help>
+      <suggest default="1"/>
+    </numberParam>
+
+    <numberRangeParam name="visit_count"
+                      prompt="Number of Matching Visits: "
+                      integer="true"
+                      min="1"
+                      max="1000">
+      <help>Set the range of number of visits that match your search criteria.</help>
+      <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
+    </numberRangeParam>
+
+        <numberRangeParam name="visits_per_year"
+                      prompt="Visits per year:"
+                      integer="false"
+                      min="0"
+                      max="365"
+                      step="0.1">
+      <help>Set the range of number of visits that match your search criteria.</help>
+      <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
+    </numberRangeParam>
+
+    <numberRangeParam name="parasite_density"
+                      prompt="Parasite Density (geometric mean):"
+                      integer="true"
+                      min="0"
+                      max="1000000">
+      <help>Set the range of days between visits to compare to visits selected in the previous step</help>
+      <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
+    </numberRangeParam> 
+
+    <datasetParam name="participantsBySourceID" 
+		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
+		  prompt="Source ID input set">
+      <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
+
+             It can be delimited by a comma, semi colon or any white space.<br><br>
+             Its possible that not all the IDs in the list will be found in the database
+             due to anumber of reasons such as unavailable ID mapping. It is currenly not
+             possible to inform which IDs did not match anything in the database]]> </help>
+     <suggest includeProjects="INIT" default="FILL" />
+     <suggest default="3001" />
+      
+    </datasetParam>
+
+    <answerParam name="participant_result"
+                 prompt="Input Result Set"
+                 readonly="true"
+                 visible="false">
+      <recordClass ref="ParticipantRecordClasses.ParticipantRecordClass" />
+    </answerParam>
+
+    <!--************************************************************-->
+    <!--   PRISM section ... should be injected  -->
+    <!--************************************************************-->
+
        <filterParamNew name="geographic_region" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData"
-                       ontologyQueryRef="DwellingVQ.RegionOntology"
+                       ontologyQueryRef="ParticipantVQ.RegionOntology"
                        prompt="Participants"
                        trimMetadataTerms="false">
          <help>
@@ -82,119 +151,75 @@
          </help>
        </filterParamNew>
 
-    <datasetParam name="participantsBySourceID" 
-		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
-		  prompt="Source ID input set">
-      <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
 
-             It can be delimited by a comma, semi colon or any white space.<br><br>
-             Its possible that not all the IDs in the list will be found in the database
-             due to anumber of reasons such as unavailable ID mapping. It is currenly not
-             possible to inform which IDs did not match anything in the database]]> </help>
-     <suggest includeProjects="INIT" default="FILL" />
-     <suggest default="3001" />
-      
-    </datasetParam>
+    <!--************************************************************-->
+    <!--   MAL-ED section ... should be injected  -->
+    <!--************************************************************-->
 
-    <stringParam name="duration_observation"
-		 prompt="Days of observation &gt;= "
-		 number="true">
-      <help>Specify the minimum number of days from the date range that the participant was observed (ie, in the study).</help>
-      <suggest default="1"/>
-      <regex>\d\d*</regex>
-    </stringParam>
+       <filterParamNew name="geographic_region_maled" 
+                       metadataQueryRef="ParticipantVQ.RegionMetaData_maled"
+                       ontologyQueryRef="ParticipantVQ.RegionOntology_maled"
+                       prompt="Participants"
+                       dependedParamRef="participantParams.dataset"
+                       trimMetadataTerms="false">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+    </filterParamNew>
 
-   <stringParam name="max_visits"
-		 prompt="Number of visits / year &lt;= "
-		 number="true">
-      <help>Specify the maximum number of visits per participant per year that match your visit criteria.</help>
-      <suggest default="365"/>
-      <regex>\d\d*\.*\d*</regex>
-    </stringParam>
+       <filterParamNew name="dwellings_nf_maled" 
+                      metadataQueryRef="ParticipantVQ.DwellingMetaData_maled"
+                      summaryMetadataQueryRef="ParticipantVQ.DwellingMetaDataSummary_maled"
+                      ontologyQueryRef="ParticipantVQ.DwellingOntology_maled"
+                      backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd_maled"
+                      useSummaryMetadataQueryForInternalValue="true"
+                      prompt="Households"
+                      dependedParamRef="participantParams.dataset,participantParams.visits_visitage_metadata_nf_maled,participantParams.geographic_region_maled,participantParams.participants_nf_maled"
+                      trimMetadataTerms="false">
+         <help>
+              Select participants based on the characteristics of the household where they live. 
+         </help>
+       </filterParamNew>
 
-   <stringParam name="min_visits"
-		 prompt="Number of visits / year &gt;= "
-		 number="true">
-      <help>Specify the minimum number of visits per participant per year that match your visit criteria.</help>
-      <suggest default="0.1"/>
-      <regex>\d\d*\.*\d*</regex>
-    </stringParam>
+       <filterParamNew name="participants_nf_maled" 
+                      metadataQueryRef="ParticipantVQ.ParticipantMetaData_maled"
+                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
+                      backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_maled"
+                      prompt="Participants"
+                      trimMetadataTerms="false"
+                      dependedParamRef="participantParams.dataset,participantParams.visits_visitage_metadata_nf_maled,participantParams.geographic_region_maled">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParamNew>
 
-    <numberRangeParam name="visits_per_year"
-                      prompt="Visits per year:"
-                      integer="false"
-                      min="0.1"
-                      max="365">
-      <help>Set the range of number of visits that match your search criteria.</help>
-      <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
-      
-    </numberRangeParam>
-           
-   <stringParam name="max_para_density"
-		 prompt="Geometric mean parasite density &lt;= "
-		 number="true">
-      <help>Specify the maximum average parasite density across the visits that match your visit criteria.</help>
-      <suggest default="1000000"/>
-      <regex>\d\d*</regex>
-    </stringParam>
+       <filterParamNew name="visits_nf_maled" 
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_maled"
+                    summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData_maled"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
+                    prompt="Clincial Visits"
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.dataset,participantParams.visits_visitage_metadata_nf_maled,participantParams.dwellings_nf_maled,participantParams.geographic_region_maled,participantParams.participants_nf_maled">
+      <help>
+        Select participants based on their visit characteristics. 
+      </help>
+    </filterParamNew>
 
-   <stringParam name="min_para_density"
-		 prompt="Geometric mean parasite density &gt;= "
-		 number="true">
-      <help>Specify the minimum average parasite density across the visits that match your visit criteria.</help>
-      <suggest default="0"/>
-      <regex>\d\d*</regex>
-    </stringParam>
+    <filterParamNew name="visits_visitage_metadata_nf_maled" 
+                      ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf_maled"
+                      metadataQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataNf_maled"
+                      summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf_maled"
+                      backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf_maled"
+                      prompt="Age (Visit count)"
+                      dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled"
+                      trimMetadataTerms="false">
+         <help>
+              Select reference samples. 
+         </help>
+       </filterParamNew>
 
-        <numberRangeParam name="parasite_density"
-                       prompt="Parasite Density (geometric mean):"
-                       integer="true"
-                       min="0"
-                       max="1000000">
-         <help>Set the range of days between visits to compare to visits selected in the previous step</help>
-<!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
 
-       </numberRangeParam> 
-
-   <stringParam name="max_anoph"
-		 prompt="Average number of anopheles &lt;= "
-		 number="true">
-      <help>Specify the maximum average number of anopheles mosquitos collected per dwelling over the date range specified that match your criteria.</help>
-      <suggest default="1000"/>
-      <regex>\d\d*</regex>
-    </stringParam>
-
-   <stringParam name="min_anoph"
-		 prompt="Average number of anopheles &gt;= "
-		 number="true">
-      <help>Specify the minimum average number of anopheles mosquitos collected per dwelling over the date range specified that match your criteria.</help>
-      <suggest default="0"/>
-      <regex>\d\d*</regex>
-    </stringParam>
-
-   <stringParam name="end_date"
-		 prompt="Latest date to include in this search: "
-		 number="false">
-      <help>Put in the latest date to include for identifying participant visits and computing anopheles counts.</help>
-      <suggest default="30-JUN-2016"/>
-      <regex>\d\d*-\w\w\w-\d\d\d\d</regex>
-    </stringParam>
-
-   <stringParam name="start_date"
-		 prompt="Earliest date to include in this search: "
-		 number="false">
-      <!-- visibleHelp>Put in the earliest date to include for identifying participant visits and computing anopheles counts.</visibleHelp -->
-      <help>Put in the earliest date to include for identifying participant visits and computing anopheles counts.</help>
-      <suggest default="05-AUG-2011"/>
-      <regex>\d\d*-\w\w\w-\d\d\d\d</regex>
-    </stringParam>
-
-    <answerParam name="participant_result"
-                  prompt="Input Result Set"
-                  readonly="true"
-                  visible="false">
-       <recordClass ref="ParticipantRecordClasses.ParticipantRecordClass" />
-    </answerParam>
 
   </paramSet>
 
@@ -204,11 +229,11 @@
 
  <querySet name="ParticipantVQ" queryType="vocab" isCacheable="true">
 
+    <!--************************************************************-->
+    <!--   PRISM section ... should be injected  -->
+    <!--************************************************************-->
+
    <sqlQuery name="ParticipantOntology">
-     <paramRef ref="participantParams.visits_visitage_metadata_nf" />
-     <paramRef ref="clinicalVisitParams.visit_date" /> 
-     <paramRef ref="participantParams.duration_observation" />  
-     <paramRef ref="participantParams.geographic_region" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -301,12 +326,6 @@ from apidbtuning.metadata m
 
     
     <sqlQuery name="VisitOntology">
-      <paramRef ref="participantParams.visits_visitage_metadata_nf" />
-      <paramRef ref="clinicalVisitParams.visit_date" /> 
-     <paramRef ref="participantParams.duration_observation" />  
-     <paramRef ref="participantParams.dwellings_nf" />  
-     <paramRef ref="participantParams.geographic_region" />  
-     <paramRef ref="participantParams.participants_nf" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -449,8 +468,6 @@ and io.output_node_id = m.protocol_app_node_id
     </sqlQuery>
 
        <sqlQuery name="ClinicalVisitAgeOntologyNf">
-         <paramRef ref="participantParams.geographic_region" /> 
-         <paramRef ref="clinicalVisitParams.visit_date" /> 
          <column name="ontology_term_name"/>
          <column name="parent_ontology_term_name"/>
          <column name="display_name"/>
@@ -544,6 +561,29 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
       </sql>
    </sqlQuery>
 
+   <sqlQuery name="RegionOntology">
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+                  select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+                  from apidbtuning.metadataontology o, (select distinct source_id
+                  from apidbtuning.metadata
+                  where source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')) ds
+                  where ds.source_id = o.ontology_term_source_id
+                  union
+                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                  null as precision from dual
+         ]]>
+    </sql>
+   </sqlQuery>
+
     <sqlQuery name="RegionMetaData" >
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -561,11 +601,6 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
     </sqlQuery>
 
        <sqlQuery name="DwellingOntology">
-         <paramRef ref="participantParams.visits_visitage_metadata_nf" />
-         <paramRef ref="clinicalVisitParams.visit_date" /> 
-         <paramRef ref="participantParams.duration_observation" />  
-         <paramRef ref="participantParams.geographic_region" />  
-         <paramRef ref="participantParams.participants_nf" />  
         <column name="ontology_term_name"/>
         <column name="parent_ontology_term_name"/>
         <column name="display_name"/>
@@ -715,6 +750,455 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 
     </sqlQuery>
 
+    <!--************************************************************-->
+    <!--   MAL-ED section ... should be injected  -->
+    <!--************************************************************-->
+
+   <sqlQuery name="ParticipantOntology_maled">
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+with leaf as ( 
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o, 
+(select distinct term
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
+ and category = 'Participant'
+ and source_id != 'EUPATH_0000032') md
+ where o.ontology_term_name = md.term),
+first as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ where o.ontology_term_name = par.parent_ontology_term_name),
+ second as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ where o.ontology_term_name = gpar.parent_ontology_term_name)
+ select * from leaf
+ union
+ select * from first
+ union
+ select * from second
+ union
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ where o.ontology_term_name = ggpar.parent_ontology_term_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_maled" isCacheable="true">
+     <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
+      <paramRef ref="participantParams.geographic_region_maled" />  
+     <paramRef ref="participantParams.dataset" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+  from apidbtuning.protocolappnodeio iov, apidbtuning.metadata m
+   where iov.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
+       and iov.input_type_source_id = 'EUPATH_0000096'
+       and iov.input_node_id = m.protocol_app_node_id
+       and m.dataset_name = $$dataset$$
+       and m.category = 'Participant'
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_maled">
+      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
+      <paramRef ref="participantParams.geographic_region_maled" />  
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+from apidbtuning.metadata m
+ where m.dataset_name = $$dataset$$
+ and m.category = 'Participant'
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    
+    <sqlQuery name="VisitOntology_maled">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+         <![CDATA[
+with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o, 
+(select distinct term
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
+ and category = 'Event'
+ and source_id != 'EUPATH_0000094') md
+ where o.ontology_term_name = md.term),
+first as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ where o.ontology_term_name = par.parent_ontology_term_name),
+ second as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ where o.ontology_term_name = gpar.parent_ontology_term_name)
+ select * from leaf
+ union
+ select * from first
+ union
+ select * from second
+ union
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ where o.ontology_term_name = ggpar.parent_ontology_term_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+       <sqlQuery name="VisitMetaData_maled" isCacheable="true">
+         <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
+         <paramRef ref="participantParams.dwellings_nf_maled" />  
+         <paramRef ref="participantParams.geographic_region_maled" />  
+         <paramRef ref="participantParams.participants_nf_maled" />  
+         <paramRef ref="participantParams.dataset" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select distinct valid.visit_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m, (
+select distinct io.output_node_id as visit_id, io.input_node_id as part_id
+from apidbtuning.protocolappnodeio io
+where io.input_node_id in ($$dwellings_nf_maled$$)
+and io.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
+) valid
+ where m.dataset_name = $$dataset$$
+ and m.category = 'Event'
+ and m.protocol_app_node_id = valid.visit_id
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+    <sqlQuery name="VisitSummaryMetaData_maled" isCacheable="true">
+      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
+      <paramRef ref="participantParams.dwellings_nf_maled" />  
+      <paramRef ref="participantParams.geographic_region_maled" />  
+      <paramRef ref="participantParams.participants_nf_maled" />  
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct valid.part_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata m, (
+select distinct io.output_node_id as visit_id, io.input_node_id as part_id
+from apidbtuning.protocolappnodeio io
+where io.input_node_id in ($$dwellings_nf_maled$$)
+and io.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
+) valid
+ where m.dataset_name = $$dataset$$
+ and m.category = 'Event'
+ and m.protocol_app_node_id = valid.visit_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaDataBkgd_maled">
+      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
+      <paramRef ref="participantParams.dwellings_nf_maled" />  
+      <paramRef ref="participantParams.geographic_region_maled" />  
+      <paramRef ref="participantParams.participants_nf_maled" />  
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+ select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata 
+ where dataset_name = $$dataset$$
+ and category = 'Event'
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ClinicalVisitAgeOntologyNf_maled">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+        <![CDATA[
+                       select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o
+where ontology_term_source_id in ('EUPATH_0000113','EUPATH_0000644')
+and dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
+union
+                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                 null as precision from dual
+    ]]>   
+        </sql>
+      </sqlQuery>
+          
+   <sqlQuery name="ClinicalVisitAgeMetaDataNf_maled" isCacheable="true">
+      <paramRef ref="participantParams.geographic_region_maled" /> 
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct m.Protocol_App_Node_Id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+  where io.input_node_id in ($$geographic_region_maled$$)
+  and Io.Output_Type_Source_Id = 'EUPATH_0000738'
+ and io.output_node_id = m.protocol_app_node_id
+ and m.dataset_name = $$dataset$$
+ and m.category = 'Event'
+ and m.source_id = 'EUPATH_0000644'
+         ]]>   
+      </sql>
+   </sqlQuery>
+
+   <sqlQuery name="SummaryClinicalVisitAgeMetaDataNf_maled" isCacheable="true">
+      <paramRef ref="participantParams.geographic_region_maled" /> 
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct io.input_Node_Id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+  where io.input_node_id in ($$geographic_region_maled$$)
+  and Io.Output_Type_Source_Id = 'EUPATH_0000738'
+ and io.output_node_id = m.protocol_app_node_id
+ and m.dataset_name = $$dataset$$
+ and m.category = 'Event'
+ and m.source_id = 'EUPATH_0000644'
+         ]]>   
+      </sql>
+   </sqlQuery>
+
+      <sqlQuery name="ClinicalVisitAgeMetaDataBkgdNf_maled" >
+      <paramRef ref="participantParams.geographic_region_maled" /> 
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from apidbtuning.metadata
+ where dataset_name = $$dataset$$
+ and category = 'Event'
+ and source_id = 'EUPATH_0000644'
+          ]]>   
+      </sql>
+   </sqlQuery>
+
+   <sqlQuery name="RegionOntology_maled">
+     <paramRef ref="participantParams.dataset" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+                  select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+                  from apidbtuning.metadataontology o, (select distinct source_id
+                  from apidbtuning.metadata
+                  where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
+                  and source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+                  and category = 'Household') ds
+                  where ds.source_id = o.ontology_term_source_id
+                  union
+                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                  null as precision from dual
+         ]]>
+    </sql>
+   </sqlQuery>
+
+    <sqlQuery name="RegionMetaData_maled" >
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select io.output_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+ where m.dataset_name = $$dataset$$
+ and m.category = 'Household'
+ and m.source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+ and m.protocol_app_node_id = io.input_node_id
+ and io.output_type_source_id = 'EUPATH_0000096'
+        ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="DwellingOntology_maled">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+   with leaf as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o, 
+(select distinct term
+ from apidbtuning.metadata
+ where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
+ and category = 'Household'
+ and source_id != 'EUPATH_0000094') md
+ where o.ontology_term_name = md.term),
+first as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ where o.ontology_term_name = par.parent_ontology_term_name),
+ second as (
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ where o.ontology_term_name = gpar.parent_ontology_term_name)
+ select * from leaf
+ union
+ select * from first
+ union
+ select * from second
+ union
+ select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ where o.ontology_term_name = ggpar.parent_ontology_term_name
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="DwellingMetaDataSummary_maled" isCacheable="true">
+      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
+      <paramRef ref="participantParams.geographic_region_maled" />  
+      <paramRef ref="participantParams.participants_nf_maled" />  
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+  from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
+   where pa.protocol_app_node_id in ($$participants_nf_maled$$)
+       and pa.protocol_app_node_id = io.output_node_id)
+ select distinct Part.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, part
+ where m.dataset_name = $$dataset$$
+ and m.category = 'Household'
+ and part.dwelling_id = m.protocol_app_node_id
+          ]]>
+    </sql>    
+
+    </sqlQuery>
+
+    <sqlQuery name="DwellingMetaData_maled" isCacheable="true">
+      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
+      <paramRef ref="participantParams.geographic_region_maled" />  
+      <paramRef ref="participantParams.participants_nf_maled" />  
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+  from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
+   where pa.protocol_app_node_id in ($$participants_nf_maled$$)
+       and pa.protocol_app_node_id = io.output_node_id)
+ select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, part
+ where m.dataset_name = $$dataset$$
+ and m.category = 'Household'
+ and part.dwelling_id = m.protocol_app_node_id
+          ]]>
+    </sql>    
+
+    </sqlQuery>
+
+    <sqlQuery name="DwellingMetaDataBkgd_maled">
+      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
+      <paramRef ref="participantParams.geographic_region_maled" />  
+      <paramRef ref="participantParams.participants_nf_maled" />  
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+  from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
+   where pa.protocol_app_node_id = io.output_node_id)
+ select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from apidbtuning.metadata m, part
+ where m.dataset_name = $$dataset$$
+ and m.category = 'Household'
+ and part.dwelling_id = m.protocol_app_node_id
+          ]]>
+    </sql>    
+
+    </sqlQuery>
+
   </querySet>    
 
       <groupSet name="metaDataGroups">
@@ -767,17 +1251,24 @@ You can restrict visits returned based on participants by selecting characterist
         <group name="geographic_loc" displayName="Geographic Region" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
-        <group name="visit_visit_characteristics" displayName="Visit visits" displayType="ShowHide">
+        <group name="visit_visit_characteristics" displayName="Visits" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can restrict the visits returned in your search by selecting characteristics such as the type of visit, diagnosis, visit tpye, etc.
+You can restrict the events returned in your search by selecting characteristics such as the type of event, diagnosis, event type, etc.
                 ]]>
             </description>
         </group>
         <group name="visit_characteristics" displayName="Visits" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on observations at visits.  Visits shown are from the period when the selected participants meet the age range specified in the Age filter    
+    Filter events based on observations at visits.  Visits shown are from the period when the selected participants meet the age range specified in the Age filter    
+             ]]>
+            </description>
+        </group>
+        <group name="event_characteristics" displayName="Events" displayType="ShowHide">
+            <description>
+                <![CDATA[
+    Filter events based on observations at those events. 
              ]]>
             </description>
         </group>
@@ -788,6 +1279,13 @@ You can restrict the visits returned in your search by selecting characteristics
                 ]]>
             </description>
         </group>
+       <group name="part_event_characteristics" displayName="Events" displayType="ShowHide">
+            <description>
+                <![CDATA[
+    Filter participants based on observations at events.     
+                ]]>
+            </description>
+        </group>
         <group name="summary_params" displayName="Visit aggregates" displayType="ShowHide">
             <description>
                 <![CDATA[
@@ -795,10 +1293,25 @@ You can further restrict the participants returned in your search by setting sum
                 ]]>
             </description>
         </group>
+        <group name="event_summary_params" displayName="# Events selected" displayType="ShowHide">
+            <description>
+                <![CDATA[
+You can further restrict the participants returned in your search by setting a range of the number of events per participant that meet your search criteria. 
+                ]]>
+            </description>
+        </group>
         <group name="relative_visits" displayName="Relative visits" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can further restrict the visits you have selected above by removing (or keeping) those visits based on a relative visit you define below.  For example, you may want to only keep visits with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a visit where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove visits where diagnosis of malaria = yes.
+                ]]>
+            </description>
+        </group>
+
+        <group name="relative_events" displayName="Relative events" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         You can further restrict the events you have selected above by removing (or keeping) those events based on a relative event you define below.  For example, you may want to only keep diarrheal events if they are followed between 0 - 5 days by an event where a laboratory test was positive for shigella. 
                 ]]>
             </description>
         </group>
