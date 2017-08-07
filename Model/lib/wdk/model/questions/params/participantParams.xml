@@ -211,7 +211,7 @@
                       metadataQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataNf_maled"
                       summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf_maled"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf_maled"
-                      prompt="Age at visit"
+                      prompt="Age (Visit count)"
                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled"
                       trimMetadataTerms="false">
          <help>
@@ -797,7 +797,7 @@ first as (
 
    <sqlQuery name="ParticipantMetaData_maled" isCacheable="true">
      <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" />
-     <paramRef ref="participantParams.geographic_region_maled" />  
+      <paramRef ref="participantParams.geographic_region_maled" />  
      <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1251,17 +1251,24 @@ You can restrict visits returned based on participants by selecting characterist
         <group name="geographic_loc" displayName="Geographic Region" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
-        <group name="visit_visit_characteristics" displayName="Visit visits" displayType="ShowHide">
+        <group name="visit_visit_characteristics" displayName="Visits" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can restrict the visits returned in your search by selecting characteristics such as the type of visit, diagnosis, visit tpye, etc.
+You can restrict the events returned in your search by selecting characteristics such as the type of event, diagnosis, event type, etc.
                 ]]>
             </description>
         </group>
         <group name="visit_characteristics" displayName="Visits" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on observations at visits.  Visits shown are from the period when the selected participants meet the age range specified in the Age filter    
+    Filter events based on observations at visits.  Visits shown are from the period when the selected participants meet the age range specified in the Age filter    
+             ]]>
+            </description>
+        </group>
+        <group name="event_characteristics" displayName="Events" displayType="ShowHide">
+            <description>
+                <![CDATA[
+    Filter events based on observations at those events. 
              ]]>
             </description>
         </group>
@@ -1272,6 +1279,13 @@ You can restrict the visits returned in your search by selecting characteristics
                 ]]>
             </description>
         </group>
+       <group name="part_event_characteristics" displayName="Events" displayType="ShowHide">
+            <description>
+                <![CDATA[
+    Filter participants based on observations at events.     
+                ]]>
+            </description>
+        </group>
         <group name="summary_params" displayName="Visit aggregates" displayType="ShowHide">
             <description>
                 <![CDATA[
@@ -1279,10 +1293,25 @@ You can further restrict the participants returned in your search by setting sum
                 ]]>
             </description>
         </group>
+        <group name="event_summary_params" displayName="# Events selected" displayType="ShowHide">
+            <description>
+                <![CDATA[
+You can further restrict the participants returned in your search by setting a range of the number of events per participant that meet your search criteria. 
+                ]]>
+            </description>
+        </group>
         <group name="relative_visits" displayName="Relative visits" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can further restrict the visits you have selected above by removing (or keeping) those visits based on a relative visit you define below.  For example, you may want to only keep visits with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a visit where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove visits where diagnosis of malaria = yes.
+                ]]>
+            </description>
+        </group>
+
+        <group name="relative_events" displayName="Relative events" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         You can further restrict the events you have selected above by removing (or keeping) those events based on a relative event you define below.  For example, you may want to only keep diarrheal events if they are followed between 0 - 5 days by an event where a laboratory test was positive for shigella. 
                 ]]>
             </description>
         </group>

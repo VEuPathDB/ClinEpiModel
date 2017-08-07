@@ -18,15 +18,37 @@
                 </text>                
             </idAttribute>
 
-      <!-- =============================================================== -->
-      <!--  Summary & record views -->
-      <!-- =============================================================== -->
+            <textAttribute name="demo_plot_heightweight_compact" displayName="Weight for Height Z - DEMO Graph"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&thumb=1"/>
+                    ]]>
+              </text>
+            </textAttribute>
 
-<!-- TODO: why do we need this?
-      <summaryView name="isolate-view" display="Participants Geographical Location"
-            jsp="/wdkCustomization/jsp/results/participant-geographical-view.jsp"
-          handlerClass="org.clinepi.model.view.GeoParticipantViewHandler"/>
--->
+            <textAttribute name="demo_plot_weightage_compact" displayName="Weight for Age Z - DEMO Graph"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&thumb=1"/>
+                    ]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="demo_plot_heightage_compact" displayName="Height for Age Z - DEMO Graph"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&thumb=1"/>
+                    ]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="demo_plot_record" displayName="Weight for Height Z">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734" type=""image/svg+xml"/>
+                    ]]>
+              </text>
+            </textAttribute>
 
       <!-- =============================================================== -->
       <!--  Step Analysis Plugins -->
@@ -69,9 +91,27 @@
 -->
 
 
+<!--
+       <table name="EventGraph"
+              displayName="Event Summary Graph"
+              queryRef="ParticipantTables.EventGraph">
+            <textAttribute name="demo_plot" displayName="Participant Event Summary">
+              <text>
+              <![CDATA[
+                   <object
+                      data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&compact=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734"/
+                      type='image/svg+xml'
+                   </object>
+                    ]]>
+              </text>
+            </textAttribute>
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+       </table>
+
+-->
          <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
 
-         
 
         <table name="Characteristics"
                displayName="Participant Characteristics"
@@ -82,21 +122,27 @@
             <columnAttribute name="parentTerm" displayName="Category"/>
         </table>
 
-<!--
+
          <table name="Visits"
-                 displayName="Clinical Visits"
-                 queryRef="ParticipantTables.Visits">
+                 displayName="Events"
+                 queryRef="ParticipantTables.Visits"
+                 attributeMetaQueryRef="ParticipantTables.EventsColumnAttributes">
             <columnAttribute name="source_id" internal="true"/>
             <columnAttribute name="project_id" internal="true"/>
             <columnAttribute name="link" internal="true"/>
+            <columnAttribute name="name" internal="true"/>
+
+
+            <!-- TODO:  this needs to be a property -->
             <linkAttribute name="db_link" displayName="Date of Visit" inReportMaker="false">
                  <displayText>
                     <![CDATA[
-                    $$EUPATH_0000091$$
+                    $$name$$
                     ]]>
                  </displayText>
                  <url>$$link$$</url>
             </linkAttribute>
+<!--
             <columnAttribute name="EUPATH_0000040" displayName="Complicated malaria"/>
             <columnAttribute name="EUPATH_0000338" displayName="Malaria diagnosis and parasite status"/>
             <columnAttribute name="EUPATH_0000311" displayName="Visit type"/>
@@ -105,9 +151,10 @@
             <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
             <columnAttribute name="EUPATH_0000092" displayName="Asexual parasite density"/>
             <columnAttribute name="EUPATH_0000100" displayName="Fever (subjective)"/>
+-->
           </table>
 
-
+<!--
         <table name="Samples"
                displayName="Samples Collected From Participant"
                queryRef="ParticipantTables.Samples">
@@ -265,31 +312,73 @@ WHERE o.dataset_name = '&&datasetName&&'
             </sql>
         </sqlQuery>
 
+      <sqlQuery name="EventGraph"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="project_id"/>
+<!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
+         <sqlParamValue name="datasetName"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></sqlParamValue>
+            <sql>
+            <![CDATA[
+SELECT pan_name  AS source_id,
+  '@PROJECT_ID@' AS project_id,
+FROM apidbtuning.metadata
+WHERE dataset_name = '&&datasetName&&'
+AND category       = 'Participant'
+/** TODO:  add this back in when we can make this a tree on the record page
+UNION
+SELECT pa.name                AS source_id,
+  '@PROJECT_ID@'              AS project_id,
+  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
+  ontology_term_name          AS term
+FROM apidbtuning.metadataontology o,
+  apidbtuning.participantattributes pa
+WHERE o.dataset_name = '&&datasetName&&'
+**/
+            ]]>
+            </sql>
+        </sqlQuery>
 
 
-      <sqlQuery name="Visits"  isCacheable='false'>
+
+      <sqlQuery name="EventsColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+
+          <sqlParamValue name="eventColumns"><![CDATA['EUPATH_0000644','BFO_0000015']]></sqlParamValue>
+
+<!--
+          <sqlParamValue name="eventColumns"><![CDATA['EUPATH_0000091','EUPATH_0000113','EUPATH_0000311','EUPATH_0000338','EUPATH_0000100','EUPATH_0000110','EUPATH_0000092','EUPATH_0000040']]></sqlParamValue>
+-->
+          <sql>
+            <![CDATA[
+                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&eventColumns&&)
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+      <sqlQuery name="Visits"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.EventsColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
 
-            <!-- These to be made dynamic -->
-            <column name="EUPATH_0000091"/>
-            <column name="EUPATH_0000113"/>
-            <column name="EUPATH_0000311"/>
-            <column name="EUPATH_0000338"/>
-            <column name="EUPATH_0000100"/>
-            <column name="EUPATH_0000110"/>
-            <column name="EUPATH_0000092"/>
-            <column name="EUPATH_0000040"/>
 
            <column name="link"/>
+           <column name="name"/>
 
+         <sqlParamValue name="visitSourceIds"><![CDATA[EUPATH_0000644,BFO_0000015]]></sqlParamValue>
+         <sqlParamValue name="orderBy"><![CDATA[EUPATH_0000644]]></sqlParamValue>
+
+
+<!--
          <sqlParamValue name="visitSourceIds"><![CDATA[EUPATH_0000091,EUPATH_0000113,EUPATH_0000311,EUPATH_0000338,EUPATH_0000100,EUPATH_0000110,EUPATH_0000092,EUPATH_0000040]]></sqlParamValue>
          <sqlParamValue name="orderBy"><![CDATA[EUPATH_0000091]]></sqlParamValue>
+-->
             <sql>
             <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&visitSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link
+                   '@WEBAPP_BASE_URL@/record/event/'||cv.name||'/@PROJECT_ID@' as link, cv.name
               from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.protocolappnodeio io
@@ -317,7 +406,7 @@ select pa.name as source_id,
                  <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
+                   '@WEBAPP_BASE_URL@/record/event/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
               from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.sampleattributes sa
