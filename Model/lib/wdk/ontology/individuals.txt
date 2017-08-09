@@ -42,3 +42,5 @@ LightTrapAttributes.LightTrapAttributesMeta	http://edamontology.org/topic_3305	E
 DwellingAttributes.DwellingAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	attributeMetaQuery	DwellingAttributes.DwellingAttributesMeta				gene		results	download	
 													
 DwellingAttributes.HouseholdMembersColumnAttributes	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	attributeMetaQuery	DwellingTables.HouseholdMembersColumnAttributes				gene			record-internal	
+ParticipantAttributes.ShinyCharacteristicsColumnAttributes	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attributeMetaQuery	ParticipantTables.ShinyCharacteristicsColumnAttributes							record-internal	
+ParticipantRecordClasses.ParticipantRecordClass.ShinyCharacteristics	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	ShinyCharacteristics					2	record	download	
