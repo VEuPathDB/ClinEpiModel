@@ -40,7 +40,10 @@ LightTrapRecordClasses.LightTrapRecordClass.record_overview	http://edamontology.
 LightTrapRecordClasses.LightTrapRecordClass.Characteristics	http://edamontology.org/topic_3305	Epidemiology	LightTrapRecordClasses.LightTrapRecordClass	table	Characteristics					2	record		
 LightTrapAttributes.LightTrapAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	LightTrapRecordClasses.LightTrapRecordClass	attributeMetaQuery	LightTrapAttributes.LightTrapAttributesMeta				gene		results	download	
 DwellingAttributes.DwellingAttributesMeta	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	attributeMetaQuery	DwellingAttributes.DwellingAttributesMeta				gene		results	download	
-													
 DwellingAttributes.HouseholdMembersColumnAttributes	http://edamontology.org/topic_3305	Epidemiology	DwellingRecordClasses.DwellingRecordClass	attributeMetaQuery	DwellingTables.HouseholdMembersColumnAttributes				gene			record-internal	
-ParticipantAttributes.ShinyCharacteristicsColumnAttributes	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attributeMetaQuery	ParticipantTables.ShinyCharacteristicsColumnAttributes							record-internal	
-ParticipantRecordClasses.ParticipantRecordClass.ShinyCharacteristics	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	ShinyCharacteristics					2	record	download	
+ParticipantAttributes.ShinyParticipantsColumnAttributes	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attributeMetaQuery	ParticipantTables.ShinyParticipantsColumnAttributes							record-internal	
+ParticipantRecordClasses.ParticipantRecordClass.ShinyParticipants	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	ShinyParticipants					2	record	download	
+ParticipantAttributes.ShinyHouseholdsColumnAttributes	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attributeMetaQuery	ParticipantTables.ShinyHouseholdsColumnAttributes							record-internal	
+ParticipantRecordClasses.ParticipantRecordClass.ShinyHouseholds	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	ShinyHouseholds					2	record	download	
+ParticipantAttributes.ShinyEventsColumnAttributes	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attributeMetaQuery	ParticipantTables.ShinyEventsColumnAttributes							record-internal	
+ParticipantRecordClasses.ParticipantRecordClass.ShinyEvents	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	ShinyEvents					2	record	download	

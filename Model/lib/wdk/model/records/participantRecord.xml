@@ -124,13 +124,30 @@
 
 
 
-         <table name="ShinyCharacteristics"
-                 displayName="ShinyCharacteristics"
-                 queryRef="ParticipantTables.ShinyCharacteristics"
-                 attributeMetaQueryRef="ParticipantTables.ShinyCharacteristicsColumnAttributes">
+         <table name="ShinyParticipants"
+                 displayName="ShinyParticipants"
+                 queryRef="ParticipantTables.ShinyParticipants"
+                 attributeMetaQueryRef="ParticipantTables.ShinyParticipantsColumnAttributes">
             <columnAttribute name="source_id" internal="true"/>
             <columnAttribute name="project_id" internal="true"/>
          </table>
+
+         <table name="ShinyHouseholds"
+                 displayName="ShinyHouseholds"
+                 queryRef="ParticipantTables.ShinyHouseholds"
+                 attributeMetaQueryRef="ParticipantTables.ShinyHouseholdsColumnAttributes">
+            <columnAttribute name="source_id" internal="true"/>
+            <columnAttribute name="project_id" internal="true"/>
+         </table>
+
+         <table name="ShinyEvents"
+                 displayName="ShinyEvents"
+                 queryRef="ParticipantTables.ShinyEvents"
+                 attributeMetaQueryRef="ParticipantTables.ShinyEventsColumnAttributes">
+            <columnAttribute name="source_id" internal="true"/>
+            <columnAttribute name="project_id" internal="true"/>
+         </table>
+
 
 
 
@@ -349,37 +366,86 @@ WHERE o.dataset_name = '&&datasetName&&'
             </sql>
         </sqlQuery>
 
-      <sqlQuery name="ShinyCharacteristics"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyCharacteristicsColumnAttributes">
+      <sqlQuery name="ShinyEvents"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyEventsColumnAttributes">
           <column name="source_id" />
           <column name="project_id" />
           <sql>
             <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*, ha.*, ea.*
-from APIDBTUNING.PARTICIPANTATTRIBUTES pa
-   , APIDBTUNING.HOUSEHOLDATTRIBUTES ha
-   , APIDBTUNING.EVENTATTRIBUTES ea
-   , APIDBTUNING.PROTOCOLAPPNODEIO io1
-   , APIDBTUNING.PROTOCOLAPPNODEIO io2
-where ha.PROTOCOL_APP_NODE_ID = io1.INPUT_NODE_ID
-and io1.OUTPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
-and pa.PROTOCOL_APP_NODE_ID = io2.INPUT_NODE_ID
-and io2.OUTPUT_NODE_ID = ea.PROTOCOL_APP_NODE_ID
+select pa.name as source_id, '@PROJECT_ID@' as project_id, ea.*
+from APIDBTUNING.EVENTATTRIBUTES ea
+   , APIDBTUNING.PARTICIPANTATTRIBUTES pa
+   , APIDBTUNING.PROTOCOLAPPNODEIO io
+where pa.PROTOCOL_APP_NODE_ID = io.INPUT_NODE_ID
+and io.OUTPUT_NODE_ID = ea.PROTOCOL_APP_NODE_ID
             ]]>
           </sql>
         </sqlQuery>
 
-
-      <sqlQuery name="ShinyCharacteristicsColumnAttributes"  isCacheable='false'>
+      <sqlQuery name="ShinyEventsColumnAttributes"  isCacheable='false'>
           <column name="name" />
           <column name="display_name" />
           <sql>
             <![CDATA[
-select source_id as name, source_id as display_name
-from apidbtuning.metadatatype t
-where source_id is not null
+select distinct source_id as name, source_id as display_name
+from apidbtuning.metadata m
+where m.category = 'Event'
             ]]>
           </sql>
         </sqlQuery>
+
+
+      <sqlQuery name="ShinyHouseholds"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyHouseholdsColumnAttributes">
+          <column name="source_id" />
+          <column name="project_id" />
+          <sql>
+            <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id, ha.*
+from APIDBTUNING.HOUSEHOLDATTRIBUTES ha
+   , APIDBTUNING.PARTICIPANTATTRIBUTES pa
+   , APIDBTUNING.PROTOCOLAPPNODEIO io
+where ha.PROTOCOL_APP_NODE_ID = io.INPUT_NODE_ID
+and io.OUTPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
+            ]]>
+          </sql>
+        </sqlQuery>
+
+      <sqlQuery name="ShinyHouseholdsColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+          <sql>
+            <![CDATA[
+select distinct source_id as name, source_id as display_name
+from apidbtuning.metadata m
+where m.category = 'Household'
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+      <sqlQuery name="ShinyParticipants"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyParticipantsColumnAttributes">
+          <column name="source_id" />
+          <column name="project_id" />
+          <sql>
+            <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*
+from APIDBTUNING.PARTICIPANTATTRIBUTES pa
+            ]]>
+          </sql>
+        </sqlQuery>
+
+      <sqlQuery name="ShinyParticipantsColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+          <sql>
+            <![CDATA[
+select distinct source_id as name, source_id as display_name
+from apidbtuning.metadata m
+where m.category = 'Participant'
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
 
 
 
