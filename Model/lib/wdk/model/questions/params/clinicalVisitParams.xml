@@ -137,9 +137,18 @@
       <help>Minimum age at visit.</help>
     </flatVocabParam>
 -->
+    <numberRangeParam name="num_relative_events"
+                       prompt="Number of matching relative events: "
+                       integer="true"
+                       min="1"
+                       max="1000">
+         <help>Set the range of the number of matching events in order to keep or remove the visit from the previous step.</help>
+         <suggest default="{'min': '1', 'max': '20'}" />  
+
+       </numberRangeParam> 
 
     <numberRangeParam name="days_between"
-                       prompt="Days between visits: "
+                       prompt="Days between events: "
                        integer="true"
                        min="0"
                        max="1000">
@@ -185,7 +194,7 @@
     </enumParam>
 
     <flatVocabParam name="use_relative_visits"
-               prompt="Use relative visits"
+               prompt="Use relative events"
                multiPick="false"
                quote="false"
                visible="true"
@@ -195,7 +204,7 @@
 
 
     <flatVocabParam name="dateOperator_fv"
-               prompt="Keep or Remove visits "
+               prompt="Keep or Remove events from previous step matching these criteria"
                multiPick="false"
                quote="false"
                visible="true"

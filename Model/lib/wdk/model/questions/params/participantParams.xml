@@ -198,7 +198,7 @@
                     summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
-                    prompt="Clincial Visits"
+                    prompt="Events"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset,participantParams.visits_visitage_metadata_nf_maled,participantParams.dwellings_nf_maled,participantParams.geographic_region_maled,participantParams.participants_nf_maled">
       <help>
@@ -211,7 +211,7 @@
                       metadataQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataNf_maled"
                       summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf_maled"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf_maled"
-                      prompt="Age (Visit count)"
+                      prompt="Events"
                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled"
                       trimMetadataTerms="false">
          <help>

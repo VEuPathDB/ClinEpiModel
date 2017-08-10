@@ -180,6 +180,7 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_00000
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf_maled" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/>
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_Gates_MAL-ED_stdm_tp_RSRC" groupRef="metaDataGroups.event_summary_params"/>
@@ -197,7 +198,7 @@ from (select distinct io.input_node_id,io.output_node_id,ca.EUPATH_0000644 from 
       where ca.protocol_app_node_id in ($$visits_nf_maled$$)
       and ca.protocol_app_node_id = io.output_node_id
 $$dateOperator_fv$$
- select distinct ioa.input_node_id,ioa.output_node_id,seta.EUPATH_0000644
+ select ioa.input_node_id,ioa.output_node_id,seta.EUPATH_0000644
  from APIDBTUNING.eventattributes seta, APIDBTUNING.eventattributes setb, apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob
  where seta.protocol_app_node_id in ($$visits_nf_maled$$)
 and $$use_relative_visits$$ = 1
@@ -207,10 +208,11 @@ and setb.protocol_app_node_id = iob.output_node_id
 and ioa.input_node_id = iob.input_node_id
 and seta.protocol_app_node_id != setb.protocol_app_node_id
 and setb.EUPATH_0000644 $$date_direction_fv$$ seta.EUPATH_0000644  
-and CASE WHEN '$$date_direction_fv$$' = '>=' THEN setb.EUPATH_0000644 - seta.EUPATH_0000644 ELSE seta.EUPATH_0000644 - setb.EUPATH_0000644 END >= $$days_between.min$$
-and CASE WHEN '$$date_direction_fv$$' = '>=' THEN setb.EUPATH_0000644 - seta.EUPATH_0000644 ELSE seta.EUPATH_0000644 - setb.EUPATH_0000644 END <= $$days_between.max$$
 and abs(setb.EUPATH_0000644 - seta.EUPATH_0000644) >= $$days_between.min$$
 and abs(setb.EUPATH_0000644 - seta.EUPATH_0000644) <= $$days_between.max$$
+group by ioa.input_node_id,ioa.output_node_id,seta.EUPATH_0000644
+having count(*) >= $$num_relative_events.min$$
+and count(*) <= $$num_relative_events.max$$
 ) main, apidbtuning.participantattributes pa
 where pa.protocol_app_node_id = main.input_node_id
 group by pa.name 
