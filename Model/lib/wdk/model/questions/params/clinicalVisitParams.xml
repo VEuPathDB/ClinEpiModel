@@ -572,7 +572,7 @@ with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protoc
        and pa.protocol_app_node_id = io.output_node_id
        and io.input_node_id = dw.protocol_app_node_id)
  select distinct Part.visit_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
@@ -612,7 +612,7 @@ with part as ( select distinct dw.protocol_app_node_id as dwelling_id, pa.protoc
        and pa.protocol_app_node_id = io.output_node_id
        and io.input_node_id = dw.protocol_app_node_id)
  select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
@@ -654,7 +654,7 @@ with part as ( select distinct iod.input_node_id as dwelling_id,pa.protocol_app_
    and pa.protocol_app_node_id = iod.output_node_id
 )
  select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
@@ -729,7 +729,7 @@ first as (
 from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
-   ) age, apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
+   ) age, ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
 where io.output_node_id in ($$geographic_region$$)
    and io.input_node_id = pa.protocol_app_node_id
    AND least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
@@ -760,7 +760,7 @@ where io.output_node_id in ($$geographic_region$$)
 from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
-   ) age, apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
+   ) age, ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io, apidbtuning.participantattributes pa
 where io.output_node_id in ($$geographic_region$$)
    and io.input_node_id = pa.protocol_app_node_id
    AND least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
@@ -788,7 +788,7 @@ where io.output_node_id in ($$geographic_region$$)
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m
+from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
           ]]>
@@ -892,13 +892,13 @@ first as (
          <sql>
            <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m
+ from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
  and m.category = 'Visit'
  and m.protocol_app_node_id in ($$dwellings_nf$$)
  union
  select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
 where dataset_name = $$dataset$$
 and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
@@ -926,12 +926,12 @@ and io.input_node_id in ($$dwellings_nf$$)
          <sql>
            <![CDATA[
  select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata 
+ from ApidbTuning.MetaDataWithoutNulls 
  where dataset_name = $$dataset$$
  and category = 'Visit'
  union
  select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
 where dataset_name = $$dataset$$
 and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
@@ -951,13 +951,13 @@ and io.output_node_id = m.protocol_app_node_id
         <![CDATA[
                 select distinct protocol_app_node_id as internal, term as ontology_term_name,
                        string_value, number_value, date_value
-                from apidbtuning.metadata 
+                from ApidbTuning.MetaDataWithoutNulls 
                 where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
                   and category = 'Visit'
               union
                 select io.input_node_id as internal, m.term as ontology_term_name,
                        m.string_value, m.number_value, m.date_value
-                from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+                from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
                 where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
                   and m.category = 'Specimen type' 
                   and m.term = 'Specimen type'
@@ -983,7 +983,7 @@ and io.output_node_id = m.protocol_app_node_id
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-  from apidbtuning.protocolappnodeio iov, apidbtuning.metadata m
+  from apidbtuning.protocolappnodeio iov, ApidbTuning.MetaDataWithoutNulls m
    where iov.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
        and iov.input_type_source_id = 'EUPATH_0000096'
        and iov.input_node_id = m.protocol_app_node_id
@@ -1005,7 +1005,7 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
      <sql>
          <![CDATA[
 select distinct iov.output_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-  from apidbtuning.protocolappnodeio iov, apidbtuning.metadata m
+  from apidbtuning.protocolappnodeio iov, ApidbTuning.MetaDataWithoutNulls m
    where iov.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
        and iov.input_type_source_id = 'EUPATH_0000096'
        and iov.input_node_id = m.protocol_app_node_id
@@ -1027,7 +1027,7 @@ select distinct iov.output_node_id as internal, m.term as ontology_term_name, m.
       <sql>
         <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m
+from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Participant'
           ]]>
@@ -1048,7 +1048,7 @@ from apidbtuning.metadata m
          <sql>
            <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m 
+ from ApidbTuning.MetaDataWithoutNulls m 
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Event'
  and m.protocol_app_node_id in ($$dwellings_nf_maled$$)
@@ -1070,7 +1070,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
         <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m 
+ from ApidbTuning.MetaDataWithoutNulls m 
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Event'
           ]]>
@@ -1088,7 +1088,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
         <![CDATA[
   select distinct io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where io.output_type_source_id = 'EUPATH_0000096'
  and io.output_node_id = ioe.input_node_id
@@ -1113,7 +1113,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
         <![CDATA[
   select distinct io.event_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where io.output_type_source_id = 'EUPATH_0000096'
  and io.output_node_id = ioe.input_node_id
@@ -1138,7 +1138,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
         <![CDATA[
   select distinct io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where io.output_type_source_id = 'EUPATH_0000096'
  and io.output_node_id = ioe.input_node_id
@@ -1161,7 +1161,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
         <![CDATA[
 select io.event_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where io.input_type_source_id = 'PCO_0000024'
  and io.output_node_id = ioe.input_node_id
@@ -1184,7 +1184,7 @@ select io.event_id as internal, m.term as ontology_term_name, m.string_value, m.
       <sql>
         <![CDATA[
 select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where io.input_type_source_id = 'PCO_0000024'
  and io.output_node_id = ioe.input_node_id
@@ -1210,7 +1210,7 @@ select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.num
       <sql>
          <![CDATA[
 select io.event_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where ioe.output_node_id in ($$participants_nf_maled$$)
  and io.output_node_id = ioe.input_node_id
@@ -1236,7 +1236,7 @@ select io.event_id as internal, m.term as ontology_term_name, m.string_value, m.
       <sql>
          <![CDATA[
 select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where ioe.output_node_id in ($$participants_nf_maled$$)
  and io.output_node_id = ioe.input_node_id
@@ -1262,7 +1262,7 @@ select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.num
       <sql>
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m
+ from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Household'
           ]]>
@@ -1320,7 +1320,7 @@ first as (
         <![CDATA[
                 select distinct protocol_app_node_id as internal, term as ontology_term_name,
                        string_value, number_value, date_value
-                from apidbtuning.metadata 
+                from ApidbTuning.MetaDataWithoutNulls 
                 where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
                 and category = 'Event'
           ]]>

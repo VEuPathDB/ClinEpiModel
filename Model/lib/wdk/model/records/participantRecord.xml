@@ -387,7 +387,7 @@ and io.OUTPUT_NODE_ID = ea.PROTOCOL_APP_NODE_ID
           <sql>
             <![CDATA[
 select distinct source_id as name, source_id as display_name
-from apidbtuning.metadata m
+from ApidbTuning.MetaDataWithoutNulls m
 where m.category = 'Event'
             ]]>
           </sql>
@@ -415,7 +415,7 @@ and io.OUTPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
           <sql>
             <![CDATA[
 select distinct source_id as name, source_id as display_name
-from apidbtuning.metadata m
+from ApidbTuning.MetaDataWithoutNulls m
 where m.category = 'Household'
             ]]>
           </sql>
@@ -439,7 +439,7 @@ from APIDBTUNING.PARTICIPANTATTRIBUTES pa
           <sql>
             <![CDATA[
 select distinct source_id as name, source_id as display_name
-from apidbtuning.metadata m
+from ApidbTuning.MetaDataWithoutNulls m
 where m.category = 'Participant'
             ]]>
           </sql>

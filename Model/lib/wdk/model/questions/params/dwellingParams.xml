@@ -167,7 +167,7 @@ first as (
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m
+ from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
  and m.category = 'Dwelling type'
  union
@@ -193,7 +193,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m
+ from ApidbTuning.MetaDataWithoutNulls m
  where m.protocol_app_node_id in ($$geographic_region$$)
  union
  select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
@@ -305,7 +305,7 @@ first as (
      <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
@@ -327,7 +327,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
      <sql>
          <![CDATA[
 select distinct io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
@@ -349,7 +349,7 @@ from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
