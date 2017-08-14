@@ -765,6 +765,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
      <column name="is_range"/>
     <sql>
          <![CDATA[
+select * from (
 with leaf as ( 
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
@@ -791,6 +792,7 @@ first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
+ ) order by ontology_term_name
          ]]>
     </sql>
    </sqlQuery>
@@ -848,6 +850,7 @@ from ApidbTuning.MetaDataWithoutNulls m
       <column name="is_range"/>
       <sql>
          <![CDATA[
+select * from (
 with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
@@ -873,6 +876,7 @@ first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
+ ) order by ontology_term_name
          ]]>
     </sql>
    </sqlQuery>
@@ -1093,6 +1097,7 @@ select io.output_node_id as internal, m.term as ontology_term_name, m.string_val
       <column name="precision"/>
       <column name="is_range"/>
       <sql>
+select * from (
    with leaf as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
@@ -1119,6 +1124,7 @@ first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
+ ) order by ontology_term_name
     </sql>
     </sqlQuery>
 
