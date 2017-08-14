@@ -1308,7 +1308,7 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="relative_events" displayName="Relative events" displayType="ShowHide">
+        <group name="relative_events" displayName="Comparison events" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can further restrict the events you have selected above by removing (or keeping) those events based on a relative event you define below.  For example, you may want to only keep diarrheal events if they are followed between 0 - 5 days by an event where a laboratory test was positive for shigella. 

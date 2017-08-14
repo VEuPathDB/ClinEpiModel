@@ -332,14 +332,15 @@
 
         <sqlQuery name="dateOperator">
           <paramRef ref="clinicalVisitParams.use_relative_visits" />  
+          <column name="display" />
           <column name="internal" />
           <column name="term" />
           <sql>
             <![CDATA[
                      SELECT * from (
-                     SELECT 'remove' as term, 'MINUS' as internal from dual
+                     SELECT 'Remove' as display, 'remove' as term, 'MINUS' as internal from dual
                      UNION
-                     SELECT 'keep' as term, 'INTERSECT' as internal from dual
+                     SELECT 'Keep' as display, 'keep' as term, 'INTERSECT' as internal from dual
                      where $$use_relative_visits$$ = 1  )
                      ORDER by term desc
             ]]>
