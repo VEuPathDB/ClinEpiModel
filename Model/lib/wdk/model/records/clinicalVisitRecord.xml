@@ -28,7 +28,7 @@
       <!--  Step Analysis Plugins -->
       <!-- =============================================================== -->
 
-             <stepAnalysisRef name="clinical-visit-dist"/>
+<!--             <stepAnalysisRef name="clinical-visit-dist"/> -->
 
      
  <!-- =============================================================== -->

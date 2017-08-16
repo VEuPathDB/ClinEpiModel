@@ -54,7 +54,7 @@
       <!--  Step Analysis Plugins -->
       <!-- =============================================================== -->
 
-<!--            <stepAnalysisRef name="person-graph-analysis"/>  -->
+            <stepAnalysisRef name="participant_filter_like"/> 
       
       <!-- =============================================================== -->
       <!--   Reporters -->  
