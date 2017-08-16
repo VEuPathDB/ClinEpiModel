@@ -41,8 +41,9 @@
       <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 
+<!--
 <stepAnalysisPlugin
-        name="participant_filter_like" displayName="Participant Analysis"
+        name="clinepi-event-dist" displayName="Participant Analysis"
         releaseVersion="1"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
@@ -53,14 +54,35 @@
       </shortDescription>
       <description/>
       <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
-      <property name="externalAppUrl"><![CDATA[/shiny/App-1-cv]]></property>
+      <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
       <property name="attributesToExtract"></property>
       <property name="tablesToExtract">ShinyParticipants,ShinyHouseholds,ShinyEvents</property>
-<!--      <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property> -->
+      <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property> 
+      <property name="addHeader">true</property>
+      <property name="iframeWidthPx">1000</property>
+      <property name="iframeLengthPx">800</property>
+    </stepAnalysisPlugin>
+-->
+
+<stepAnalysisPlugin
+        name="clinepi-event-dist" displayName="Event Distribution for Selected Participants"
+        releaseVersion="1"
+        analysisViewName="eupathExternalAnalysisResult"
+        analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
+      <shortDescription>
+        <![CDATA[
+          Plot a histogram of the distribution of any available data for the chosen set of participants
+        ]]>
+      </shortDescription>
+      <description/>
+      <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
+      <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
+      <property name="tablesToExtract">ShinyParticipants,ShinyEvents,ShinyHouseholds</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1000</property>
       <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 
   </stepAnalysisPlugins>
+
 </wdkModel>
