@@ -198,7 +198,7 @@
                     summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
-                    prompt="Clincial Visits"
+                    prompt="Events"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset,participantParams.visits_visitage_metadata_nf_maled,participantParams.dwellings_nf_maled,participantParams.geographic_region_maled,participantParams.participants_nf_maled">
       <help>
@@ -211,7 +211,7 @@
                       metadataQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataNf_maled"
                       summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf_maled"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf_maled"
-                      prompt="Age (Visit count)"
+                      prompt="Events"
                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled"
                       trimMetadataTerms="false">
          <help>
@@ -291,7 +291,7 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
    from apidbtuning.clinicalvisitattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
    ) age,
-   apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio iov, apidbtuning.metadata m
+   apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio iov, ApidbTuning.MetaDataWithoutNulls m
    where pa.protocol_app_node_id in ($$geographic_region$$)
    AND least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
@@ -317,7 +317,7 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m
+from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Participant'
           ]]>
@@ -386,13 +386,13 @@ where io.input_node_id in ($$dwellings_nf$$)
 and io.output_node_id in ($$visits_visitage_metadata_nf$$)
 )
 select distinct valid.visit_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, valid
+ from ApidbTuning.MetaDataWithoutNulls m, valid
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Visit'
  and m.protocol_app_node_id = valid.visit_id
   union
  select valid.visit_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, valid, apidbtuning.protocolappnodeio ios
+from ApidbTuning.MetaDataWithoutNulls m, valid, apidbtuning.protocolappnodeio ios
 where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
@@ -417,7 +417,7 @@ and ios.input_node_id = valid.visit_id
          <sql>
            <![CDATA[
 select distinct io.input_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes va
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes va
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Visit'
  and m.protocol_app_node_id = va.protocol_app_node_id
@@ -426,7 +426,7 @@ select distinct io.input_node_id as internal, term as ontology_term_name, string
  and io.input_node_id in ($$dwellings_nf$$)
   union
  select iov.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, apidbtuning.protocolappnodeio iov, apidbtuning.protocolappnodeio ios
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio iov, apidbtuning.protocolappnodeio ios
 where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
@@ -453,12 +453,12 @@ and iov.input_node_id in ($$dwellings_nf$$)
          <sql>
            <![CDATA[
  select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata 
+ from ApidbTuning.MetaDataWithoutNulls 
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'Visit'
  union
  select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
 where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
@@ -499,7 +499,7 @@ union
       <sql>
         <![CDATA[
 select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, apidbtuning.clinicalvisitattributes cva,
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.clinicalvisitattributes cva,
  (select distinct io.input_node_id, io.output_node_id
   from apidbtuning.protocolappnodeio io
   where io.input_node_id in ($$geographic_region$$)
@@ -526,7 +526,7 @@ select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.s
       <sql>
         <![CDATA[
 select distinct pa.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, apidbtuning.clinicalvisitattributes cva,
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.clinicalvisitattributes cva,
  (select distinct io.input_node_id, io.output_node_id
   from apidbtuning.protocolappnodeio io
   where io.input_node_id in ($$geographic_region$$)
@@ -660,7 +660,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
    where pa.protocol_app_node_id in ($$participants_nf$$)
        and pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
@@ -697,7 +697,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
    where pa.protocol_app_node_id in ($$participants_nf$$)
        and pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
@@ -733,7 +733,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
  and part.dwelling_id = m.protocol_app_node_id
@@ -765,6 +765,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
      <column name="is_range"/>
     <sql>
          <![CDATA[
+select * from (
 with leaf as ( 
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
@@ -791,6 +792,7 @@ first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
+ ) order by ontology_term_name
          ]]>
     </sql>
    </sqlQuery>
@@ -807,7 +809,7 @@ first as (
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-  from apidbtuning.protocolappnodeio iov, apidbtuning.metadata m
+  from apidbtuning.protocolappnodeio iov, ApidbTuning.MetaDataWithoutNulls m
    where iov.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
        and iov.input_type_source_id = 'EUPATH_0000096'
        and iov.input_node_id = m.protocol_app_node_id
@@ -829,7 +831,7 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from apidbtuning.metadata m
+from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
           ]]>
@@ -848,6 +850,7 @@ from apidbtuning.metadata m
       <column name="is_range"/>
       <sql>
          <![CDATA[
+select * from (
 with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
@@ -873,6 +876,7 @@ first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
+ ) order by ontology_term_name
          ]]>
     </sql>
    </sqlQuery>
@@ -891,7 +895,7 @@ first as (
          <sql>
            <![CDATA[
 select distinct valid.visit_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, (
+ from ApidbTuning.MetaDataWithoutNulls m, (
 select distinct io.output_node_id as visit_id, io.input_node_id as part_id
 from apidbtuning.protocolappnodeio io
 where io.input_node_id in ($$dwellings_nf_maled$$)
@@ -918,7 +922,7 @@ and io.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
       <sql>
         <![CDATA[
 select distinct valid.part_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, (
+ from ApidbTuning.MetaDataWithoutNulls m, (
 select distinct io.output_node_id as visit_id, io.input_node_id as part_id
 from apidbtuning.protocolappnodeio io
 where io.input_node_id in ($$dwellings_nf_maled$$)
@@ -945,7 +949,7 @@ and io.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
       <sql>
         <![CDATA[
  select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata 
+ from ApidbTuning.MetaDataWithoutNulls 
  where dataset_name = $$dataset$$
  and category = 'Event'
           ]]>
@@ -985,7 +989,7 @@ union
       <sql>
         <![CDATA[
 select distinct m.Protocol_App_Node_Id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
   where io.input_node_id in ($$geographic_region_maled$$)
   and Io.Output_Type_Source_Id = 'EUPATH_0000738'
  and io.output_node_id = m.protocol_app_node_id
@@ -1007,7 +1011,7 @@ select distinct m.Protocol_App_Node_Id as internal, m.term as ontology_term_name
       <sql>
         <![CDATA[
 select distinct io.input_Node_Id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
   where io.input_node_id in ($$geographic_region_maled$$)
   and Io.Output_Type_Source_Id = 'EUPATH_0000738'
  and io.output_node_id = m.protocol_app_node_id
@@ -1073,7 +1077,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
       <sql>
         <![CDATA[
 select io.output_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
  and m.source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
@@ -1093,6 +1097,7 @@ select io.output_node_id as internal, m.term as ontology_term_name, m.string_val
       <column name="precision"/>
       <column name="is_range"/>
       <sql>
+select * from (
    with leaf as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
@@ -1119,6 +1124,7 @@ first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
+ ) order by ontology_term_name
     </sql>
     </sqlQuery>
 
@@ -1139,7 +1145,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
    where pa.protocol_app_node_id in ($$participants_nf_maled$$)
        and pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
  and part.dwelling_id = m.protocol_app_node_id
@@ -1165,7 +1171,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
    where pa.protocol_app_node_id in ($$participants_nf_maled$$)
        and pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
  and part.dwelling_id = m.protocol_app_node_id
@@ -1190,7 +1196,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id = io.output_node_id)
  select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, part
+ from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
  and part.dwelling_id = m.protocol_app_node_id
@@ -1308,7 +1314,7 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="relative_events" displayName="Relative events" displayType="ShowHide">
+        <group name="relative_events" displayName="Comparison events" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can further restrict the events you have selected above by removing (or keeping) those events based on a relative event you define below.  For example, you may want to only keep diarrheal events if they are followed between 0 - 5 days by an event where a laboratory test was positive for shigella. 
