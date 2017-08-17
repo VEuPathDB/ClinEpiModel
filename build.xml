@@ -85,6 +85,7 @@
                                             ReFlow-Installation,
                                             WDK-Installation,
                                             EbrcModelCommon-Installation,
+  	                                        ClinEpiModel-MavenInstallation,
                                             ClinEpiModel/Model-Installation">
 
 
@@ -93,6 +94,13 @@
     </ant>
 
   </target>  
+	
+	<target name="ClinEpiModel-MavenInstallation">
+	  <ant target="mavenBuildProject">
+      <property name="project" value="ClinEpiModel"/>
+	  </ant>
+	  <property name="alreadyBuilt" value="true"/>
+  </target>
    
 
   <!-- oooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->
