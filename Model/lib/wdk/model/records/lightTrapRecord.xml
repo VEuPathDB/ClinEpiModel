@@ -97,7 +97,7 @@ select count(*) from apidbtuning.LightTrapAttributes
          <column name="source_id"/>
          <column name="project_id"/>
 
-          <sqlParamValue name="dwellingSourceIds"><![CDATA[OBI_0001627]]></sqlParamValue>
+          <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000452]]></sqlParamValue>
 <!--
           <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000002]]></sqlParamValue>
 -->
@@ -130,7 +130,7 @@ select count(*) from apidbtuning.LightTrapAttributes
 <!--
           <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000002']]></sqlParamValue>
 -->
-          <sqlParamValue name="dwellingSourceIds"><![CDATA['OBI_0001627']]></sqlParamValue>
+          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>
          <sql>
             <![CDATA[
                      select meta.display_name, meta.name, meta.help, 

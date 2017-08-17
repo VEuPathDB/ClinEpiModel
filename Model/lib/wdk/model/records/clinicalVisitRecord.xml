@@ -136,7 +136,7 @@ select count(*) from apidbtuning.eventattributes
 -->
 
          <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id</sqlParamValue>
-         <sqlParamValue name="dwellingSourceIds"><![CDATA[OBI_0001627]]></sqlParamValue>
+         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000452]]></sqlParamValue>
 
           <sql>
             <![CDATA[
@@ -170,7 +170,7 @@ select count(*) from apidbtuning.eventattributes
          <!--
           <sqlParamValue name="participantAndDwellingSourceIds"><![CDATA['EUPATH_0000054','EUPATH_0000002', 'PATO_0000047', 'EUPATH_0000033', 'EUPATH_0000035', 'EUPATH_0000034']]></sqlParamValue>
 -->
-          <sqlParamValue name="participantAndDwellingSourceIds"><![CDATA['OBI_0001627']]></sqlParamValue>
+          <sqlParamValue name="participantAndDwellingSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>
          <sql>
             <![CDATA[
                      select meta.display_name, meta.name, meta.help, 

@@ -239,7 +239,9 @@ select count(*) from apidbtuning.ParticipantAttributes
          <!--
          <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
          -->
-         <sqlParamValue name="dwellingSourceIds"><![CDATA[OBI_0001627]]></sqlParamValue>
+
+
+         <sqlParamValue name="dwellingSourceIds"><![CDATA[EUPATH_0000452]]></sqlParamValue>
           <sql>
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
@@ -268,7 +270,7 @@ select count(*) from apidbtuning.ParticipantAttributes
 
 
 
-          <sqlParamValue name="dwellingSourceIds"><![CDATA['OBI_0001627']]></sqlParamValue>
+          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>
 <!--          <sqlParamValue name="dwellingSourceIds"><![CDATA['EUPATH_0000054', 'EUPATH_0000002']]></sqlParamValue> -->
           <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EUPATH_0000032']]></sqlParamValue>
 
