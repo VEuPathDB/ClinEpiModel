@@ -115,7 +115,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
         /> 
 -->
         <attributesList 
-            summary="EUPATH_0000054,ave_anoph,time_of_obs,visit_count,visits_per_year_obs,avg_weight,ave_para_density,avg_hemo"        
+            summary="EUPATH_0000054,ave_anoph,time_of_obs,visits_per_year_obs,malaria_cat_compact"        
         /> 
 
 
