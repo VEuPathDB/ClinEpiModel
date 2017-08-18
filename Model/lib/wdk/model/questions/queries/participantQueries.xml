@@ -114,6 +114,8 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_00000
        <column name="visit_count"/>
        <column name="visits_per_year_obs"/>
        <column name="time_of_obs"/>
+       <column name="xmin"/>
+       <column name="xmax"/>
          <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
@@ -125,7 +127,9 @@ greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_ag
    round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) as ave_para_density,
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
    round(avg(ca.EUPATH_0000047),1) as avg_hemo,
-   round(avg(ca.IAO_0000414),1) as avg_weight
+   round(avg(ca.IAO_0000414),1) as avg_weight,
+   $$visit_date.min$$ as xmin,
+   $$visit_date.max$$ as xmax
 from (select distinct io.input_node_id,io.output_node_id from apidbtuning.eventattributes ca, apidbtuning.protocolappnodeio io
       where ca.protocol_app_node_id in ($$visits_nf$$)
       and ca.protocol_app_node_id = io.output_node_id

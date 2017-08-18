@@ -23,7 +23,6 @@
         <attributesList 
             summary="ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
-
 	<dynamicAttributes>
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of observations meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -115,7 +114,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
         /> 
 -->
         <attributesList 
-            summary="EUPATH_0000054,ave_anoph,time_of_obs,visits_per_year_obs,malaria_cat_compact"        
+            summary="EUPATH_0000054,timeline_search,visits_per_year_obs,ave_anoph,time_of_obs"        
         /> 
 
 
@@ -169,6 +168,18 @@ Use the filters above to select a set of Participants or to explore the data.  S
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
+	     <columnAttribute name="xmin" displayName="min date" align="center" internal="true"> 
+            </columnAttribute>
+	     <columnAttribute name="xmax" displayName="max date" align="center" internal="true"> 
+            </columnAttribute>
+             <textAttribute name="timeline_search" displayName="Malaria status timeline (search)" help="Timeline based on the date range chosen in this search" sortable="false">
+                <text>
+                  <![CDATA[
+                           <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=40&w=800&xmin=$$xmin$$&xmax=$$xmax$$&thumb=1"/>
+                  ]]>
+                </text>
+             </textAttribute>
+
 	</dynamicAttributes>
           
 
