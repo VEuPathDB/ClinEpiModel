@@ -1317,7 +1317,7 @@ You can further restrict the participants returned in your search by setting a r
         <group name="relative_events" displayName="Related observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-                         You can further restrict the observations you have selected above by removing (or keeping) those observations based on a related observation you define below.  For example, you may want to only keep diarrheal observations if they are followed between 0 - 5 days by an observation where a laboratory test was positive for shigella. 
+                         You can restrict the observations you have previously selected by removing (or keeping) those observations based on related observations you define below. For example, you may want to only keep diarrheal observations if they are followed between 0 - 5 days by an observation where a laboratory test was positive for shigella.
                 ]]>
             </description>
         </group>
