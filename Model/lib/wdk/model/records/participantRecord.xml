@@ -94,9 +94,9 @@
 
 <!--
        <table name="EventGraph"
-              displayName="Event Summary Graph"
+              displayName="Observation Summary Graph"
               queryRef="ParticipantTables.EventGraph">
-            <textAttribute name="demo_plot" displayName="Participant Event Summary">
+            <textAttribute name="demo_plot" displayName="Participant Observation Summary">
               <text>
               <![CDATA[
                    <object
@@ -491,7 +491,7 @@ where m.category = 'Participant'
             <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&visitSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/event/'||cv.name||'/@PROJECT_ID@' as link, cv.name
+                   '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
               from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.protocolappnodeio io
@@ -519,7 +519,7 @@ select pa.name as source_id,
                  <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/event/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
+                   '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
               from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.sampleattributes sa
