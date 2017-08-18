@@ -172,10 +172,10 @@ Use the filters above to select a set of Participants or to explore the data.  S
             </columnAttribute>
 	     <columnAttribute name="xmax" displayName="max date" align="center" internal="true"> 
             </columnAttribute>
-             <textAttribute name="timeline_search" displayName="Malaria status timeline (search)" help="Timeline based on the date range chosen in this search" sortable="false">
+             <textAttribute name="timeline_search" displayName="Malaria status timeline (search)" help="Timeline based on the date range chosen in this search" sortable="false" truncateTo="100000">
                 <text>
                   <![CDATA[
-                           <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=40&w=800&xmin=$$xmin$$&xmax=$$xmax$$&thumb=1"/>
+                           <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=40&w=800&xmin=$$xmin$$&xmax=$$xmax$$&thumb=1/>
                   ]]>
                 </text>
              </textAttribute>

@@ -128,8 +128,8 @@ greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_ag
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
    round(avg(ca.EUPATH_0000047),1) as avg_hemo,
    round(avg(ca.IAO_0000414),1) as avg_weight,
-   $$visit_date.min$$ as xmin,
-   $$visit_date.max$$ as xmax
+   to_char($$visit_date.min$$, 'yyyy-mm-dd') as xmin,
+   to_char($$visit_date.max$$, 'yyyy-mm-dd') as xmax
 from (select distinct io.input_node_id,io.output_node_id from apidbtuning.eventattributes ca, apidbtuning.protocolappnodeio io
       where ca.protocol_app_node_id in ($$visits_nf$$)
       and ca.protocol_app_node_id = io.output_node_id

@@ -74,7 +74,7 @@
                       summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf"
                       ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf"
-                      prompt="Age at observation"
+                      prompt="Participants"
                       dependedParamRef="participantParams.geographic_region,clinicalVisitParams.visit_date"
                       trimMetadataTerms="false">
          <help>
@@ -464,7 +464,7 @@ and io.output_node_id = m.protocol_app_node_id
            <![CDATA[
                        select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
-where ontology_term_name = 'Age at time of observation'
+where ontology_term_source_id = 'EUPATH_0000113'
 union
                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
