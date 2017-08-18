@@ -202,8 +202,8 @@ Use the filters above to select a set of Participants or to explore the data.  S
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
+              "observationsGroupName": "part_visit_characteristics",
+              "relatedObservationsGroupName": "relative_visits",
               "useRelativeObservationsParamName": "use_relative_visits",
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
