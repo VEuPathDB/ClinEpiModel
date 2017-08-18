@@ -1,7 +1,7 @@
 <wdkModel>
     <recordClassSet name="ClinicalVisitRecordClasses">
 
-      <recordClass name="ClinicalVisitRecordClass" urlName="clinical-visit" displayName="Clinical Visit"> 
+      <recordClass name="ClinicalVisitRecordClass" urlName="clinical-observation" displayName="Clinical Observation"> 
 
 
             <!-- primary key definition -->
@@ -10,7 +10,7 @@
               <columnRef>project_id</columnRef>
             </primaryKey>
 
-            <idAttribute name="primary_key" displayName="Visit Id">
+            <idAttribute name="primary_key" displayName="Observation Id">
                 <text>
                     <![CDATA[
                       $$source_id$$
@@ -65,7 +65,7 @@
 
              <text>
                   <![CDATA[
-                  Visit from <i>$$EUPATH_0000091$$</i> for Participant <a href="@WEBAPP_BASE_URL@/record/participant/$$parent_id$$/@PROJECT_ID@">$$parent_id$$</a>.
+                  Observation from <i>$$EUPATH_0000091$$</i> for Participant <a href="@WEBAPP_BASE_URL@/record/participant/$$parent_id$$/@PROJECT_ID@">$$parent_id$$</a>.
                   ]]>
              </text>
           </textAttribute>
@@ -75,7 +75,7 @@
 
 
         <table name="Characteristics"
-               displayName="Clinical Visit Characteristics"
+               displayName="Clinical Observation Characteristics"
                queryRef="ClinicalVisitTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
@@ -84,7 +84,7 @@
         </table>
 
         <table name="Samples"
-               displayName="Samples Collected During Visit"
+               displayName="Samples Collected During Observation"
                queryRef="ClinicalVisitTables.Samples">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>

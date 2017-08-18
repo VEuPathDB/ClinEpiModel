@@ -113,12 +113,12 @@
 
 
          <table name="Visits"
-                 displayName="Clinical Visits"
+                 displayName="Clinical Observations"
                  queryRef="ParticipantTables.Visits">
             <columnAttribute name="source_id" internal="true"/>
             <columnAttribute name="project_id" internal="true"/>
             <columnAttribute name="link" internal="true"/>
-            <linkAttribute name="db_link" displayName="Date of Visit" inReportMaker="false">
+            <linkAttribute name="db_link" displayName="Date of Observation" inReportMaker="false">
                  <displayText>
                     <![CDATA[
                     $$EUPATH_0000091$$
@@ -128,10 +128,10 @@
             </linkAttribute>
             <columnAttribute name="EUPATH_0000040" displayName="Complicated malaria"/>
             <columnAttribute name="EUPATH_0000338" displayName="Malaria diagnosis and parasite status"/>
-            <columnAttribute name="EUPATH_0000311" displayName="Visit type"/>
-            <columnAttribute name="EUPATH_0000113" displayName="Age at time of visit"/>
+            <columnAttribute name="EUPATH_0000311" displayName="Observation type"/>
+            <columnAttribute name="EUPATH_0000113" displayName="Age at time of observation"/>
             <columnAttribute name="EUPATH_0000110" displayName="Temperature"/>
-            <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
+            <columnAttribute name="EUPATH_0000091" displayName="Date of observation" internal="true"/>
             <columnAttribute name="EUPATH_0000092" displayName="Asexual parasite density"/>
             <columnAttribute name="EUPATH_0000100" displayName="Fever (subjective)"/>
           </table>
@@ -153,7 +153,7 @@
             </linkAttribute>
 
             <columnAttribute name="sample_id" displayName="Sample ID"/>
-            <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
+            <columnAttribute name="EUPATH_0000091" displayName="Date of observation" internal="true"/>
             <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
 
@@ -310,7 +310,7 @@ WHERE o.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
             <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&visitSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link
+                   '@WEBAPP_BASE_URL@/record/clinical-observation/'||cv.name||'/@PROJECT_ID@' as link
               from ApidbTuning.eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.protocolappnodeio io
@@ -338,7 +338,7 @@ select pa.name as source_id,
                  <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/clinical-visit/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
+                   '@WEBAPP_BASE_URL@/record/clinical-observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
               from ApidbTuning.eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.sampleattributes sa

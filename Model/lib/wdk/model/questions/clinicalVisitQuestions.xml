@@ -1,15 +1,15 @@
 <wdkModel>
 
-  <questionSet name="ClinicalVisitQuestions" displayName="Search for Clinical Visits" excludeProjects="TrichDB">
+  <questionSet name="ClinicalVisitQuestions" displayName="Search for Clinical Observations" excludeProjects="TrichDB">
 
     <!-- ************************************************************ -->
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
 
    <question name="ClinicalVisitsByRelativeVisits" newBuild="2"
-              searchCategory="Clinical Visit"
-              displayName="Select a Set of Clinical Visits"
-              shortDisplayName="Clinical Visits"
+              searchCategory="Clinical Observation"
+              displayName="Select a Set of Clinical Observations"
+              shortDisplayName="Clinical Observations"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
@@ -24,13 +24,13 @@
         /> 
 
         <dynamicAttributes>
-	  <columnAttribute name="min_days_between" displayName="Min days between visits" help="Reports the minimum days between any matching visits and the visit returned" align="center">
+	  <columnAttribute name="min_days_between" displayName="Min days between observations" help="Reports the minimum days between any matching observations and the observation returned" align="center">
 	    <plugin name="histogram" display="Histogram"
 		    description="Display a histogram of the values"
 		    implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
 		    view="/wdk/jsp/results/histogram.jsp" />
 	  </columnAttribute>
-	  <columnAttribute name="num_matching_visits" displayName="# matching visits" help="Count of the matching visits any one of which would cause this visit to be removed or retained, depending on the parameters of the search" align="center">
+	  <columnAttribute name="num_matching_visits" displayName="# matching observations" help="Count of the matching observations any one of which would cause this observation to be removed or retained, depending on the parameters of the search" align="center">
 	    <plugin name="histogram" display="Histogram"
 		    description="Display a histogram of the values"
 		    implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -41,13 +41,13 @@
 
         <summary>
             <![CDATA[
-            In this search, you will build a set of Visits and you can further restrict the visits returned based on the relationship of two different selected visits.  You can use the wealth of data in the PRISM study to find Visits with clinically interesting patterns.
+            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
             More here...
             ]]>
         </summary>
          <description>
             <![CDATA[
-            In this search, you will build a set of Visits and you can further restrict the visits returned based on the relationship of two different selected visits.  You can use the wealth of data in the PRISM study to find Visits with clinically interesting patterns.
+            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
             More here...
             ]]>
 </description>
@@ -62,12 +62,27 @@
           <value>hideAttrDescr</value>
         </propertyList>
  
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "part_visit_characteristics",
+              "relatedObservationsGroupName": "relative_visits",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "numRelativeEventsParamName": "num_relative_events",
+              "relativeVisitsParamName": "relative_visits_nf"
+            }
+          </value>
+        </propertyList>
+
     </question>
 
        <question name="ClinicalVisitsByAllData" newBuild="2"
-              searchCategory="Clinical Visit"
-              displayName="Select a Set of Clinical Visits (no Relative Visits)"
-              shortDisplayName="Clinical Visits noRel"
+              searchCategory="Clinical Observation"
+              displayName="Select a Set of Clinical Observations (no Relative Observations)"
+              shortDisplayName="Clinical Observations noRel"
               queryRef="ClinicalVisitId.ClinicalVisitsByAllData" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
@@ -85,13 +100,13 @@
 
         <summary>
             <![CDATA[
-            In this search, you will build a set of Visits using all characteristics associated with that visit including participant and household information.  You can use the wealth of data in the PRISM study to find Visits with clinically interesting patterns.
+            In this search, you will build a set of Observations using all characteristics associated with that observation including participant and household information.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
             More here...
             ]]>
         </summary>
          <description>
             <![CDATA[
-            In this search, you will build a set of Visits using all characteristics associated with that visit including participant and household information.  You can use the wealth of data in the PRISM study to find Visits with clinically interesting patterns.
+            In this search, you will build a set of Observations using all characteristics associated with that observation including participant and household information.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
             More here...
             ]]>
 </description>
@@ -109,9 +124,9 @@
     </question>
 
     <question name="ClinicalVisitBySourceID" newBuild="22"
-              searchCategory="Clinical Visit"
-              displayName="Clinical Visit ID"
-              shortDisplayName="Visit ID"
+              searchCategory="Clinical Observation"
+              displayName="Clinical Observation ID"
+              shortDisplayName="Observation ID"
               queryRef="ClinicalVisitId.ClinicalVisitsBySourceID" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass">
 
@@ -143,8 +158,8 @@
     </question>
 
     <question name="ClinicalVisitsByParticipants" newBuild="22"
-	      displayName="Transform to clinical visits"
-	      shortDisplayName="participants->clinicalvisits"
+	      displayName="Transform to clinical observations"
+	      shortDisplayName="participants->clinicalobservations"
 	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
 	      recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass"
 	      noSummaryOnSingleRecord="false">
@@ -161,7 +176,7 @@
 	 />
 
       <dynamicAttributes>
-	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical visits are associated with" align="center">
+	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical observations are associated with" align="center">
 	  <plugin name="histogram" display="Histogram"
 		  description="Display a histogram of the values"
 		  implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -170,10 +185,10 @@
 	</dynamicAttributes>
       
       <summary>
-	Find clinical visit by participant ID's
+	Find clinical observation by participant ID's
       </summary>
       <description>
-      Find clincal visits by participant ID's
+      Find clincal observations by participant ID's
       </description>
 
   </question>

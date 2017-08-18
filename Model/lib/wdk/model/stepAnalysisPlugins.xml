@@ -42,13 +42,13 @@
     </stepAnalysisPlugin>
 
 <stepAnalysisPlugin
-        name="clinical-visit-dist" displayName="Number of Visits Distribution"
+        name="clinical-visit-dist" displayName="Number of Observations Distribution"
         releaseVersion="1"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
         <![CDATA[
-          Plot a graph of # of visits distribution of this result
+          Plot a graph of # of observations distribution of this result
         ]]>
       </shortDescription>
       <description/>
@@ -61,7 +61,7 @@
     </stepAnalysisPlugin>
 
     <stepAnalysisPlugin
-        name="clinepi-event-dist" displayName="Event Distribution for Selected Participants"
+        name="clinepi-event-dist" displayName="Observation Distribution for Selected Participants"
         releaseVersion="1"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">

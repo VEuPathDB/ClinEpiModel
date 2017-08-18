@@ -8,7 +8,7 @@
 
    <question name="ParticipantsByAllData" newBuild="1"
               searchCategory="Participant"
-              displayName="Select a Set of Participants (no Relative Visits)"
+              displayName="Select a Set of Participants (no Relative Observations)"
               shortDisplayName="Part Details"
               queryRef="ParticipantId.ParticipantsByCharWiz" 
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
@@ -25,13 +25,13 @@
         /> 
 
 	<dynamicAttributes>
-	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of visits meeting search criteria over the time frame specified" align="center"> 
+	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of observations meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>     
-             <columnAttribute name="avg_weight" displayName="Avg Weight" help="Average weight of visits meeting search criteria over the time frame specified" align="center"> 
+             <columnAttribute name="avg_weight" displayName="Avg Weight" help="Average weight of observations meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -44,19 +44,19 @@
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-            <columnAttribute name="ave_para_density" displayName="Geo Mean Parasite Density" help="Average parasite density of participant in visits meeting search criteria" align="center"> 
+            <columnAttribute name="ave_para_density" displayName="Geo Mean Parasite Density" help="Average parasite density of participant in observations meeting search criteria" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="visits_per_year_obs" displayName="Matching Visits / Year" align="center" help="Number of visits matching search criteria / year of observation for this participant"> 
+	     <columnAttribute name="visits_per_year_obs" displayName="Matching Observations / Year" align="center" help="Number of observations matching search criteria / year of observation for this participant"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="visit_count" displayName="# matching visits" align="center" help="Number of visits visits matching the search criteria for this participant"> 
+	     <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations observations matching the search criteria for this participant"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -68,7 +68,7 @@
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="ave_age_visit" displayName="Avg age at visit" align="center"> 
+	     <columnAttribute name="ave_age_visit" displayName="Avg age at observation" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -103,7 +103,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
     <question name="ParticipantsByRelativeVisits" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants"
-              shortDisplayName="Part by Rel Visits"
+              shortDisplayName="Part by Rel Observations"
               queryRef="ParticipantId.ParticipantsByCharWizRelVis" 
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
 
@@ -120,13 +120,13 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
 
 	<dynamicAttributes>
-	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of visits meeting search criteria over the time frame specified" align="center"> 
+	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of observations meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>     
-             <columnAttribute name="avg_weight" displayName="Avg Weight" help="Average weight of visits meeting search criteria over the time frame specified" align="center"> 
+             <columnAttribute name="avg_weight" displayName="Avg Weight" help="Average weight of observations meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -139,19 +139,19 @@ Use the filters above to select a set of Participants or to explore the data.  S
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-            <columnAttribute name="ave_para_density" displayName="Geo Mean Parasite Density" help="Average parasite density of participant in visits meeting search criteria" align="center"> 
+            <columnAttribute name="ave_para_density" displayName="Geo Mean Parasite Density" help="Average parasite density of participant in observations meeting search criteria" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="visits_per_year_obs" displayName="Matching Visits / Year" align="center" help="Number of visits matching search criteria / year of observation for this participant"> 
+	     <columnAttribute name="visits_per_year_obs" displayName="Matching Observations / Year" align="center" help="Number of observations matching search criteria / year of observation for this participant"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="visit_count" displayName="# matching visits" align="center" help="Number of visits visits matching the search criteria for this participant"> 
+	     <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations observations matching the search criteria for this participant"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -163,7 +163,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="ave_age_visit" displayName="Avg age at visit" align="center"> 
+	     <columnAttribute name="ave_age_visit" displayName="Avg age at observation" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -188,6 +188,21 @@ Use the filters above to select a set of Participants or to explore the data.  S
           <value>hideAttrDescr</value>
         </propertyList>
  
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "part_event_characteristics",
+              "relatedObservationsGroupName": "relative_events",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "numRelativeEventsParamName": "num_relative_events",
+              "relativeVisitsParamName": "relative_visits_nf"
+            }
+          </value>
+        </propertyList>
+
     </question>
 
    <question name="ParticipantsByDwellingId"   newBuild="1" 
@@ -224,7 +239,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
       <question name="ParticipantsByClinicalVisit"   newBuild="22" 
               displayName="Transform to Participants"
-              shortDisplayName="clinicalvisits->participant"
+              shortDisplayName="clinicalobservations->participant"
               queryRef="ParticipantId.ParticipantsByClinicalVisits" 
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
               noSummaryOnSingleRecord="true">
@@ -237,7 +252,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
 
 	<dynamicAttributes>
-	     <columnAttribute name="num_of_visits" displayName="Clincal Visits Transformed" help="Clinicals visits associated with the participant" align="center"> 
+	     <columnAttribute name="num_of_visits" displayName="Clincal Observations Transformed" help="Clinicals observations associated with the participant" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -246,12 +261,12 @@ Use the filters above to select a set of Participants or to explore the data.  S
 	</dynamicAttributes>
 
              <summary>
-             Find participants by by clinical visits.
+             Find participants by by clinical observations.
              </summary>
 
              <description>
                <![CDATA[
-             Find participants by clinical visits.
+             Find participants by clinical observations.
                ]]>
              </description>
     </question>

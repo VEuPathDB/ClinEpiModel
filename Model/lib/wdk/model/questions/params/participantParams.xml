@@ -61,11 +61,11 @@
                     summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData"
                     ontologyQueryRef="ParticipantVQ.VisitOntology"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd"
-                    prompt="Clincial Visits"
+                    prompt="Clincial Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
       <help>
-        Select participants based on their visit characteristics. 
+        Select participants based on their observation characteristics. 
       </help>
     </filterParamNew>
 
@@ -74,7 +74,7 @@
                       summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf"
                       ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf"
-                      prompt="Age at visit"
+                      prompt="Age at observation"
                       dependedParamRef="participantParams.geographic_region,clinicalVisitParams.visit_date"
                       trimMetadataTerms="false">
          <help>
@@ -105,28 +105,28 @@
     </stringParam>
 
    <stringParam name="max_visits"
-		 prompt="Number of visits / year &lt;= "
+		 prompt="Number of observations / year &lt;= "
 		 number="true">
-      <help>Specify the maximum number of visits per participant per year that match your visit criteria.</help>
+      <help>Specify the maximum number of observations per participant per year that match your observation criteria.</help>
       <suggest default="365"/>
       <regex>\d\d*\.*\d*</regex>
     </stringParam>
 
    <stringParam name="min_visits"
-		 prompt="Number of visits / year &gt;= "
+		 prompt="Number of observations / year &gt;= "
 		 number="true">
-      <help>Specify the minimum number of visits per participant per year that match your visit criteria.</help>
+      <help>Specify the minimum number of observations per participant per year that match your observation criteria.</help>
       <suggest default="0.1"/>
       <regex>\d\d*\.*\d*</regex>
     </stringParam>
 
     <numberRangeParam name="visits_per_year"
-                      prompt="Visits per year:"
+                      prompt="Observations per year:"
                       integer="false"
                       min="0"
                       max="365"
                       step="0.1">
-      <help>Set the range of number of visits that match your search criteria.</help>
+      <help>Set the range of number of observations that match your search criteria.</help>
       <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
       
     </numberRangeParam>
@@ -134,7 +134,7 @@
    <stringParam name="max_para_density"
 		 prompt="Geometric mean parasite density &lt;= "
 		 number="true">
-      <help>Specify the maximum average parasite density across the visits that match your visit criteria.</help>
+      <help>Specify the maximum average parasite density across the observations that match your observation criteria.</help>
       <suggest default="1000000"/>
       <regex>\d\d*</regex>
     </stringParam>
@@ -142,7 +142,7 @@
    <stringParam name="min_para_density"
 		 prompt="Geometric mean parasite density &gt;= "
 		 number="true">
-      <help>Specify the minimum average parasite density across the visits that match your visit criteria.</help>
+      <help>Specify the minimum average parasite density across the observations that match your observation criteria.</help>
       <suggest default="0"/>
       <regex>\d\d*</regex>
     </stringParam>
@@ -152,7 +152,7 @@
                        integer="true"
                        min="0"
                        max="1000000">
-         <help>Set the range of days between visits to compare to visits selected in the previous step</help>
+         <help>Set the range of days between observations to compare to observations selected in the previous step</help>
 <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
 
        </numberRangeParam> 
@@ -176,7 +176,7 @@
    <stringParam name="end_date"
 		 prompt="Latest date to include in this search: "
 		 number="false">
-      <help>Put in the latest date to include for identifying participant visits and computing anopheles counts.</help>
+      <help>Put in the latest date to include for identifying participant observations and computing anopheles counts.</help>
       <suggest default="30-JUN-2016"/>
       <regex>\d\d*-\w\w\w-\d\d\d\d</regex>
     </stringParam>
@@ -184,8 +184,8 @@
    <stringParam name="start_date"
 		 prompt="Earliest date to include in this search: "
 		 number="false">
-      <!-- visibleHelp>Put in the earliest date to include for identifying participant visits and computing anopheles counts.</visibleHelp -->
-      <help>Put in the earliest date to include for identifying participant visits and computing anopheles counts.</help>
+      <!-- visibleHelp>Put in the earliest date to include for identifying participant observations and computing anopheles counts.</visibleHelp -->
+      <help>Put in the earliest date to include for identifying participant observations and computing anopheles counts.</help>
       <suggest default="05-AUG-2011"/>
       <regex>\d\d*-\w\w\w-\d\d\d\d</regex>
     </stringParam>
@@ -464,7 +464,7 @@ and io.output_node_id = m.protocol_app_node_id
            <![CDATA[
                        select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
-where ontology_term_name = 'Age at time of visit'
+where ontology_term_name = 'Age at time of observation'
 union
                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
@@ -720,10 +720,10 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 
       <groupSet name="metaDataGroups">
         
-        <group name="daterange" displayName="Time period / age at visit" displayType="ShowHide">
+        <group name="daterange" displayName="Time period / age at observation" displayType="ShowHide">
             <description>
                 <![CDATA[
-Filter participants based on the date range they were observed, the number of days they were observed in that period, and their age at each observation (ie clinical visit). Study data is available from 05-AUG-2011 to 30-JUN-2016.
+Filter participants based on the date range they were observed, the number of days they were observed in that period, and their age at each observation (ie clinical observation). Study data is available from 05-AUG-2011 to 30-JUN-2016.
                 ]]>
             </description>
         </group>
@@ -737,7 +737,7 @@ Filter households based on the date range they were in the study.  Note that the
         <group name="age_at_visit" displayName="Age" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on their age at visits. Participants are removed if they have any visits within the previously selected Time Period where they were not within this Age range.  (The study included participants from age 0.5 to 11 years, and from 18 to 75 years of age.)
+    Filter participants based on their age at observations. Participants are removed if they have any observations within the previously selected Time Period where they were not within this Age range.  (The study included participants from age 0.5 to 11 years, and from 18 to 75 years of age.)
                 ]]>
             </description>
         </group>
@@ -758,7 +758,7 @@ Filter households based on the date range they were in the study.  Note that the
         <group name="visit_part_characteristics" displayName="Personal characteristics" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can restrict visits returned based on participants by selecting characteristics about where they live including their dwelling type and their own characteristics such as genotype information.
+You can restrict observations returned based on participants by selecting characteristics about where they live including their dwelling type and their own characteristics such as genotype information.
                 ]]>
             </description>
         </group>
@@ -768,38 +768,38 @@ You can restrict visits returned based on participants by selecting characterist
         <group name="geographic_loc" displayName="Geographic Region" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
-        <group name="visit_visit_characteristics" displayName="Visit visits" displayType="ShowHide">
+        <group name="visit_visit_characteristics" displayName="Observation observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can restrict the visits returned in your search by selecting characteristics such as the type of visit, diagnosis, visit tpye, etc.
+You can restrict the observations returned in your search by selecting characteristics such as the type of observation, diagnosis, observation tpye, etc.
                 ]]>
             </description>
         </group>
-        <group name="visit_characteristics" displayName="Visits" displayType="ShowHide">
+        <group name="visit_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on observations at visits.  Visits shown are from the period when the selected participants meet the age range specified in the Age filter    
+    Filter participants based on observations at observations.  Observations shown are from the period when the selected participants meet the age range specified in the Age filter    
              ]]>
             </description>
         </group>
-       <group name="part_visit_characteristics" displayName="Visits" displayType="ShowHide">
+       <group name="part_visit_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on observations at visits.  Visits shown are for the selected set of participants when they were within the age range specified in the Age filter.    
+    Filter participants based on observations at observations.  Observations shown are for the selected set of participants when they were within the age range specified in the Age filter.    
                 ]]>
             </description>
         </group>
-        <group name="summary_params" displayName="Visit aggregates" displayType="ShowHide">
+        <group name="summary_params" displayName="Observation aggregates" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can further restrict the participants returned in your search by setting summary values such as the average parasitemia or the number of visits / year of the visits matching the previous step characteristics.
+You can further restrict the participants returned in your search by setting summary values such as the average parasitemia or the number of observations / year of the observations matching the previous step characteristics.
                 ]]>
             </description>
         </group>
-        <group name="relative_visits" displayName="Relative visits" displayType="ShowHide">
+        <group name="relative_visits" displayName="Related observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-                         You can further restrict the visits you have selected above by removing (or keeping) those visits based on a relative visit you define below.  For example, you may want to only keep visits with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a visit where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove visits where diagnosis of malaria = yes.
+                         You can restrict the observations you have previously selected by removing (or keeping) those observations based on related observations you define below.  For example, you may want to only keep observations with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a observation where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove observations where diagnosis of malaria = yes.
                 ]]>
             </description>
         </group>

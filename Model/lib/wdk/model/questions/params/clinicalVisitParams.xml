@@ -33,22 +33,22 @@
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData"
                     ontologyQueryRef="ClinicalVisitVQ.VisitOntology"
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd"
-                    prompt="Clincial Visits"
+                    prompt="Clincial Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.dwellings_nf,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf">
       <help>
-        Select visits based on their visit characteristics. 
+        Select observations based on their observation characteristics. 
       </help>
     </filterParamNew>
 
      <filterParamNew name="relative_visits_nf" 
                     metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData"
                     ontologyQueryRef="ClinicalVisitVQ.RelVisitOntology"
-                    prompt="Relative Visits"
+                    prompt="Related Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="">
       <help>
-        Select relative visits based on their visit characteristics. 
+        Select related observations based on their observation characteristics. 
       </help>
     </filterParamNew>
 
@@ -56,11 +56,11 @@
                       metadataQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetadataNf"
                       ontologyQueryRef="ClinicalVisitVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetadataBkgdNf"
-                      prompt="Age at visit"
+                      prompt="Age at observation"
                       dependedParamRef="clinicalVisitParams.geographic_region,clinicalVisitParams.visit_date,participantParams.duration_observation"
                       trimMetadataTerms="false">
          <help>
-              Select the age of the participants at the time of their clinical visits.
+              Select the age of the participants at the time of their clinical observations.
          </help>
        </filterParamNew>
 
@@ -72,7 +72,7 @@
                        prompt="Participant"
                        trimMetadataTerms="false">
          <help>
-           Select visits based on the participants subcounty where they live. 
+           Select observations based on the participants subcounty where they live. 
          </help>
     </filterParamNew>
 
@@ -86,7 +86,7 @@
                       dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf"
                       trimMetadataTerms="false">
          <help>
-              Select visits based on the household characteristics where the participants live. 
+              Select observations based on the household characteristics where the participants live. 
          </help>
        </filterParamNew>
 
@@ -108,7 +108,7 @@
                        prompt="Choose start and end dates "
                        minDate="2011-08-01"
                        maxDate="2016-06-30">
-         <help>"select the earliest and latest dates to include for identifying visits and computing mosquito counts."</help>
+         <help>"select the earliest and latest dates to include for identifying observations and computing mosquito counts."</help>
 <!--         <suggest default="{'min': '2011-08-05', 'max': '2016-06-30'}" />  -->
 
        </dateRangeParam>
@@ -117,74 +117,74 @@
 
 <!--  NOTE: this is development yet to be done so commenting out for now 
        <flatVocabParam name="min_age_at_visit"
-               prompt="Age at visit &gt;= "
+               prompt="Age at observation &gt;= "
                multiPick="false"
                quote="false"
                visible="false"
                dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.geographic_region"
                queryRef="ClinicalVisitVQ.minAgeAtVisit">
-      <help>Minimum age at visit.</help>
+      <help>Minimum age at observation.</help>
     </flatVocabParam>
 
     <flatVocabParam name="max_age_at_visit"
-               prompt="Age at visit &lt;= "
+               prompt="Age at observation &lt;= "
                multiPick="false"
                quote="false"
                visible="false"
                dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.geographic_region"
                queryRef="ClinicalVisitVQ.maxAgeAtVisit">
-      <help>Minimum age at visit.</help>
+      <help>Minimum age at observation.</help>
     </flatVocabParam>
 -->
 
    <stringParam name="maxDaysBetween"
-		 prompt="Max days between visits &lt;= "
+		 prompt="Max days between observations &lt;= "
 		 number="true">
-      <help>Specify the maximum number of days between visit to keep or remove and the following visit.</help>
+      <help>Specify the maximum number of days between observation to keep or remove and the following observation.</help>
       <suggest default="10"/>
       <regex>\d\d*</regex>
     </stringParam>
 
      <stringParam name="minDaysBetween"
-		 prompt="Min days between visits &gt;= "
+		 prompt="Min days between observations &gt;= "
 		 number="true">
-      <help>Specify the minimum number of days between visit to keep or remove and the following visit.</help>
+      <help>Specify the minimum number of days between observation to keep or remove and the following observation.</help>
       <suggest default="1"/>
       <regex>\d\d*</regex>
     </stringParam>
 
     <numberRangeParam name="days_between"
-                       prompt="Days between visits: "
+                       prompt="Days between observations: "
                        integer="true"
                        min="1"
                        max="1000">
-         <help>Set the range of days between visits to compare to visits selected in the previous step</help>
+         <help>Set the range of days between observations to compare to observations selected in the previous step</help>
          <suggest default="{'min': '1', 'max': '10'}" />  
 
        </numberRangeParam> 
 
    <stringParam name="minAgeAtVisit"
-		 prompt="Age at visit &gt;= "
+		 prompt="Age at observation &gt;= "
 		 number="true">
-      <help>Minimum age at time of visit.</help>
+      <help>Minimum age at time of observation.</help>
       <suggest default="0.5"/>
       <regex>\d\d*\.*\d*</regex>
     </stringParam>
 
    <stringParam name="maxAgeAtVisit"
-		 prompt="Age at visit &lt;= "
+		 prompt="Age at observation &lt;= "
 		 number="true">
-      <help>Maximum age at time of visit.</help>
+      <help>Maximum age at time of observation.</help>
       <suggest default="80"/>
       <regex>\d\d*\.*\d*</regex>
     </stringParam>
 
     <enumParam name="dateOperator"
-               prompt="Keep or Remove visits "
+               prompt="Keep or Remove observations "
                multiPick="false"
                quote="false"
                visible="true">
-      <help>Choose how to compare these two visits.  Do you want to remove visits that have another visit within the specified time frame or keep them.</help>
+      <help>Choose how to compare these two observations.  Do you want to remove observations that have another observation within the specified time frame or keep them.</help>
       <enumList>
         <enumValue default="true">
           <term>remove</term>
@@ -202,7 +202,7 @@
                multiPick="false"
                quote="false"
                visible="true">
-      <help>Choose a direction for the corresponding visit.  Will the matching visit be before or after relative to the first visit.</help>
+      <help>Choose a direction for the corresponding observation.  Will the matching observation be before or after relative to the first observation.</help>
       <enumList>
         <enumValue default="true">
           <term>after</term>
@@ -216,23 +216,23 @@
     </enumParam>
 
     <flatVocabParam name="use_relative_visits"
-               prompt="Use relative visits"
+               prompt="Use relative observations"
                multiPick="false"
                quote="false"
                visible="true"
                queryRef="ClinicalVisitVQ.useRelativeVisits">
-      <help>You MUST change this parameter to Yes in order to use relative visits! If you decide to not use relative visits, set this parameter to No and make certain "Keep or remove visits" is set to remove.</help>
+      <help>You MUST change this parameter to Yes in order to use related observations! If you decide to not use related observations, set this parameter to No and make certain "Keep or remove observations" is set to remove.</help>
     </flatVocabParam>
 
 
     <flatVocabParam name="dateOperator_fv"
-               prompt="Keep or Remove visits "
+               prompt="Keep or Remove observations "
                multiPick="false"
                quote="false"
                visible="true"
                dependedParamRef="clinicalVisitParams.use_relative_visits"
                queryRef="ClinicalVisitVQ.dateOperator">
-      <help>Choose how to compare these two visits.  Do you want to remove visits that have another visit within the specified time frame or keep them.</help>
+      <help>Choose how to compare these two observations.  Do you want to remove observations that have another observation within the specified time frame or keep them.</help>
     </flatVocabParam>
 
     <flatVocabParam name="date_direction_fv"
@@ -241,7 +241,7 @@
                quote="false"
                visible="true"
                queryRef="ClinicalVisitVQ.dateDirection">
-      <help>Choose a direction for the corresponding visit.  Will the matching visit be before or after relative to the first visit.</help>
+      <help>Choose a direction for the corresponding observation.  Will the matching observation be before or after relative to the first observation.</help>
     </flatVocabParam>
 
     <answerParam name="clinical_visit_result"
@@ -346,7 +346,7 @@ select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal
            <![CDATA[
                        select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
-where ontology_term_name = 'Age at time of visit'
+where ontology_term_name = 'Age at time of observation'
 union
                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
