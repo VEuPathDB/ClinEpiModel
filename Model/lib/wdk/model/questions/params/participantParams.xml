@@ -720,7 +720,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 
       <groupSet name="metaDataGroups">
         
-        <group name="daterange" displayName="Time period / age at observation" displayType="ShowHide">
+        <group name="daterange" displayName="Date / age at observation" displayType="ShowHide">
             <description>
                 <![CDATA[
 Filter participants based on the date range they were observed, the number of days they were observed in that period, and their age at each observation (ie clinical observation). Study data is available from 05-AUG-2011 to 30-JUN-2016.

@@ -56,11 +56,12 @@
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
- <textAttribute name="record_overview" displayName="Overview">
+ <textAttribute name="record_overview" displayName="Overview" truncateTo="100000">
 
              <text>
                   <![CDATA[
-                  Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
+                           Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.<br />
+                           <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=1000" type=""image/svg+xml"/>
                   ]]>
              </text>
           </textAttribute>
@@ -69,6 +70,14 @@
               <text>
               <![CDATA[
                   <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=40&w=800&thumb=1"/>
+                    ]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="malaria_cat_timeline" displayName="Observations timeline"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=1000" type=""image/svg+xml"/>
                     ]]>
               </text>
             </textAttribute>
