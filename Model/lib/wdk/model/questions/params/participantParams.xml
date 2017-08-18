@@ -198,7 +198,7 @@
                     summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
-                    prompt="Events"
+                    prompt="Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset,participantParams.visits_visitage_metadata_nf_maled,participantParams.dwellings_nf_maled,participantParams.geographic_region_maled,participantParams.participants_nf_maled">
       <help>
@@ -211,7 +211,7 @@
                       metadataQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataNf_maled"
                       summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf_maled"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf_maled"
-                      prompt="Events"
+                      prompt="Observations"
                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled"
                       trimMetadataTerms="false">
          <help>
@@ -1260,21 +1260,21 @@ You can restrict visits returned based on participants by selecting characterist
         <group name="visit_visit_characteristics" displayName="Visits" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can restrict the events returned in your search by selecting characteristics such as the type of event, diagnosis, event type, etc.
+You can restrict the observations returned in your search by selecting characteristics such as the type of observation, diagnosis, observation type, etc.
                 ]]>
             </description>
         </group>
         <group name="visit_characteristics" displayName="Visits" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter events based on observations at visits.  Visits shown are from the period when the selected participants meet the age range specified in the Age filter    
+    Filter observations based on observations at visits.  Visits shown are from the period when the selected participants meet the age range specified in the Age filter    
              ]]>
             </description>
         </group>
-        <group name="event_characteristics" displayName="Events" displayType="ShowHide">
+        <group name="event_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter events based on observations at those events. 
+    Filter observations based on observations at those observations. 
              ]]>
             </description>
         </group>
@@ -1285,10 +1285,10 @@ You can restrict the events returned in your search by selecting characteristics
                 ]]>
             </description>
         </group>
-       <group name="part_event_characteristics" displayName="Events" displayType="ShowHide">
+       <group name="part_event_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on observations at events.     
+    Filter participants based on observations at observations.     
                 ]]>
             </description>
         </group>
@@ -1299,10 +1299,10 @@ You can further restrict the participants returned in your search by setting sum
                 ]]>
             </description>
         </group>
-        <group name="event_summary_params" displayName="# Events selected" displayType="ShowHide">
+        <group name="event_summary_params" displayName="# Observations selected" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can further restrict the participants returned in your search by setting a range of the number of events per participant that meet your search criteria. 
+You can further restrict the participants returned in your search by setting a range of the number of observations per participant that meet your search criteria. 
                 ]]>
             </description>
         </group>
@@ -1314,10 +1314,10 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="relative_events" displayName="Comparison events" displayType="ShowHide">
+        <group name="relative_events" displayName="Related observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-                         You can further restrict the events you have selected above by removing (or keeping) those events based on a relative event you define below.  For example, you may want to only keep diarrheal events if they are followed between 0 - 5 days by an event where a laboratory test was positive for shigella. 
+                         You can further restrict the observations you have selected above by removing (or keeping) those observations based on a related observation you define below.  For example, you may want to only keep diarrheal observations if they are followed between 0 - 5 days by an observation where a laboratory test was positive for shigella. 
                 ]]>
             </description>
         </group>

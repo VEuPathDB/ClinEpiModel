@@ -138,17 +138,17 @@
     </flatVocabParam>
 -->
     <numberRangeParam name="num_relative_events"
-                       prompt="Number of matching relative events: "
+                       prompt="Number of matching related observations: "
                        integer="true"
                        min="1"
                        max="1000">
-         <help>Set the range of the number of matching events in order to keep or remove the visit from the previous step.</help>
+         <help>Set the range of the number of matching observations in order to keep or remove the visit from the previous step.</help>
          <suggest default="{'min': '1', 'max': '20'}" />  
 
        </numberRangeParam> 
 
     <numberRangeParam name="days_between"
-                       prompt="Days between events: "
+                       prompt="Days between observations: "
                        integer="true"
                        min="0"
                        max="1000">
@@ -194,7 +194,7 @@
     </enumParam>
 
     <flatVocabParam name="use_relative_visits"
-               prompt="Use relative events"
+               prompt="Use relative observations"
                multiPick="false"
                quote="false"
                visible="true"
@@ -204,7 +204,7 @@
 
 
     <flatVocabParam name="dateOperator_fv"
-               prompt="Keep or Remove events from previous step matching these criteria"
+               prompt="Keep or Remove observations from previous step matching these criteria"
                multiPick="false"
                quote="false"
                visible="true"

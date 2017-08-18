@@ -142,7 +142,7 @@
          </table>
 
          <table name="ShinyEvents"
-                 displayName="ShinyEvents"
+                 displayName="ShinyObservations"
                  queryRef="ParticipantTables.ShinyEvents"
                  attributeMetaQueryRef="ParticipantTables.ShinyEventsColumnAttributes">
             <columnAttribute name="source_id" internal="true"/>
@@ -153,7 +153,7 @@
 
 
          <table name="Visits"
-                 displayName="Events"
+                 displayName="Observations"
                  queryRef="ParticipantTables.Visits"
                  attributeMetaQueryRef="ParticipantTables.EventsColumnAttributes">
             <columnAttribute name="source_id" internal="true"/>
