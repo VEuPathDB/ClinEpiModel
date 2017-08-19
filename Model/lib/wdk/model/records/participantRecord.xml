@@ -60,8 +60,7 @@
 
              <text>
                   <![CDATA[
-                           Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.<p />
-                           <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=1000" type="image/svg+xml"/>
+                           Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
                   ]]>
              </text>
           </textAttribute>
@@ -75,13 +74,13 @@
             </textAttribute>
 
 <!--
-<textAttribute name="malaria_cat_timeline" displayName="Observations timeline"  truncateTo="100000">
-              <text>
-              <![CDATA[
-              <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=1000" type="image/svg+xml"/>
-                    ]]>
-              </text>
-            </textAttribute>
+            <textAttribute name="malaria_cat_timeline" displayName="Observations timeline">
+            <text>
+            <![CDATA[
+               <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=800" type=""image/svg+xml"/>
+]]>
+</text>
+</textAttribute>
 -->
 
 
