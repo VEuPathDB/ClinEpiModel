@@ -753,7 +753,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata 
  where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
- and category in ('Event','Specimen')
+ and category in ('Event','Specimen type')
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
@@ -793,7 +793,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata 
  where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
- and category in ('Event','Specimen')
+ and category in ('Event','Specimen type')
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
@@ -840,8 +840,8 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
  select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
 where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
-and m.category = 'Specimen' 
-and m.term = 'Specimen'
+and m.category = 'Specimen type' 
+and m.term = 'Specimen type'
 and io.output_node_id = m.protocol_app_node_id
 and io.input_node_id in ($$dwellings_nf$$)
           ]]>
@@ -872,8 +872,8 @@ and io.input_node_id in ($$dwellings_nf$$)
  select io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
 where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
-and m.category = 'Specimen' 
-and m.term = 'Specimen'
+and m.category = 'Specimen type' 
+and m.term = 'Specimen type'
 and io.output_node_id = m.protocol_app_node_id
           ]]>
     </sql>
@@ -897,8 +897,8 @@ and io.output_node_id = m.protocol_app_node_id
                        m.string_value, m.number_value, m.date_value
                 from apidbtuning.metadata m, apidbtuning.protocolappnodeio io
                 where dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
-                  and m.category = 'Specimen' 
-                  and m.term = 'Specimen'
+                  and m.category = 'Specimen type' 
+                  and m.term = 'Specimen type'
                   and io.output_node_id = m.protocol_app_node_id
           ]]>
     </sql>
