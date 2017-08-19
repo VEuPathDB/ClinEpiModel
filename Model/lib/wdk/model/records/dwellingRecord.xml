@@ -235,7 +235,7 @@ SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
   term           AS parentTerm,
   string_value   AS term
-FROM ApidbTuning.MetaDataWithoutNulls 
+FROM apidbtuning.metadata 
 WHERE dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
 AND category       = 'Household'
 /** TODO:  add this back in when we can make this a tree on the record page
