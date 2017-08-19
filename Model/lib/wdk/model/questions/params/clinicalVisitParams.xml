@@ -157,7 +157,7 @@
                        prompt="Days between observations: "
                        integer="true"
                        min="1"
-                       max="1000">
+                       max="10000">
          <help>Set the range of days between observations to compare to observations selected in the previous step</help>
          <suggest default="{'min': '1', 'max': '10'}" />  
 
@@ -241,7 +241,7 @@
                quote="false"
                visible="true"
                queryRef="ClinicalVisitVQ.dateDirection">
-      <help>Choose a direction for the corresponding observation.  Will the matching observation be before or after relative to the first observation.</help>
+      <help>Choose a direction for the corresponding observation.  Will the observation be before or after the relative observation.</help>
     </flatVocabParam>
 
     <answerParam name="clinical_visit_result"
@@ -264,9 +264,11 @@
             <column name="term" />
             <sql>
               <![CDATA[
-                       SELECT 'before' as display, 'after' as term, '>=' as internal from dual
+                       SELECT * from (
+                       SELECT 'before' as term, '<=' as internal from dual
                        UNION
-                       SELECT 'after' as display, 'before' as term, '<=' as internal from dual
+                       SELECT 'after' as term, '>=' as internal from dual )
+                       ORDER by term desc
               ]]>
             </sql>
         </sqlQuery>

@@ -66,7 +66,7 @@ from vis, relvis rv
 where $$use_relative_visits$$ = 1
 and vis.input_node_id = rv.input_node_id
 and vis.protocol_app_node_id != rv.protocol_app_node_id
-and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
+and vis.EUPATH_0000091 $$date_direction_fv$$ rv.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 )
@@ -79,7 +79,7 @@ select vis.protocol_app_node_id,vis.name, vis.input_node_id,rv.EUPATH_0000091
 from vis, relvis rv
 where vis.input_node_id = rv.input_node_id
 and vis.protocol_app_node_id != rv.protocol_app_node_id
-and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
+and vis.EUPATH_0000091 $$date_direction_fv$$ rv.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 ) inter, visits

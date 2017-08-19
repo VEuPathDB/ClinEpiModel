@@ -143,7 +143,7 @@ and seta.protocol_app_node_id = ioa.output_node_id
 and setb.protocol_app_node_id = iob.output_node_id
 and ioa.input_node_id = iob.input_node_id
 and seta.protocol_app_node_id != setb.protocol_app_node_id
-and setb.EUPATH_0000091 $$date_direction_fv$$ seta.EUPATH_0000091  
+and seta.EUPATH_0000091 $$date_direction_fv$$ setb.EUPATH_0000091  
 and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$days_between.min$$
 and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$days_between.max$$
 ) main,
