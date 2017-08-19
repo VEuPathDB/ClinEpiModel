@@ -1,15 +1,15 @@
 <wdkModel>
 
-  <questionSet name="ClinicalVisitQuestions" displayName="Search for Clinical Observations" excludeProjects="TrichDB">
+  <questionSet name="ClinicalVisitQuestions" displayName="Search for Observations" excludeProjects="TrichDB">
 
     <!-- ************************************************************ -->
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
 
    <question name="ClinicalVisitsByRelativeVisits" newBuild="2"
-              searchCategory="Clinical Observation"
-              displayName="Select a Set of Clinical Observations"
-              shortDisplayName="Clinical Observations"
+              searchCategory="Observation"
+              displayName="Select a Set of Observations"
+              shortDisplayName="Observations"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
@@ -80,9 +80,9 @@
     </question>
 
        <question name="ClinicalVisitsByAllData" newBuild="2"
-              searchCategory="Clinical Observation"
-              displayName="Select a Set of Clinical Observations (no Relative Observations)"
-              shortDisplayName="Clinical Observations noRel"
+              searchCategory="Observation"
+              displayName="Select a Set of Observations (no Relative Observations)"
+              shortDisplayName="Observations noRel"
               queryRef="ClinicalVisitId.ClinicalVisitsByAllData" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
 
@@ -124,8 +124,8 @@
     </question>
 
     <question name="ClinicalVisitBySourceID" newBuild="22"
-              searchCategory="Clinical Observation"
-              displayName="Clinical Observation ID"
+              searchCategory="Observation"
+              displayName="Observation ID"
               shortDisplayName="Observation ID"
               queryRef="ClinicalVisitId.ClinicalVisitsBySourceID" 
               recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass">
@@ -158,7 +158,7 @@
     </question>
 
     <question name="ClinicalVisitsByParticipants" newBuild="22"
-	      displayName="Transform to clinical observations"
+	      displayName="Transform to observations"
 	      shortDisplayName="participants->clinicalobservations"
 	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
 	      recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass"
@@ -176,7 +176,7 @@
 	 />
 
       <dynamicAttributes>
-	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical observations are associated with" align="center">
+	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants observations are associated with" align="center">
 	  <plugin name="histogram" display="Histogram"
 		  description="Display a histogram of the values"
 		  implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -185,7 +185,7 @@
 	</dynamicAttributes>
       
       <summary>
-	Find clinical observation by participant ID's
+	Find observation by participant ID's
       </summary>
       <description>
       Find clincal observations by participant ID's

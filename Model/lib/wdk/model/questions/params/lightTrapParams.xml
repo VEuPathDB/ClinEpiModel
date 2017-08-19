@@ -114,7 +114,7 @@
       <sql>
         <![CDATA[
                  select distinct lta.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and m.category = 'Household'
  and m.source_id = 'EUPATH_0000054'
@@ -180,7 +180,7 @@ first as (
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m
+ from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and m.category = 'Household'
  union
@@ -205,7 +205,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m
+ from ApidbTuning.MetaDataWithoutNulls m
  where m.protocol_app_node_id in ($$geographic_region$$)
  union
  select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
@@ -232,7 +232,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
          <![CDATA[
  select distinct lta.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
  where m.protocol_app_node_id in ($$geographic_region$$)
  and m.protocol_app_node_id = io.input_node_id
  and io.output_node_id = lta.protocol_app_node_id
@@ -314,7 +314,7 @@ first as (
       <sql>
         <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
+ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and m.category = 'CDC light trap assay'
  and m.protocol_app_node_id = lta.protocol_app_node_id
@@ -338,7 +338,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <sql>
         <![CDATA[
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from apidbtuning.metadata m
+ from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
  and m.category = 'CDC light trap assay'
         ]]>

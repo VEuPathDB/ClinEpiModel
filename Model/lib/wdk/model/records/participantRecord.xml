@@ -56,12 +56,12 @@
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
- <textAttribute name="record_overview" displayName="Overview" truncateTo="100000">
+ <textAttribute name="record_overview" displayName="Overview" >
 
              <text>
                   <![CDATA[
-                           Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.<br />
-                           <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=1000" type=""image/svg+xml"/>
+                           Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.<p />
+                           <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=1000" type="image/svg+xml"/>
                   ]]>
              </text>
           </textAttribute>
@@ -74,13 +74,15 @@
               </text>
             </textAttribute>
 
-            <textAttribute name="malaria_cat_timeline" displayName="Observations timeline"  truncateTo="100000">
+<!--
+<textAttribute name="malaria_cat_timeline" displayName="Observations timeline"  truncateTo="100000">
               <text>
               <![CDATA[
-                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=1000" type=""image/svg+xml"/>
+              <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=50&w=1000" type="image/svg+xml"/>
                     ]]>
               </text>
             </textAttribute>
+-->
 
 
          <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
@@ -122,7 +124,7 @@
 
 
          <table name="Visits"
-                 displayName="Clinical Observations"
+                 displayName="Observations"
                  queryRef="ParticipantTables.Visits">
             <columnAttribute name="source_id" internal="true"/>
             <columnAttribute name="project_id" internal="true"/>
@@ -278,7 +280,7 @@ SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
   term           AS parentTerm,
   string_value   AS term
-FROM apidbtuning.metadata
+FROM ApidbTuning.MetaDataWithoutNulls 
 WHERE dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
 AND category       = 'Participant'
 /** TODO:  add this back in when we can make this a tree on the record page

@@ -1,7 +1,7 @@
 <wdkModel>
     <recordClassSet name="ClinicalVisitRecordClasses">
 
-      <recordClass name="ClinicalVisitRecordClass" urlName="clinical-observation" displayName="Clinical Observation"> 
+      <recordClass name="ClinicalVisitRecordClass" urlName="clinical-observation" displayName="Observation"> 
 
 
             <!-- primary key definition -->
@@ -75,7 +75,7 @@
 
 
         <table name="Characteristics"
-               displayName="Clinical Observation Characteristics"
+               displayName="Observation Characteristics"
                queryRef="ClinicalVisitTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
@@ -209,7 +209,7 @@ SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
   term           AS parentTerm,
   string_value   AS term
-FROM apidbtuning.metadata
+FROM ApidbTuning.MetaDataWithoutNulls 
 WHERE dataset_name = 'ISASimple_ICEMR_PRISM_cohort_RSRC'
 AND category       = 'Event'
 /** TODO:  add this back in when we can make this a tree on the record page

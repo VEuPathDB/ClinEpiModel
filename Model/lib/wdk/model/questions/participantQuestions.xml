@@ -272,12 +272,12 @@ Use the filters above to select a set of Participants or to explore the data.  S
 	</dynamicAttributes>
 
              <summary>
-             Find participants by by clinical observations.
+             Find participants by by observations.
              </summary>
 
              <description>
                <![CDATA[
-             Find participants by clinical observations.
+             Find participants by observations.
                ]]>
              </description>
     </question>
