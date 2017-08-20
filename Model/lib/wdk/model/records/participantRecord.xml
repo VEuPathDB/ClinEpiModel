@@ -78,7 +78,7 @@
       <text>
       <![CDATA[
 
-                   <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&w=800&h=125" type="image/svg+xml"/>
+                   <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&w=1000&h=125" type="image/svg+xml"/>
 
       ]]>
     </text>
