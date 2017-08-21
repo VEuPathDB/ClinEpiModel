@@ -441,6 +441,7 @@ from APIDBTUNING.PARTICIPANTATTRIBUTES pa
 select distinct source_id as name, source_id as display_name
 from apidbtuning.metadata m
 where m.category = 'Participant'
+and source_id != 'EUPATH_0000032'
             ]]>
           </sql>
         </sqlQuery>
