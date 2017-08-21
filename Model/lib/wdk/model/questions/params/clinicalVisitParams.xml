@@ -156,8 +156,8 @@
     <numberRangeParam name="days_between"
                        prompt="Days between observations: "
                        integer="true"
-                       min="1"
-                       max="10000">
+                       min="0"
+                       max="36500">
          <help>Set the range of days between observations to compare to observations selected in the previous step</help>
          <suggest default="{'min': '1', 'max': '10'}" />  
 

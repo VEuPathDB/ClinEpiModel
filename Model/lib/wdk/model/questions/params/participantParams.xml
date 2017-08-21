@@ -792,14 +792,14 @@ You can restrict the observations returned in your search by selecting character
         <group name="summary_params" displayName="Observation aggregates" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can further restrict the participants returned in your search by setting summary values such as the average parasitemia or the number of observations / year of the observations matching the previous step characteristics.
+You can further restrict the participants returned in your search by setting summary values per participant such as the average parasitemia or the number of observations / year that match the criteria in this search.
                 ]]>
             </description>
         </group>
         <group name="relative_visits" displayName="Related observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-                         You can restrict the observations you have previously selected by removing (or keeping) those observations based on related observations you define below.  For example, you may want to only keep observations with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a observation where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove observations where diagnosis of malaria = yes.
+                         You can restrict previously selected Observations by removing (or keeping) those observations based on Related Observations that you define below.  For example, if you are interested in observations of asymptomatic parasitemia, you might want to exclude those that are followed by a malaria diagnosis within the subsequent 14 days.  To accomplish this, you would (1) ENABLE the Related Observations filter, (2) specify REMOVE Observations that are 1-14 days BEFORE the Related Observations, and (3) define Malaria Diagnosis = Symptomatic Malaria.
                 ]]>
             </description>
         </group>
