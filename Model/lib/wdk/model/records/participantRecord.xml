@@ -42,13 +42,30 @@
               </text>
             </textAttribute>
 
-            <textAttribute name="demo_plot_record" displayName="Weight for Height Z">
+            <textAttribute name="demo_plot_weightheight" displayName="Weight for Height Z-score">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
                     ]]>
               </text>
             </textAttribute>
+
+            <textAttribute name="demo_plot_weightage" displayName="Weight for Age Z-score">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
+                    ]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="demo_plot_heightage" displayName="Height for Age Z-score">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
+                    ]]>
+              </text>
+            </textAttribute>
+
 
       <!-- =============================================================== -->
       <!--  Step Analysis Plugins -->
@@ -92,27 +109,40 @@
 -->
 
 
-<!--
-       <table name="EventGraph"
-              displayName="Observation Summary Graph"
+
+<!--       <table name="EventGraph"
+              displayName="Observation Summary Graphs"
               queryRef="ParticipantTables.EventGraph">
-            <textAttribute name="demo_plot" displayName="Participant Observation Summary">
+            <columnAttribute name="source_id" internal="true"/>
+            <columnAttribute name="project_id" internal="true"/>
+            <columnAttribute name="plot_weightage_col"  displayName="Weight for Age Z-score"/>
+            <textAttribute name="plot_weightage" displayName="Weight for Age Z-score">
               <text>
               <![CDATA[
-                   <object
-                      data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&compact=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734"/
-                      type='image/svg+xml'
-                   </object>
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
                     ]]>
               </text>
             </textAttribute>
-            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="plot_heightage_col"  displayName="Height for Age Z-score"/>
+            <textAttribute name="plot_heightage" displayName="Height for Age Z-score">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
+                    ]]>
+              </text>
+            </textAttribute>
+            <columnAttribute name="plot_weightheight_col"  displayName="Weight for Height Z-score"/>
+            <textAttribute name="plot_weightheight" displayName="Weight for Height Z-score">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
+                    ]]>
+              </text>
+            </textAttribute>
        </table>
-
 -->
-         <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
 
+         <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
 
         <table name="Characteristics"
                displayName="Participant Characteristics"
@@ -253,7 +283,7 @@ select count(*) from apidbtuning.ParticipantAttributes
                      and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
           </sql>  
-         </sqlQuery>
+        </sqlQuery>
 
        <sqlQuery name="ParticipantAttributesMeta" isCacheable="false">
           <column name="name" />
@@ -346,25 +376,10 @@ WHERE o.dataset_name = '&&datasetName&&'
       <sqlQuery name="EventGraph"  isCacheable='false'>
             <column name="source_id"/>
             <column name="project_id"/>
-<!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
-         <sqlParamValue name="datasetName"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></sqlParamValue>
             <sql>
             <![CDATA[
-SELECT pan_name  AS source_id,
-  '@PROJECT_ID@' AS project_id,
-FROM apidbtuning.metadata
-WHERE dataset_name = '&&datasetName&&'
-AND category       = 'Participant'
-/** TODO:  add this back in when we can make this a tree on the record page
-UNION
-SELECT pa.name                AS source_id,
-  '@PROJECT_ID@'              AS project_id,
-  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
-  ontology_term_name          AS term
-FROM apidbtuning.metadataontology o,
-  apidbtuning.participantattributes pa
-WHERE o.dataset_name = '&&datasetName&&'
-**/
+select pa.*, pa.name as source_id, '@PROJECT_ID@'
+from APIDBTUNING.PARTICIPANTATTRIBUTES pa
             ]]>
             </sql>
         </sqlQuery>
