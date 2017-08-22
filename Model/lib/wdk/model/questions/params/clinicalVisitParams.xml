@@ -33,22 +33,22 @@
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData"
                     ontologyQueryRef="ClinicalVisitVQ.VisitOntology"
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd"
-                    prompt="Clincial Visits"
+                    prompt="Clincial Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset,clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.dwellings_nf,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf">
       <help>
-        Select visits based on their visit characteristics. 
+        Select observations based on their observation characteristics. 
       </help>
     </filterParamNew>
 
      <filterParamNew name="relative_visits_nf" 
                     metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData"
                     ontologyQueryRef="ClinicalVisitVQ.RelVisitOntology"
-                    prompt="Relative Visits"
+                    prompt="Relative Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset">
       <help>
-        Select relative visits based on their visit characteristics. 
+        Select relative observations based on their observation characteristics. 
       </help>
     </filterParamNew>
 
@@ -56,11 +56,11 @@
                       metadataQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetaDataNf"
                       ontologyQueryRef="ClinicalVisitVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetaDataBkgdNf"
-                      prompt="Age at visit"
+                      prompt="Age at observation"
                       dependedParamRef="participantParams.dataset,clinicalVisitParams.geographic_region,clinicalVisitParams.visit_date,participantParams.duration_observation"
                       trimMetadataTerms="false">
          <help>
-              Select the age of the participants at the time of their clinical visits.
+              Select the age of the participants at the time of their clinical observations.
          </help>
        </filterParamNew>
 
@@ -73,7 +73,7 @@
                       dependedParamRef="participantParams.dataset"
                        trimMetadataTerms="false">
          <help>
-           Select visits based on the participants subcounty where they live. 
+           Select observations based on the participants subcounty where they live. 
          </help>
     </filterParamNew>
 
@@ -87,7 +87,7 @@
                       dependedParamRef="participantParams.dataset,clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.geographic_region,clinicalVisitParams.participants_nf"
                       trimMetadataTerms="false">
          <help>
-              Select visits based on the household characteristics where the participants live. 
+              Select observations based on the household characteristics where the participants live. 
          </help>
        </filterParamNew>
 
@@ -109,7 +109,7 @@
                        prompt="Choose start and end dates "
                        minDate="2011-08-01"
                        maxDate="2016-06-30">
-         <help>"select the earliest and latest dates to include for identifying visits and computing mosquito counts."</help>
+         <help>"select the earliest and latest dates to include for identifying observations and computing mosquito counts."</help>
 <!--         <suggest default="{'min': '2011-08-05', 'max': '2016-06-30'}" />  -->
 
        </dateRangeParam>
@@ -124,17 +124,17 @@
                visible="false"
                dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.geographic_region"
                queryRef="ClinicalVisitVQ.minAgeAtVisit">
-      <help>Minimum age at visit.</help>
+      <help>Minimum age at observation.</help>
     </flatVocabParam>
 
     <flatVocabParam name="max_age_at_visit"
-               prompt="Age at visit &lt;= "
+               prompt="Age at observation &lt;= "
                multiPick="false"
                quote="false"
                visible="false"
                dependedParamRef="clinicalVisitParams.visits_visitage_metadata_nf,clinicalVisitParams.geographic_region"
                queryRef="ClinicalVisitVQ.maxAgeAtVisit">
-      <help>Minimum age at visit.</help>
+      <help>Minimum age at observation.</help>
     </flatVocabParam>
 -->
     <numberRangeParam name="num_relative_events"
@@ -142,7 +142,7 @@
                        integer="true"
                        min="1"
                        max="1000">
-         <help>Set the range of the number of matching observations in order to keep or remove the visit from the previous step.</help>
+         <help>Set the range of the number of matching observations in order to keep or remove the observation from the previous step.</help>
          <suggest default="{'min': '1', 'max': '20'}" />  
 
        </numberRangeParam> 
@@ -152,17 +152,17 @@
                        integer="true"
                        min="0"
                        max="1000">
-         <help>Set the range of days between visits to compare to visits selected in the previous step</help>
+         <help>Set the range of days between observations to compare to observations selected in the previous step</help>
          <suggest default="{'min': '0', 'max': '10'}" />  
 
        </numberRangeParam> 
 
     <enumParam name="dateOperator"
-               prompt="Keep or Remove visits "
+               prompt="Keep or Remove observations "
                multiPick="false"
                quote="false"
                visible="true">
-      <help>Choose how to compare these two visits.  Do you want to remove visits that have another visit within the specified time frame or keep them.</help>
+      <help>Choose how to compare these two observations.  Do you want to remove observations that have another observation within the specified time frame or keep them.</help>
       <enumList>
         <enumValue default="true">
           <term>remove</term>
@@ -180,7 +180,7 @@
                multiPick="false"
                quote="false"
                visible="true">
-      <help>Choose a direction for the corresponding visit.  Will the matching visit be before or after relative to the first visit.</help>
+      <help>Choose a direction for the corresponding observation.  Will the matching observation be before or after relative to the first observation.</help>
       <enumList>
         <enumValue default="true">
           <term>after</term>
@@ -199,7 +199,7 @@
                quote="false"
                visible="true"
                queryRef="ClinicalVisitVQ.useRelativeVisits">
-      <help>You MUST change this parameter to Yes in order to use relative visits! If you decide to not use relative visits, set this parameter to No and make certain "Keep or remove visits" is set to remove.</help>
+      <help>You MUST change this parameter to Yes in order to use relative observations! If you decide to not use relative observations, set this parameter to No and make certain "Keep or remove observations" is set to remove.</help>
     </flatVocabParam>
 
 
@@ -210,7 +210,7 @@
                visible="true"
                dependedParamRef="clinicalVisitParams.use_relative_visits"
                queryRef="ClinicalVisitVQ.dateOperator">
-      <help>Choose how to compare these two visits.  Do you want to remove visits that have another visit within the specified time frame or keep them.</help>
+      <help>Choose how to compare these two observations.  Do you want to remove observations that have another observation within the specified time frame or keep them.</help>
     </flatVocabParam>
 
     <flatVocabParam name="date_direction_fv"
@@ -219,7 +219,7 @@
                quote="false"
                visible="true"
                queryRef="ClinicalVisitVQ.dateDirection">
-      <help>Choose a direction for the corresponding visit.  Will the matching visit be before or after relative to the first visit.</help>
+      <help>Choose a direction for the corresponding observation.  Will the matching observation be before or after relative to the first observation.</help>
       <suggest default="after"/>
     </flatVocabParam>
 
@@ -242,7 +242,7 @@
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset,clinicalVisitParams.visits_visitage_metadata_nf_maled,clinicalVisitParams.dwellings_nf_maled,clinicalVisitParams.geographic_region_maled,clinicalVisitParams.participants_nf_maled">
       <help>
-        Select visits based on their visit characteristics. 
+        Select observations based on their observation characteristics. 
       </help>
     </filterParamNew>
 
@@ -252,11 +252,11 @@
                       ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf_maled"
                       backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetaDataBkgdNf_maled"
                       useSummaryMetadataQueryForInternalValue="true"
-                      prompt="Age (visit count)"
+                      prompt="Age (observation count)"
                       dependedParamRef="participantParams.dataset,clinicalVisitParams.geographic_region_maled"
                       trimMetadataTerms="false">
          <help>
-              Select the age of the participants at the time of their clinical visits.
+              Select the age of the participants at the time of their clinical observations.
          </help>
        </filterParamNew>
 
@@ -269,7 +269,7 @@
                        dependedParamRef="participantParams.dataset"
                        trimMetadataTerms="false">
          <help>
-           Select visits based on the participants subcounty where they live. 
+           Select observations based on the participants subcounty where they live. 
          </help>
     </filterParamNew>
 
@@ -283,7 +283,7 @@
                       dependedParamRef="participantParams.dataset,clinicalVisitParams.visits_visitage_metadata_nf_maled,clinicalVisitParams.geographic_region_maled,clinicalVisitParams.participants_nf_maled"
                       trimMetadataTerms="false">
          <help>
-              Select visits based on the household characteristics where the participants live. 
+              Select observations based on the household characteristics where the participants live. 
          </help>
        </filterParamNew>
 

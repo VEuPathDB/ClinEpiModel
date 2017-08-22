@@ -37,21 +37,21 @@
     </numberParam>
 
     <numberRangeParam name="visit_count"
-                      prompt="Number of Matching Visits: "
+                      prompt="Number of Matching Observations: "
                       integer="true"
                       min="1"
                       max="1000">
-      <help>Set the range of number of visits that match your search criteria.</help>
+      <help>Set the range of number of observations that match your search criteria.</help>
       <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
     </numberRangeParam>
 
         <numberRangeParam name="visits_per_year"
-                      prompt="Visits per year:"
+                      prompt="Observations per year:"
                       integer="false"
                       min="0"
                       max="365"
                       step="0.1">
-      <help>Set the range of number of visits that match your search criteria.</help>
+      <help>Set the range of number of observations that match your search criteria.</help>
       <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
     </numberRangeParam>
 
@@ -60,7 +60,7 @@
                       integer="true"
                       min="0"
                       max="1000000">
-      <help>Set the range of days between visits to compare to visits selected in the previous step</help>
+      <help>Set the range of days between observations to compare to observations selected in the previous step</help>
       <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
     </numberRangeParam> 
 
@@ -130,7 +130,7 @@
                     summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData"
                     ontologyQueryRef="ParticipantVQ.VisitOntology"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd"
-                    prompt="Clincial Visits"
+                    prompt="Clincial Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
       <help>
