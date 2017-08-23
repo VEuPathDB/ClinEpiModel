@@ -46,7 +46,7 @@
             <textAttribute name="demo_plot_allThree_compact" displayName="Observations Summary - DEMO Graph"  truncateTo="100000">
               <text>
               <![CDATA[
-                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689,EUPATH_0000734,EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&thumb=1"/>
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689,EUPATH_0000734,EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&h=150&w=400"/>
                     ]]>
               </text>
             </textAttribute>
