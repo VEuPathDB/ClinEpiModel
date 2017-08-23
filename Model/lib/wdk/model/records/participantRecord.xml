@@ -17,7 +17,7 @@
                     ]]>
                 </text>                
             </idAttribute>
-
+<!--
             <textAttribute name="demo_plot_heightweight_compact" displayName="Weight for Height Z - DEMO Graph"  truncateTo="100000">
               <text>
               <![CDATA[
@@ -41,11 +41,20 @@
                     ]]>
               </text>
             </textAttribute>
+-->
+
+            <textAttribute name="demo_plot_allThree_compact" displayName="Observations Summary - DEMO Graph"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689,EUPATH_0000734,EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&thumb=1"/>
+                    ]]>
+              </text>
+            </textAttribute>
 
             <textAttribute name="demo_plot_weightheight" displayName="Weight for Height Z-score">
               <text>
               <![CDATA[
-                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type=""image/svg+xml"/>
                     ]]>
               </text>
             </textAttribute>
@@ -53,7 +62,7 @@
             <textAttribute name="demo_plot_weightage" displayName="Weight for Age Z-score">
               <text>
               <![CDATA[
-                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type=""image/svg+xml"/>
                     ]]>
               </text>
             </textAttribute>
@@ -61,11 +70,26 @@
             <textAttribute name="demo_plot_heightage" displayName="Height for Age Z-score">
               <text>
               <![CDATA[
-                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704" type=""image/svg+xml"/>
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type=""image/svg+xml"/>
                     ]]>
               </text>
             </textAttribute>
 
+            <textAttribute name="demo_plot_allThree" displayName="Observations Graph">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689,EUPATH_0000734,EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type=""image/svg+xml"/>
+                    ]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="demo_plot_xlength" displayName="Length Over Time">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=ClinEpiDB&id=$$source_id$$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000719&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type=""image/svg+xml"/>
+                    ]]>
+              </text>
+            </textAttribute>
 
       <!-- =============================================================== -->
       <!--  Step Analysis Plugins -->
