@@ -190,7 +190,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
 
         <attributesList 
-            summary="visit_count,demo_plot_allThree_compact"        
+            summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741,visit_count"        
         /> 
 
 
