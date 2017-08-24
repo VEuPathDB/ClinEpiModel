@@ -143,7 +143,7 @@
                        min="1"
                        max="1000">
          <help>Set the range of the number of matching observations in order to keep or remove the observation from the previous step.</help>
-         <suggest default="{'min': '1', 'max': '20'}" />  
+         <suggest default="{'min': '1', 'max': '100'}" />  
 
        </numberRangeParam> 
 

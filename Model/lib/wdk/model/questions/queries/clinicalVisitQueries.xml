@@ -39,6 +39,7 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
+       <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
        <column name="source_id"/>
