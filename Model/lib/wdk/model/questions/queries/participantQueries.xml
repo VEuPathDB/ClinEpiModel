@@ -183,7 +183,6 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_00000
        <paramRef ref="clinicalVisitParams.relative_visits_nf_maled" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/>
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_Gates_MAL-ED_stdm_tp_RSRC" groupRef="metaDataGroups.event_summary_params"/>
-       <paramRef ref="participantParams.visits_visitage_metadata_nf_maled" visible="false" groupRef="metaDataGroups.event_summary_params"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_age_visit"/>
