@@ -251,7 +251,7 @@ SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as dwellin
         <sql>
             <![CDATA[
 SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, count(*) as num_of_visits , max(source_set.wdk_weight) as wdk_weight
-              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.clinicalvisitattributes cva, apidbtuning.participantattributes pa
+              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.eventattributes cva, apidbtuning.participantattributes pa
               WHERE source_set.source_id = cva.name 
               AND cva.protocol_app_node_id = io.output_node_id
               AND  io.input_node_id = pa.protocol_app_node_id

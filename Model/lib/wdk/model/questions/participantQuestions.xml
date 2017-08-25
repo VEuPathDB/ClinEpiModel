@@ -283,15 +283,13 @@ Use the filters above to select a set of Participants or to explore the data.  S
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
               noSummaryOnSingleRecord="true">
 
-<!--
         <attributesList 
-            summary="num_of_visits,EUPATH_0000054"   
+            summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741,num_of_visits"        
             sorting="num_of_visits desc"
         /> 
--->
 
 	<dynamicAttributes>
-	     <columnAttribute name="num_of_visits" displayName="Clincal Observations Transformed" help="Clinicals observations associated with the participant" align="center"> 
+	     <columnAttribute name="num_of_visits" displayName="Observations Transformed" help="Observations associated with the participant from the previous step" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"

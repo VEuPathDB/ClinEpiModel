@@ -240,31 +240,16 @@
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd_maled"
                     prompt="Observations"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset,clinicalVisitParams.visits_visitage_metadata_nf_maled,clinicalVisitParams.dwellings_nf_maled,clinicalVisitParams.geographic_region_maled,clinicalVisitParams.participants_nf_maled">
+                    dependedParamRef="participantParams.dataset,clinicalVisitParams.dwellings_nf_maled,clinicalVisitParams.geographic_region_maled,clinicalVisitParams.participants_nf_maled">
       <help>
         Select observations based on their observation characteristics. 
       </help>
     </filterParamNew>
 
-       <filterParamNew name="visits_visitage_metadata_nf_maled" 
-                      metadataQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetaDataNf_maled"
-                      summaryMetadataQueryRef="ClinicalVisitVQ.SummaryClinicalVisitAgeMetaDataNf_maled"
-                      ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf_maled"
-                      backgroundQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetaDataBkgdNf_maled"
-                      useSummaryMetadataQueryForInternalValue="true"
-                      prompt="Age (observation count)"
-                      dependedParamRef="participantParams.dataset,clinicalVisitParams.geographic_region_maled"
-                      trimMetadataTerms="false">
-         <help>
-              Select the age of the participants at the time of their clinical observations.
-         </help>
-       </filterParamNew>
-
        <filterParamNew name="geographic_region_maled" 
                        metadataQueryRef="ClinicalVisitVQ.RegionMetaData_maled"
                        summaryMetadataQueryRef="ClinicalVisitVQ.RegionMetaDataSummary_maled"
                        ontologyQueryRef="ParticipantVQ.RegionOntology_maled"
-                       useSummaryMetadataQueryForInternalValue="true"
                        prompt="Participant"
                        dependedParamRef="participantParams.dataset"
                        trimMetadataTerms="false">
@@ -280,7 +265,7 @@
                       backgroundQueryRef="ClinicalVisitVQ.DwellingMetaDataBkgd_maled"
                       useSummaryMetadataQueryForInternalValue="true"
                       prompt="Households"
-                      dependedParamRef="participantParams.dataset,clinicalVisitParams.visits_visitage_metadata_nf_maled,clinicalVisitParams.geographic_region_maled,clinicalVisitParams.participants_nf_maled"
+                      dependedParamRef="participantParams.dataset,clinicalVisitParams.geographic_region_maled,clinicalVisitParams.participants_nf_maled"
                       trimMetadataTerms="false">
          <help>
               Select observations based on the household characteristics where the participants live. 
@@ -295,7 +280,7 @@
                       useSummaryMetadataQueryForInternalValue="true"
                       prompt="Participants"
                       trimMetadataTerms="false"
-                      dependedParamRef="participantParams.dataset,clinicalVisitParams.visits_visitage_metadata_nf_maled,clinicalVisitParams.geographic_region_maled">
+                      dependedParamRef="participantParams.dataset,clinicalVisitParams.geographic_region_maled">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -911,7 +896,6 @@ and io.output_node_id = m.protocol_app_node_id
 
 
    <sqlQuery name="ParticipantMetaData_maled" isCacheable="true">
-     <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf_maled" />
      <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
      <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
@@ -923,9 +907,9 @@ and io.output_node_id = m.protocol_app_node_id
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
   from apidbtuning.protocolappnodeio iov, ApidbTuning.MetaDataWithoutNulls m
-   where iov.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
-       and iov.input_type_source_id = 'EUPATH_0000096'
-       and iov.input_node_id = m.protocol_app_node_id
+   where iov.input_node_id in ($$geographic_region_maled$$)
+       and iov.output_type_source_id = 'EUPATH_0000096'
+       and iov.output_node_id = m.protocol_app_node_id
        and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
        and m.category = 'Participant'
           ]]>
@@ -936,13 +920,16 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
       <column name="internal"/>
       <sql>
         <![CDATA[
-select internal from (##FILTERED_IDS##);
+select distinct io.output_node_id as internal
+  from apidbtuning.protocolappnodeio io,
+  (##FILTERED_IDS##) md
+  where io.input_node_id = md.internal
+  and io.output_type_source_id = 'EUPATH_0000738'
          ]]>   
       </sql>
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd_maled">
-      <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf_maled" />
       <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -961,7 +948,6 @@ from ApidbTuning.MetaDataWithoutNulls m
     </sqlQuery>
 
     <sqlQuery name="VisitMetaData_maled" isCacheable="true">
-         <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf_maled" />
          <paramRef ref="clinicalVisitParams.dwellings_nf_maled" />  
          <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
          <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
@@ -983,7 +969,6 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sqlQuery>    
 
     <sqlQuery name="VisitMetaDataBkgd_maled">
-      <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf_maled" />
       <paramRef ref="clinicalVisitParams.dwellings_nf_maled" />  
       <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
       <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
@@ -1003,69 +988,17 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="ClinicalVisitAgeMetaDataNf_maled" isCacheable="true">
-      <paramRef ref="clinicalVisitParams.geographic_region_maled" /> 
-      <paramRef ref="participantParams.dataset" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-  select distinct io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
- from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
- where io.output_type_source_id = 'EUPATH_0000096'
- and io.output_node_id = ioe.input_node_id
- and ioe.output_type_source_id = 'EUPATH_0000738') io
-  where m.protocol_app_node_id in ($$geographic_region_maled$$)
- and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
-  and m.category = 'Event'
- and m.source_id = 'EUPATH_0000644'
- and io.event_id = m.protocol_app_node_id
-         ]]>   
-      </sql>
-   </sqlQuery>
-
-   <sqlQuery name="SummaryClinicalVisitAgeMetaDataNf_maled" isCacheable="true">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
-select internal from (##FILTERED_IDS##);
-         ]]>   
-      </sql>
-   </sqlQuery>
-
-      <sqlQuery name="ClinicalVisitAgeMetaDataBkgdNf_maled" >
-      <paramRef ref="clinicalVisitParams.geographic_region_maled" /> 
-      <paramRef ref="participantParams.dataset" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-  select distinct io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
- from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
- where io.output_type_source_id = 'EUPATH_0000096'
- and io.output_node_id = ioe.input_node_id
- and ioe.output_type_source_id = 'EUPATH_0000738') io
-  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
-  and m.category = 'Event'
- and m.source_id = 'EUPATH_0000644'
- and io.event_id = m.protocol_app_node_id
-          ]]>   
-      </sql>
-   </sqlQuery>
-
    <sqlQuery name="RegionMetaDataSummary_maled" >
       <column name="internal"/>
       <sql>
         <![CDATA[
-select internal from (##FILTERED_IDS##);
+select distinct iob.output_node_id as internal
+  from apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob,
+  (##FILTERED_IDS##) md
+  where ioa.input_node_id = md.internal
+  and ioa.output_type_source_id = 'EUPATH_0000096'
+  and ioa.output_node_id = iob.input_node_id
+  and iob.output_type_source_id = 'EUPATH_0000738'
          ]]>   
       </sql>
     </sqlQuery>
@@ -1097,13 +1030,18 @@ select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.num
       <column name="internal"/>
       <sql>
         <![CDATA[
-select internal from (##FILTERED_IDS##);
+select distinct iob.output_node_id as internal
+  from apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob,
+  (##FILTERED_IDS##) md
+  where ioa.input_node_id = md.internal
+  and ioa.output_type_source_id = 'EUPATH_0000096'
+  and ioa.output_node_id = iob.input_node_id
+  and iob.output_type_source_id = 'EUPATH_0000738'
          ]]>   
       </sql>
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaData_maled" isCacheable="true">
-      <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf_maled" />
       <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
       <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
@@ -1129,7 +1067,6 @@ select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.num
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaDataBkgd_maled">
-      <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf_maled" />
       <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
       <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
