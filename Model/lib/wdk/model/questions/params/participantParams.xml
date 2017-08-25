@@ -835,7 +835,7 @@ and io.output_node_id in ($$visits_visitage_metadata_nf_maled$$)
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitSummaryMetaData_maled" isCacheable="false">
+    <sqlQuery name="VisitSummaryMetaData_maled" isCacheable="true">
       <column name="internal"/>
       <sql>
         <![CDATA[
