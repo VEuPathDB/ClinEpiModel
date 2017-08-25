@@ -107,23 +107,12 @@
  <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true">
 
    <sqlQuery name="SummaryRegionMetaData">
-     <paramRef ref="participantParams.dataset" />  
-     <column name="ontology_term_name"/>
-     <column name="internal"/>
-     <column name="number_value"/>
-     <column name="date_value"/>
-     <column name="string_value"/>
-     <sql>
+      <column name="internal"/>
+      <sql>
         <![CDATA[
-                 select distinct lta.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
- where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Dwelling type'
- and m.source_id = 'EUPATH_0000054'
- and m.protocol_app_node_id = io.input_node_id
- and io.output_node_id = lta.protocol_app_node_id
-          ]]>
-    </sql>
+select internal from (##FILTERED_IDS##)
+         ]]>   
+      </sql>
     </sqlQuery>
 
    <sqlQuery name="DwellingOntology">
@@ -224,40 +213,11 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sqlQuery>
 
     <sqlQuery name="SummaryDwellingMetaData" isCacheable="false">
-      <paramRef ref="dwellingParams.date_range" />  
-      <paramRef ref="lightTrapParams.geographic_region" />  
-      <paramRef ref="participantParams.dataset" />  
-      <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
       <sql>
-         <![CDATA[
- select distinct lta.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
- where m.protocol_app_node_id in ($$geographic_region$$)
- and m.protocol_app_node_id = io.input_node_id
- and io.output_node_id = lta.protocol_app_node_id
- and lta.OBI_0001619 >= $$date_range.min$$
- and lta.OBI_0001619 <= $$date_range.max$$ 
- union
- select lta.protocol_app_node_id, mos.ontology_term_name, mos.string_value,mos.number_value,mos.date_value
- from
- (select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
-   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
-  where da.protocol_app_node_id in ($$geographic_region$$)
-  and da.protocol_app_node_id = io.input_node_id
-  and la.protocol_app_node_id = io.output_node_id
-  and la.OBI_0001619 >= $$date_range.min$$
-  and la.OBI_0001619 <= $$date_range.max$$ 
-  group by da.protocol_app_node_id) mos, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes lta
-  where mos.protocol_app_node_id = io.input_node_id
-  and io.output_node_id = lta.protocol_app_node_id
-  and lta.OBI_0001619 >= $$date_range.min$$
-  and lta.OBI_0001619 <= $$date_range.max$$ 
-          ]]>
+        <![CDATA[
+select internal from (##FILTERED_IDS##)
+         ]]>   
       </sql>
     </sqlQuery>
 

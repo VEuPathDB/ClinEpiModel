@@ -217,7 +217,7 @@
 
 
             <!-- TODO:  this needs to be a property -->
-            <linkAttribute name="db_link" displayName="Date of Visit" inReportMaker="false">
+            <linkAttribute name="db_link" displayName="Date of Observation" inReportMaker="false">
                  <displayText>
                     <![CDATA[
                     $$name$$
@@ -228,10 +228,10 @@
 <!--
             <columnAttribute name="EUPATH_0000040" displayName="Complicated malaria"/>
             <columnAttribute name="EUPATH_0000338" displayName="Malaria diagnosis and parasite status"/>
-            <columnAttribute name="EUPATH_0000311" displayName="Visit type"/>
-            <columnAttribute name="EUPATH_0000113" displayName="Age at time of visit"/>
+            <columnAttribute name="EUPATH_0000311" displayName="Observation type"/>
+            <columnAttribute name="EUPATH_0000113" displayName="Age at time of observation"/>
             <columnAttribute name="EUPATH_0000110" displayName="Temperature"/>
-            <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
+            <columnAttribute name="EUPATH_0000091" displayName="Date of observation" internal="true"/>
             <columnAttribute name="EUPATH_0000092" displayName="Asexual parasite density"/>
             <columnAttribute name="EUPATH_0000100" displayName="Fever (subjective)"/>
 -->
@@ -254,7 +254,7 @@
             </linkAttribute>
 
             <columnAttribute name="sample_id" displayName="Sample ID"/>
-            <columnAttribute name="EUPATH_0000091" displayName="Date of visit" internal="true"/>
+            <columnAttribute name="EUPATH_0000091" displayName="Date of observation" internal="true"/>
             <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
 -->

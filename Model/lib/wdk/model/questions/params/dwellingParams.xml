@@ -315,25 +315,12 @@ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
     </sqlQuery>
 
     <sqlQuery name="ParticipantSummaryMetaData" isCacheable="false">
-     <paramRef ref="dwellingParams.date_range" />  
-     <paramRef ref="dwellingParams.dwellings_nf" />  
-     <paramRef ref="dwellingParams.geographic_region" />  
-     <paramRef ref="participantParams.dataset" />  
-     <column name="ontology_term_name"/>
-     <column name="internal"/>
-     <column name="number_value"/>
-     <column name="date_value"/>
-     <column name="string_value"/>
-     <sql>
-         <![CDATA[
-select distinct io.input_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
- where m.dataset_name = $$dataset$$
- and m.category = 'Participant'
- and m.protocol_app_node_id = io.output_node_id
- and io.input_node_id in ($$dwellings_nf$$)
-          ]]>
-    </sql>
+      <column name="internal"/>
+      <sql>
+        <![CDATA[
+select internal from (##FILTERED_IDS##)
+         ]]>   
+      </sql>
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd">

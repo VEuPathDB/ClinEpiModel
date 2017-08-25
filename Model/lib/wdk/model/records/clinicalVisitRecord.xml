@@ -10,7 +10,7 @@
               <columnRef>project_id</columnRef>
             </primaryKey>
 
-            <idAttribute name="primary_key" displayName="Visit Id">
+            <idAttribute name="primary_key" displayName="Observation Id">
                 <text>
                     <![CDATA[
                       $$source_id$$
@@ -78,7 +78,7 @@
 
 
         <table name="Characteristics"
-               displayName="Clinical Visit Characteristics"
+               displayName="Clinical Observation Characteristics"
                queryRef="ClinicalVisitTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
@@ -88,7 +88,7 @@
 
 <!--
         <table name="Samples"
-               displayName="Samples Collected During Visit"
+               displayName="Samples Collected During Observation"
                queryRef="ClinicalVisitTables.Samples">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
