@@ -39,7 +39,6 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
        <column name="source_id"/>
@@ -102,6 +101,7 @@ group by name
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf_maled" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf_maled" visible="false" groupRef="metaDataGroups.relative_events"/>
@@ -134,6 +134,8 @@ and vis.protocol_app_node_id != rv.protocol_app_node_id
 and rv.EUPATH_0000644 $$date_direction_fv$$ vis.EUPATH_0000644
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) >= $$days_between.min$$
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
+group by vis.protocol_app_node_id,vis.name, vis.input_node_id,vis.EUPATH_0000644
+having count(*) >= $$num_relative_events.min$$ and count(*) <= $$num_relative_events.max$$
 )
 select name as source_id,'ClinEpiDB' as project_id
 , CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
