@@ -1,17 +1,17 @@
 <wdkModel>
   <stepAnalysisPlugins>
-    
+
     <viewConfig prefix="/wdkCustomization/jsp/analysis/" suffix=".jsp"/>
     <executionConfig threadPoolSize="25" fileStoreDirectory="@STEP_ANALYSIS_JOB_DIR@"/>
 
-     <stepAnalysisPlugin
+    <stepAnalysisPlugin
         name="person-graph-analysis" displayName="Graph Person Results"
-        releaseVersion="1"
+        releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
         <![CDATA[
-                 Graph utilizing R and shiny the results in this step.
+          Graph utilizing R and shiny the results in this step.
         ]]>
       </shortDescription>
       <description/>
@@ -20,12 +20,11 @@
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1000</property>
       <property name="iframeLengthPx">800</property>
-    </stepAnalysisPlugin>     
+    </stepAnalysisPlugin>
 
-
-<stepAnalysisPlugin
+    <stepAnalysisPlugin
         name="light-trap-plots" displayName="Total Anopheles graphed by Month Year"
-        releaseVersion="1"
+        releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
@@ -42,9 +41,9 @@
     </stepAnalysisPlugin>
 
 <!--
-<stepAnalysisPlugin
+    <stepAnalysisPlugin
         name="clinepi-event-dist" displayName="Participant Analysis"
-        releaseVersion="1"
+        releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
@@ -64,9 +63,9 @@
     </stepAnalysisPlugin>
 -->
 
-<stepAnalysisPlugin
+    <stepAnalysisPlugin
         name="clinepi-event-dist" displayName="Distribution of Observations"
-        releaseVersion="1"
+        releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
