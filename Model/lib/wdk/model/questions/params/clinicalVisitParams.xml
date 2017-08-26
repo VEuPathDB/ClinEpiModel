@@ -151,7 +151,7 @@
                        prompt="Days between observations: "
                        integer="true"
                        min="0"
-                       max="1000">
+                       max="10000">
          <help>Set the range of days between observations to compare to observations selected in the previous step</help>
          <suggest default="{'min': '0', 'max': '10'}" />  
 
