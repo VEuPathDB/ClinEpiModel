@@ -277,7 +277,6 @@
                       summaryMetadataQueryRef="ClinicalVisitVQ.ParticipantMetaDataSummary_maled"
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_maled"
-                      useSummaryMetadataQueryForInternalValue="true"
                       prompt="Participants"
                       trimMetadataTerms="false"
                       dependedParamRef="participantParams.dataset,clinicalVisitParams.geographic_region_maled">
@@ -906,12 +905,10 @@ and io.output_node_id = m.protocol_app_node_id
       <sql>
          <![CDATA[
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
-  from apidbtuning.protocolappnodeio iov, ApidbTuning.MetaDataWithoutNulls m
-   where iov.input_node_id in ($$geographic_region_maled$$)
-       and iov.output_type_source_id = 'EUPATH_0000096'
-       and iov.output_node_id = m.protocol_app_node_id
-       and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
-       and m.category = 'Participant'
+from ApidbTuning.MetaDataWithoutNulls m
+ where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
+ and m.category = 'Participant'
+ and m.protocol_app_node_id in ($$geographic_region_maled$$)
           ]]>
     </sql>
     </sqlQuery>
@@ -992,13 +989,11 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <column name="internal"/>
       <sql>
         <![CDATA[
-select distinct iob.output_node_id as internal
-  from apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob,
+select distinct io.output_node_id as internal
+  from apidbtuning.protocolappnodeio io,
   (##FILTERED_IDS##) md
-  where ioa.input_node_id = md.internal
-  and ioa.output_type_source_id = 'EUPATH_0000096'
-  and ioa.output_node_id = iob.input_node_id
-  and iob.output_type_source_id = 'EUPATH_0000738'
+  where io.input_node_id = md.internal
+  and io.output_type_source_id = 'EUPATH_0000738'
          ]]>   
       </sql>
     </sqlQuery>
@@ -1012,8 +1007,8 @@ select distinct iob.output_node_id as internal
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
+select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, io.output_node_id as part_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where io.input_type_source_id = 'PCO_0000024'
  and io.output_node_id = ioe.input_node_id
@@ -1030,13 +1025,11 @@ select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.num
       <column name="internal"/>
       <sql>
         <![CDATA[
-select distinct iob.output_node_id as internal
-  from apidbtuning.protocolappnodeio ioa, apidbtuning.protocolappnodeio iob,
+select distinct io.output_node_id as internal
+  from apidbtuning.protocolappnodeio io,
   (##FILTERED_IDS##) md
-  where ioa.input_node_id = md.internal
-  and ioa.output_type_source_id = 'EUPATH_0000096'
-  and ioa.output_node_id = iob.input_node_id
-  and iob.output_type_source_id = 'EUPATH_0000738'
+  where io.input_node_id = md.internal
+  and io.output_type_source_id = 'EUPATH_0000738'
          ]]>   
       </sql>
     </sqlQuery>
@@ -1052,11 +1045,10 @@ select distinct iob.output_node_id as internal
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, ioe.output_node_id as event_id
- from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
- where ioe.output_node_id in ($$participants_nf_maled$$)
- and io.output_node_id = ioe.input_node_id
+select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, io.output_node_id as part_id
+ from apidbtuning.protocolappnodeio io
+ where io.output_node_id in ($$participants_nf_maled$$)
  and io.input_type_source_id = 'PCO_0000024') io
  where m.protocol_app_node_id = io.hh_id
  and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
@@ -1077,9 +1069,13 @@ select io.hh_id as internal, m.term as ontology_term_name, m.string_value, m.num
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m
- where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
+select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, io.output_node_id as part_id
+ from apidbtuning.protocolappnodeio io
+ where io.output_type_source_id = 'EUPATH_0000096' 
+ and io.input_type_source_id = 'PCO_0000024') io
+ where m.protocol_app_node_id = io.hh_id
+ and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Household'
           ]]>
     </sql>    
