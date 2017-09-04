@@ -43,7 +43,7 @@ We hope strategies help you get the most from the data!
        </attribute>
        <attribute name="tip">
  <![CDATA[
-you can click Add Step to add a step to your strategy ?
+In the Strategy Panel, you can click Add Step to add a step to your strategy ?
 ]]>
        </attribute>
        <attribute name="showTipAsDidYouKnow">true</attribute>
@@ -57,7 +57,7 @@ To view the results of a prior search or combination, click on a step box.
        </attribute>
        <attribute name="tip">
  <![CDATA[
-you can see results of a previous step by clicking on its box ?
+In the Strategy Panel, you can see results of a previous step by clicking on its box ?
 ]]>
        </attribute>
        <attribute name="showTipAsDidYouKnow">true</attribute>
@@ -72,7 +72,7 @@ For a menu of actions/properties for how it is combined with the prior step, cli
        </attribute>
        <attribute name="tip">
  <![CDATA[
-you can get a menu of step actions by clicking on the "Edit" icon ?
+In the Strategy Panel, you can get a menu of step actions by clicking on the "Edit" icon ?
 ]]>
        </attribute>
        <attribute name="showTipAsDidYouKnow">true</attribute>
@@ -87,7 +87,7 @@ Click the "Edit" icon to get a menu.  Choose "Make Nested Strategy."  Now that s
        </attribute>
        <attribute name="tip">
  <![CDATA[
-you can branch a strategy ?
+In the Strategy Panel, you can branch a strategy ?
 <br>Choose "Make Nested Strategy" in the step actions menu.
 ]]>
        </attribute>
