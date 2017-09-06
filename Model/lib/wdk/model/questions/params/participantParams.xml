@@ -185,7 +185,8 @@
                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_maled"
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_maled"
-                      prompt="Participants"
+                      filterDataType="Participants"
+                      prompt="Personal characteristics"
                       trimMetadataTerms="false"
                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled">
          <help>
