@@ -92,7 +92,8 @@
        <filterParamNew name="geographic_region" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData"
                        ontologyQueryRef="ParticipantVQ.RegionOntology"
-                       prompt="Participants"
+                       filterDataTypeDisplayName="Participants"
+                       prompt="Geographic region"
                        trimMetadataTerms="false">
          <help>
            Select participants based on their geographic region. 
@@ -159,7 +160,8 @@
        <filterParamNew name="geographic_region_maled" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData_maled"
                        ontologyQueryRef="ParticipantVQ.RegionOntology_maled"
-                       prompt="Participants"
+                       filterDataTypeDisplayName="Participants"
+                       prompt="Geographic region"
                        dependedParamRef="participantParams.dataset"
                        trimMetadataTerms="false">
          <help>
@@ -185,7 +187,7 @@
                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_maled"
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_maled"
-                      filterDataType="Participants"
+                      filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
                       trimMetadataTerms="false"
                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled">
