@@ -1,5 +1,11 @@
 <wdkModel>
 
+  <constant name="dwellingIdTransformSql1">
+    <![CDATA[
+      select internal from (##FILTERED_IDS##)
+    ]]> 
+  </constant>   
+
   <paramSet name="dwellingParams">
     
     <enumParam name="type"
@@ -50,12 +56,12 @@
 
     <filterParamNew name="participants_nf" 
                       metadataQueryRef="DwellingVQ.ParticipantMetaData"
-                      summaryMetadataQueryRef="DwellingVQ.ParticipantSummaryMetaData"
                       ontologyQueryRef="DwellingVQ.ParticipantOntology"
                       backgroundQueryRef="DwellingVQ.ParticipantMetaDataBkgd"
                       prompt="Participants"
                       trimMetadataTerms="false"
                       dependedParamRef="participantParams.dataset,dwellingParams.date_range,dwellingParams.dwellings_nf,dwellingParams.geographic_region">
+         <idTransformSql>%%dwellingIdTransformSql1%%</idTransformSql> 
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -312,15 +318,6 @@ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  and io.input_node_id in ($$dwellings_nf$$)
           ]]>
     </sql>
-    </sqlQuery>
-
-    <sqlQuery name="ParticipantSummaryMetaData" isCacheable="false">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
-select internal from (##FILTERED_IDS##)
-         ]]>   
-      </sql>
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd">

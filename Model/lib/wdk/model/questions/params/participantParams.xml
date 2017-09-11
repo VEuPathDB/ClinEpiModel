@@ -1,5 +1,31 @@
 <wdkModel>
 
+  <constant name="participantIdTransformSql1">
+    <![CDATA[
+      select distinct io.output_node_id as internal
+       from apidbtuning.protocolappnodeio io,
+         (##FILTERED_IDS##) fi
+       where io.input_node_id = fi.internal
+        and io.output_type_source_id = 'EUPATH_0000096'
+    ]]>   
+  </constant>
+  
+  <constant name="participantIdTransformSql2">
+    <![CDATA[
+      select distinct io.input_node_id as internal
+       from apidbtuning.protocolappnodeio io,
+        (##FILTERED_IDS##) fi
+       where io.output_node_id = fi.internal
+        and io.input_type_source_id = 'EUPATH_0000096'
+    ]]>     
+  </constant>
+  
+  <constant name="participantIdTransformSql3">
+    <![CDATA[
+      select internal from (##FILTERED_IDS##)
+    ]]> 
+  </constant>   
+
   <paramSet name="participantParams">
     
     <enumParam name="type"
@@ -102,13 +128,13 @@
 
        <filterParamNew name="dwellings_nf" 
                       metadataQueryRef="ParticipantVQ.DwellingMetaData"
-                      summaryMetadataQueryRef="ParticipantVQ.DwellingMetaDataSummary"
                       ontologyQueryRef="ParticipantVQ.DwellingOntology"
                       backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd"
-                      useSummaryMetadataQueryForInternalValue="true"
+                      useIdTransformSqlForInternalValue="true"
                       prompt="Households"
                       dependedParamRef="participantParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region,participantParams.participants_nf"
                       trimMetadataTerms="false">
+         <idTransformSql>%%participantIdTransformSql3%%</idTransformSql>             
          <help>
               Select participants based on the characteristics of the household where they live. 
          </help>
@@ -122,18 +148,18 @@
                       trimMetadataTerms="false"
                       dependedParamRef="participantParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region">
          <help>
-              Select participants based on their characteristics. 
+           Select participants based on their characteristics. 
          </help>
        </filterParamNew>
 
        <filterParamNew name="visits_nf" 
                     metadataQueryRef="ParticipantVQ.VisitMetaData"
-                    summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData"
                     ontologyQueryRef="ParticipantVQ.VisitOntology"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd"
                     prompt="Clincial Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
+      <idTransformSql>%%participantIdTransformSql3%%</idTransformSql>    
       <help>
         Select participants based on their visit characteristics. 
       </help>
@@ -141,12 +167,12 @@
 
     <filterParamNew name="visits_visitage_metadata_nf" 
                       metadataQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataNf"
-                      summaryMetadataQueryRef="ParticipantVQ.SummaryClinicalVisitAgeMetaDataNf"
                       ontologyQueryRef="ParticipantVQ.ClinicalVisitAgeOntologyNf"
                       backgroundQueryRef="ParticipantVQ.ClinicalVisitAgeMetaDataBkgdNf"
                       prompt="Age at visit"
                       dependedParamRef="participantParams.geographic_region,clinicalVisitParams.visit_date"
                       trimMetadataTerms="false">
+         <idTransformSql>%%participantIdTransformSql3%%</idTransformSql>                 
          <help>
               Select reference samples. 
          </help>
@@ -171,13 +197,13 @@
 
        <filterParamNew name="dwellings_nf_maled" 
                       metadataQueryRef="ParticipantVQ.DwellingMetaData_maled"
-                      summaryMetadataQueryRef="ParticipantVQ.DwellingMetaDataSummary_maled"
                       ontologyQueryRef="ParticipantVQ.DwellingOntology_maled"
                       backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd_maled"
-                      useSummaryMetadataQueryForInternalValue="true"
+                      useIdTransformSqlForInternalValue="true"
                       prompt="Households"
                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled,participantParams.participants_nf_maled"
                       trimMetadataTerms="false">
+         <idTransformSql>%%participantIdTransformSql1%%</idTransformSql>             
          <help>
               Select participants based on the characteristics of the household where they live. 
          </help>
@@ -198,12 +224,12 @@
 
        <filterParamNew name="visits_nf_maled" 
                     metadataQueryRef="ParticipantVQ.VisitMetaData_maled"
-                    summaryMetadataQueryRef="ParticipantVQ.VisitSummaryMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
                     prompt="Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset,participantParams.dwellings_nf_maled,participantParams.geographic_region_maled,participantParams.participants_nf_maled">
+      <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>   
       <help>
         Select participants based on their visit characteristics. 
       </help>
@@ -391,15 +417,6 @@ and ios.input_node_id = valid.visit_id
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitSummaryMetaData" isCacheable="true">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
-select internal from (##FILTERED_IDS##)
-         ]]>   
-      </sql>
-    </sqlQuery>
-
     <sqlQuery name="VisitMetaDataBkgd">
          <paramRef ref="participantParams.visits_visitage_metadata_nf" />
          <paramRef ref="clinicalVisitParams.visit_date" /> 
@@ -473,15 +490,6 @@ select distinct pa.output_Node_Id as internal, m.term as ontology_term_name, m.s
  and pa.output_node_id = cva.protocol_app_node_id
  and cva.EUPATH_0000091 >= $$visit_date.min$$
  and cva.EUPATH_0000091 <= $$visit_date.max$$
-         ]]>   
-      </sql>
-   </sqlQuery>
-
-   <sqlQuery name="SummaryClinicalVisitAgeMetaDataNf" isCacheable="true">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
-select internal from (##FILTERED_IDS##)
          ]]>   
       </sql>
    </sqlQuery>
@@ -584,15 +592,6 @@ first as (
  select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
  null as precision from dual
     </sql>
-    </sqlQuery>
-
-    <sqlQuery name="DwellingMetaDataSummary" isCacheable="true">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
-select internal from (##FILTERED_IDS##)
-         ]]>   
-      </sql>
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaData" isCacheable="true">
@@ -819,19 +818,6 @@ and io.output_type_source_id = 'EUPATH_0000738'
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitSummaryMetaData_maled" isCacheable="true">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
-select distinct io.input_node_id as internal
-  from apidbtuning.protocolappnodeio io,
-  (##FILTERED_IDS##) fi
-  where io.output_node_id = fi.internal
-  and io.input_type_source_id = 'EUPATH_0000096'
-         ]]>   
-      </sql>
-    </sqlQuery>
-
     <sqlQuery name="VisitMetaDataBkgd_maled">
       <paramRef ref="participantParams.dwellings_nf_maled" />  
       <paramRef ref="participantParams.geographic_region_maled" />  
@@ -937,20 +923,6 @@ first as (
  where o.ontology_term_name = ggpar.parent_ontology_term_name
  ) order by ontology_term_name
     </sql>
-    </sqlQuery>
-
-    <sqlQuery name="DwellingMetaDataSummary_maled" isCacheable="true">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
- select distinct io.output_node_id as internal
-  from apidbtuning.protocolappnodeio io,
-  (##FILTERED_IDS##) fi
-  where io.input_node_id = fi.internal
-  and io.output_type_source_id = 'EUPATH_0000096'
-
-         ]]>   
-      </sql>
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaData_maled" isCacheable="true">

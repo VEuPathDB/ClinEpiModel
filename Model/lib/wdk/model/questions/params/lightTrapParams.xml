@@ -1,5 +1,11 @@
 <wdkModel>
 
+  <constant name="lightTrapIdTransformSql1">
+    <![CDATA[
+      select internal from (##FILTERED_IDS##)
+    ]]> 
+  </constant>   
+
   <paramSet name="lightTrapParams">
     
     <enumParam name="type"
@@ -19,11 +25,11 @@
 
     <filterParamNew name="geographic_region" 
                     metadataQueryRef="DwellingVQ.RegionMetaData"
-                    summaryMetadataQueryRef="lightTrapVQ.SummaryRegionMetaData"
                     ontologyQueryRef="DwellingVQ.RegionOntology"
                     prompt="Dwelling"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset">
+      <idTransformSql>%%lightTrapIdTransformSql1%%</idTransformSql>
       <help>
         Select light trap collections based on geographic region. 
       </help>
@@ -32,11 +38,11 @@
      <filterParamNew name="dwellings_nf" 
                     ontologyQueryRef="lightTrapVQ.DwellingOntology"
                     metadataQueryRef="lightTrapVQ.DwellingMetaData"
-                    summaryMetadataQueryRef="lightTrapVQ.SummaryDwellingMetaData"
                     backgroundQueryRef="lightTrapVQ.DwellingMetaDataBkgd"
                     prompt="Dwelling"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.dataset,lightTrapParams.geographic_region,dwellingParams.date_range">
+      <idTransformSql>%%lightTrapIdTransformSql1%%</idTransformSql>
       <help>
         Select light trap collections based on the characteristics of the dwelling where collection was performed. 
       </help>
@@ -105,15 +111,6 @@
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
  <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true">
-
-   <sqlQuery name="SummaryRegionMetaData">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
-select internal from (##FILTERED_IDS##)
-         ]]>   
-      </sql>
-    </sqlQuery>
 
    <sqlQuery name="DwellingOntology">
      <column name="ontology_term_name"/>
@@ -210,15 +207,6 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
   group by da.protocol_app_node_id
           ]]>
     </sql>
-    </sqlQuery>
-
-    <sqlQuery name="SummaryDwellingMetaData" isCacheable="false">
-      <column name="internal"/>
-      <sql>
-        <![CDATA[
-select internal from (##FILTERED_IDS##)
-         ]]>   
-      </sql>
     </sqlQuery>
 
     <sqlQuery name="LightTrapOntology">
