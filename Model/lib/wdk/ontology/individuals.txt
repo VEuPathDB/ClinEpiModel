@@ -24,6 +24,7 @@ ParticipantRecordClasses.ParticipantRecordClass.demo_plot_weightage	http://edamo
 ParticipantRecordClasses.ParticipantRecordClass.demo_plot_heightage	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	demo_plot_heightage				gene	2		record	
 ParticipantRecordClasses.ParticipantRecordClass.demo_plot_allThree	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	demo_plot_allThree				gene	1		record	
 ParticipantRecordClasses.ParticipantRecordClass.demo_plot_xlength	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	demo_plot_xlength				gene	2		record	
+ParticipantRecordClasses.ParticipantRecordClass.demo_plot_weight	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	demo_plot_weight				gene	2		record	
 ParticipantRecordClasses.ParticipantRecordClass.demo_plot_allThree_compact	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	demo_plot_allThree_compact						results		
 ParticipantRecordClasses.ParticipantRecordClass.record_overview	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attribute	record_overview						record-internal		
 ParticipantRecordClasses.ParticipantRecordClass.Visits	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	Visits					3	record	download	

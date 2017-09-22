@@ -64,6 +64,25 @@
 -->
 
     <stepAnalysisPlugin
+        name="clinepi-cont-table" displayName="2x2 Contingency Tables"
+        releaseVersion="1" hasParameters="false"
+        analysisViewName="eupathExternalAnalysisResult"
+        analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
+      <shortDescription>
+        <![CDATA[
+          Build 2x2 contingency tables for the chosen set of participants
+        ]]>
+      </shortDescription>
+      <description/>
+      <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
+      <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
+      <property name="tablesToExtract">ShinyParticipants,ShinyEvents,ShinyHouseholds</property>
+      <property name="addHeader">true</property>
+      <property name="iframeWidthPx">1200</property>
+      <property name="iframeLengthPx">800</property>
+    </stepAnalysisPlugin>
+
+    <stepAnalysisPlugin
         name="clinepi-event-dist" displayName="Distribution of Observations"
         releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
@@ -78,7 +97,7 @@
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
       <property name="tablesToExtract">ShinyParticipants,ShinyEvents,ShinyHouseholds</property>
       <property name="addHeader">true</property>
-      <property name="iframeWidthPx">1000</property>
+      <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 
