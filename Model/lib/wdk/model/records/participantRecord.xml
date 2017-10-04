@@ -19,7 +19,7 @@
             </idAttribute>
 
             <!-- Default list of attributes for step results. This will be used by combined steps, eg. -->
-            <attributesList summary="EUPATH_0000452,demo_plot_allThree_compact" />
+            <attributesList summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741" />
 <!--
             <textAttribute name="demo_plot_heightweight_compact" displayName="Weight for Height Z - DEMO Graph"  truncateTo="100000">
               <text>

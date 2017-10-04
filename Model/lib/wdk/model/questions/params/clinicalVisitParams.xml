@@ -256,7 +256,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd_maled"
                     prompt="Observations"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset,clinicalVisitParams.dwellings_nf_maled,clinicalVisitParams.geographic_region_maled,clinicalVisitParams.participants_nf_maled">
+                    dependedParamRef="participantParams.dataset,clinicalVisitParams.dwellings_nf_maled">
       <help>
         Select observations based on their observation characteristics. 
       </help>
@@ -280,7 +280,7 @@
                       backgroundQueryRef="ClinicalVisitVQ.DwellingMetaDataBkgd_maled"
                       useIdTransformSqlForInternalValue="true"
                       prompt="Households"
-                      dependedParamRef="participantParams.dataset,clinicalVisitParams.geographic_region_maled,clinicalVisitParams.participants_nf_maled"
+                      dependedParamRef="participantParams.dataset,clinicalVisitParams.participants_nf_maled"
                       trimMetadataTerms="false">
          <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>          
          <help>
@@ -893,7 +893,7 @@ and io.output_node_id = m.protocol_app_node_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Participant'
@@ -912,7 +912,7 @@ from ApidbTuning.MetaDataWithoutNulls m
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Participant'
@@ -922,8 +922,6 @@ from ApidbTuning.MetaDataWithoutNulls m
 
     <sqlQuery name="VisitMetaData_maled" isCacheable="true">
          <paramRef ref="clinicalVisitParams.dwellings_nf_maled" />  
-         <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
-         <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
          <paramRef ref="participantParams.dataset" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -932,7 +930,7 @@ from ApidbTuning.MetaDataWithoutNulls m
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct m.protocol_app_node_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Event'
@@ -943,8 +941,6 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
 
     <sqlQuery name="VisitMetaDataBkgd_maled">
       <paramRef ref="clinicalVisitParams.dwellings_nf_maled" />  
-      <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
-      <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -953,7 +949,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct m.protocol_app_node_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Event'
@@ -970,7 +966,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select io.part_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, io.output_node_id as part_id, ioe.output_node_id as event_id
  from apidbtuning.protocolappnodeio io, apidbtuning.protocolappnodeio ioe
  where io.input_type_source_id = 'PCO_0000024'
@@ -985,7 +981,6 @@ select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.n
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaData_maled" isCacheable="true">
-      <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
       <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -995,7 +990,7 @@ select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.n
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select io.part_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, io.output_node_id as part_id
  from apidbtuning.protocolappnodeio io
  where io.output_node_id in ($$participants_nf_maled$$)
@@ -1009,9 +1004,8 @@ select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.n
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaDataBkgd_maled">
-      <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
-      <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1019,7 +1013,7 @@ select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.n
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select io.part_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, ( select distinct io.input_node_id as hh_id, io.output_node_id as part_id
  from apidbtuning.protocolappnodeio io
  where io.output_type_source_id = 'EUPATH_0000096' 
@@ -1044,7 +1038,7 @@ select io.part_id as internal, m.term as ontology_term_name, m.string_value, m.n
     <sql>
          <![CDATA[
 select * from (
-with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+with leaf as ( select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
@@ -1053,22 +1047,22 @@ from apidbtuning.metadataontology o,
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
- where o.ontology_term_name = par.parent_ontology_term_name),
+ where o.ontology_term_source_id = par.parent_ontology_term_name),
  second as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
- where o.ontology_term_name = gpar.parent_ontology_term_name)
+ where o.ontology_term_source_id = gpar.parent_ontology_term_name)
  select * from leaf
  union
  select * from first
  union
  select * from second
  union
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
- where o.ontology_term_name = ggpar.parent_ontology_term_name
+ where o.ontology_term_source_id = ggpar.parent_ontology_term_name
  ) order by ontology_term_name
          ]]>
     </sql>
@@ -1082,7 +1076,7 @@ first as (
       <column name="string_value"/>
       <sql>
         <![CDATA[
-                select distinct protocol_app_node_id as internal, term as ontology_term_name,
+                select distinct protocol_app_node_id as internal, source_id as ontology_term_name,
                        string_value, number_value, date_value
                 from ApidbTuning.MetaDataWithoutNulls 
                 where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$

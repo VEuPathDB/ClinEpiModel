@@ -201,7 +201,7 @@
                       backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd_maled"
                       useIdTransformSqlForInternalValue="true"
                       prompt="Households"
-                      dependedParamRef="participantParams.dataset,participantParams.geographic_region_maled,participantParams.participants_nf_maled"
+                      dependedParamRef="participantParams.dataset,participantParams.participants_nf_maled"
                       trimMetadataTerms="false">
          <idTransformSql>%%participantIdTransformSql1%%</idTransformSql>             
          <help>
@@ -228,7 +228,7 @@
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
                     prompt="Observations"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset,participantParams.dwellings_nf_maled,participantParams.geographic_region_maled,participantParams.participants_nf_maled">
+                    dependedParamRef="participantParams.dataset,participantParams.dwellings_nf_maled">
       <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>   
       <help>
         Select participants based on their visit characteristics. 
@@ -563,7 +563,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
         <column name="is_range"/>
     <sql>
    with leaf as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
@@ -572,11 +572,11 @@ from apidbtuning.metadataontology o,
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
  where o.ontology_term_name = par.parent_ontology_term_name),
  second as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
  where o.ontology_term_name = gpar.parent_ontology_term_name)
  select * from leaf
@@ -585,7 +585,7 @@ first as (
  union
  select * from second
  union
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
  union
@@ -611,7 +611,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$participants_nf$$)
        and pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.dwelling_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
@@ -647,7 +647,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.dwelling_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Dwelling type'
@@ -682,7 +682,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
          <![CDATA[
 select * from (
 with leaf as ( 
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
@@ -691,22 +691,22 @@ from apidbtuning.metadataontology o,
  and source_id != 'EUPATH_0000032') md
  where o.ontology_term_name = md.term),
 first as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
- where o.ontology_term_name = par.parent_ontology_term_name),
+ where o.ontology_term_source_id = par.parent_ontology_term_name),
  second as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
- where o.ontology_term_name = gpar.parent_ontology_term_name)
+ where o.ontology_term_source_id = gpar.parent_ontology_term_name)
  select * from leaf
  union
  select * from first
  union
  select * from second
  union
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
- where o.ontology_term_name = ggpar.parent_ontology_term_name
+ where o.ontology_term_source_id = ggpar.parent_ontology_term_name
  ) order by ontology_term_name
          ]]>
     </sql>
@@ -714,7 +714,7 @@ first as (
 
    <sqlQuery name="ParticipantMetaData_maled" isCacheable="true">
      <paramRef ref="participantParams.dataset" />  
-         <paramRef ref="participantParams.geographic_region_maled" />  
+     <paramRef ref="participantParams.geographic_region_maled" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -722,7 +722,7 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
@@ -741,7 +741,7 @@ from ApidbTuning.MetaDataWithoutNulls m
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
@@ -762,7 +762,7 @@ from ApidbTuning.MetaDataWithoutNulls m
       <sql>
          <![CDATA[
 select * from (
-with leaf as ( select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+with leaf as ( select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
@@ -771,22 +771,22 @@ from apidbtuning.metadataontology o,
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
- where o.ontology_term_name = par.parent_ontology_term_name),
+ where o.ontology_term_source_id = par.parent_ontology_term_name),
  second as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
- where o.ontology_term_name = gpar.parent_ontology_term_name)
+ where o.ontology_term_source_id = gpar.parent_ontology_term_name)
  select * from leaf
  union
  select * from first
  union
  select * from second
  union
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
- where o.ontology_term_name = ggpar.parent_ontology_term_name
+ where o.ontology_term_source_id = ggpar.parent_ontology_term_name
  ) order by ontology_term_name
          ]]>
     </sql>
@@ -794,8 +794,6 @@ first as (
 
        <sqlQuery name="VisitMetaData_maled" isCacheable="true">
          <paramRef ref="participantParams.dwellings_nf_maled" />  
-         <paramRef ref="participantParams.geographic_region_maled" />  
-         <paramRef ref="participantParams.participants_nf_maled" />  
          <paramRef ref="participantParams.dataset" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -804,7 +802,7 @@ first as (
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct valid.visit_id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct valid.visit_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.MetaDataWithoutNulls m, (
 select distinct io.output_node_id as visit_id, io.input_node_id as part_id
 from apidbtuning.protocolappnodeio io
@@ -820,8 +818,6 @@ and io.output_type_source_id = 'EUPATH_0000738'
 
     <sqlQuery name="VisitMetaDataBkgd_maled">
       <paramRef ref="participantParams.dwellings_nf_maled" />  
-      <paramRef ref="participantParams.geographic_region_maled" />  
-      <paramRef ref="participantParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -830,7 +826,7 @@ and io.output_type_source_id = 'EUPATH_0000738'
       <column name="string_value"/>
       <sql>
         <![CDATA[
- select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ select distinct protocol_app_node_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.MetaDataWithoutNulls 
  where dataset_name = $$dataset$$
  and category = 'Event'
@@ -850,7 +846,7 @@ and io.output_type_source_id = 'EUPATH_0000738'
      <column name="is_range"/>
     <sql>
          <![CDATA[
-                  select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
                   from apidbtuning.metadataontology o, (select distinct source_id
                   from apidbtuning.metadata
                   where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
@@ -873,7 +869,7 @@ and io.output_type_source_id = 'EUPATH_0000738'
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select io.output_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select io.output_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
@@ -896,7 +892,7 @@ select io.output_node_id as internal, m.term as ontology_term_name, m.string_val
       <sql>
 select * from (
    with leaf as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o, 
 (select distinct term
  from apidbtuning.metadata
@@ -905,28 +901,27 @@ from apidbtuning.metadataontology o,
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
- where o.ontology_term_name = par.parent_ontology_term_name),
+ where o.ontology_term_source_id = par.parent_ontology_term_name),
  second as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
- where o.ontology_term_name = gpar.parent_ontology_term_name)
+ where o.ontology_term_source_id = gpar.parent_ontology_term_name)
  select * from leaf
  union
  select * from first
  union
  select * from second
  union
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
  from apidbtuning.metadataontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
- where o.ontology_term_name = ggpar.parent_ontology_term_name
+ where o.ontology_term_source_id = ggpar.parent_ontology_term_name
  ) order by ontology_term_name
     </sql>
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaData_maled" isCacheable="true">
-      <paramRef ref="participantParams.geographic_region_maled" />  
       <paramRef ref="participantParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -940,7 +935,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$participants_nf_maled$$)
        and pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.dwelling_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
@@ -951,7 +946,6 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
     </sqlQuery>
 
     <sqlQuery name="DwellingMetaDataBkgd_maled">
-      <paramRef ref="participantParams.geographic_region_maled" />  
       <paramRef ref="participantParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -964,7 +958,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.dwelling_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.dwelling_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
