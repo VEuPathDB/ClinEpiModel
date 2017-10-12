@@ -86,7 +86,7 @@
             <columnAttribute name="parentTerm" displayName="Category"/>
         </table>
 
-<!--
+
         <table name="Samples"
                displayName="Samples Collected During Observation"
                queryRef="ClinicalVisitTables.Samples">
@@ -95,7 +95,7 @@
             <columnAttribute name="sample_id" displayName="Sample ID"/>
             <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
         </table>
--->
+
 
     </recordClass>
     </recordClassSet>

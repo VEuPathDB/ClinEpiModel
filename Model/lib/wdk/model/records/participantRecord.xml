@@ -237,16 +237,6 @@
                  </displayText>
                  <url>$$link$$</url>
             </linkAttribute>
-<!--
-            <columnAttribute name="EUPATH_0000040" displayName="Complicated malaria"/>
-            <columnAttribute name="EUPATH_0000338" displayName="Malaria diagnosis and parasite status"/>
-            <columnAttribute name="EUPATH_0000311" displayName="Observation type"/>
-            <columnAttribute name="EUPATH_0000113" displayName="Age at time of observation"/>
-            <columnAttribute name="EUPATH_0000110" displayName="Temperature"/>
-            <columnAttribute name="EUPATH_0000091" displayName="Date of observation" internal="true"/>
-            <columnAttribute name="EUPATH_0000092" displayName="Asexual parasite density"/>
-            <columnAttribute name="EUPATH_0000100" displayName="Fever (subjective)"/>
--->
           </table>
 
 <!--
@@ -409,16 +399,6 @@ WHERE o.dataset_name = '&&datasetName&&'
             </sql>
         </sqlQuery>
 
-      <sqlQuery name="EventGraph"  isCacheable='false'>
-            <column name="source_id"/>
-            <column name="project_id"/>
-            <sql>
-            <![CDATA[
-select pa.*, pa.name as source_id, '@PROJECT_ID@'
-from APIDBTUNING.PARTICIPANTATTRIBUTES pa
-            ]]>
-            </sql>
-        </sqlQuery>
 
       <sqlQuery name="ShinyEvents"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyEventsColumnAttributes">
           <column name="source_id" />
