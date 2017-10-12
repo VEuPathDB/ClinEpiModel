@@ -39,11 +39,11 @@
     <import file="model/questions/participantQuestions.xml"/> 
     <import file="model/questions/params/participantParams.xml"/>
 
-    <!-- Dwelling record -->
-    <import file="model/records/dwellingRecord.xml"/>
-    <import file="model/questions/queries/dwellingQueries.xml"/>
-    <import file="model/questions/dwellingQuestions.xml"/> 
-    <import file="model/questions/params/dwellingParams.xml"/>
+    <!-- Household record -->
+    <import file="model/records/householdRecord.xml"/>
+    <import file="model/questions/queries/householdQueries.xml"/>
+    <import file="model/questions/householdQuestions.xml"/> 
+    <import file="model/questions/params/householdParams.xml"/>
 
     <!-- Light Trap record -->
     <import file="model/records/lightTrapRecord.xml"/>
@@ -52,10 +52,10 @@
     <import file="model/questions/params/lightTrapParams.xml"/>
 
 
-    <!-- Clinical Visits record -->
-    <import file="model/records/clinicalVisitRecord.xml"/>
-    <import file="model/questions/queries/clinicalVisitQueries.xml"/>
-    <import file="model/questions/clinicalVisitQuestions.xml"/> 
-    <import file="model/questions/params/clinicalVisitParams.xml"/>
+    <!-- Observation record -->
+    <import file="model/records/observationRecord.xml"/>
+    <import file="model/questions/queries/observationQueries.xml"/>
+    <import file="model/questions/observationQuestions.xml"/> 
+    <import file="model/questions/params/observationParams.xml"/>
 
 </wdkModel>
