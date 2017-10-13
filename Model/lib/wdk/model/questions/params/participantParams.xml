@@ -90,8 +90,10 @@
       <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
     </numberRangeParam> 
 
+
+
     <datasetParam name="participantsBySourceID" 
-		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
+		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass_gems"
 		  prompt="Source ID input set">
       <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
 
@@ -108,11 +110,12 @@
                  prompt="Input Result Set"
                  readonly="true"
                  visible="false">
-      <recordClass ref="ParticipantRecordClasses.ParticipantRecordClass" />
+      <recordClass ref="ParticipantRecordClasses.ParticipantRecordClass_gems" />
     </answerParam>
 
     <!--************************************************************-->
     <!--   PRISM section ... should be injected  -->
+    <!--   TODO: DELETE THIS AND COPY OVER FROM BRANCH ... ADD PRISM SUFFIX -->
     <!--************************************************************-->
 
        <filterParamNew name="geographic_region" 
@@ -223,19 +226,112 @@
        </filterParamNew>
 
        <filterParamNew name="visits_nf_maled" 
-                    metadataQueryRef="ParticipantVQ.VisitMetaData_maled"
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
-                    prompt="Observations"
-                    trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset,participantParams.dwellings_nf_maled">
-      <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>   
-      <help>
-        Select participants based on their visit characteristics. 
-      </help>
-    </filterParamNew>
+                       metadataQueryRef="ParticipantVQ.VisitMetaData_maled"
+                       ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
+                       backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
+                       prompt="Observations"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.dataset,participantParams.dwellings_nf_maled">
+         <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>   
+         <help>
+           Select participants based on their visit characteristics. 
+         </help>
+       </filterParamNew>
 
+    
+    <!--************************************************************-->
+    <!--   GEMS section ... -->
+    <!--************************************************************-->
 
+    <!--  ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" -->
+
+       <filterParamNew name="geographic_region_gems" 
+                       ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
+                       metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
+                       prompt="Study Site"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.dataset">
+         <help>
+           Select participants based on their personal and household characteristics. 
+         </help>
+       </filterParamNew>
+       
+       <filterParamNew name="participant_dwelling_gems" 
+                       metadataQueryRef="ParticipantVQ.ParticipantDwellingMetaData_gems"
+                       ontologyQueryRef="ParticipantVQ.ParticipantDwellingOntology_gems"
+                       backgroundQueryRef="ParticipantVQ.ParticipantDwellingMetaDataBkgd_gems"
+                       prompt="Participant"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_gems">
+         <help>
+           Select participants based on study site. 
+         </help>
+       </filterParamNew>
+
+       <enumParam name="enrollment_followup"
+                  prompt="Query enrollment or follow-up"
+                  multiPick="false"
+                  quote="true"
+                  visible="true">
+         <help>Choose whether to query based on enrollment or followup measurements.</help>
+         <enumList>
+           <enumValue default="true">
+             <term>Enrollment</term>
+             <internal>enrollment</internal>
+           </enumValue>
+           <enumValue>
+             <term>Follow-up</term>
+             <internal>followup</internal>
+           </enumValue>  
+         </enumList>
+       </enumParam>
+
+       <filterParamNew name="event_gems" 
+                       metadataQueryRef="ParticipantVQ.EventMetaData_gems"
+                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
+                       backgroundQueryRef="ParticipantVQ.EventMetaDataBkgd_gems"
+                       prompt="Participant"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.dataset,participantParams.participant_dwelling_gems">
+         <help>
+           Select participants based on variables associated with their enrollment or followup events. 
+         </help>
+       </filterParamNew>       
+
+       <filterParamNew name="relative_event_gems" 
+                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
+                       metadataQueryRef="ParticipantVQ.RelativeEventMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.RelativeEventMetaDataBkgd_gems"
+                       prompt="Participant"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.dataset">
+         <help>
+           Modify participant selected based on the relationship between their enrollment and followup events. 
+         </help>
+       </filterParamNew>    
+
+       <enumParam name="return_case_control"
+                  prompt="Modify selected participant result"
+                  multiPick="false"
+                  quote="true"
+                  visible="true">
+         <help>Choose whether to return just what you have selected, fill in cases/controls for selected or only cases/controls for selected.</help>
+         <enumList>
+           <enumValue default="true">
+             <term>Return selected participants only</term>
+             <internal>selected</internal>
+           </enumValue>
+           <enumValue>
+             <term>Return both the selected participants and their matching cases/controls</term>
+             <internal>caseid</internal>
+           </enumValue>  
+           <enumValue>
+             <term>Return only the matching cases / controls for the selected participants</term>
+             <internal>matching</internal>
+           </enumValue>  
+         </enumList>
+       </enumParam>
+       
   </paramSet>
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -915,6 +1011,240 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
 
     </sqlQuery>
 
+    
+    <!--************************************************************-->
+    <!--   GEMS section ... -->
+    <!--************************************************************-->
+
+    <sqlQuery name="GeographicRegionOntology_gems">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('OBI_0001627')
+     UNION
+      select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o
+     CONNECT BY o.ontology_term_source_id = PRIOR o.parent_ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('OBI_0001627')
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="GeographicRegionMetaData_gems" isCacheable="true">
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m 
+ where m.dataset_name = $$dataset$$
+ and m.source_id in (select distinct o.ontology_term_source_id 
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('OBI_0001627'))
+          ]]>
+    </sql>    
+    </sqlQuery>
+    
+    <sqlQuery name="ParticipantDwellingOntology_gems">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
+order by display_name
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantDwellingMetaData_gems" isCacheable="true">
+      <paramRef ref="participantParams.geographic_region_gems" />  
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m 
+ where m.dataset_name = $$dataset$$
+ and m.protocol_app_node_id in ($$geographic_region_gems$$)  --(select protocol_app_node_id from apidbtuning.participantattributes)
+ and m.source_id in (select distinct o.ontology_term_source_id 
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024'))
+          ]]>
+    </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantDwellingMetaDataBkgd_gems">
+      <paramRef ref="participantParams.geographic_region_gems" />  
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m 
+ where m.dataset_name = $$dataset$$
+ and m.source_id in (select distinct o.ontology_term_source_id 
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024'))
+          ]]>
+    </sql>    
+    </sqlQuery> 
+
+    
+    <sqlQuery name="EventOntology_gems">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id = 'EUPATH_0000738'
+order by display_name
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="EventMetaData_gems" isCacheable="true">
+      <paramRef ref="participantParams.participant_dwelling_gems" />  
+<!--      <paramRef ref="participantParams.enrollment_followup" />  -->
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m 
+ where m.dataset_name = $$dataset$$
+ and m.source_id in (select distinct o.ontology_term_source_id 
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738'))  
+and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
+          ]]>
+    </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="EventMetaDataBkgd_gems">
+      <paramRef ref="participantParams.participant_dwelling_gems" />  
+<!--      <paramRef ref="participantParams.enrollment_followup" />  -->
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m 
+ where m.dataset_name = $$dataset$$
+ and m.source_id in (select distinct o.ontology_term_source_id 
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738'))  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
+          ]]>
+    </sql>    
+    </sqlQuery> 
+
+<!--  Note that may not need the following one -->
+    <sqlQuery name="RelativeEventOntology_gems">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id = 'EUPATH_0000738'
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="RelativeEventMetaData_gems" isCacheable="true">
+      <paramRef ref="participantParams.dataset" />  
+<!--      <paramRef ref="participantParams.enrollment_followup" />  -->
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m 
+ where m.dataset_name = $$dataset$$
+ and m.source_id in (select distinct o.ontology_term_source_id 
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738')) 
+--and m.protocol_app_node_id in ($$participant_dwelling_gems$$) 
+          ]]>
+    </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="RelativeEventMetaDataBkgd_gems">
+      <paramRef ref="participantParams.dataset" />  
+<!--      <paramRef ref="participantParams.enrollment_followup" />  -->
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m 
+ where m.dataset_name = $$dataset$$
+ and m.source_id in (select distinct o.ontology_term_source_id 
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738'))  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
+          ]]>
+    </sql>    
+    </sqlQuery> 
+
+
   </querySet>    
 
       <groupSet name="metaDataGroups">
@@ -1032,6 +1362,13 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
+        <group name="case_control" displayName="Case / Control" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         Choose whether to return just the participants selected in this search, include the matching cases (or controls) for the participants selected or only the matching cases (or controls) for the selected participants.
+                ]]>
+            </description>
+        </group>
 
     </groupSet>
 
