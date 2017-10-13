@@ -304,7 +304,7 @@
                        backgroundQueryRef="ParticipantVQ.RelativeEventMetaDataBkgd_gems"
                        prompt="Participant"
                        trimMetadataTerms="false"
-                       dependedParamRef="participantParams.dataset">
+                       dependedParamRef="participantParams.dataset,participantParams.participant_dwelling_gems">
          <help>
            Modify participant selected based on the relationship between their enrollment and followup events. 
          </help>
@@ -1017,6 +1017,7 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
     <!--************************************************************-->
 
     <sqlQuery name="GeographicRegionOntology_gems">
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -1026,15 +1027,17 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
       <column name="precision"/>
       <column name="is_range"/>
       <sql>
- select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('OBI_0001627')
+     and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
      UNION
       select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
      CONNECT BY o.ontology_term_source_id = PRIOR o.parent_ontology_term_source_id
      START WITH o.ontology_term_source_id in ('OBI_0001627')
+     and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
       </sql>
     </sqlQuery>
 
@@ -1053,12 +1056,14 @@ from apidbtuning.metadataontology o
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('OBI_0001627'))
+     START WITH o.ontology_term_source_id in ('OBI_0001627')
+and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
     </sqlQuery>
     
     <sqlQuery name="ParticipantDwellingOntology_gems">
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -1072,6 +1077,7 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
+and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
 order by display_name
       </sql>
     </sqlQuery>
@@ -1093,7 +1099,8 @@ order by display_name
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024'))
+     START WITH o.ontology_term_source_id in ('PCO_0000024')
+and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
     </sqlQuery>
@@ -1114,13 +1121,15 @@ from apidbtuning.metadataontology o
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024'))
+     START WITH o.ontology_term_source_id in ('PCO_0000024')
+and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
     </sqlQuery> 
 
     
     <sqlQuery name="EventOntology_gems">
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -1134,6 +1143,7 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000738'
+     and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
 order by display_name
       </sql>
     </sqlQuery>
@@ -1155,7 +1165,8 @@ order by display_name
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738'))  
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738')  
+and dataset_name = $$dataset$$ )
 and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
           ]]>
     </sql>    
@@ -1178,13 +1189,15 @@ and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738'))  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738')  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
+and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
     </sqlQuery> 
 
 <!--  Note that may not need the following one -->
     <sqlQuery name="RelativeEventOntology_gems">
+      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -1198,11 +1211,14 @@ from apidbtuning.metadataontology o
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000738'
+and dataset_name = $$dataset$$ 
+order by display_name
       </sql>
     </sqlQuery>
 
     <sqlQuery name="RelativeEventMetaData_gems" isCacheable="true">
       <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.participant_dwelling_gems" />  
 <!--      <paramRef ref="participantParams.enrollment_followup" />  -->
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1217,14 +1233,16 @@ from apidbtuning.metadataontology o
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738')) 
---and m.protocol_app_node_id in ($$participant_dwelling_gems$$) 
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738') 
+and dataset_name = $$dataset$$ )
+and m.protocol_app_node_id in ($$participant_dwelling_gems$$) 
           ]]>
     </sql>    
     </sqlQuery>
 
     <sqlQuery name="RelativeEventMetaDataBkgd_gems">
       <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.participant_dwelling_gems" />  
 <!--      <paramRef ref="participantParams.enrollment_followup" />  -->
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1239,7 +1257,8 @@ from apidbtuning.metadataontology o
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738'))  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738')  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
+and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
     </sqlQuery> 
