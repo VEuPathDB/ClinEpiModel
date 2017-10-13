@@ -33,7 +33,7 @@
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>   
              
-	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this participants dwelling over the time frame specified" align="center"> 
+	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this participants household over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -95,20 +95,13 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
     </question>
 
+<!--
     <question name="ParticipantsByRelativeVisits" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants (PRISM)"
               shortDisplayName="Particip PRISM"
               queryRef="ParticipantId.ParticipantsByCharWizRelVis" 
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
-
-
-<!--
-        <attributesList 
-            summary="EUPATH_0000054,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight,avg_hemo"        
-        /> 
--->
-
 	<dynamicAttributes>
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of observations meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -123,7 +116,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>   
              
-	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this participants dwelling over the time frame specified" align="center"> 
+	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this participants household over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -179,7 +172,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
         </propertyList>
  
       </question>
-
+-->
         <question name="ParticipantsByRelativeVisits_maled" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants (MAL-ED)"
@@ -242,22 +235,17 @@ Use the filters above to select a set of Participants or to explore the data.  S
         </propertyList>
  
       </question>
-      
-   <question name="ParticipantsByDwellingId"   newBuild="1" 
+
+
+   <question name="ParticipantsByHouseholdId"   newBuild="1" 
               displayName="Transform to Participants"
-              shortDisplayName="dwelling->participant"
-              queryRef="ParticipantId.ParticipantsByDwellingIds" 
+              shortDisplayName="household->participant"
+              queryRef="ParticipantId.ParticipantsByHouseholdIds" 
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
               noSummaryOnSingleRecord="true">
 
-<!--
-        <attributesList 
-            summary="EUPATH_0000054,dwelling"   
-            sorting="EUPATH_0000054 desc"
-        /> 
--->
 	<dynamicAttributes>
-	     <columnAttribute name="dwelling" displayName="Dwelling Transformed" help="Dwelling Participant is associated with" align="center"> 
+	     <columnAttribute name="household" displayName="Household Transformed" help="Household Participant is associated with" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -266,12 +254,12 @@ Use the filters above to select a set of Participants or to explore the data.  S
 	</dynamicAttributes>
 
              <summary>
-             Find participant by dwelling id.
+             Find participant by household id.
              </summary>
 
              <description>
                <![CDATA[
-             Find participant by dwelling id.
+             Find participant by household id.
                ]]>
              </description>
     </question>
@@ -307,6 +295,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
                ]]>
              </description>
     </question>
+
 
    <question name="ParticipantsBySourceID" newBuild="22"
 	     displayName="Participant ID"

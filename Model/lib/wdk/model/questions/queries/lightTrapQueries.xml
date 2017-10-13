@@ -24,8 +24,8 @@
               isCacheable="true">
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
        <paramRef ref="lightTrapParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="dwellingParams.date_range" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
+       <paramRef ref="householdParams.date_range" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="lightTrapParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="lightTrapParams.lighttraps_nf" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
@@ -41,16 +41,16 @@ where lta.protocol_app_node_id in ($$lighttraps_nf$$)
 
     <!-- Transforms -->
       
-    <sqlQuery name="LightTrapsByDwellingIds" doNotTest="true" displayName="ID" isCacheable="true">
-    <paramRef ref="dwellingParams.dwelling_result"/>
+    <sqlQuery name="LightTrapsByHouseholdIds" doNotTest="true" displayName="ID" isCacheable="true">
+    <paramRef ref="householdParams.household_result"/>
         <column name="project_id"/>
         <column name="source_id"/>
         <column name="wdk_weight"/>
 
         <sql>
             <![CDATA[
-SELECT   lta.name as source_id , '@PROJECT_ID@' as project_id, da.name as dwelling, wdk_weight
-              FROM ($$dwelling_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.dwellingattributes da, apidbtuning.lighttrapattributes lta
+SELECT   lta.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
+              FROM ($$household_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.householdattributes da, apidbtuning.lighttrapattributes lta
               WHERE source_set.source_id = da.name 
               AND da.protocol_app_node_id = io.input_node_id
               AND  io.output_node_id = lta.protocol_app_node_id

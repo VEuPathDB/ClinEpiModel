@@ -1,0 +1,308 @@
+[templateStart] 
+name=observationRecord
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
+prop=datasetName
+prop=observationRecordOverview
+prop=observationAttributesList
+prop=householdSourceIdsIncludedInObservationAttributes
+prop=participantSourceIdsIncludedInObservationAttributes
+>templateTextStart<
+
+    <recordClassSet name="ObservationRecordClasses">
+
+      <recordClass name="ObservationRecordClass" urlName="observation" displayName="Observation"> 
+
+
+            <!-- primary key definition -->
+            <primaryKey aliasQueryRef="ObservationAttributes.VisitsAlias">
+              <columnRef>source_id</columnRef>
+              <columnRef>project_id</columnRef>
+            </primaryKey>
+
+            <idAttribute name="primary_key" displayName="Observation Id">
+                <text>
+                    <![CDATA[
+                      $$source_id$$
+                    ]]>
+                </text>
+            </idAttribute>
+     
+
+<!-- TODO
+           <attributesList summary="visit_date,parent_id,visit_type"       
+            />
+-->
+
+        <!-- =============================================================== -->
+      <!--  Step Analysis Plugins -->
+      <!-- =============================================================== -->
+
+<!--             <stepAnalysisRef name="clinical-visit-dist"/> -->
+
+     
+ <!-- =============================================================== -->
+      <!--   Reporters -->  
+      <!-- =============================================================== -->
+
+
+
+      <reporter name="attributesTabular" displayName="%%attributesReporterDisplayName%%" scopes="results"
+                implementation="org.gusdb.wdk.model.report.AttributesTabularReporter">
+        <property name="page_size">500</property>
+      </reporter>
+
+      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
+                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
+             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
+      </reporter>
+
+      <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
+                implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
+
+      <!-- =================================================================== -->
+      <!--  Text Attributes  ++++++++-->
+      <!-- =================================================================== -->
+
+
+
+
+ <textAttribute name="record_overview" displayName="Overview">
+             <text>
+                  <![CDATA[
+                  ${observationRecordOverview}
+                  ]]>
+             </text>
+          </textAttribute>
+
+<!--
+ <textAttribute name="record_overview" displayName="Overview">
+
+
+             <text>
+                  <![CDATA[
+
+                  Visit from <i>$$EUPATH_0000091$$</i> for Participant <a href="@WEBAPP_BASE_URL@/record/participant/$$parent_id$$/@PROJECT_ID@">$$parent_id$$</a>.
+                  ]]>
+             </text>
+          </textAttribute>
+-->
+
+         <attributeQueryRef ref="ObservationAttributes.ObservationAttributes" attributeMetaQueryRef="ObservationAttributes.ObservationAttributesMeta"/>
+
+
+        <table name="Characteristics"
+               displayName="Clinical Observation Characteristics"
+               queryRef="ObservationTables.Characteristics">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="term" displayName="Value"/>
+            <columnAttribute name="parentTerm" displayName="Category"/>
+        </table>
+
+
+        <table name="Samples"
+               displayName="Samples Collected During Observation"
+               queryRef="ObservationTables.Samples">
+            <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
+            <columnAttribute name="sample_id" displayName="Sample ID"/>
+            <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
+        </table>
+
+
+    </recordClass>
+    </recordClassSet>
+>templateTextEnd<
+
+
+[templateStart] 
+name=observationRecordAttributeQueries
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
+prop=datasetName
+prop=observationAttributesList
+prop=householdSourceIdsIncludedInObservationAttributes
+prop=participantSourceIdsIncludedInObservationAttributes
+prop=participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote
+>templateTextStart<
+    <querySet name="ObservationAttributes" queryType="attribute" doNotTest="true"  
+              isCacheable='false'>
+
+
+      <testRowCountSql>
+select count(*) from apidbtuning.eventattributes
+       </testRowCountSql>
+       <sqlQuery name="VisitsAlias" doNotTest="true">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="old_source_id"/>
+         <column name="old_project_id"/>
+         <sql>
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM Apidbtuning.Eventattributes
+         </sql>
+       </sqlQuery>
+
+
+
+       <sqlQuery name="ObservationAttributes" attributeMetaQueryRef="ObservationAttributes.ObservationAttributesMeta">
+         <column name="source_id"/>
+         <column name="project_id"/>
+
+         <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
+
+<!-- ICEMR
+         <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id,PATO_0000047, EUPATH_0000033, EUPATH_0000035, EUPATH_0000034</sqlParamValue>
+         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
+
+MALED
+         <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id</sqlParamValue>
+         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000452]]></sqlParamValue>
+-->
+
+         <sqlParamValue name="participantSourceIds"><![CDATA[${participantSourceIdsIncludedInObservationAttributes}]]></sqlParamValue>
+         <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInObservationAttributes}]]></sqlParamValue>
+
+          <sql>
+            <![CDATA[
+ select cva.name as source_id, '@PROJECT_ID@' as project_id, cva.*,
+                     da.*, pa.*
+                     from APIDBTUNING.PROTOCOLAPPNODEIO io1
+                        , APIDBTUNING.PROTOCOLAPPNODEIO io2
+                        , apidbtuning.eventattributes cva
+                        , (select protocol_app_node_id as hh_protocol_app_node_id, &&householdSourceIds&& from apidbtuning.householdattributes) da
+                        , (select protocol_app_node_id as p_protocol_app_node_id, &&participantSourceIds&& from apidbtuning.participantattributes) pa
+                     where cva.PROTOCOL_APP_NODE_ID = io1.OUTPUT_NODE_ID
+                     and io1.input_node_id = pa.p_PROTOCOL_APP_NODE_ID
+                     and pa.p_PROTOCOL_APP_NODE_ID = io2.OUTPUT_NODE_ID
+                     and io2.input_node_id = da.hh_PROTOCOL_APP_NODE_ID
+            ]]>
+          </sql>  
+         </sqlQuery>
+
+       <sqlQuery name="ObservationAttributesMeta" isCacheable="false">
+          <column name="name" />
+          <column name="display_name" />
+          <column name="help" />
+          <column name="plugin_name" />
+          <column name="plugin_display" />
+          <column name="plugin_description" />
+          <column name="plugin_implementation" />
+          <column name="plugin_view" />
+          <column name="plugin_properties" />
+
+         <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
+         <!-- ICEMR
+          <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA['EUPATH_0000054','EUPATH_0000002', 'PATO_0000047', 'EUPATH_0000033', 'EUPATH_0000035', 'EUPATH_0000034']]></sqlParamValue>
+
+MALED
+          <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>
+-->
+          <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA[${participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote}]]></sqlParamValue>
+
+         <sql>
+            <![CDATA[
+                     select meta.display_name, meta.name, meta.help, 
+                            decode(meta.type, 'string', 'wordCloud', 'number', 'histogram', null) as plugin_name,
+                            decode(meta.type, 'string', 'Word Cloud', 'number', 'Histogram', null) as plugin_display,
+                            decode(meta.type, 'string', 'Display the terms in the attribute as word clouds', 'number', 'Display a histogram of the values', null) as plugin_description,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
+                            decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
+                            decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
+                     from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'Visit'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'Visit'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
+                           union
+                           select 'Participant ID' as display_name, 'parent_id' as name, '' as help, '' as type from dual
+                           union
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.metadatatype mt, sres.ontologyterm ot where ot.source_id = mt.source_id and mt.source_id in (&&participantAndHouseholdSourceIds&&)
+                           ) meta
+            ]]>
+         </sql>
+
+         </sqlQuery>
+
+      </querySet>
+
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=observationRecordTableQueries
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
+prop=datasetName
+prop=observationAttributesList
+prop=householdSourceIdsIncludedInObservationAttributes
+prop=participantSourceIdsIncludedInObservationAttributes
+>templateTextStart<
+    <querySet name="ObservationTables" queryType="table" 
+              isCacheable='false'>
+
+
+      <sqlQuery name="Characteristics"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="term"/>
+            <column name="parentTerm"/>
+<!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
+         <sqlParamValue name="datasetName"><![CDATA[${datasetName}]]></sqlParamValue>
+            <sql>
+            <![CDATA[
+SELECT pan_name  AS source_id,
+  '@PROJECT_ID@' AS project_id,
+  term           AS parentTerm,
+  string_value   AS term
+FROM apidbtuning.metadata
+WHERE dataset_name = '&&datasetName&&'
+AND category       = 'Visit'
+/** TODO:  add this back in when we can make this a tree on the record page
+UNION
+SELECT a.name                AS source_id,
+  '@PROJECT_ID@'              AS project_id,
+  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
+  ontology_term_name          AS term
+FROM apidbtuning.metadataontology o,
+  apidbtuning.eventattributes a
+WHERE o.dataset_name = '&&datasetName&&'
+**/
+            ]]>
+            </sql>
+       </sqlQuery>
+
+
+      <sqlQuery name="Samples"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="sample_id"/>
+
+            <!-- TODO: should be dynamic -->
+            <column name="OBI_0100051"/>
+
+            <sqlParamValue name="sampleSourceIds"><![CDATA[OBI_0100051]]></sqlParamValue>
+            <sqlParamValue name="orderBy"><![CDATA[OBI_0100051]]></sqlParamValue>
+            <sql>
+
+                 <![CDATA[
+select cv.name as source_id,
+        '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, sa.name as sample_id
+              from Apidbtuning.Eventattributes cv
+              , apidbtuning.sampleattributes sa
+              , apidbtuning.protocolappnodeio io
+              where sa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
+              and io.INPUT_NODE_ID = cv.PROTOCOL_APP_NODE_ID
+              order by &&orderBy&&
+                  ]]>
+            </sql>
+        </sqlQuery>
+      </querySet>
+
+>templateTextEnd<

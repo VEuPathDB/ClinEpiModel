@@ -20,7 +20,7 @@
           </dynamicAttributes>
  
     	  <summary>
-    			<![CDATA[Light traps by lighttrap and dwelling details]]>
+    			<![CDATA[Light traps by lighttrap and household details]]>
     	  </summary>
 
           <propertyList name="organism">
@@ -34,7 +34,7 @@
           </propertyList>
           <description>
             <![CDATA[
-             Find light trap collections based on details of the dwelling, participants who live there and the light trap collections themselves.
+             Find light trap collections based on details of the household, participants who live there and the light trap collections themselves.
             ]]>
         </description>
     	</question>
@@ -63,10 +63,10 @@
         </description>
        </question>
 
-        <question name="CollectionsByDwellingId"   newBuild="1"
+        <question name="CollectionsByHouseholdId"   newBuild="1"
               displayName="Transform to Lighttraps"
-              shortDisplayName="dwellings->lighttraps"
-              queryRef="LightTrapId.LightTrapsByDwellingIds"
+              shortDisplayName="households->lighttraps"
+              queryRef="LightTrapId.LightTrapsByHouseholdIds"
               recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
               noSummaryOnSingleRecord="false">
     
@@ -74,14 +74,14 @@
 
        <!-- <dynamicAttributes>
              <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with th\
-is dwelling" align="center">
+is household" align="center">
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
              <columnAttribute name="collections" displayName="Collection Transformed" help="list of light trap ids from transformed result set associated with this\
- dwelling " align="center">
+ household " align="center">
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -90,12 +90,12 @@ is dwelling" align="center">
         </dynamicAttributes> -->
 
              <summary>
-             Find light trap collections by dwellings.
+             Find light trap collections by households.
              </summary>
 
              <description>
                <![CDATA[
-              Find light trap collections by dwellings.
+              Find light trap collections by households.
                ]]>
              </description>
     </question>

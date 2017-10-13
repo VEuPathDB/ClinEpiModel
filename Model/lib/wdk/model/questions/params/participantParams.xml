@@ -129,10 +129,10 @@
          </help>
     </filterParamNew>
 
-       <filterParamNew name="dwellings_nf" 
-                      metadataQueryRef="ParticipantVQ.DwellingMetaData"
-                      ontologyQueryRef="ParticipantVQ.DwellingOntology"
-                      backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd"
+       <filterParamNew name="households_nf" 
+                      metadataQueryRef="ParticipantVQ.HouseholdMetaData"
+                      ontologyQueryRef="ParticipantVQ.HouseholdOntology"
+                      backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd"
                       useIdTransformSqlForInternalValue="true"
                       prompt="Households"
                       dependedParamRef="participantParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region,participantParams.participants_nf"
@@ -161,7 +161,7 @@
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd"
                     prompt="Clincial Observations"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.dwellings_nf,participantParams.geographic_region,participantParams.participants_nf">
+                    dependedParamRef="participantParams.visits_visitage_metadata_nf,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.households_nf,participantParams.geographic_region,participantParams.participants_nf">
       <idTransformSql>%%participantIdTransformSql3%%</idTransformSql>    
       <help>
         Select participants based on their visit characteristics. 
@@ -198,10 +198,10 @@
          </help>
     </filterParamNew>
 
-       <filterParamNew name="dwellings_nf_maled" 
-                      metadataQueryRef="ParticipantVQ.DwellingMetaData_maled"
-                      ontologyQueryRef="ParticipantVQ.DwellingOntology_maled"
-                      backgroundQueryRef="ParticipantVQ.DwellingMetaDataBkgd_maled"
+       <filterParamNew name="households_nf_maled" 
+                      metadataQueryRef="ParticipantVQ.HouseholdMetaData_maled"
+                      ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
+                      backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_maled"
                       useIdTransformSqlForInternalValue="true"
                       prompt="Households"
                       dependedParamRef="participantParams.dataset,participantParams.participants_nf_maled"
@@ -480,7 +480,7 @@ first as (
          <paramRef ref="participantParams.visits_visitage_metadata_nf" />
          <paramRef ref="clinicalVisitParams.visit_date" /> 
          <paramRef ref="participantParams.duration_observation" />  
-         <paramRef ref="participantParams.dwellings_nf" />  
+         <paramRef ref="participantParams.households_nf" />  
          <paramRef ref="participantParams.geographic_region" />  
          <paramRef ref="participantParams.participants_nf" />  
          <column name="ontology_term_name"/>
@@ -493,7 +493,7 @@ first as (
 with valid as (
 select distinct io.output_node_id as visit_id, io.input_node_id as part_id
 from apidbtuning.protocolappnodeio io
-where io.input_node_id in ($$dwellings_nf$$)
+where io.input_node_id in ($$households_nf$$)
 and io.output_node_id in ($$visits_visitage_metadata_nf$$)
 )
 select distinct valid.visit_id as internal, term as ontology_term_name, string_value, number_value, date_value
@@ -517,7 +517,7 @@ and ios.input_node_id = valid.visit_id
          <paramRef ref="participantParams.visits_visitage_metadata_nf" />
          <paramRef ref="clinicalVisitParams.visit_date" /> 
          <paramRef ref="participantParams.duration_observation" />  
-         <paramRef ref="participantParams.dwellings_nf" />  
+         <paramRef ref="participantParams.households_nf" />  
          <paramRef ref="participantParams.geographic_region" />  
          <paramRef ref="participantParams.participants_nf" />  
          <column name="ontology_term_name"/>
@@ -557,7 +557,7 @@ and io.output_node_id = m.protocol_app_node_id
 from apidbtuning.metadataontology o
 where ontology_term_name = 'Age at time of visit'
 union
-                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                  null as precision from dual
     ]]>   
         </sql>
@@ -626,7 +626,7 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
                   where source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')) ds
                   where ds.source_id = o.ontology_term_source_id
                   union
-                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                   null as precision from dual
          ]]>
     </sql>
@@ -641,14 +641,14 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
       <sql>
         <![CDATA[
  select pa.protocol_app_node_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value, cast(null as number) as number_value, cast(null as date) as date_value
- from apidbtuning.participantattributes pa, apidbtuning.dwellingattributes da, apidbtuning.metadatatype mt
+ from apidbtuning.participantattributes pa, apidbtuning.householdattributes da, apidbtuning.metadatatype mt
  where pa.EUPATH_0000094 = da.name
  and mt.source_id = 'EUPATH_0000054'
         ]]>
       </sql>
     </sqlQuery>
 
-       <sqlQuery name="DwellingOntology">
+       <sqlQuery name="HouseholdOntology">
         <column name="ontology_term_name"/>
         <column name="parent_ontology_term_name"/>
         <column name="display_name"/>
@@ -664,7 +664,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and category = 'Dwelling type'
+ and category = 'Household type'
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
@@ -690,7 +690,7 @@ first as (
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaData" isCacheable="true">
+    <sqlQuery name="HouseholdMetaData" isCacheable="true">
       <paramRef ref="participantParams.visits_visitage_metadata_nf" />
       <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
@@ -703,31 +703,31 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
-with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+with part as ( select distinct io.input_node_id as household_id, io.output_node_id as part_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$participants_nf$$)
        and pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.dwelling_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.household_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Dwelling type'
- and part.dwelling_id = m.protocol_app_node_id
+ and m.category = 'Household type'
+ and part.household_id = m.protocol_app_node_id
  union
- select part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   and la.OBI_0001619 >= $$visit_date.min$$ 
   and la.OBI_0001619 <= $$visit_date.max$$ 
   group by da.protocol_app_node_id) mos, part
-  where part.dwelling_id = mos.protocol_app_node_id(+)
+  where part.household_id = mos.protocol_app_node_id(+)
           ]]>
     </sql>    
 
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaDataBkgd">
+    <sqlQuery name="HouseholdMetaDataBkgd">
       <paramRef ref="participantParams.visits_visitage_metadata_nf" />
       <paramRef ref="clinicalVisitParams.visit_date" /> 
       <paramRef ref="participantParams.duration_observation" />  
@@ -740,22 +740,22 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
       <column name="string_value"/>
       <sql>
          <![CDATA[
-with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+with part as ( select distinct io.input_node_id as household_id, io.output_node_id as part_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.dwelling_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.household_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
- and m.category = 'Dwelling type'
- and part.dwelling_id = m.protocol_app_node_id
+ and m.category = 'Household type'
+ and part.household_id = m.protocol_app_node_id
  union
- select part.dwelling_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   group by da.protocol_app_node_id) mos, part
-  where part.dwelling_id = mos.protocol_app_node_id(+)
+  where part.household_id = mos.protocol_app_node_id(+)
           ]]>
     </sql>    
 
@@ -854,7 +854,7 @@ from apidbtuning.metadataontology o
    </sqlQuery>
 
        <sqlQuery name="VisitMetaData_maled" isCacheable="true">
-         <paramRef ref="participantParams.dwellings_nf_maled" />  
+         <paramRef ref="participantParams.households_nf_maled" />  
          <paramRef ref="participantParams.dataset" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -867,7 +867,7 @@ select distinct valid.visit_id as internal, source_id as ontology_term_name, str
  from ApidbTuning.MetaDataWithoutNulls m, (
 select distinct io.output_node_id as visit_id, io.input_node_id as part_id
 from apidbtuning.protocolappnodeio io
-where io.input_node_id in ($$dwellings_nf_maled$$)
+where io.input_node_id in ($$households_nf_maled$$)
 and io.output_type_source_id = 'EUPATH_0000738'
 ) valid
  where m.dataset_name = $$dataset$$
@@ -878,7 +878,7 @@ and io.output_type_source_id = 'EUPATH_0000738'
     </sqlQuery>    
 
     <sqlQuery name="VisitMetaDataBkgd_maled">
-      <paramRef ref="participantParams.dwellings_nf_maled" />  
+      <paramRef ref="participantParams.households_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -915,7 +915,7 @@ select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontolo
                   and category = 'Household') ds
                   where ds.source_id = o.ontology_term_source_id
                   union
-                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                   null as precision from dual
          ]]>
     </sql>
@@ -941,7 +941,7 @@ select io.output_node_id as internal, m.source_id as ontology_term_name, m.strin
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="DwellingOntology_maled">
+    <sqlQuery name="HouseholdOntology_maled">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -964,7 +964,7 @@ from apidbtuning.metadataontology o
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaData_maled" isCacheable="true">
+    <sqlQuery name="HouseholdMetaData_maled" isCacheable="true">
       <paramRef ref="participantParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -974,21 +974,21 @@ from apidbtuning.metadataontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+with part as ( select distinct io.input_node_id as household_id, io.output_node_id as part_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id in ($$participants_nf_maled$$)
        and pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.dwelling_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.household_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
- and part.dwelling_id = m.protocol_app_node_id
+ and part.household_id = m.protocol_app_node_id
           ]]>
     </sql>    
 
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaDataBkgd_maled">
+    <sqlQuery name="HouseholdMetaDataBkgd_maled">
       <paramRef ref="participantParams.participants_nf_maled" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -998,14 +998,14 @@ with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_i
       <column name="string_value"/>
       <sql>
          <![CDATA[
-with part as ( select distinct io.input_node_id as dwelling_id, io.output_node_id as part_id
+with part as ( select distinct io.input_node_id as household_id, io.output_node_id as part_id
   from apidbtuning.participantattributes pa, apidbtuning.protocolappnodeio io
    where pa.protocol_app_node_id = io.output_node_id)
- select distinct Part.dwelling_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.household_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
- and part.dwelling_id = m.protocol_app_node_id
+ and part.household_id = m.protocol_app_node_id
           ]]>
     </sql>    
 
@@ -1306,11 +1306,11 @@ Filter households based on the date range they were in the study.  Note that the
         <group name="visit_part_characteristics" displayName="Personal characteristics" displayType="ShowHide">
             <description>
                 <![CDATA[
-You can restrict visits returned based on participants by selecting characteristics about where they live including their dwelling type and their own characteristics such as genotype information.
+You can restrict visits returned based on participants by selecting characteristics about where they live including their household type and their own characteristics such as genotype information.
                 ]]>
             </description>
         </group>
-        <group name="part_dwelling_characteristics" displayName="Households" displayType="ShowHide">
+        <group name="part_household_characteristics" displayName="Households" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
         <group name="geographic_loc" displayName="Geographic Region" displayType="ShowHide">

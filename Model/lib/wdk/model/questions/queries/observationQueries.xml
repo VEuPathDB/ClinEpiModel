@@ -33,7 +33,7 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
@@ -95,7 +95,7 @@ group by name
           isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_maled" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.participants_nf_maled" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.dwellings_nf_maled" groupRef="metaDataGroups.part_dwelling_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_nf_maled" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_nf_maled" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
@@ -164,7 +164,7 @@ group by name
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
        <column name="source_id"/>

@@ -1,0 +1,326 @@
+[templateStart] 
+name=householdRecord
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/householdRecord.xml
+prop=datasetName
+prop=householdRecordOverview
+prop=householdAttributesList
+prop=householdSourceIdsForHouseholdMemberTable
+>templateTextStart<
+    <recordClassSet name="HouseholdRecordClasses">
+      <recordClass name="HouseholdRecordClass" urlName="household" displayName="Household"> 
+
+            <!-- primary key definition -->
+            <primaryKey aliasQueryRef="HouseholdAttributes.HouseholdAlias">
+              <columnRef>source_id</columnRef>
+              <columnRef>project_id</columnRef>
+            </primaryKey>
+
+            <idAttribute name="primary_key"
+                         displayName="Household Id">
+                <text>
+                    <![CDATA[
+                      $$source_id$$
+                    ]]>
+                </text>                
+            </idAttribute>
+
+      <!-- =============================================================== -->
+      <!--   Reporters -->  
+      <!-- =============================================================== -->
+
+
+      <reporter name="attributesTabular" displayName="%%attributesReporterDisplayName%%" scopes="results"
+                implementation="org.gusdb.wdk.model.report.AttributesTabularReporter">
+        <property name="page_size">500</property>
+      </reporter>
+
+      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
+                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
+             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
+      </reporter>
+
+      <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
+                implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
+
+      <!-- =================================================================== -->
+      <!--  Text Attributes  ++++++++-->
+      <!-- =================================================================== -->
+<!--
+         <textAttribute name="record_overview" displayName="Overview">
+
+           <text>
+              <![CDATA[
+                  Subcounty: $$EUPATH_0000054$$<br>
+              ]]>
+           </text>
+         </textAttribute>
+-->
+
+         <textAttribute name="record_overview" displayName="Overview">
+
+           <text>
+              <![CDATA[
+              ${householdRecordOverview}
+              ]]>
+           </text>
+         </textAttribute>
+
+
+         <attributeQueryRef ref="HouseholdAttributes.HouseholdAttributes" attributeMetaQueryRef="HouseholdAttributes.HouseholdAttributesMeta"/>
+
+        <table name="Characteristics"
+               displayName="Household Characteristics"
+               queryRef="HouseholdTables.Characteristics">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="term" displayName="Value"/>
+            <columnAttribute name="parentTerm" displayName="Category"/>
+        </table>
+
+         <table name="HouseholdMembers"
+                 displayName="Household Members"
+                 queryRef="HouseholdTables.HouseholdMembers"
+                 attributeMetaQueryRef="HouseholdTables.HouseholdMembersColumnAttributes">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="participant" inReportMaker="true" internal="true"/>
+
+            <linkAttribute name="db_link" displayName="Participant ID" inReportMaker="false">
+                 <displayText>
+                    <![CDATA[
+                    $$participant$$
+                    ]]>
+                 </displayText>
+                 <url>@WEBAPP_BASE_URL@/record/participant/$$participant$$/@PROJECT_ID@</url>
+            </linkAttribute>
+          </table>
+
+
+	  <table name="LightTraps"
+                 displayName="Mosquitoe Light Trap Collections"
+                 queryRef="HouseholdTables.LightTraps"
+                 attributeMetaQueryRef="HouseholdTables.LightTrapColumnAttributes">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+    </table>
+
+
+    </recordClass>
+</recordClassSet>
+>templateTextEnd<
+
+
+[templateStart] 
+name=householdRecordAttributeQueries
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/householdRecord.xml
+prop=datasetName
+prop=householdAttributesList
+prop=householdSourceIdsForHouseholdMemberTable
+>templateTextStart<
+    <querySet name="HouseholdAttributes" queryType="attribute" doNotTest="true"  
+              isCacheable='false'>
+              
+
+      <testRowCountSql>
+select count(*) from apidbtuning.householdattributes
+       </testRowCountSql>
+
+       <sqlQuery name="HouseholdAlias" doNotTest="true">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="old_source_id"/>
+         <column name="old_project_id"/>
+         <sql>
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM Apidbtuning.Householdattributes
+         </sql>
+       </sqlQuery>
+
+       <sqlQuery name="HouseholdAttributes" attributeMetaQueryRef="HouseholdAttributes.HouseholdAttributesMeta">
+         <column name="source_id"/>
+         <column name="project_id"/>
+
+          <sql>
+            <![CDATA[
+                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.householdattributes d
+            ]]>
+          </sql>  
+         </sqlQuery>
+
+       <sqlQuery name="HouseholdAttributesMeta" isCacheable="false">
+          <column name="name" />
+          <column name="display_name" />
+          <column name="help" />
+          <column name="plugin_name" />
+          <column name="plugin_display" />
+          <column name="plugin_description" />
+          <column name="plugin_implementation" />
+          <column name="plugin_view" />
+          <column name="plugin_properties" />
+         <sql>
+            <![CDATA[
+                     select meta.display_name, meta.name, meta.help, 
+                            decode(meta.type, 'string', 'wordCloud', 'number', 'histogram', null) as plugin_name,
+                            decode(meta.type, 'string', 'Word Cloud', 'number', 'Histogram', null) as plugin_display,
+                            decode(meta.type, 'string', 'Display the terms in the attribute as word clouds', 'number', 'Display a histogram of the values', null) as plugin_description,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
+                            decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
+                            decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
+                     from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'Household'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.protocol_app_node_type = 'Household'
+                           and ot.ontology_term_id = m.TERM_ID
+                           and mt.term_id = m.term_id
+                           union
+                           select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
+                           ) meta
+                     
+            ]]>
+         </sql>
+
+         </sqlQuery>
+
+
+      </querySet>
+
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=householdRecordTableQueries
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/householdRecord.xml
+prop=datasetName
+prop=householdAttributesList
+prop=householdSourceIdsForHouseholdMemberTable
+prop=householdSourceIdsForHouseholdMemberTableQuote
+>templateTextStart<
+    <querySet name="HouseholdTables" queryType="table" 
+              isCacheable='false'>
+
+
+      <sqlQuery name="HouseholdMembersColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+<!--
+          <sqlParamValue name="householdMemberColumns"><![CDATA['EUPATH_0000033','EUPATH_0000034','EUPATH_0000035' ]]></sqlParamValue>
+
+
+          <sqlParamValue name="householdMemberColumns"><![CDATA['PATO_0000047', 'EUPATH_0000741', 'EUPATH_0000657', 'EUPATH_0000660', 'EUPATH_0000744', 'EUPATH_0000742' ]]></sqlParamValue>
+-->
+          <sqlParamValue name="householdMemberColumns"><![CDATA[ ${householdSourceIdsForHouseholdMemberTableQuote} ]]></sqlParamValue>
+
+          <sql>
+            <![CDATA[
+                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&householdMemberColumns&&)
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+
+
+
+      <sqlQuery name="Characteristics"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="term"/>
+            <column name="parentTerm"/>            
+<!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
+         <sqlParamValue name="datasetName"><![CDATA[${datasetName}]]></sqlParamValue>
+            <sql>
+            <![CDATA[
+SELECT pan_name  AS source_id,
+  '@PROJECT_ID@' AS project_id,
+  term           AS parentTerm,
+  string_value   AS term
+FROM apidbtuning.metadata
+WHERE dataset_name = '&&datasetName&&'
+AND category       = 'Household'
+/** TODO:  add this back in when we can make this a tree on the record page
+UNION
+SELECT a.name                AS source_id,
+  '@PROJECT_ID@'              AS project_id,
+  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
+  ontology_term_name          AS term
+FROM apidbtuning.metadataontology o,
+  apidbtuning.householdattributes a
+WHERE o.dataset_name = '&&datasetName&&'
+**/
+            ]]>
+            </sql>
+        </sqlQuery>
+
+
+      <sqlQuery name="HouseholdMembers"  isCacheable='false' attributeMetaQueryRef="HouseholdTables.HouseholdMembersColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="participant"/>
+
+<!--
+            <sqlParamValue name="householdMemberColumns"><![CDATA[EUPATH_0000033,EUPATH_0000034,EUPATH_0000035 ]]></sqlParamValue>
+
+            <sqlParamValue name="householdMemberColumns"><![CDATA[ PATO_0000047, EUPATH_0000741, EUPATH_0000657, EUPATH_0000660, EUPATH_0000744, EUPATH_0000742 ]]></sqlParamValue>
+-->
+            <sqlParamValue name="householdMemberColumns"><![CDATA[ ${householdSourceIdsForHouseholdMemberTable}  ]]></sqlParamValue>
+
+            <sql>
+            <![CDATA[
+SELECT ha.name AS source_id,
+  '@PROJECT_ID@' AS project_id,
+  pa.name as participant,
+  &&householdMemberColumns&&
+FROM apidbtuning.PARTICIPANTATTRIBUTES pa
+   , apidbtuning.HOUSEHOLDATTRIBUTES ha
+   , apidbtuning.protocolappnodeio io
+WHERE
+  pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
+  and io.INPUT_NODE_ID = ha.PROTOCOL_APP_NODE_ID
+order by source_id
+            ]]>
+            </sql>
+        </sqlQuery>
+
+
+       <sqlQuery name="LightTraps"  isCacheable='false' attributeMetaQueryRef="HouseholdTables.LightTrapColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+
+            <sqlParamValue name="lightTrapSourceIds"><![CDATA[EUPATH_0000200,EUPATH_0000198,EUPATH_0000192,EUPATH_0000196,EUPATH_0000203,EUPATH_0000193,EUPATH_0000197,EUPATH_0000218,EUPATH_0000202,EUPATH_0000204,EUPATH_0000195,EUPATH_0000205,OBI_0001619,EUPATH_0000217,EUPATH_0000194]]></sqlParamValue>
+            <sqlParamValue name="orderBySourceIds"><![CDATA[OBI_0001619]]></sqlParamValue>
+
+            <sql>
+            <![CDATA[
+            select EUPATH_0000094 as source_id, '@PROJECT_ID@' as project_id, &&lightTrapSourceIds&& from apidbtuning.lighttrapattributes order by &&orderBySourceIds&&
+            ]]>
+            </sql>
+        </sqlQuery>
+
+
+      <sqlQuery name="LightTrapColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+<!--
+          <sqlParamValue name="lightTrapSourceIds"><![CDATA['EUPATH_0000200','EUPATH_0000198','EUPATH_0000192','EUPATH_0000196','EUPATH_0000203','EUPATH_0000193','EUPATH_0000197','EUPATH_0000218','EUPATH_0000202','EUPATH_0000204','EUPATH_0000195','EUPATH_0000205','OBI_0001619','EUPATH_0000217','EUPATH_0000194' ]]></sqlParamValue>
+
+
+-->
+          <sqlParamValue name="lightTrapSourceIds"><![CDATA['DUMMY' ]]></sqlParamValue>
+          <sql>
+            <![CDATA[
+                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&lightTrapSourceIds&&)
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+      </querySet>
+
+>templateTextEnd<

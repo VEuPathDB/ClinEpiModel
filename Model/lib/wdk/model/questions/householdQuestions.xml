@@ -1,18 +1,18 @@
 <wdkModel>
 
-  <questionSet name="DwellingQuestions" displayName="Search for Dwellings" excludeProjects="TrichDB">
+  <questionSet name="HouseholdQuestions" displayName="Search for Households" includeProjects="ICEMR">
 
     <!-- ************************************************************ -->
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
 
 
-   <question name="DwellingsByCharacteristics" newBuild="1"
-              searchCategory="Dwelling"
+   <question name="HouseholdsByCharacteristics" newBuild="1"
+              searchCategory="Household"
               displayName="Select a Set of Households"
               shortDisplayName="Household Details"
-              queryRef="DwellingId.DwellingsByCharacteristics" 
-              recordClassRef="DwellingRecordClasses.DwellingRecordClass">
+              queryRef="HouseholdId.HouseholdsByCharacteristics" 
+              recordClassRef="HouseholdRecordClasses.HouseholdRecordClass">
 
 <!--
         <attributesList 
@@ -21,13 +21,13 @@
 -->
 
 	<dynamicAttributes>
-	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this dwelling over the time frame specified" align="center"> 
+	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this household over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-            <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this dwelling who matched your participants criteria" align="center"> 
+            <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -39,7 +39,7 @@
              <textAttribute name="lt_graph" displayName="Mosquito Collections" inReportMaker="false" truncateTo="100000">
                 <text>
                    <![CDATA[
-                   <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=$$primary_key$$&enddate=$$end_date$$&startdate=$$start_date$$&type=DwellingLightTrap&fmt=png&thumb=1"/>
+                   <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=$$primary_key$$&enddate=$$end_date$$&startdate=$$start_date$$&type=HouseholdLightTrap&fmt=png&thumb=1"/>
                     ]]>
                 </text>
              </textAttribute>
@@ -49,7 +49,7 @@
 
         <summary>
             <![CDATA[ 
-           Find dwellings based on dwelling and participant details.
+           Find households based on household and participant details.
             ]]>
         </summary>
 
@@ -65,19 +65,19 @@
                
         <description>
             <![CDATA[
-             Find dwellings based on details of the dwelling itself and the participants participants who live there. 
+             Find households based on details of the household itself and the participants participants who live there. 
             ]]>
         </description>
  
     </question>
 
     <!--Find records by Source ID-->
-   <question name="DwellingsBySourceID" newBuild="22"
-              searchCategory="Dwelling"
+   <question name="HouseholdsBySourceID" newBuild="22"
+              searchCategory="Household"
               displayName="Household ID"
               shortDisplayName="Household ID"
-              queryRef="DwellingId.DwellingsBySourceID" 
-              recordClassRef="DwellingRecordClasses.DwellingRecordClass"
+              queryRef="HouseholdId.HouseholdsBySourceID" 
+              recordClassRef="HouseholdRecordClasses.HouseholdRecordClass"
              >
 
         <attributesList 
@@ -100,11 +100,11 @@
 
     <!-- transforms -->
    
-   <question name="DwellingsByParticipantId"   newBuild="1" 
+   <question name="HouseholdsByParticipantId"   newBuild="1" 
               displayName="Transform to Households"
               shortDisplayName="participant->household"
-              queryRef="DwellingId.DwellingsByParticipantIds" 
-              recordClassRef="DwellingRecordClasses.DwellingRecordClass"
+              queryRef="HouseholdId.HouseholdsByParticipantIds" 
+              recordClassRef="HouseholdRecordClasses.HouseholdRecordClass"
               noSummaryOnSingleRecord="false">
  
 
@@ -115,13 +115,13 @@
         /> 
 -->
 	<dynamicAttributes>
-	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this dwelling" align="center"> 
+	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this household" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="participants" displayName="Participants Transformed" help="list of participant ids from transformed result set associated with this dwelling " align="center"> 
+	     <columnAttribute name="participants" displayName="Participants Transformed" help="list of participant ids from transformed result set associated with this household " align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -130,21 +130,21 @@
 	</dynamicAttributes>
 
              <summary>
-             Find dwelling by participants who are household members.
+             Find household by participants who are household members.
              </summary>
 
              <description>
                <![CDATA[
-              Find dwelling by participants who are household members.
+              Find household by participants who are household members.
                ]]>
              </description>
     </question>
     
-    <question name="DwellingsByLightTrapId"   newBuild="1"
+    <question name="HouseholdsByLightTrapId"   newBuild="1"
               displayName="Transform to Households"
               shortDisplayName="lighttrap->households"
-              queryRef="DwellingId.DwellingsByLightTrapIds"
-              recordClassRef="DwellingRecordClasses.DwellingRecordClass"
+              queryRef="HouseholdId.HouseholdsByLightTrapIds"
+              recordClassRef="HouseholdRecordClasses.HouseholdRecordClass"
               noSummaryOnSingleRecord="true">
     
 <!--
@@ -153,13 +153,13 @@
         />
 -->
 	<dynamicAttributes>
-	     <columnAttribute name="lt_count" displayName="# Collections" help="number of light trap collections from transformed result set associated with this dwelling" align="center"> 
+	     <columnAttribute name="lt_count" displayName="# Collections" help="number of light trap collections from transformed result set associated with this household" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="ave_anoph" displayName="Average Anopheles" help="Average of the anopheles collected from the transformed collections for this dwelling" align="center"> 
+	     <columnAttribute name="ave_anoph" displayName="Average Anopheles" help="Average of the anopheles collected from the transformed collections for this household" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -168,12 +168,12 @@
 	</dynamicAttributes>
 
              <summary>
-             Find dwellings by light trap collections from the dwelling.
+             Find households by light trap collections from the household.
              </summary>
 
              <description>
                <![CDATA[
-              Find dwellings by light trap collections from the dwelling.
+              Find households by light trap collections from the household.
                ]]>
              </description>
     </question>

@@ -1,12 +1,12 @@
 <wdkModel>
 
-  <constant name="dwellingIdTransformSql1">
+  <constant name="householdIdTransformSql1">
     <![CDATA[
       select internal from (##FILTERED_IDS##)
     ]]> 
   </constant>   
 
-  <paramSet name="dwellingParams">
+  <paramSet name="householdParams">
     
     <enumParam name="type"
                prompt="type"
@@ -16,8 +16,8 @@
       <help>this is internal</help>
       <enumList>
         <enumValue default="true">
-          <term>dwelling</term>
-          <internal>dwelling</internal>
+          <term>household</term>
+          <internal>household</internal>
         </enumValue>
       </enumList>
     </enumParam>
@@ -31,22 +31,22 @@
 
        </dateRangeParam>    
 
-    <filterParamNew name="dwellings_nf" 
-                    ontologyQueryRef="DwellingVQ.DwellingOntology"
-                    metadataQueryRef="DwellingVQ.DwellingMetaData"
-                    backgroundQueryRef="DwellingVQ.DwellingMetaDataBkgd"
+    <filterParamNew name="households_nf" 
+                    ontologyQueryRef="HouseholdVQ.HouseholdOntology"
+                    metadataQueryRef="HouseholdVQ.HouseholdMetaData"
+                    backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd"
                     prompt="Households"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset,dwellingParams.geographic_region,dwellingParams.date_range">
+                    dependedParamRef="participantParams.dataset,householdParams.geographic_region,householdParams.date_range">
       <help>
         Select participants based on their characteristics. 
       </help>
     </filterParamNew>
 
      <filterParamNew name="geographic_region" 
-                    metadataQueryRef="DwellingVQ.RegionMetaData"
-                    ontologyQueryRef="DwellingVQ.RegionOntology"
-                    prompt="Dwelling"
+                    metadataQueryRef="HouseholdVQ.RegionMetaData"
+                    ontologyQueryRef="HouseholdVQ.RegionOntology"
+                    prompt="Household"
                     dependedParamRef="participantParams.dataset"
                     trimMetadataTerms="false">
       <help>
@@ -55,21 +55,21 @@
     </filterParamNew>          
 
     <filterParamNew name="participants_nf" 
-                      metadataQueryRef="DwellingVQ.ParticipantMetaData"
-                      ontologyQueryRef="DwellingVQ.ParticipantOntology"
-                      backgroundQueryRef="DwellingVQ.ParticipantMetaDataBkgd"
+                      metadataQueryRef="HouseholdVQ.ParticipantMetaData"
+                      ontologyQueryRef="HouseholdVQ.ParticipantOntology"
+                      backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd"
                       prompt="Participants"
                       trimMetadataTerms="false"
-                      dependedParamRef="participantParams.dataset,dwellingParams.date_range,dwellingParams.dwellings_nf,dwellingParams.geographic_region">
-         <idTransformSql>%%dwellingIdTransformSql1%%</idTransformSql> 
+                      dependedParamRef="participantParams.dataset,householdParams.date_range,householdParams.households_nf,householdParams.geographic_region">
+         <idTransformSql>%%householdIdTransformSql1%%</idTransformSql> 
          <help>
               Select participants based on their characteristics. 
          </help>
        </filterParamNew>
 
 
-    <datasetParam name="dwellingsBySourceID"
-		  recordClassRef="DwellingRecordClasses.DwellingRecordClass"
+    <datasetParam includeProjects="ICEMR" name="householdsBySourceID"
+		  recordClassRef="HouseholdRecordClasses.HouseholdRecordClass"
 		  prompt="Source ID input set">
       <help><![CDATA[Input a set of source ID's, or upload a file <br><br>
 
@@ -81,11 +81,13 @@
       <suggest default="HH101009801" />
       
     </datasetParam>
-    <answerParam name="dwelling_result"
+
+
+    <answerParam name="household_result"
                   prompt="Input Result Set"
                   readonly="true"
                   visible="false">
-       <recordClass ref="DwellingRecordClasses.DwellingRecordClass" />
+       <recordClass ref="HouseholdRecordClasses.HouseholdRecordClass" />
     </answerParam>
 
  <enumParam name="district"
@@ -116,9 +118,9 @@
     <!--  Vocab queries-->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
- <querySet name="DwellingVQ" queryType="vocab" isCacheable="true">
+ <querySet name="HouseholdVQ" queryType="vocab" isCacheable="true">
 
-   <sqlQuery name="DwellingOntology">
+   <sqlQuery name="HouseholdOntology">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -135,7 +137,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
- and category = 'Dwelling type') md
+ and category = 'Household type') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -161,9 +163,9 @@ first as (
     </sql>
    </sqlQuery>
           
-    <sqlQuery name="DwellingMetaDataBkgd">
-     <paramRef ref="dwellingParams.date_range" />  
-     <paramRef ref="dwellingParams.geographic_region" />  
+    <sqlQuery name="HouseholdMetaDataBkgd">
+     <paramRef ref="householdParams.date_range" />  
+     <paramRef ref="householdParams.geographic_region" />  
      <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -175,11 +177,11 @@ first as (
 select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
- and m.category = 'Dwelling type'
+ and m.category = 'Household type'
  union
  select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
   group by da.protocol_app_node_id
@@ -187,9 +189,9 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="DwellingMetaData" isCacheable="true">
-      <paramRef ref="dwellingParams.date_range" />  
-      <paramRef ref="dwellingParams.geographic_region" />  
+    <sqlQuery name="HouseholdMetaData" isCacheable="true">
+      <paramRef ref="householdParams.date_range" />  
+      <paramRef ref="householdParams.geographic_region" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -204,7 +206,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
  union
  select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.dwellingattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
+  from apidbtuning.householdattributes da, apidbtuning.protocolappnodeio io, apidbtuning.lighttrapattributes la
   where da.protocol_app_node_id in ($$geographic_region$$)
   and da.protocol_app_node_id = io.input_node_id
   and la.protocol_app_node_id = io.output_node_id
@@ -231,10 +233,10 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
                   from apidbtuning.metadata
                   where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
                   and source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
-                  and category = 'Dwelling type') ds
+                  and category = 'Household type') ds
                   where ds.source_id = o.ontology_term_source_id
                   union
-                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Dwelling' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+                  select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
                   null as precision from dual
          ]]>
     </sql>
@@ -252,7 +254,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
 select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata
  where dataset_name = $$dataset$$
- and category in ('Dwelling type','Household')
+ and category in ('Household type','Household')
  and source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
           ]]>
     </sql>
@@ -299,9 +301,9 @@ first as (
    </sqlQuery>
 
    <sqlQuery name="ParticipantMetaData" isCacheable="true">
-     <paramRef ref="dwellingParams.date_range" />  
-     <paramRef ref="dwellingParams.dwellings_nf" />  
-     <paramRef ref="dwellingParams.geographic_region" />  
+     <paramRef ref="householdParams.date_range" />  
+     <paramRef ref="householdParams.households_nf" />  
+     <paramRef ref="householdParams.geographic_region" />  
      <paramRef ref="participantParams.dataset" />  
      <column name="ontology_term_name"/>
      <column name="internal"/>
@@ -315,15 +317,15 @@ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
- and io.input_node_id in ($$dwellings_nf$$)
+ and io.input_node_id in ($$households_nf$$)
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd">
-     <paramRef ref="dwellingParams.date_range" />  
-      <paramRef ref="dwellingParams.dwellings_nf" />  
-      <paramRef ref="dwellingParams.geographic_region" />  
+     <paramRef ref="householdParams.date_range" />  
+      <paramRef ref="householdParams.households_nf" />  
+      <paramRef ref="householdParams.geographic_region" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -337,7 +339,7 @@ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
  and m.protocol_app_node_id = io.output_node_id
- and io.input_node_id in (select protocol_app_node_id from apidbtuning.dwellingattributes)
+ and io.input_node_id in (select protocol_app_node_id from apidbtuning.householdattributes)
           ]]>
     </sql>
     </sqlQuery>

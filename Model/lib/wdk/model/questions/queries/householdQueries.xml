@@ -4,32 +4,32 @@
 
   -->
 
-  <querySet name="DwellingId" queryType="id" isCacheable="false">
+  <querySet name="HouseholdId" queryType="id" isCacheable="false">
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!-- Source id  -->
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
 
-    <sqlQuery name="DwellingsBySourceID"
+    <sqlQuery name="HouseholdsBySourceID" includeProjects="ICEMR"
 	      isCacheable="true">
-      <paramRef ref="dwellingParams.dwellingsBySourceID" />
+      <paramRef ref="householdParams.householdsBySourceID" />
       <column name="source_id" />
       <column name="project_id" />
       <sql>
 
-	<![CDATA[select distinct da.name as source_id, '@PROJECT_ID@' as project_id from APIDBTUNING.DWELLINGATTRIBUTES da,
-        ($$dwellingsBySourceID$$) ds WHERE da.name=ds.source_id]]>
+	<![CDATA[select distinct da.name as source_id, '@PROJECT_ID@' as project_id from APIDBTUNING.HOUSEHOLDATTRIBUTES da,
+        ($$householdsBySourceID$$) ds WHERE da.name=ds.source_id]]>
       </sql>
       
     </sqlQuery>
 
-    <sqlQuery name="DwellingsByCharacteristics" isCacheable="true">
+    <sqlQuery name="HouseholdsByCharacteristics" isCacheable="true">
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
-       <paramRef ref="dwellingParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="dwellingParams.date_range" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="dwellingParams.dwellings_nf" groupRef="metaDataGroups.part_dwelling_characteristics"/>
-       <paramRef ref="dwellingParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.date_range" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="householdParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_anoph"/>
@@ -40,7 +40,7 @@ select dwpct.name as source_id, 'ClinEpiDB' as project_id,
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph, dwpct.part_count
 from (
 select da.protocol_app_node_id,da.name,count(*) as part_count
-from apidbtuning.protocolappnodeio io, apidbtuning.dwellingattributes da
+from apidbtuning.protocolappnodeio io, apidbtuning.householdattributes da
 where io.output_node_id in ($$participants_nf$$)
 and da.protocol_app_node_id = io.input_node_id
 group by da.protocol_app_node_id,da.name
@@ -59,7 +59,7 @@ group by da.protocol_app_node_id,da.name
 
 <!-- transform(s) -->
 
-    <sqlQuery name="DwellingsByParticipantIds" doNotTest="true"
+    <sqlQuery name="HouseholdsByParticipantIds" doNotTest="true"
               displayName="ID" isCacheable="true">
       <paramRef ref="participantParams.participant_result"/>
         <column name="project_id"/>
@@ -73,7 +73,7 @@ group by da.protocol_app_node_id,da.name
 SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct source_set.source_id) as participant_count,
  listagg (pa.name, ',') WITHIN GROUP (order by pa.name )  as participants,
  max(source_set.wdk_weight) as wdk_weight
-              FROM ($$participant_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.dwellingattributes da, apidbtuning.participantattributes pa
+              FROM ($$participant_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.householdattributes da, apidbtuning.participantattributes pa
               WHERE source_set.source_id = pa.name 
               AND pa.protocol_app_node_id = io.output_node_id
               AND  io.input_node_id = da.protocol_app_node_id
@@ -82,7 +82,7 @@ SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct sou
         </sql>
     </sqlQuery>
 
-     <sqlQuery name="DwellingsByLightTrapIds" doNotTest="true"
+     <sqlQuery name="HouseholdsByLightTrapIds" doNotTest="true"
               displayName="ID" isCacheable="true">
       <paramRef ref="lightTrapParams.lighttrap_result"/>
         <column name="project_id"/>
@@ -95,7 +95,7 @@ SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct sou
             <![CDATA[
                      SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, max(source_set.wdk_weight) as wdk_weight, count(*) as lt_count,
                       round(avg(nvl(avg(lta.EUPATH_0000192),0)+nvl(avg(lta.EUPATH_0000193),0)+nvl(avg(lta.EUPATH_0000204),0)+nvl(avg(lta.EUPATH_0000205),0)),1) as ave_anoph
-              FROM ($$lighttrap_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.dwellingattributes da, apidbtuning.lighttrapattributes lta
+              FROM ($$lighttrap_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.householdattributes da, apidbtuning.lighttrapattributes lta
               WHERE source_set.source_id = lta.name 
               AND lta.protocol_app_node_id = io.output_node_id
               AND  io.input_node_id = da.protocol_app_node_id
