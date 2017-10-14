@@ -225,6 +225,7 @@ and count(*) <= $$visit_count.max$$
 <!--       <paramRef ref="participantParams.enrollment_followup" groupRef="metaDataGroups.part_event_characteristics"/> -->
        <paramRef ref="participantParams.event_gems" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="participantParams.relative_event_gems" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="participantParams.return_case_control" groupRef="metaDataGroups.case_control"/>
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_Gates_GEMS_gems1_case_control_RSRC" groupRef="metaDataGroups.case_control"/> 
