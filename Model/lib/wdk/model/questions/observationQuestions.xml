@@ -11,7 +11,7 @@
               displayName="Select a Set of Clinical Observations (PRISM)"
               shortDisplayName="Clinical Observations"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits" 
-              recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
+              recordClassRef="ObservationRecordClasses.ObservationRecordClass" >
 
 
 <!--
@@ -66,7 +66,7 @@
               displayName="Select a Set of Observations (MAL-ED)"
               shortDisplayName="Observations"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_maled" 
-              recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
+              recordClassRef="ObservationRecordClasses.ObservationRecordClass" >
 
 
         <attributesList 
@@ -134,7 +134,7 @@
               displayName="Select a Set of Clinical Observations (no Relative Observations)"
               shortDisplayName="Clinical Observations noRel"
               queryRef="ClinicalVisitId.ClinicalVisitsByAllData" 
-              recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass" >
+              recordClassRef="ObservationRecordClasses.ObservationRecordClass" >
 
 
 <!--
@@ -177,7 +177,7 @@
               displayName="Clinical Observation ID"
               shortDisplayName="Observation ID"
               queryRef="ClinicalVisitId.ClinicalVisitsBySourceID" 
-              recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass">
+              recordClassRef="ObservationRecordClasses.ObservationRecordClass">
 
 
 <!--
@@ -205,7 +205,7 @@
 	      displayName="Transform to clinical observations"
 	      shortDisplayName="participants->clinicalvisits"
 	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
-	      recordClassRef="ClinicalVisitRecordClasses.ClinicalVisitRecordClass"
+	      recordClassRef="ObservationRecordClasses.ObservationRecordClass"
 	      noSummaryOnSingleRecord="false">
 
 <!--

@@ -93,7 +93,7 @@
 
 
     <datasetParam name="participantsBySourceID" 
-		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass_gems"
+		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
 		  prompt="Source ID input set">
       <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
 
@@ -110,7 +110,7 @@
                  prompt="Input Result Set"
                  readonly="true"
                  visible="false">
-      <recordClass ref="ParticipantRecordClasses.ParticipantRecordClass_gems" />
+      <recordClass ref="ParticipantRecordClasses.ParticipantRecordClass" />
     </answerParam>
 
     <!--************************************************************-->
@@ -231,7 +231,7 @@
                        backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
                        prompt="Observations"
                        trimMetadataTerms="false"
-                       dependedParamRef="participantParams.dataset,participantParams.dwellings_nf_maled">
+                       dependedParamRef="participantParams.dataset,participantParams.households_nf_maled">
          <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>   
          <help>
            Select participants based on their visit characteristics. 
@@ -1077,7 +1077,7 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
-and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
+     and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
 order by display_name
       </sql>
     </sqlQuery>
