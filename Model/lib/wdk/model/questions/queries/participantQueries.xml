@@ -229,12 +229,33 @@ and count(*) <= $$visit_count.max$$
        <paramRef ref="participantParams.relative_event_gems" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="participantParams.return_case_control" groupRef="metaDataGroups.case_control"/>
        <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_Gates_GEMS_gems1_case_control_RSRC" groupRef="metaDataGroups.case_control"/> 
-<!--       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_Gates_MAL-ED_stdm_tp_RSRC" groupRef="metaDataGroups.case_control"/> -->
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
            <![CDATA[
-select 'eupath_1234' as source_id, 'Gates' as project_id from dual
+with core as (
+select distinct name, EUPATH_0010049, EUPATH_0010375
+from (
+select distinct name, EUPATH_0010049, EUPATH_0010375 from apidbtuning.participantattributes
+      where protocol_app_node_id in ($$event_gems$$)
+$$dateOperator_fv$$
+select distinct name, EUPATH_0010049, EUPATH_0010375 from apidbtuning.participantattributes
+      where protocol_app_node_id in ($$relative_event_gems$$)
+      and $$use_relative_visits$$ = 1)
+)
+select name as source_id, 'ClinEpiDB' as project_id from core
+where 'selected' = $$return_case_control$$
+UNION
+select distinct pa.name as source_id, 'ClinEpiDB' as project_id 
+from core, apidbtuning.participantattributes pa
+where 'caseid' = $$return_case_control$$
+and core.EUPATH_0010049 = pa.EUPATH_0010049
+UNION
+select distinct pa.name as source_id, 'ClinEpiDB' as project_id 
+from core, apidbtuning.participantattributes pa
+where 'matching' = $$return_case_control$$
+and core.EUPATH_0010049 = pa.EUPATH_0010049
+and core.EUPATH_0010375 != pa.EUPATH_0010375
                 ]]>   
         </sql>
      </sqlQuery>

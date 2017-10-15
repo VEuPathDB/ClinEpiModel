@@ -1031,13 +1031,13 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('OBI_0001627')
-     and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
+     and dataset_name = $$dataset$$ 
      UNION
       select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
      CONNECT BY o.ontology_term_source_id = PRIOR o.parent_ontology_term_source_id
      START WITH o.ontology_term_source_id in ('OBI_0001627')
-     and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
+     and dataset_name = $$dataset$$ 
       </sql>
     </sqlQuery>
 
@@ -1077,7 +1077,7 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
-     and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
+     and dataset_name = $$dataset$$ 
 order by display_name
       </sql>
     </sqlQuery>
@@ -1099,7 +1099,7 @@ order by display_name
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('PCO_0000024')
+     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
 and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
@@ -1121,7 +1121,7 @@ and dataset_name = $$dataset$$ )
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('PCO_0000024')
+     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
 and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
@@ -1143,7 +1143,7 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000738'
-     and dataset_name = 'ISASimple_Gates_GEMS_gems1_case_control_RSRC' --$$dataset$$ 
+     and dataset_name = $$dataset$$ 
 order by display_name
       </sql>
     </sqlQuery>
