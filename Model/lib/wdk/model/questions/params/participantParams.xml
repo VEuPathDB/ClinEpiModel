@@ -262,26 +262,30 @@
                        backgroundQueryRef="ParticipantVQ.ParticipantDwellingMetaDataBkgd_gems"
                        prompt="Participant"
                        trimMetadataTerms="false"
-                       dependedParamRef="participantParams.dataset,participantParams.geographic_region_gems">
+                       dependedParamRef="participantParams.dataset,participantParams.case_control,participantParams.geographic_region_gems">
          <help>
            Select participants based on study site. 
          </help>
        </filterParamNew>
 
-       <enumParam name="enrollment_followup"
+       <enumParam name="case_control"
                   prompt="Query enrollment or follow-up"
                   multiPick="false"
-                  quote="true"
+                  quote="false"
                   visible="true">
-         <help>Choose whether to query based on enrollment or followup measurements.</help>
+         <help>Choose whether to query based on cases, controls or either.</help>
          <enumList>
            <enumValue default="true">
-             <term>Enrollment</term>
-             <internal>enrollment</internal>
+             <term>Both Cases and Controls</term>
+             <internal>'case','control'</internal>
            </enumValue>
            <enumValue>
-             <term>Follow-up</term>
-             <internal>followup</internal>
+             <term>Cases</term>
+             <internal>'case'</internal>
+           </enumValue>
+           <enumValue>
+             <term>Controls</term>
+             <internal>'control'</internal>
            </enumValue>  
          </enumList>
        </enumParam>
@@ -304,7 +308,7 @@
                        backgroundQueryRef="ParticipantVQ.RelativeEventMetaDataBkgd_gems"
                        prompt="Participant"
                        trimMetadataTerms="false"
-                       dependedParamRef="participantParams.dataset,participantParams.participant_dwelling_gems">
+                       dependedParamRef="participantParams.dataset,participantParams.case_control,participantParams.participant_dwelling_gems">
          <help>
            Modify participant selected based on the relationship between their enrollment and followup events. 
          </help>
@@ -1078,6 +1082,7 @@ from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
      and dataset_name = $$dataset$$ 
+     and o.ontology_term_source_id != 'EUPATH_0010375'
 order by display_name
       </sql>
     </sqlQuery>
@@ -1085,6 +1090,7 @@ order by display_name
     <sqlQuery name="ParticipantDwellingMetaData_gems" isCacheable="true">
       <paramRef ref="participantParams.geographic_region_gems" />  
       <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1095,12 +1101,17 @@ order by display_name
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.dataset_name = $$dataset$$
- and m.protocol_app_node_id in ($$geographic_region_gems$$)  --(select protocol_app_node_id from apidbtuning.participantattributes)
+ and m.protocol_app_node_id in ($$geographic_region_gems$$) -- (select protocol_app_node_id from apidbtuning.participantattributes)
+ and m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
+                                where source_id = 'EUPATH_0010375'
+                                and dataset_name = $$dataset$$
+                                and string_value in ($$case_control$$))
  and m.source_id in (select distinct o.ontology_term_source_id 
-from apidbtuning.metadataontology o
+     from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
-and dataset_name = $$dataset$$ )
+   and dataset_name = $$dataset$$ 
+   and o.ontology_term_source_id != 'EUPATH_0010375')
           ]]>
     </sql>    
     </sqlQuery>
@@ -1219,7 +1230,7 @@ order by display_name
     <sqlQuery name="RelativeEventMetaData_gems" isCacheable="true">
       <paramRef ref="participantParams.dataset" />  
       <paramRef ref="participantParams.participant_dwelling_gems" />  
-<!--      <paramRef ref="participantParams.enrollment_followup" />  -->
+      <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1230,12 +1241,15 @@ order by display_name
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.dataset_name = $$dataset$$
+ and m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
+                                where source_id = 'EUPATH_0010375'
+                                and dataset_name = $$dataset$$
+                                and string_value not in ($$case_control$$))
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000738') 
 and dataset_name = $$dataset$$ )
-and m.protocol_app_node_id in ($$participant_dwelling_gems$$) 
           ]]>
     </sql>    
     </sqlQuery>
@@ -1243,7 +1257,7 @@ and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
     <sqlQuery name="RelativeEventMetaDataBkgd_gems">
       <paramRef ref="participantParams.dataset" />  
       <paramRef ref="participantParams.participant_dwelling_gems" />  
-<!--      <paramRef ref="participantParams.enrollment_followup" />  -->
+      <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1254,11 +1268,11 @@ and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.dataset_name = $$dataset$$
- and m.source_id in (select distinct o.ontology_term_source_id 
+and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738')  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
-and dataset_name = $$dataset$$ )
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738')
+     and dataset_name = $$dataset$$) 
           ]]>
     </sql>    
     </sqlQuery> 
@@ -1381,7 +1395,15 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="case_control" displayName="Case / Control" displayType="ShowHide">
+        <group name="relative_case_control" displayName="Case Control" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         You can restrict the participants you have previously selected by removing (or keeping) participants based on differences or similarities between matched cases and controls. 
+                ]]>
+            </description>
+        </group>
+
+        <group name="results_options" displayName="Results Options" displayType="ShowHide">
             <description>
                 <![CDATA[
                          Choose whether to return just the participants selected in this search, include the matching cases (or controls) for the participants selected or only the matching cases (or controls) for the selected participants.

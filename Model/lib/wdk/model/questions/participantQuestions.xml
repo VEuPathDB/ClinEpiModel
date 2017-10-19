@@ -236,11 +236,11 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-              <question name="ParticipantsByTwoVisitsVisits_gems" newBuild="1" includeProjects="ClinEpiDB"
+              <question name="ParticipantsByCaseControlVisits_gems" newBuild="1" includeProjects="ClinEpiDB"
               searchCategory="Participant"
               displayName="Select a Set of Participants (GEMS)"
               shortDisplayName="Particip GEMS"
-              queryRef="ParticipantId.ParticipantsByTwoVisits_gems" 
+              queryRef="ParticipantId.ParticipantsByCaseControl_gems" 
               recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
 
 
