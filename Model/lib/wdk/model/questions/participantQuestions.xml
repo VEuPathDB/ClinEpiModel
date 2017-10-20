@@ -236,7 +236,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-              <question name="ParticipantsByCaseControlVisits_gems" newBuild="1" includeProjects="ClinEpiDB"
+      <question name="ParticipantsByCaseControlVisits_gems" newBuild="1" includeProjects="ClinEpiDB"
               searchCategory="Participant"
               displayName="Select a Set of Participants (GEMS)"
               shortDisplayName="Particip GEMS"
@@ -284,6 +284,53 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
+       <question name="ParticipantsByCaseControlVisitsShort_gems" newBuild="1" includeProjects="ClinEpiDB"
+              searchCategory="Participant"
+              displayName="Shorter: Select a Set of Participants (GEMS)"
+              shortDisplayName="Particip GEMS"
+              queryRef="ParticipantId.ParticipantsByCaseControlShort_gems" 
+              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
+
+
+        <attributesList 
+            summary="OBI_0001627,EUPATH_0010056" 
+        /> 
+
+
+        <summary>
+            <![CDATA[
+Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+
+<!--
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "part_event_characteristics",
+              "relatedObservationsGroupName": "relative_events",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "numRelativeEventsParamName": "num_relative_events",
+              "relativeVisitsParamName": "relative_visits_nf_maled"
+            }
+          </value>
+        </propertyList>
+-->
+ 
+      </question>
 
    <question name="ParticipantsByHouseholdId"   newBuild="1" includeProjects="Gates,ICEMR"
               displayName="Transform to Participants"
