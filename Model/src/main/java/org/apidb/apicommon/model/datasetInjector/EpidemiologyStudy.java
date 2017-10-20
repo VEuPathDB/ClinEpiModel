@@ -44,6 +44,8 @@ public class EpidemiologyStudy extends DatasetInjector {
           //TODO inject metadata filter question
 
       }
+
+
       if(hasParticipants) {
 
           String householdSourceIdsIncludedInParticipantAttributes = getPropValue("householdSourceIdsIncludedInParticipantAttributes");
@@ -61,13 +63,16 @@ public class EpidemiologyStudy extends DatasetInjector {
           // TODO:  model ref for visit table and sample table if has those things
           //TODO inject metadata filter question
       }
+
       if(hasObservations) {
 
           String householdSourceIdsIncludedInObservationAttributes = getPropValue("householdSourceIdsIncludedInObservationAttributes");
           String participantSourceIdsIncludedInObservationAttributes = getPropValue("participantSourceIdsIncludedInObservationAttributes");
           String hhAndPIncludedInObservationAttributes = householdSourceIdsIncludedInObservationAttributes + "," + participantSourceIdsIncludedInObservationAttributes;
-
           setPropValue("participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote", addQuotes(hhAndPIncludedInObservationAttributes));
+
+          // always include the participant name here
+          participantSourceIdsIncludedInObservationAttributes = "name as parent_id, " + participantSourceIdsIncludedInObservationAttributes;
 
           injectTemplate("observationRecord");
           injectTemplate("observationRecordAttributeQueries");
@@ -76,6 +81,7 @@ public class EpidemiologyStudy extends DatasetInjector {
           // model ref for visit table and sample table if has those things
           // TODO inject metadata filter question
       }
+
 
       if(hasHouseholds && hasParticipants) {
           // inject transform question
