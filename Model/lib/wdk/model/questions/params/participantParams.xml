@@ -1110,20 +1110,23 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name,
+                  m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.dataset_name = $$dataset$$
- and m.protocol_app_node_id in ($$geographic_region_gems$$) -- (select protocol_app_node_id from apidbtuning.participantattributes)
- and m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
-                                where source_id = 'EUPATH_0010375'
-                                and dataset_name = $$dataset$$
-                                and string_value in ($$case_control$$))
- and m.source_id in (select distinct o.ontology_term_source_id 
-     from apidbtuning.metadataontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
-   and dataset_name = $$dataset$$ )
-          ]]>
+   and m.protocol_app_node_id in ($$geographic_region_gems$$)
+   and m.protocol_app_node_id
+       in (select protocol_app_node_id
+           from apidbTuning.ParticipantAttributes
+           where EUPATH_0010375 in ($$case_control$$)
+          )
+   and m.source_id
+       in (select distinct o.ontology_term_source_id 
+           from apidbtuning.metadataontology o
+           connect by o.parent_ontology_term_source_id = prior o.ontology_term_source_id
+           start with o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
+          )
+         ]]>
     </sql>    
     </sqlQuery>
 
