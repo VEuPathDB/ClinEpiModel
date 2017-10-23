@@ -1069,12 +1069,10 @@ from apidbtuning.metadataontology o
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
- and m.source_id in (select distinct o.ontology_term_source_id 
+ where m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('OBI_0001627')
-and dataset_name = $$dataset$$ )
+     START WITH o.ontology_term_source_id in ('OBI_0001627') )
           ]]>
     </sql>    
     </sqlQuery>
@@ -1113,8 +1111,7 @@ order by display_name
   select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name,
                   m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
-   and m.protocol_app_node_id in ($$geographic_region_gems$$)
+ where m.protocol_app_node_id in ($$geographic_region_gems$$)
    and m.protocol_app_node_id
        in (select protocol_app_node_id
            from apidbTuning.ParticipantAttributes
@@ -1125,6 +1122,7 @@ order by display_name
            from apidbtuning.metadataontology o
            connect by o.parent_ontology_term_source_id = prior o.ontology_term_source_id
            start with o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
+           and o.dataset_name = $$dataset$$
           )
          ]]>
     </sql>    
@@ -1142,8 +1140,7 @@ order by display_name
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
- and m.source_id in (select distinct o.ontology_term_source_id 
+ where m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
@@ -1182,10 +1179,8 @@ order by display_name
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
- and m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
+ where m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
                                 where source_id = 'EUPATH_0010375'
-                                and dataset_name = $$dataset$$
                                 and string_value in ($$case_control$$))
           ]]>
     </sql>    
@@ -1202,7 +1197,6 @@ order by display_name
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
           ]]>
     </sql>    
     </sqlQuery> 
@@ -1241,12 +1235,11 @@ order by display_name
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
- and m.source_id in (select distinct o.ontology_term_source_id 
+ where m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000738')  
-and dataset_name = $$dataset$$ )
+and o.dataset_name = $$dataset$$ )
 and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
           ]]>
     </sql>    
@@ -1265,8 +1258,7 @@ and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
- and m.source_id in (select distinct o.ontology_term_source_id 
+ where m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000738')  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
@@ -1308,10 +1300,8 @@ order by display_name
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
- and m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
+ where m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
                                 where source_id = 'EUPATH_0010375'
-                                and dataset_name = $$dataset$$
                                 and string_value not in ($$case_control$$))
  and m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
@@ -1334,8 +1324,7 @@ and dataset_name = $$dataset$$ )
          <![CDATA[
  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.dataset_name = $$dataset$$
-and m.source_id in (select distinct o.ontology_term_source_id 
+ where m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000738')
