@@ -1233,7 +1233,7 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.source_id in (select distinct o.ontology_term_source_id 
 from apidbtuning.metadataontology o
