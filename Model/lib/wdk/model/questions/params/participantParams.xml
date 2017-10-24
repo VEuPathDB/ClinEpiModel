@@ -1058,7 +1058,7 @@ from apidbtuning.metadataontology o
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="GeographicRegionMetaData_gems" isCacheable="true">
+    <sqlQuery name="GeographicRegionMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1067,12 +1067,8 @@ from apidbtuning.metadataontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.source_id in (select distinct o.ontology_term_source_id 
-from apidbtuning.metadataontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('OBI_0001627') )
           ]]>
     </sql>    
     </sqlQuery>
@@ -1092,12 +1088,13 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from apidbtuning.metadataontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
-     and dataset_name = $$dataset$$ 
+     and o.dataset_name = $$dataset$$ 
+     and o.ontology_term_source_id != 'EUPATH_0000094'
 order by display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantDwellingMetaData_gems" isCacheable="true">
+    <sqlQuery name="ParticipantDwellingMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.geographic_region_gems" />  
       <paramRef ref="participantParams.dataset" />  
       <paramRef ref="participantParams.case_control" />  
@@ -1108,7 +1105,7 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
-  select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name,
+  select m.protocol_app_node_id as internal, m.source_id as ontology_term_name,
                   m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.protocol_app_node_id in ($$geographic_region_gems$$)
@@ -1117,18 +1114,11 @@ order by display_name
            from apidbTuning.ParticipantAttributes
            where EUPATH_0010375 in ($$case_control$$)
           )
-   and m.source_id
-       in (select distinct o.ontology_term_source_id 
-           from apidbtuning.metadataontology o
-           connect by o.parent_ontology_term_source_id = prior o.ontology_term_source_id
-           start with o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
-           and o.dataset_name = $$dataset$$
-          )
          ]]>
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="ParticipantDwellingMetaDataBkgd_gems">
+    <sqlQuery name="ParticipantDwellingMetaDataBkgd_gems" isCacheable="false">
       <paramRef ref="participantParams.geographic_region_gems" />  
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -1138,13 +1128,8 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.source_id in (select distinct o.ontology_term_source_id 
-from apidbtuning.metadataontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
-and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
     </sqlQuery> 
@@ -1163,11 +1148,12 @@ and dataset_name = $$dataset$$ )
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.metadataontology o
 where o.dataset_name = $$dataset$$ 
+and o.ontology_term_source_id != 'EUPATH_0000094'
 order by display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="AllDataMetaData_gems" isCacheable="true">
+    <sqlQuery name="AllDataMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.dataset" />  
       <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
@@ -1177,7 +1163,7 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
                                 where source_id = 'EUPATH_0010375'
@@ -1186,7 +1172,7 @@ order by display_name
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="AllDataMetaDataBkgd_gems">
+    <sqlQuery name="AllDataMetaDataBkgd_gems" isCacheable="false">
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1195,7 +1181,7 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
           ]]>
     </sql>    
@@ -1222,7 +1208,7 @@ order by display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="EventMetaData_gems" isCacheable="true">
+    <sqlQuery name="EventMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.participant_dwelling_gems" />  
 <!--      <paramRef ref="participantParams.enrollment_followup" />  -->
       <paramRef ref="participantParams.dataset" />  
@@ -1235,17 +1221,12 @@ order by display_name
          <![CDATA[
  select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.source_id in (select distinct o.ontology_term_source_id 
-from apidbtuning.metadataontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738')  
-and o.dataset_name = $$dataset$$ )
-and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
+ where m.protocol_app_node_id in ($$participant_dwelling_gems$$)
           ]]>
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="EventMetaDataBkgd_gems">
+    <sqlQuery name="EventMetaDataBkgd_gems" isCacheable="false">
       <paramRef ref="participantParams.participant_dwelling_gems" />  
 <!--      <paramRef ref="participantParams.enrollment_followup" />  -->
       <paramRef ref="participantParams.dataset" />  
@@ -1256,13 +1237,8 @@ and m.protocol_app_node_id in ($$participant_dwelling_gems$$)
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.source_id in (select distinct o.ontology_term_source_id 
-from apidbtuning.metadataontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738')  /* NOTE: will need to restrict based on $$enrollment_followup$$ */
-and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
     </sqlQuery> 
@@ -1288,7 +1264,7 @@ order by display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="RelativeEventMetaData_gems" isCacheable="true">
+    <sqlQuery name="RelativeEventMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.dataset" />  
       <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
@@ -1298,21 +1274,16 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
                                 where source_id = 'EUPATH_0010375'
                                 and string_value not in ($$case_control$$))
- and m.source_id in (select distinct o.ontology_term_source_id 
-from apidbtuning.metadataontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738') 
-and dataset_name = $$dataset$$ )
           ]]>
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="RelativeEventMetaDataBkgd_gems">
+    <sqlQuery name="RelativeEventMetaDataBkgd_gems" isCacheable="false">
       <paramRef ref="participantParams.dataset" />  
       <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
@@ -1322,13 +1293,8 @@ and dataset_name = $$dataset$$ )
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select distinct m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.source_id in (select distinct o.ontology_term_source_id 
-from apidbtuning.metadataontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738')
-     and dataset_name = $$dataset$$) 
           ]]>
     </sql>    
     </sqlQuery> 
