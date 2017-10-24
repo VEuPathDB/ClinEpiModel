@@ -71,6 +71,7 @@ BEGIN MALED
 
       <stepAnalysisRef name="clinepi-event-dist"/> 
       <stepAnalysisRef name="clinepi-cont-table"/>    
+      <stepAnalysisRef name="clinepi-summaries"/>
  
       <!-- =============================================================== -->
       <!--   Reporters -->  
