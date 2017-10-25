@@ -247,7 +247,7 @@
 
        <filterParamNew name="geographic_region_gems" 
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
-                       metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
+                       metadataQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Study Site"
                        trimMetadataTerms="false"
@@ -260,7 +260,7 @@
        <filterParamNew name="participant_dwelling_gems" 
                        metadataQueryRef="ParticipantVQ.ParticipantDwellingMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.ParticipantDwellingOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.ParticipantDwellingMetaDataBkgd_gems"
+                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
@@ -295,7 +295,7 @@
        <filterParamNew name="all_data_gems" 
                        metadataQueryRef="ParticipantVQ.AllDataMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.AllDataOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.AllDataMetaDataBkgd_gems"
+                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
@@ -308,7 +308,7 @@
        <filterParamNew name="event_gems" 
                        metadataQueryRef="ParticipantVQ.EventMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.EventMetaDataBkgd_gems"
+                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
@@ -321,7 +321,7 @@
        <filterParamNew name="relative_event_gems" 
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        metadataQueryRef="ParticipantVQ.RelativeEventMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.RelativeEventMetaDataBkgd_gems"
+                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
@@ -1063,7 +1063,7 @@ from apidbtuning.metadataontology o
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="GeographicRegionMetaData_gems" isCacheable="false">
+    <sqlQuery name="AllParticipantNoDependencies_gems" isCacheable="false">
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1074,6 +1074,7 @@ from apidbtuning.metadataontology o
          <![CDATA[
  select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
+where category = 'Participant'
           ]]>
     </sql>    
     </sqlQuery>
@@ -1123,22 +1124,6 @@ order by display_name
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="ParticipantDwellingMetaDataBkgd_gems" isCacheable="false">
-      <paramRef ref="participantParams.geographic_region_gems" />  
-      <paramRef ref="participantParams.dataset" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
- select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m 
-          ]]>
-    </sql>    
-    </sqlQuery> 
-
     <sqlQuery name="AllDataOntology_gems">
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -1177,22 +1162,6 @@ order by display_name
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="AllDataMetaDataBkgd_gems" isCacheable="false">
-      <paramRef ref="participantParams.dataset" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
- select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m 
-          ]]>
-    </sql>    
-    </sqlQuery> 
-
-    
     <sqlQuery name="EventOntology_gems">
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -1230,23 +1199,6 @@ order by display_name
           ]]>
     </sql>    
     </sqlQuery>
-
-    <sqlQuery name="EventMetaDataBkgd_gems" isCacheable="false">
-      <paramRef ref="participantParams.participant_dwelling_gems" />  
-<!--      <paramRef ref="participantParams.enrollment_followup" />  -->
-      <paramRef ref="participantParams.dataset" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
- select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m 
-          ]]>
-    </sql>    
-    </sqlQuery> 
 
 <!--  Note that may not need the following one -->
     <sqlQuery name="RelativeEventOntology_gems">
@@ -1287,23 +1239,6 @@ order by display_name
           ]]>
     </sql>    
     </sqlQuery>
-
-    <sqlQuery name="RelativeEventMetaDataBkgd_gems" isCacheable="false">
-      <paramRef ref="participantParams.dataset" />  
-      <paramRef ref="participantParams.case_control" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
- select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.MetaDataWithoutNulls m 
-          ]]>
-    </sql>    
-    </sqlQuery> 
-
 
   </querySet>    
 
