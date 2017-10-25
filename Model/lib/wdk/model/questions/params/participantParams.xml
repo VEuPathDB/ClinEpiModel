@@ -271,11 +271,11 @@
        </filterParamNew>
 
        <enumParam name="case_control"
-                  prompt="Query Cases or Controls"
+                  prompt="Cases or Controls"
                   multiPick="false"
                   quote="false"
                   visible="true">
-         <help>Choose whether to query based on cases, controls or either.</help>
+         <help>Choose whether to search for cases, controls or either.</help>
          <enumList>
            <enumValue default="true">
              <term>Both Cases and Controls</term>
@@ -310,7 +310,7 @@
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
                        filterDataTypeDisplayName="Participants"
-                       prompt="Participant"
+                       prompt="Observations"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.dataset,participantParams.participant_dwelling_gems">
          <help>
@@ -323,20 +323,20 @@
                        metadataQueryRef="ParticipantVQ.RelativeEventMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
                        filterDataTypeDisplayName="Participants"
-                       prompt="Participant"
+                       prompt="Related Case or Control"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.dataset,participantParams.case_control">
          <help>
-           Modify participant selected based on the relationship between their enrollment and followup events. 
+           Modify participants selected based on information about their related case or control. 
          </help>
        </filterParamNew>    
 
        <enumParam name="return_case_control"
-                  prompt="Modify selected participant result"
+                  prompt="Which participants to return"
                   multiPick="false"
                   quote="true"
                   visible="true">
-         <help>Choose whether to return just what you have selected, fill in cases/controls for selected or only cases/controls for selected.</help>
+         <help>Choose whether to return just the participants you have selected, to include the cases/controls for those selected participants, or to return only the related cases/controls for the selected participants.</help>
          <enumList>
            <enumValue default="true">
              <term>Return selected participants only</term>
@@ -1309,7 +1309,7 @@ You can restrict the observations returned in your search by selecting character
         <group name="event_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter observations based on observations at those observations. 
+    Filter observations based on information gained at those observations. 
              ]]>
             </description>
         </group>
@@ -1323,7 +1323,7 @@ You can restrict the observations returned in your search by selecting character
        <group name="part_event_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on observations at observations.     
+    Filter participants based on information gained at observations.     
                 ]]>
             </description>
         </group>
