@@ -55,7 +55,7 @@
       <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
       <property name="attributesToExtract"></property>
-      <property name="tablesToExtract">ShinyParticipants,ShinyHouseholds,ShinyEvents</property>
+      <property name="tablesToExtract">ShinyParticipants,ShinyHouseholds,ShinyObservations</property>
       <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property> 
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1000</property>
@@ -76,7 +76,7 @@
       <description/>
       <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
-      <property name="tablesToExtract">ShinyParticipants,ShinyEvents,ShinyHouseholds</property> 
+      <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property> 
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
@@ -95,7 +95,7 @@
       <description/>
       <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
-      <property name="tablesToExtract">ShinyParticipants,ShinyEvents,ShinyHouseholds</property>
+      <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
@@ -114,7 +114,7 @@
       <description/>
       <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_Summaries]]></property>
-      <property name="tablesToExtract">ShinyParticipants,ShinyEvents,ShinyHouseholds</property>
+      <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
