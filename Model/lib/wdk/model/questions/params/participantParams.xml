@@ -248,6 +248,7 @@
        <filterParamNew name="geographic_region_gems" 
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
                        metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
+                       filterDataTypeDisplayName="Participants"
                        prompt="Study Site"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.dataset">
@@ -260,6 +261,7 @@
                        metadataQueryRef="ParticipantVQ.ParticipantDwellingMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.ParticipantDwellingOntology_gems"
                        backgroundQueryRef="ParticipantVQ.ParticipantDwellingMetaDataBkgd_gems"
+                       filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.dataset,participantParams.case_control,participantParams.geographic_region_gems">
@@ -294,6 +296,7 @@
                        metadataQueryRef="ParticipantVQ.AllDataMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.AllDataOntology_gems"
                        backgroundQueryRef="ParticipantVQ.AllDataMetaDataBkgd_gems"
+                       filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.dataset,participantParams.case_control">
@@ -306,6 +309,7 @@
                        metadataQueryRef="ParticipantVQ.EventMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        backgroundQueryRef="ParticipantVQ.EventMetaDataBkgd_gems"
+                       filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.dataset,participantParams.participant_dwelling_gems">
@@ -318,6 +322,7 @@
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        metadataQueryRef="ParticipantVQ.RelativeEventMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.RelativeEventMetaDataBkgd_gems"
+                       filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.dataset,participantParams.case_control">
