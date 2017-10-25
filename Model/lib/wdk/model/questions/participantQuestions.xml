@@ -284,7 +284,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-       <question name="ParticipantsByCaseControlVisitsShort_gems" newBuild="1" includeProjects="ClinEpiDB"
+       <question name="ParticipantsByCaseControlVisitsShort_gems" newBuild="1" includeProjects="NotUsed"
               searchCategory="Participant"
               displayName="Shorter: Select a Set of Participants (GEMS)"
               shortDisplayName="Particip GEMS"
