@@ -269,7 +269,7 @@
        </filterParamNew>
 
        <enumParam name="case_control"
-                  prompt="Query enrollment or follow-up"
+                  prompt="Query Cases or Controls"
                   multiPick="false"
                   quote="false"
                   visible="true">
