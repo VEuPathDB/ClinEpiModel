@@ -1262,7 +1262,7 @@ order by display_name
  where m.protocol_app_node_id
        in (select protocol_app_node_id
        from apidbTuning.participantAttributes
-       where EUPATH_0010375 in ($$case_control$$)
+       where EUPATH_0010375 not in ($$case_control$$)
            )
           ]]>
     </sql>    
