@@ -277,7 +277,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
- and category = 'Participant') md
+ and category = 'Child') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
@@ -315,7 +315,7 @@ first as (
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
- and m.category = 'Participant'
+ and m.category = 'Child'
  and m.protocol_app_node_id = io.output_node_id
  and io.input_node_id in ($$households_nf$$)
           ]]>
@@ -337,7 +337,7 @@ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
- and m.category = 'Participant'
+ and m.category = 'Child'
  and m.protocol_app_node_id = io.output_node_id
  and io.input_node_id in (select protocol_app_node_id from apidbtuning.householdattributes)
           ]]>

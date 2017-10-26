@@ -631,7 +631,7 @@ from apidbtuning.metadataontology o,
 (select distinct term
  from apidbtuning.metadata
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
- and category = 'Participant'
+ and category = 'Child'
  and source_id != 'EUPATH_0000032') md
  where o.ontology_term_name = md.term),
 first as (
@@ -681,7 +681,7 @@ where io.output_node_id in ($$geographic_region$$)
        and io.output_node_id in ($$visits_visitage_metadata_nf$$)
        and pa.protocol_app_node_id = m.protocol_app_node_id
  and m.dataset_name = $$dataset$$
- and m.category = 'Participant'
+ and m.category = 'Child'
           ]]>
     </sql>
     </sqlQuery>
@@ -702,7 +702,7 @@ where io.output_node_id in ($$geographic_region$$)
 select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
- and m.category = 'Participant'
+ and m.category = 'Child'
           ]]>
     </sql>
     </sqlQuery>
