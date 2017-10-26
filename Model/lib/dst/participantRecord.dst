@@ -304,14 +304,14 @@ ICEMR
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Participant'
+                           where m.protocol_app_node_type = 'Child'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            and ot.source_id not in (&&excludeParticipantSourceIds&&)
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Participant'
+                           where m.protocol_app_node_type = 'Child'
                            and ot.ontology_term_id = m.TERM_ID
                            and mt.term_id = m.term_id
                            and ot.source_id not in (&&excludeParticipantSourceIds&&)
@@ -362,7 +362,7 @@ SELECT pan_name  AS source_id,
   string_value   AS term
 FROM apidbtuning.metadata
 WHERE dataset_name = '&&datasetName&&'
-AND category       = 'Participant'
+AND category       = 'Child'
 /** TODO:  add this back in when we can make this a tree on the record page
 UNION
 SELECT pa.name                AS source_id,
@@ -452,7 +452,7 @@ from APIDBTUNING.PARTICIPANTATTRIBUTES pa
             <![CDATA[
 select distinct source_id as name, source_id as display_name
 from ApidbTuning.MetaDataWithoutNulls m
-where m.category = 'Participant'
+where m.category = 'Child'
             ]]>
           </sql>
         </sqlQuery>
