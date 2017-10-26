@@ -173,7 +173,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 -->
-        <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="Gates"
+        <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="NotUsed"
               searchCategory="Participant"
               displayName="Select a Set of Participants (MAL-ED)"
               shortDisplayName="Particip MAL-ED"
@@ -236,7 +236,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-      <question name="ParticipantsByCaseControlVisits_gems" newBuild="1" includeProjects="ClinEpiDB"
+      <question name="ParticipantsByCaseControlVisits_gems" newBuild="1" includeProjects="ClinEpiDB,Gates"
               searchCategory="Participant"
               displayName="Select a Set of Participants (GEMS)"
               shortDisplayName="Particip GEMS"
@@ -332,7 +332,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-   <question name="ParticipantsByHouseholdId"   newBuild="1" includeProjects="Gates,ICEMR"
+   <question name="ParticipantsByHouseholdId"   newBuild="1" includeProjects="ICEMR"
               displayName="Transform to Participants"
               shortDisplayName="household->participant"
               queryRef="ParticipantId.ParticipantsByHouseholdIds" 
@@ -359,7 +359,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
              </description>
     </question>
 
-      <question name="ParticipantsByClinicalVisit"   newBuild="22" includeProjects="Gates,ICEMR"
+      <question name="ParticipantsByClinicalVisit"   newBuild="22" includeProjects="ICEMR"
               displayName="Transform to Participants"
               shortDisplayName="clinicalvisits->participant"
               queryRef="ParticipantId.ParticipantsByClinicalVisits" 
