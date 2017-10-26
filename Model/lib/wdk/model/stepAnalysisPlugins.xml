@@ -83,7 +83,7 @@
     </stepAnalysisPlugin>
 
     <stepAnalysisPlugin
-        name="clinepi-event-dist" displayName="Distribution of Observations"
+        name="clinepi-event-dist" displayName="Distributions"
         releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
@@ -102,13 +102,13 @@
     </stepAnalysisPlugin>
 
     <stepAnalysisPlugin
-        name="clinepi-summaries" displayName="Summarize Observations by Group"
+        name="clinepi-summaries" displayName="Data Summaries"
         releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
         <![CDATA[
-          Make line plots of summary data with custom groups and facets for observations returned for the selected participants
+          Make plots of summary data using custom facets within the chosen set of participants
         ]]>
       </shortDescription>
       <description/>
