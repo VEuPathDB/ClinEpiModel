@@ -1155,9 +1155,10 @@ order by display_name
          <![CDATA[
  select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
-                                where source_id = 'EUPATH_0010375'
-                                and string_value in ($$case_control$$))
+ where m.protocol_app_node_id in (select protocol_app_node_id
+                                  from apidbTuning.ParticipantAttributes
+                                  where EUPATH_0010375 in ($$case_control$$)
+                                  )
           ]]>
     </sql>    
     </sqlQuery>
@@ -1233,9 +1234,10 @@ order by display_name
          <![CDATA[
  select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
- where m.protocol_app_node_id in (select protocol_app_node_id from apidbtuning.metadatawithoutnulls 
-                                where source_id = 'EUPATH_0010375'
-                                and string_value not in ($$case_control$$))
+ where m.protocol_app_node_id in (select protocol_app_node_id
+                                  from apidbTuning.ParticipantAttributes
+                                  where EUPATH_0010375 in ($$case_control$$)
+                                  )
           ]]>
     </sql>    
     </sqlQuery>
