@@ -1385,7 +1385,7 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="relative_case_control" displayName="Case Control" displayType="ShowHide">
+        <group name="relative_case_control" displayName="Related Case/Control" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can restrict the participants you have previously selected by removing (or keeping) participants based on differences or similarities between matched cases and controls. 
