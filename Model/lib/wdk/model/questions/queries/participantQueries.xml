@@ -49,7 +49,7 @@
        <column name="time_of_obs"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
  round(count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
                     round((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
@@ -116,7 +116,7 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_00000
        <column name="time_of_obs"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
 round(count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) -
 greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
                     round((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
@@ -189,7 +189,7 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_00000
        <column name="visit_count"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, 'ClinEpiDB' as project_id, 
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
                     count(*) as visit_count, 
    round(avg(EUPATH_0000644),1) -1 as ave_age_visit
 from (select distinct io.input_node_id,io.output_node_id,ca.EUPATH_0000644 from apidbtuning.eventattributes ca, apidbtuning.protocolappnodeio io
@@ -245,16 +245,16 @@ select distinct seta.name, seta.EUPATH_0010049, seta.EUPATH_0010375 from apidbtu
       and seta.protocol_app_node_id in ($$event_gems$$)
       and seta.EUPATH_0010049 = setb.EUPATH_0010049)
 )
-select name as source_id, 'ClinEpiDB' as project_id from core
+select name as source_id, '@PROJECT_ID@' as project_id from core
 where 'selected' = $$return_case_control$$
 UNION
-select distinct pa.name as source_id, 'ClinEpiDB' as project_id 
+select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
 from core, apidbtuning.participantattributes pa
 where 'caseid' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
 /*
 UNION
-select distinct pa.name as source_id, 'ClinEpiDB' as project_id 
+select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
 from core, apidbtuning.participantattributes pa
 where 'matching' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
@@ -289,16 +289,16 @@ select distinct seta.name, seta.EUPATH_0010049, seta.EUPATH_0010375 from apidbtu
       and seta.protocol_app_node_id in ($$all_data_gems$$)
       and seta.EUPATH_0010049 = setb.EUPATH_0010049)
 )
-select name as source_id, 'ClinEpiDB' as project_id from core
+select name as source_id, '@PROJECT_ID@' as project_id from core
 where 'selected' = $$return_case_control$$
 UNION
-select distinct pa.name as source_id, 'ClinEpiDB' as project_id 
+select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
 from core, apidbtuning.participantattributes pa
 where 'caseid' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
 /*
 UNION
-select distinct pa.name as source_id, 'ClinEpiDB' as project_id 
+select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
 from core, apidbtuning.participantattributes pa
 where 'matching' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049

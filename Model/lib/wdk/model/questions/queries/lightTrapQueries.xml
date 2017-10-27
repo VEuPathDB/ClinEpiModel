@@ -31,7 +31,7 @@
        <column name="project_id"/>
          <sql>
            <![CDATA[
-select lta.name as source_id, 'ClinEpiDB' as project_id
+select lta.name as source_id, '@PROJECT_ID@' as project_id
 from apidbtuning.lighttrapattributes lta
 where lta.protocol_app_node_id in ($$lighttraps_nf$$)
                 ]]>   

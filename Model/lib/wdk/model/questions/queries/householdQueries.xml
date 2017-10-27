@@ -36,7 +36,7 @@
        <column name="part_count"/>
          <sql>
            <![CDATA[
-select dwpct.name as source_id, 'ClinEpiDB' as project_id, 
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph, dwpct.part_count
 from (
 select da.protocol_app_node_id,da.name,count(*) as part_count

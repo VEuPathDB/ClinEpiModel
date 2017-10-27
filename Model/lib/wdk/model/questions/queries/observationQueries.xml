@@ -71,7 +71,7 @@ and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 )
-select name as source_id,'ClinEpiDB' as project_id
+select name as source_id,'@PROJECT_ID@' as project_id
 , CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
 select visits.protocol_app_node_id,visits.name,visits.input_node_id as parent_id,visits.EUPATH_0000091, abs(inter.EUPATH_0000091 - visits.EUPATH_0000091) as days_between
@@ -136,7 +136,7 @@ and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
 group by vis.protocol_app_node_id,vis.name, vis.input_node_id,vis.EUPATH_0000644
 having count(*) >= $$num_relative_events.min$$ and count(*) <= $$num_relative_events.max$$
 )
-select name as source_id,'ClinEpiDB' as project_id
+select name as source_id,'@PROJECT_ID@' as project_id
 , CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
 select visits.protocol_app_node_id,visits.name,visits.input_node_id as parent_id,visits.EUPATH_0000644, abs(inter.EUPATH_0000644 - visits.EUPATH_0000644) as days_between
@@ -171,7 +171,7 @@ group by name
        <column name="project_id"/>
        <sql>
            <![CDATA[
-select name as source_id,'ClinEpiDB' as project_id
+select name as source_id,'@PROJECT_ID@' as project_id
 from APIDBTUNING.CLINICALVISITATTRIBUTES
 where protocol_app_node_id in ($$visits_nf$$)
                 ]]>   
