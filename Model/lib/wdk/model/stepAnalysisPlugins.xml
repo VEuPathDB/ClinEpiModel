@@ -5,8 +5,10 @@
     <executionConfig threadPoolSize="25" fileStoreDirectory="@STEP_ANALYSIS_JOB_DIR@"/>
 
     <stepAnalysisPlugin
-        name="person-graph-analysis" displayName="Graph Person Results"
-        releaseVersion="1" hasParameters="false"
+        name="person-graph-analysis"
+        displayName="Graph Person Results"
+        releaseVersion="1"
+        hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
@@ -56,7 +58,7 @@
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
       <property name="attributesToExtract"></property>
       <property name="tablesToExtract">ShinyParticipants,ShinyHouseholds,ShinyObservations</property>
-      <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property> 
+      <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1000</property>
       <property name="iframeLengthPx">800</property>
@@ -67,6 +69,7 @@
         name="clinepi-cont-table" displayName="2x2 Contingency Tables"
         releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
+        customThumbnail="images/analysis_plugins/contingency_tables.jpg"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
         <![CDATA[
@@ -76,7 +79,7 @@
       <description/>
       <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
-      <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property> 
+      <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
@@ -85,6 +88,7 @@
     <stepAnalysisPlugin
         name="clinepi-event-dist" displayName="Distributions"
         releaseVersion="1" hasParameters="false"
+        customThumbnail="images/analysis_plugins/distributions.jpg"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
@@ -102,8 +106,11 @@
     </stepAnalysisPlugin>
 
     <stepAnalysisPlugin
-        name="clinepi-summaries" displayName="Data Summaries"
-        releaseVersion="1" hasParameters="false"
+        name="clinepi-summaries"
+        displayName="Data Summaries"
+        releaseVersion="1"
+        hasParameters="false"
+        customThumbnail="images/analysis_plugins/data_summaries.jpg"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
