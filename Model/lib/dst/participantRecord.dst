@@ -13,7 +13,10 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
 >templateTextStart<
     <recordClassSet name="ParticipantRecordClasses">
 
-      <recordClass name="ParticipantRecordClass" urlName="participant" displayName="Participant"> 
+      <recordClass name="ParticipantRecordClass" 
+                   urlName="participant" 
+                   displayName="Participant"
+                   allRecordsQueryRef="ParticipantAttributes.AllParticipants"> 
 
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="ParticipantAttributes.ParticipantAlias">
@@ -223,6 +226,16 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
       <testRowCountSql>
 select count(*) from apidbtuning.ParticipantAttributes
        </testRowCountSql>
+
+
+
+       <sqlQuery name="AllParticipants" doNotTest="true">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <sql>
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id FROM ApidbTuning.ParticipantAttributes
+         </sql>
+       </sqlQuery>
 
        <sqlQuery name="ParticipantAlias" doNotTest="true">
          <column name="source_id"/>
