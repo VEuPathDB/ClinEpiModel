@@ -36,6 +36,8 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
             <attributesList summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741" />
              -->        
 
+            <attributesList summary="${participantAttributesList}" />
+
            
            ${participantGraphAttributes}
 
