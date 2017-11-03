@@ -131,8 +131,10 @@ BEGIN MALED
                queryRef="ParticipantTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="term" displayName="Value"/>
-            <columnAttribute name="parentTerm" displayName="Category"/>
+            <columnAttribute name="display_name" displayName="Value"/>
+            <columnAttribute name="parent_source_id" displayName="Category"/>
+            <columnAttribute name="unique_id" displayName="unique_id"/>
+            <propertyList name="tableIsTree"><value>true</value></propertyList>
         </table>
 
          <table name="ShinyParticipants"
@@ -366,29 +368,31 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
       <sqlQuery name="Characteristics"  isCacheable='false'>
             <column name="source_id"/>
             <column name="project_id"/>
-            <column name="term"/>
-            <column name="parentTerm"/>
+            <column name="display_name"/>
+            <column name="parent_source_id"/>
+            <column name="unique_id"/>
 <!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
          <sqlParamValue name="datasetName"><![CDATA[${datasetName}]]></sqlParamValue>
             <sql>
             <![CDATA[
 SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
-  term           AS parentTerm,
-  string_value   AS term
+  nvl(source_id, 'root')      AS parent_source_id,
+  protocol_app_node_id ||'_'||term_id ||'_'||string_value as unique_id,
+  string_value   AS display_name
 FROM apidbtuning.metadata
 WHERE dataset_name = '&&datasetName&&'
+AND string_value is not null
 AND category       = 'Child'
-/** TODO:  add this back in when we can make this a tree on the record page
 UNION
 SELECT pa.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
-  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
-  ontology_term_name          AS term
+  nvl(o.PARENT_ONTOLOGY_TERM_SOURCE_ID, 'root') AS parent_source_id,
+  o.ONTOLOGY_TERM_SOURCE_ID AS unique_id,
+  ontology_term_name          AS display_name
 FROM apidbtuning.metadataontology o,
   apidbtuning.participantattributes pa
 WHERE o.dataset_name = '&&datasetName&&'
-**/
             ]]>
             </sql>
         </sqlQuery>
