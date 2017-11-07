@@ -134,6 +134,7 @@ BEGIN MALED
             <columnAttribute name="display_name" displayName="Value"/>
             <columnAttribute name="parent_source_id" displayName="Category"/>
             <columnAttribute name="unique_id" displayName="unique_id"/>
+            <columnAttribute name="is_leaf" displayName="is_leaf"/>
             <propertyList name="tableIsTree"><value>true</value></propertyList>
         </table>
 
@@ -371,6 +372,7 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
             <column name="display_name"/>
             <column name="parent_source_id"/>
             <column name="unique_id"/>
+            <column name="is_leaf"/>
 <!--         <sqlParamValue name="datasetName"><![CDATA[ISASimple_ICEMR_PRISM_surveillance_RSRC]]></sqlParamValue> -->
          <sqlParamValue name="datasetName"><![CDATA[${datasetName}]]></sqlParamValue>
             <sql>
@@ -379,7 +381,8 @@ SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
   nvl(source_id, 'root')      AS parent_source_id,
   protocol_app_node_id ||'_'||term_id ||'_'||string_value as unique_id,
-  string_value   AS display_name
+  string_value   AS display_name,
+  1 as is_leaf
 FROM apidbtuning.metadata
 WHERE dataset_name = '&&datasetName&&'
 AND string_value is not null
@@ -389,7 +392,8 @@ SELECT pa.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
   nvl(o.PARENT_ONTOLOGY_TERM_SOURCE_ID, 'root') AS parent_source_id,
   o.ONTOLOGY_TERM_SOURCE_ID AS unique_id,
-  ontology_term_name          AS display_name
+  ontology_term_name          AS display_name,
+  0 as is_leaf
 FROM apidbtuning.metadataontology o,
   apidbtuning.participantattributes pa
 WHERE o.dataset_name = '&&datasetName&&'
