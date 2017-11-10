@@ -1,0 +1,47 @@
+<wdkModel>
+
+  <xmlQuestionSet name="XmlQuestions" displayName="">
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!-- Study Approval  -->
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <xmlQuestion name="StudyApproval"
+                 displayName="Study Approvals"
+                 recordClassRef="XmlRecordClasses.StudyApprovalRecord"
+                 xmlDataURL="studyApprovals.xml">
+    </xmlQuestion>
+    
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!-- WdkVerbiage -->
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <xmlQuestion name="WdkVerbiage"
+                 displayName="Verbiage"
+                 recordClassRef="XmlRecordClasses.WdkVerbiageRecord"
+                 xmlDataURL="verbiage.xml">
+    </xmlQuestion>
+    
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!-- SiteVerbiage -->
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <xmlQuestion name="SiteVerbiage"
+                 displayName="Verbiage"
+                 recordClassRef="XmlRecordClasses.SiteVerbiageRecord"
+                 xmlDataURL="siteVerbiage.xml">
+    </xmlQuestion>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!-- Strategies Help -->
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <xmlQuestion name="StrategiesHelp" 
+                 displayName="Strategies Help"
+                 recordClassRef="XmlRecordClasses.StrategiesHelpRecord"
+                 xmlDataURL="siteHelp.xml">
+    </xmlQuestion>
+    
+  </xmlQuestionSet>
+</wdkModel>
+        

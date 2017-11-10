@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <!DOCTYPE xml [
+  <!ENTITY nbsp "&#160;">
+  <!ENTITY lt   "&#60;">
+  <!ENTITY gt   "&#62;">
+]>
+
+<wdkModel>
+
+  <xmlRecordClassSet name="XmlRecordClasses">
+
+
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- WdkVerbiage -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <xmlRecordClass
+          name="WdkVerbiageRecord"
+          type="Verbiage"
+          idPrefix="Verb."
+          delimiter="@">
+      <xmlAttribute name="title"/>
+      <xmlAttribute name="content"/>
+    </xmlRecordClass>
+
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- SiteVerbiage -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+        <xmlRecordClass
+          name="SiteVerbiageRecord"
+          type="Verbiage"
+          idPrefix="Verb."
+          delimiter="@">
+            <xmlAttribute name="title"/>
+            <xmlAttribute name="content"/>
+         </xmlRecordClass>
+
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- StrategiesHelp -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+        <xmlRecordClass 
+          name="StrategiesHelpRecord"
+          type="StrategiesHelp"
+          idPrefix="StrategiesHelp."
+          delimiter="@">
+            <xmlAttribute name="title"/>
+            <xmlAttribute name="tip"/>
+            <xmlAttribute name="image"/>
+            <xmlAttribute name="showTipAsDidYouKnow"/>
+            <xmlAttribute name="body"/>
+         </xmlRecordClass>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!-- Study Approval Record -->
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <xmlRecordClass
+          name="StudyApprovalRecord"
+          type="StudyApproval"
+          idPrefix="APPROVAL."
+          delimiter="@">
+      <xmlAttribute name="study"/>
+      <xmlAttribute name="user_id"/>
+    </xmlRecordClass>
+    
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!-- External Links Record -->
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <xmlRecordClass includeProjects="ClinEpiDB,Gates"
+          name="ExternalLinksRecord"
+          type="ExternalLinks"
+          idPrefix="EL."
+          delimiter="@">
+      <xmlTable name="communityLinks" displayName="Community Links">
+        <xmlAttribute name="title"/>
+        <xmlAttribute name="url"/>
+      </xmlTable>
+    </xmlRecordClass>
+
+  </xmlRecordClassSet>
+
+</wdkModel>
+
