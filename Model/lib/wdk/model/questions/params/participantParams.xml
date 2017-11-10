@@ -247,13 +247,16 @@
 
        <filterParamNew name="geographic_region_gems" 
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
-                       metadataQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
+                       ontologyValuesQueryRef="GeographicRegionOntologyValues_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Study Site"
                        trimMetadataTerms="false"
+                       countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.dataset">
          <help>
-           Select participants based on their personal and household characteristics. 
+           Select participants based on their personal and household
+           characteristics.
          </help>
        </filterParamNew>
        
@@ -261,9 +264,11 @@
                        metadataQueryRef="ParticipantVQ.ParticipantDwellingMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.ParticipantDwellingOntology_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       ontologyValuesQueryRef="AllParticipantNoDependenciesOntologyValues_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
+                       countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.dataset,participantParams.case_control,participantParams.geographic_region_gems">
          <help>
            Select participants based on study site. 
@@ -296,9 +301,11 @@
                        metadataQueryRef="ParticipantVQ.AllDataMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.AllDataOntology_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       ontologyValuesQueryRef="AllParticipantNoDependenciesOntologyValues_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
+                       countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.dataset,participantParams.case_control">
          <help>
            Select participants based on variables associated with their enrollment or followup events. 
@@ -309,9 +316,11 @@
                        metadataQueryRef="ParticipantVQ.EventMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       ontologyValuesQueryRef="EventOntologyValues_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Observations"
                        trimMetadataTerms="false"
+                       countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.dataset,participantParams.participant_dwelling_gems">
          <help>
            Select participants based on variables associated with their enrollment or followup events. 
@@ -350,9 +359,11 @@
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        metadataQueryRef="ParticipantVQ.RelativeEventMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       ontologyValuesQueryRef="EventOntologyValues_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Related Case or Control"
                        trimMetadataTerms="false"
+                       countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.dataset,participantParams.case_control">
          <help>
            Modify participants selected based on information about their related case or control. 
@@ -1091,6 +1102,43 @@ from apidbtuning.metadataontology o
       </sql>
     </sqlQuery>
 
+    <sqlQuery name="GeographicRegionMetaData_gems" isCacheable="false">
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.MetaDataWithoutNulls m 
+where category = 'Child'
+and source_id = 'OBI_0001627'
+          ]]>
+    </sql>    
+    </sqlQuery>
+    
+    <sqlQuery name="GeographicRegionOntologyValues_gems" isCacheable="true">
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.metadataontology o
+where o.type is not null
+and o.is_range = 0
+and m.source_id = o.ontology_term_source_id
+and m.category = 'Child'
+and source_id = 'OBI_0001627'
+          ]]>
+      </sql>    
+    </sqlQuery>
+        
     <sqlQuery name="AllParticipantNoDependencies_gems" isCacheable="false">
       <paramRef ref="participantParams.dataset" />  
       <column name="ontology_term_name"/>
@@ -1106,6 +1154,25 @@ where category = 'Child'
           ]]>
     </sql>    
     </sqlQuery>
+
+    <sqlQuery name="AllParticipantNoDependenciesOntologyValues_gems" isCacheable="true">
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.metadataontology o
+where o.type is not null
+and o.is_range = 0
+and m.source_id = o.ontology_term_source_id
+and m.category = 'Child'
+          ]]>
+      </sql>    
+    </sqlQuery>   
     
     <sqlQuery name="ParticipantDwellingOntology_gems">
       <paramRef ref="participantParams.dataset" />  
@@ -1232,6 +1299,31 @@ order by display_name
  where m.protocol_app_node_id in ($$participant_dwelling_gems$$)
           ]]>
     </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="EventOntologyValues_gems" isCacheable="true">
+      <paramRef ref="participantParams.dataset" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+ select distinct m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.MetaDataWithoutNulls m, (select ontology_term_source_id from (
+select distinct o.ontology_term_source_id, o.type, o.is_range
+from apidbtuning.metadataontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id = 'EUPATH_0000738'
+     and o.dataset_name = $$dataset$$ 
+) where type is not null
+  and is_range = 0
+  and ontology_term_source_id not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')) ont
+where m.source_id = ont.ontology_term_source_id
+and m.category = 'Child'
+          ]]>
+      </sql>    
     </sqlQuery>
 
      <sqlQuery name="KeepRemove">
