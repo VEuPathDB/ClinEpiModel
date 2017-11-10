@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xmlAnswer>
+
+  <!--  GEMS Study -->
+  <record>
+    <attribute name="study">GEMS</attribute>
+    <attribute name="user_id">108976930</attribute>
+  </record>
+  
+  <!--  MAL-ED Study -->
+  <record> 
+    <attribute name="study">MAL-ED</attribute>
+    <attribute name="user_id">376</attribute>
+  </record>
+  
+  <record> 
+    <attribute name="study">MAL-ED</attribute>
+    <attribute name="user_id">108976930</attribute>
+  </record>
+  
+  <!-- ICEMR  -->
+
+</xmlAnswer>
