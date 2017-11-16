@@ -101,6 +101,25 @@
       <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 
+    <stepAnalysisPlugin
+        name="clinepi-summaries" displayName="Summarize Observations by Group"
+        releaseVersion="1" hasParameters="false"
+        analysisViewName="eupathExternalAnalysisResult"
+        analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
+      <shortDescription>
+        <![CDATA[
+          Make line plots of summary data with custom groups and facets for observations returned for the selected participants
+        ]]>
+      </shortDescription>
+      <description/>
+      <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
+      <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_Summaries]]></property>
+      <property name="tablesToExtract">ShinyParticipants,ShinyEvents,ShinyHouseholds</property>
+      <property name="addHeader">true</property>
+      <property name="iframeWidthPx">1200</property>
+      <property name="iframeLengthPx">800</property>
+    </stepAnalysisPlugin>
+
   </stepAnalysisPlugins>
 
 </wdkModel>
