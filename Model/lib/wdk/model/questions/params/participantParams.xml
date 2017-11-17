@@ -873,7 +873,7 @@ and io.output_type_source_id = 'EUPATH_0000738'
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select io.output_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct io.output_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.protocolappnodeio io
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
