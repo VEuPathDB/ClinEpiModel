@@ -229,7 +229,7 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
               >
 
       <testRowCountSql>
-select count(*) from apidbtuning.Participants
+select count(*) from apidbtuning.D841A9F5259Participants
        </testRowCountSql>
 
 
@@ -238,7 +238,7 @@ select count(*) from apidbtuning.Participants
          <column name="source_id"/>
          <column name="project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id FROM apidbtuning.Participants
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id FROM apidbtuning.D841A9F5259Participants
          </sql>
        </sqlQuery>
 
@@ -248,7 +248,7 @@ select count(*) from apidbtuning.Participants
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.Participants
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.D841A9F5259Participants
          </sql>
        </sqlQuery>
 
@@ -273,9 +273,9 @@ select count(*) from apidbtuning.Participants
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
-                     from apidbtuning.PANIO io
-                        , apidbtuning.Participants pa
-                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.Households) da
+                     from apidbtuning.D841A9F5259PANIO io
+                        , apidbtuning.D841A9F5259Participants pa
+                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.D841A9F5259Households) da
                      where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
                      and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
@@ -321,7 +321,7 @@ ICEMR
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct mo.display_name || ' (' || mo.parent_ontology_term_name || ')' as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.PropertyTypes mt, apidbtuning.Ontology mo
+                           from apidbtuning.D841A9F5259InferredChars m, sres.ontologyterm ot, apidbtuning.D841A9F5259PropertyTypes mt, apidbtuning.D841A9F5259Ontology mo
                            where m.pan_type = 'Child'
                            and ot.ontology_term_id = m.PROPERTY_ID
                            and mt.property_id = m.PROPERTY_id
@@ -329,7 +329,7 @@ ICEMR
                            and ot.source_id not in (&&excludeParticipantSourceIds&&)
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredParams m, sres.ontologyterm ot, apidbtuning.PropertyTypes mt
+                           from apidbtuning.D841A9F5259InferredParams m, sres.ontologyterm ot, apidbtuning.D841A9F5259PropertyTypes mt
                            where m.pan_type = 'Child'
                            and ot.ontology_term_id = m.property_ID
                            and mt.property_id = m.property_id
@@ -337,7 +337,7 @@ ICEMR
                            union
 --                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
 --                           union
-                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.PropertyTypes mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.D841A9F5259PropertyTypes mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
                            ) meta
             ]]>
          </sql>
@@ -394,8 +394,8 @@ SELECT pa.name                AS source_id,
   o.ONTOLOGY_TERM_SOURCE_ID AS unique_id,
   ontology_term_name          AS display_name,
   0 as is_leaf
-FROM apidbtuning.Ontology o,
-  apidbtuning.Participants pa
+FROM apidbtuning.D841A9F5259Ontology o,
+  apidbtuning.D841A9F5259Participants pa
 WHERE o.dataset_name = '&&datasetName&&'
             ]]>
             </sql>
@@ -408,9 +408,9 @@ WHERE o.dataset_name = '&&datasetName&&'
           <sql>
             <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id, ea.*
-from apidbtuning.Observations ea
-   , apidbtuning.Participants pa
-   , apidbtuning.PANIO io
+from apidbtuning.D841A9F5259Observations ea
+   , apidbtuning.D841A9F5259Participants pa
+   , apidbtuning.D841A9F5259PANIO io
 where pa.PAN_ID = io.INPUT_PAN_ID
 and io.OUTPUT_PAN_ID = ea.PAN_ID
             ]]>
@@ -436,9 +436,9 @@ where m.category = 'Event'
           <sql>
             <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id, ha.*
-from apidbtuning.Households ha
-   , apidbtuning.Participants pa
-   , apidbtuning.PANIO io
+from apidbtuning.D841A9F5259Households ha
+   , apidbtuning.D841A9F5259Participants pa
+   , apidbtuning.D841A9F5259PANIO io
 where ha.PAN_ID = io.INPUT_PAN_ID
 and io.OUTPUT_PAN_ID = pa.PAN_ID
             ]]>
@@ -464,7 +464,7 @@ where m.category = 'Household'
           <sql>
             <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*
-from apidbtuning.Participants pa
+from apidbtuning.D841A9F5259Participants pa
             ]]>
           </sql>
         </sqlQuery>
@@ -496,7 +496,7 @@ ICEMR
 -->
           <sql>
             <![CDATA[
-                     select property_source_id as name, property as display_name from apidbtuning.PropertyTypes where property_source_id in (&&eventColumns&&)
+                     select property_source_id as name, property as display_name from apidbtuning.D841A9F5259PropertyTypes where property_source_id in (&&eventColumns&&)
             ]]>
           </sql>
         </sqlQuery>
@@ -528,9 +528,9 @@ ICEMR
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&observationSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
-              from apidbtuning.Observations cv
-              , apidbtuning.Participants pa
-              , apidbtuning.PANIO io
+              from apidbtuning.D841A9F5259Observations cv
+              , apidbtuning.D841A9F5259Participants pa
+              , apidbtuning.D841A9F5259PANIO io
               where cv.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = pa.PAN_ID
               order by &&orderBy&&
@@ -556,11 +556,11 @@ select pa.name as source_id,
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
-              from apidbtuning.Observations cv
-              , apidbtuning.Participants pa
-              , apidbtuning.samples sa
-              , apidbtuning.PANIO io
-              , apidbtuning.PANIO io2
+              from apidbtuning.D841A9F5259Observations cv
+              , apidbtuning.D841A9F5259Participants pa
+              , apidbtuning.D841A9F5259samples sa
+              , apidbtuning.D841A9F5259PANIO io
+              , apidbtuning.D841A9F5259PANIO io2
               where cv.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = pa.PAN_ID
               and sa.pan_id = io2.output_pan_id
