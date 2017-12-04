@@ -165,15 +165,15 @@ MALED
             <![CDATA[
  select cva.name as source_id, '@PROJECT_ID@' as project_id, cva.*,
                      da.*, pa.*
-                     from APIDBTUNING.PROTOCOLAPPNODEIO io1
-                        , APIDBTUNING.PROTOCOLAPPNODEIO io2
+                     from apidbtuning.PANIO io1
+                        , apidbtuning.PANIO io2
                         , apidbtuning.eventattributes cva
                         , (select protocol_app_node_id as hh_protocol_app_node_id, &&householdSourceIds&& from apidbtuning.householdattributes) da
                         , (select protocol_app_node_id as p_protocol_app_node_id, &&participantSourceIds&& from apidbtuning.participantattributes) pa
-                     where cva.PROTOCOL_APP_NODE_ID = io1.OUTPUT_NODE_ID
-                     and io1.input_node_id = pa.p_PROTOCOL_APP_NODE_ID
-                     and pa.p_PROTOCOL_APP_NODE_ID = io2.OUTPUT_NODE_ID
-                     and io2.input_node_id = da.hh_PROTOCOL_APP_NODE_ID
+                     where cva.PROTOCOL_APP_NODE_ID = io1.OUTPUT_PAN_ID
+                     and io1.input_pan_id = pa.p_PROTOCOL_APP_NODE_ID
+                     and pa.p_PROTOCOL_APP_NODE_ID = io2.OUTPUT_PAN_ID
+                     and io2.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID
             ]]>
           </sql>  
          </sqlQuery>
@@ -296,9 +296,9 @@ select cv.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, sa.name as sample_id
               from Apidbtuning.Eventattributes cv
               , apidbtuning.sampleattributes sa
-              , apidbtuning.protocolappnodeio io
-              where sa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
-              and io.INPUT_NODE_ID = cv.PROTOCOL_APP_NODE_ID
+              , apidbtuning.PANIO io
+              where sa.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = cv.PROTOCOL_APP_NODE_ID
               order by &&orderBy&&
                   ]]>
             </sql>

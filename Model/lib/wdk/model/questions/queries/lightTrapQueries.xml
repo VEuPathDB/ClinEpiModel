@@ -50,10 +50,10 @@ where lta.protocol_app_node_id in ($$lighttraps_nf$$)
         <sql>
             <![CDATA[
 SELECT   lta.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
-              FROM ($$household_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.householdattributes da, apidbtuning.lighttrapattributes lta
+              FROM ($$household_result$$) source_set, apidbtuning.PANIO io, apidbtuning.householdattributes da, apidbtuning.lighttrapattributes lta
               WHERE source_set.source_id = da.name 
-              AND da.protocol_app_node_id = io.input_node_id
-              AND  io.output_node_id = lta.protocol_app_node_id
+              AND da.protocol_app_node_id = io.input_pan_id
+              AND  io.output_pan_id = lta.protocol_app_node_id
              ]]>
         </sql>
     </sqlQuery>

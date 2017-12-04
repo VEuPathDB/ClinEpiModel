@@ -278,10 +278,10 @@ SELECT ha.name AS source_id,
   &&householdMemberColumns&&
 FROM apidbtuning.PARTICIPANTATTRIBUTES pa
    , apidbtuning.HOUSEHOLDATTRIBUTES ha
-   , apidbtuning.protocolappnodeio io
+   , apidbtuning.PANIO io
 WHERE
-  pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
-  and io.INPUT_NODE_ID = ha.PROTOCOL_APP_NODE_ID
+  pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID
+  and io.INPUT_PAN_ID = ha.PROTOCOL_APP_NODE_ID
 order by source_id
             ]]>
             </sql>

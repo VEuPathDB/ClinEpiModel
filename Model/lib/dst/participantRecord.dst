@@ -273,11 +273,11 @@ select count(*) from apidbtuning.ParticipantAttributes
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
-                     from APIDBTUNING.PROTOCOLAPPNODEIO io
+                     from apidbtuning.PANIO io
                         , apidbtuning.participantattributes pa
                         , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.householdattributes) da
-                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
-                     and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
+                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID (+)
+                     and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
           </sql>  
         </sqlQuery>
@@ -410,9 +410,9 @@ WHERE o.dataset_name = '&&datasetName&&'
 select pa.name as source_id, '@PROJECT_ID@' as project_id, ea.*
 from APIDBTUNING.EVENTATTRIBUTES ea
    , APIDBTUNING.PARTICIPANTATTRIBUTES pa
-   , APIDBTUNING.PROTOCOLAPPNODEIO io
-where pa.PROTOCOL_APP_NODE_ID = io.INPUT_NODE_ID
-and io.OUTPUT_NODE_ID = ea.PROTOCOL_APP_NODE_ID
+   , apidbtuning.PANIO io
+where pa.PROTOCOL_APP_NODE_ID = io.INPUT_PAN_ID
+and io.OUTPUT_PAN_ID = ea.PROTOCOL_APP_NODE_ID
             ]]>
           </sql>
         </sqlQuery>
@@ -438,9 +438,9 @@ where m.category = 'Event'
 select pa.name as source_id, '@PROJECT_ID@' as project_id, ha.*
 from APIDBTUNING.HOUSEHOLDATTRIBUTES ha
    , APIDBTUNING.PARTICIPANTATTRIBUTES pa
-   , APIDBTUNING.PROTOCOLAPPNODEIO io
-where ha.PROTOCOL_APP_NODE_ID = io.INPUT_NODE_ID
-and io.OUTPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
+   , apidbtuning.PANIO io
+where ha.PROTOCOL_APP_NODE_ID = io.INPUT_PAN_ID
+and io.OUTPUT_PAN_ID = pa.PROTOCOL_APP_NODE_ID
             ]]>
           </sql>
         </sqlQuery>
@@ -530,9 +530,9 @@ select pa.name as source_id,
                    '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
               from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
-              , apidbtuning.protocolappnodeio io
-              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
-              and io.INPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
+              , apidbtuning.PANIO io
+              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PROTOCOL_APP_NODE_ID
               order by &&orderBy&&
             ]]>
             </sql>
@@ -559,12 +559,12 @@ select pa.name as source_id,
               from Apidbtuning.Eventattributes cv
               , apidbtuning.participantattributes pa
               , apidbtuning.sampleattributes sa
-              , apidbtuning.protocolappnodeio io
-              , apidbtuning.protocolappnodeio io2
-              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
-              and io.INPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
-              and sa.protocol_app_node_id = io2.output_node_id
-              and io2.INPUT_NODE_ID = cv.PROTOCOL_APP_NODE_ID
+              , apidbtuning.PANIO io
+              , apidbtuning.PANIO io2
+              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PROTOCOL_APP_NODE_ID
+              and sa.protocol_app_node_id = io2.output_pan_id
+              and io2.INPUT_PAN_ID = cv.PROTOCOL_APP_NODE_ID
               order by &&orderBy&&
                   ]]>
             </sql>

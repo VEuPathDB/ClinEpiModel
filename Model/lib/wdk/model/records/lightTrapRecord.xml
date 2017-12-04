@@ -106,11 +106,11 @@ select count(*) from apidbtuning.LightTrapAttributes
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
-                     from APIDBTUNING.PROTOCOLAPPNODEIO io
+                     from apidbtuning.PANIO io
                         , apidbtuning.lighttrapattributes pa
                         , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.householdattributes) da
-                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
-                     and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
+                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID (+)
+                     and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
           </sql>  
          </sqlQuery>
