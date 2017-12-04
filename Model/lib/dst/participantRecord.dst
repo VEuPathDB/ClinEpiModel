@@ -321,23 +321,23 @@ ICEMR
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct mo.display_name || ' (' || mo.parent_ontology_term_name || ')' as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.metadatatype mt, apidbtuning.Ontology mo
+                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.PropertyTypes mt, apidbtuning.Ontology mo
                            where m.pan_type = 'Child'
                            and ot.ontology_term_id = m.PROPERTY_ID
-                           and mt.term_id = m.PROPERTY_id
-                           and mt.term_id = mo.ontology_term_id
+                           and mt.property_id = m.PROPERTY_id
+                           and mt.property_id = mo.ontology_term_id
                            and ot.source_id not in (&&excludeParticipantSourceIds&&)
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredParams m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           from apidbtuning.InferredParams m, sres.ontologyterm ot, apidbtuning.PropertyTypes mt
                            where m.pan_type = 'Child'
                            and ot.ontology_term_id = m.property_ID
-                           and mt.term_id = m.property_id
+                           and mt.property_id = m.property_id
                            and ot.source_id not in (&&excludeParticipantSourceIds&&)
                            union
 --                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
 --                           union
-                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.metadatatype mt, sres.ontologyterm ot where ot.source_id = mt.source_id and mt.source_id in (&&householdSourceIds&&)
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.PropertyTypes mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
                            ) meta
             ]]>
          </sql>
@@ -496,7 +496,7 @@ ICEMR
 -->
           <sql>
             <![CDATA[
-                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&eventColumns&&)
+                     select property_source_id as name, property as display_name from apidbtuning.PropertyTypes where property_source_id in (&&eventColumns&&)
             ]]>
           </sql>
         </sqlQuery>

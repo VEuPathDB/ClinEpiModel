@@ -166,16 +166,16 @@ select count(*) from apidbtuning.Households
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.PropertyTypes mt
                            where m.pan_type = 'Household'
                            and ot.ontology_term_id = m.PROPERTY_ID
-                           and mt.term_id = m.property_id
+                           and mt.property_id = m.property_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredParams m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           from apidbtuning.InferredParams m, sres.ontologyterm ot, apidbtuning.PropertyTypes mt
                            where m.pan_type = 'Household'
                            and ot.ontology_term_id = m.property_id
-                           and mt.term_id = m.property_id
+                           and mt.property_id = m.property_id
                            union
                            select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
                            ) meta
@@ -218,7 +218,7 @@ prop=householdSourceIdsForHouseholdMemberTableQuote
 
           <sql>
             <![CDATA[
-                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&householdMemberColumns&&)
+                     select property_source_id as name, property as display_name from apidbtuning.PropertyTypes where property_source_id in (&&householdMemberColumns&&)
             ]]>
           </sql>
         </sqlQuery>
@@ -315,7 +315,7 @@ order by source_id
           <sqlParamValue name="lightTrapSourceIds"><![CDATA['DUMMY' ]]></sqlParamValue>
           <sql>
             <![CDATA[
-                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&lightTrapSourceIds&&)
+                     select property_source_id as name, property as display_name from apidbtuning.PropertyTypes where property_source_id in (&&lightTrapSourceIds&&)
             ]]>
           </sql>
         </sqlQuery>

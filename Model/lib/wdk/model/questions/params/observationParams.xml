@@ -435,13 +435,13 @@ union
       <sql>
         <![CDATA[
 select distinct cva.pan_id as internal, m.property as ontology_term_name, '1' as string_value, cva.EUPATH_0000113 as number_value, cast(null as date) as date_value
- from apidbtuning.Participants pa, apidbtuning.PANIO io, apidbtuning.clinicalvisitattributes cva, apidbtuning.metadatatype m
+ from apidbtuning.Participants pa, apidbtuning.PANIO io, apidbtuning.clinicalvisitattributes cva, apidbtuning.PropertyTypes m
  where cva.pan_id in ($$geographic_region$$)
  and cva.EUPATH_0000091 >= $$visit_date.min$$
  and cva.EUPATH_0000091 <= $$visit_date.max$$
  and io.output_pan_id = cva.pan_id
  and pa.pan_id = io.input_pan_id
- and m.source_id = 'EUPATH_0000113'
+ and m.property_source_id = 'EUPATH_0000113'
  AND least(pa.EUPATH_0000152, $$visit_date.max$$) - 
  greatest(pa.EUPATH_0000151, $$visit_date.min$$) + 1 >= $$duration_observation$$
          ]]>   
@@ -461,10 +461,10 @@ select distinct cva.pan_id as internal, m.property as ontology_term_name, '1' as
       <sql>
         <![CDATA[
 select distinct cva.pan_id as internal, m.property as ontology_term_name, '1' as string_value, cva.EUPATH_0000113 as number_value, cast(null as date) as date_value
- from apidbtuning.Participants pa, apidbtuning.PANIO io, apidbtuning.clinicalvisitattributes cva, apidbtuning.metadatatype m
+ from apidbtuning.Participants pa, apidbtuning.PANIO io, apidbtuning.clinicalvisitattributes cva, apidbtuning.PropertyTypes m
  where io.output_pan_id = cva.pan_id
  and pa.pan_id = io.input_pan_id
- and m.source_id = 'EUPATH_0000113'
+ and m.property_source_id = 'EUPATH_0000113'
           ]]>   
       </sql>
       </sqlQuery>
@@ -481,11 +481,11 @@ select distinct cva.pan_id as internal, m.property as ontology_term_name, '1' as
 select distinct ioa.output_pan_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value,
 cast(null as number) as number_value, cast(null as date) as date_value
 from apidbtuning.Households da,apidbtuning.PANIO ioa, apidbtuning.PANIO iob,
-apidbtuning.clinicalvisitattributes cva,apidbtuning.metadatatype mt
+apidbtuning.clinicalvisitattributes cva,apidbtuning.PropertyTypes mt
 where da.pan_id = ioa.input_pan_id
 and ioa.output_pan_id = iob.input_pan_id
 and iob.output_pan_id = cva.pan_id
-and mt.source_id = 'EUPATH_0000054'
+and mt.property_source_id = 'EUPATH_0000054'
         ]]>
       </sql>
     </sqlQuery>

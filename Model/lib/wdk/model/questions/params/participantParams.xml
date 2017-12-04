@@ -702,9 +702,9 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
       <sql>
         <![CDATA[
  select pa.pan_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value, cast(null as number) as number_value, cast(null as date) as date_value
- from apidbtuning.Participants pa, apidbtuning.Households da, apidbtuning.metadatatype mt
+ from apidbtuning.Participants pa, apidbtuning.Households da, apidbtuning.PropertyTypes mt
  where pa.EUPATH_0000094 = da.name
- and mt.source_id = 'EUPATH_0000054'
+ and mt.property_source_id = 'EUPATH_0000054'
         ]]>
       </sql>
     </sqlQuery>
