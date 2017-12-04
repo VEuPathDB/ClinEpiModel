@@ -48,25 +48,25 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
        <sql>
            <![CDATA[
 with vis as (
-select distinct ca.protocol_app_node_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
+select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
 from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.PANIO io
-where ca.protocol_app_node_id in ($$visits_nf$$)
-and ca.protocol_app_node_id = io.output_pan_id
+where ca.pan_id in ($$visits_nf$$)
+and ca.pan_id = io.output_pan_id
 ),
 relvis as (
-select distinct ca.protocol_app_node_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
+select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
 from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.PANIO io
-where ca.protocol_app_node_id in ($$relative_visits_nf$$)
-and ca.protocol_app_node_id = io.output_pan_id
+where ca.pan_id in ($$relative_visits_nf$$)
+and ca.pan_id = io.output_pan_id
 ),
 visits as (
 select * from vis
 $$dateOperator_fv$$
-select vis.protocol_app_node_id,vis.name, vis.input_pan_id,vis.EUPATH_0000091
+select vis.pan_id,vis.name, vis.input_pan_id,vis.EUPATH_0000091
 from vis, relvis rv
 where $$use_relative_visits$$ = 1
 and vis.input_pan_id = rv.input_pan_id
-and vis.protocol_app_node_id != rv.protocol_app_node_id
+and vis.pan_id != rv.pan_id
 and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
@@ -74,17 +74,17 @@ and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 select name as source_id,'@PROJECT_ID@' as project_id
 , CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
-select visits.protocol_app_node_id,visits.name,visits.input_pan_id as parent_id,visits.EUPATH_0000091, abs(inter.EUPATH_0000091 - visits.EUPATH_0000091) as days_between
+select visits.pan_id,visits.name,visits.input_pan_id as parent_id,visits.EUPATH_0000091, abs(inter.EUPATH_0000091 - visits.EUPATH_0000091) as days_between
 from (
-select vis.protocol_app_node_id,vis.name, vis.input_pan_id,rv.EUPATH_0000091
+select vis.pan_id,vis.name, vis.input_pan_id,rv.EUPATH_0000091
 from vis, relvis rv
 where vis.input_pan_id = rv.input_pan_id
-and vis.protocol_app_node_id != rv.protocol_app_node_id
+and vis.pan_id != rv.pan_id
 and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 ) inter, visits
-where visits.protocol_app_node_id = inter.protocol_app_node_id(+)
+where visits.pan_id = inter.pan_id(+)
 )
 group by name
                 ]]>   
@@ -111,45 +111,45 @@ group by name
        <sql>
            <![CDATA[
 with vis as (
-select distinct ca.protocol_app_node_id, ca.name, io.input_pan_id ,ca.EUPATH_0000644 
-from APIDBTUNING.EventATTRIBUTES ca,apidbtuning.PANIO io
-where ca.protocol_app_node_id in ($$visits_nf_maled$$)
-and ca.protocol_app_node_id = io.output_pan_id
+select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000644 
+from apidbtuning.Observations ca,apidbtuning.PANIO io
+where ca.pan_id in ($$visits_nf_maled$$)
+and ca.pan_id = io.output_pan_id
 ),
 relvis as (
-select distinct ca.protocol_app_node_id, ca.name, io.input_pan_id ,ca.EUPATH_0000644 
-from APIDBTUNING.EventATTRIBUTES ca,apidbtuning.PANIO io
-where ca.protocol_app_node_id in ($$relative_visits_nf_maled$$)
-and ca.protocol_app_node_id = io.output_pan_id
+select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000644 
+from apidbtuning.Observations ca,apidbtuning.PANIO io
+where ca.pan_id in ($$relative_visits_nf_maled$$)
+and ca.pan_id = io.output_pan_id
 ),
 visits as (
 select * from vis
 $$dateOperator_fv$$
-select vis.protocol_app_node_id,vis.name, vis.input_pan_id,vis.EUPATH_0000644
+select vis.pan_id,vis.name, vis.input_pan_id,vis.EUPATH_0000644
 from vis, relvis rv
 where $$use_relative_visits$$ = 1
 and vis.input_pan_id = rv.input_pan_id
-and vis.protocol_app_node_id != rv.protocol_app_node_id
+and vis.pan_id != rv.pan_id
 and rv.EUPATH_0000644 $$date_direction_fv$$ vis.EUPATH_0000644
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) >= $$days_between.min$$
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
-group by vis.protocol_app_node_id,vis.name, vis.input_pan_id,vis.EUPATH_0000644
+group by vis.pan_id,vis.name, vis.input_pan_id,vis.EUPATH_0000644
 having count(*) >= $$num_relative_events.min$$ and count(*) <= $$num_relative_events.max$$
 )
 select name as source_id,'@PROJECT_ID@' as project_id
 , CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
-select visits.protocol_app_node_id,visits.name,visits.input_pan_id as parent_id,visits.EUPATH_0000644, abs(inter.EUPATH_0000644 - visits.EUPATH_0000644) as days_between
+select visits.pan_id,visits.name,visits.input_pan_id as parent_id,visits.EUPATH_0000644, abs(inter.EUPATH_0000644 - visits.EUPATH_0000644) as days_between
 from (
-select vis.protocol_app_node_id,vis.name, vis.input_pan_id,rv.EUPATH_0000644
+select vis.pan_id,vis.name, vis.input_pan_id,rv.EUPATH_0000644
 from vis, relvis rv
 where vis.input_pan_id = rv.input_pan_id
-and vis.protocol_app_node_id != rv.protocol_app_node_id
+and vis.pan_id != rv.pan_id
 and rv.EUPATH_0000644 $$date_direction_fv$$ vis.EUPATH_0000644
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) >= $$days_between.min$$
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
 ) inter, visits
-where visits.protocol_app_node_id = inter.protocol_app_node_id(+)
+where visits.pan_id = inter.pan_id(+)
 )
 group by name
                 ]]>   
@@ -173,7 +173,7 @@ group by name
            <![CDATA[
 select name as source_id,'@PROJECT_ID@' as project_id
 from APIDBTUNING.CLINICALVISITATTRIBUTES
-where protocol_app_node_id in ($$visits_nf$$)
+where pan_id in ($$visits_nf$$)
                 ]]>   
         </sql>
      </sqlQuery>
@@ -192,10 +192,10 @@ where protocol_app_node_id in ($$visits_nf$$)
         <sql>
           <![CDATA[
  SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
-              FROM ($$participant_result$$) source_set, apidbtuning.PANIO io, apidbtuning.eventattributes cva, apidbtuning.participantattributes pa
+              FROM ($$participant_result$$) source_set, apidbtuning.PANIO io, apidbtuning.Observations cva, apidbtuning.Participants pa
               WHERE source_set.source_id = pa.name 
-              AND pa.protocol_app_node_id = io.input_pan_id
-              AND  io.output_pan_id = cva.protocol_app_node_id
+              AND pa.pan_id = io.input_pan_id
+              AND  io.output_pan_id = cva.pan_id
                ]]>   
        </sql>
     </sqlQuery>                

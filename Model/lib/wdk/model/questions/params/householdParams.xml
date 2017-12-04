@@ -174,17 +174,17 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.MetaDataWithoutNulls m
  where m.dataset_name = $$dataset$$
  and m.category = 'Household type'
  union
- select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
+ select da.pan_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.householdattributes da, apidbtuning.PANIO io, apidbtuning.lighttrapattributes la
-  where da.protocol_app_node_id = io.input_pan_id
-  and la.protocol_app_node_id = io.output_pan_id
-  group by da.protocol_app_node_id
+  from apidbtuning.Households da, apidbtuning.PANIO io, apidbtuning.LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  group by da.pan_id
           ]]>
     </sql>
     </sqlQuery>
@@ -200,19 +200,19 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.MetaDataWithoutNulls m
- where m.protocol_app_node_id in ($$geographic_region$$)
+ where m.pan_id in ($$geographic_region$$)
  union
- select da.protocol_app_node_id, 'average anopheles' as ontology_term_name, null as string_value, 
+ select da.pan_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.householdattributes da, apidbtuning.PANIO io, apidbtuning.lighttrapattributes la
-  where da.protocol_app_node_id in ($$geographic_region$$)
-  and da.protocol_app_node_id = io.input_pan_id
-  and la.protocol_app_node_id = io.output_pan_id
+  from apidbtuning.Households da, apidbtuning.PANIO io, apidbtuning.LightTraps la
+  where da.pan_id in ($$geographic_region$$)
+  and da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
   and la.OBI_0001619 >= $$date_range.min$$
   and la.OBI_0001619 <= $$date_range.max$$ 
-  group by da.protocol_app_node_id
+  group by da.pan_id
           ]]>
     </sql>
     </sqlQuery>
@@ -251,7 +251,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from apidbtuning.metadata
  where dataset_name = $$dataset$$
  and category in ('Household type','Household')
@@ -312,11 +312,11 @@ first as (
      <column name="string_value"/>
      <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.PANIO io
  where m.dataset_name = $$dataset$$
  and m.category = 'Child'
- and m.protocol_app_node_id = io.output_pan_id
+ and m.pan_id = io.output_pan_id
  and io.input_pan_id in ($$households_nf$$)
           ]]>
     </sql>
@@ -334,12 +334,12 @@ from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.PANIO io
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.PANIO io
  where m.dataset_name = $$dataset$$
  and m.category = 'Child'
- and m.protocol_app_node_id = io.output_pan_id
- and io.input_pan_id in (select protocol_app_node_id from apidbtuning.householdattributes)
+ and m.pan_id = io.output_pan_id
+ and io.input_pan_id in (select pan_id from apidbtuning.Households)
           ]]>
     </sql>
     </sqlQuery>

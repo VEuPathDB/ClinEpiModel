@@ -18,7 +18,7 @@
        <column name="project_id"/>
       <sql>
            <![CDATA[
- Select distinct pa.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.participantATTRIBUTES pa,
+ Select distinct pa.name as source_id, '@PROJECT_ID@' as project_id from  apidbtuning.Participants pa,
  ($$participantsBySourceID$$) ds where pa.name = ds.source_id
                 ]]>   
         </sql>
@@ -59,22 +59,22 @@ select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id,
    round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
    round(avg(ca.EUPATH_0000047),1) as avg_hemo,
    round(avg(ca.IAO_0000414),1) as avg_weight
-from apidbtuning.clinicalvisitattributes ca, apidbtuning.participantattributes pa, apidbtuning.PANIO io,
+from apidbtuning.clinicalvisitattributes ca, apidbtuning.Participants pa, apidbtuning.PANIO io,
    (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
    where protocol_app_node_id in (SELECT distinct md.internal FROM ($$visits_visitage_metadata_nf$$) md)
    ) age,
-   (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
-  from apidbtuning.householdattributes da, apidbtuning.PANIO io, apidbtuning.lighttrapattributes la
-  where da.protocol_app_node_id = io.input_pan_id
-  and la.protocol_app_node_id = io.output_pan_id
+   (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
+  from apidbtuning.Households da, apidbtuning.PANIO io, apidbtuning.LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
   and la.OBI_0001619 >= $$visit_date.min$$ 
   and la.OBI_0001619 <= $$visit_date.max$$ 
-  group by da.protocol_app_node_id) mos, apidbtuning.PANIO iom
+  group by da.pan_id) mos, apidbtuning.PANIO iom
 where ca.protocol_app_node_id in ($$visits_nf$$)
 and ca.protocol_app_node_id = io.output_pan_id
-and pa.protocol_app_node_id = io.input_pan_id
-and iom.output_pan_id = pa.protocol_app_node_id
+and pa.pan_id = io.input_pan_id
+and iom.output_pan_id = pa.pan_id
 and iom.input_pan_id = mos.protocol_app_node_id(+)
 group by pa.name, pa.EUPATH_0000152, pa.EUPATH_0000032, pa.EUPATH_0000151,age.max_age,age.min_age,mos.ave_anoph 
 having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
@@ -143,21 +143,21 @@ and setb.EUPATH_0000091 $$date_direction_fv$$ seta.EUPATH_0000091
 and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$days_between.min$$
 and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$days_between.max$$
 ) main,
-APIDBTUNING.CLINICALVISITATTRIBUTES ca, apidbtuning.participantattributes pa,
+APIDBTUNING.CLINICALVISITATTRIBUTES ca, apidbtuning.Participants pa,
    (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from apidbtuning.clinicalvisitattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
    ) age,
-   (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
-  from apidbtuning.householdattributes da, apidbtuning.PANIO io, apidbtuning.lighttrapattributes la
-  where da.protocol_app_node_id = io.input_pan_id
-  and la.protocol_app_node_id = io.output_pan_id
+   (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
+  from apidbtuning.Households da, apidbtuning.PANIO io, apidbtuning.LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
   and la.OBI_0001619 >= $$visit_date.min$$ 
   and la.OBI_0001619 <= $$visit_date.max$$ 
-  group by da.protocol_app_node_id) mos, apidbtuning.PANIO iom
+  group by da.pan_id) mos, apidbtuning.PANIO iom
 where ca.protocol_app_node_id = main.output_pan_id
-and pa.protocol_app_node_id = main.input_pan_id
-and iom.output_pan_id = pa.protocol_app_node_id
+and pa.pan_id = main.input_pan_id
+and iom.output_pan_id = pa.pan_id
 and iom.input_pan_id = mos.protocol_app_node_id(+)
 group by pa.name, pa.EUPATH_0000152, pa.EUPATH_0000032, pa.EUPATH_0000151,age.max_age,age.min_age,mos.ave_anoph 
 having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
@@ -192,25 +192,25 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_00000
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
                     count(*) as visit_count, 
    round(avg(EUPATH_0000644),1) -1 as ave_age_visit
-from (select distinct io.input_pan_id,io.output_pan_id,ca.EUPATH_0000644 from apidbtuning.eventattributes ca, apidbtuning.PANIO io
-      where ca.protocol_app_node_id in ($$visits_nf_maled$$)
-      and ca.protocol_app_node_id = io.output_pan_id
+from (select distinct io.input_pan_id,io.output_pan_id,ca.EUPATH_0000644 from apidbtuning.Observations ca, apidbtuning.PANIO io
+      where ca.pan_id in ($$visits_nf_maled$$)
+      and ca.pan_id = io.output_pan_id
 $$dateOperator_fv$$
  select ioa.input_pan_id,ioa.output_pan_id,seta.EUPATH_0000644
- from APIDBTUNING.eventattributes seta, APIDBTUNING.eventattributes setb, apidbtuning.PANIO ioa, apidbtuning.PANIO iob
- where seta.protocol_app_node_id in ($$visits_nf_maled$$)
+ from apidbtuning.Observations seta, apidbtuning.Observations setb, apidbtuning.PANIO ioa, apidbtuning.PANIO iob
+ where seta.pan_id in ($$visits_nf_maled$$)
 and $$use_relative_visits$$ = 1
-and setb.protocol_app_node_id in ($$relative_visits_nf_maled$$)
-and seta.protocol_app_node_id = ioa.output_pan_id
-and setb.protocol_app_node_id = iob.output_pan_id
+and setb.pan_id in ($$relative_visits_nf_maled$$)
+and seta.pan_id = ioa.output_pan_id
+and setb.pan_id = iob.output_pan_id
 and ioa.input_pan_id = iob.input_pan_id
-and seta.protocol_app_node_id != setb.protocol_app_node_id
+and seta.pan_id != setb.pan_id
 and setb.EUPATH_0000644 $$date_direction_fv$$ seta.EUPATH_0000644  
 and abs(setb.EUPATH_0000644 - seta.EUPATH_0000644) >= $$days_between.min$$
 and abs(setb.EUPATH_0000644 - seta.EUPATH_0000644) <= $$days_between.max$$
 group by ioa.input_pan_id,ioa.output_pan_id,seta.EUPATH_0000644
-) main, apidbtuning.participantattributes pa
-where pa.protocol_app_node_id = main.input_pan_id
+) main, apidbtuning.Participants pa
+where pa.pan_id = main.input_pan_id
 group by pa.name 
 having count(*) >= $$visit_count.min$$
 and count(*) <= $$visit_count.max$$
@@ -236,26 +236,26 @@ and count(*) <= $$visit_count.max$$
 with core as (
 select distinct name, EUPATH_0010049, EUPATH_0010375
 from (
-select distinct name, EUPATH_0010049, EUPATH_0010375 from apidbtuning.participantattributes
-      where protocol_app_node_id in ($$event_gems$$) -- (select protocol_app_node_id from apidbtuning.participantattributes)
+select distinct name, EUPATH_0010049, EUPATH_0010375 from apidbtuning.Participants
+      where pan_id in ($$event_gems$$) -- (select pan_id from apidbtuning.Participants)
 $$keep_remove$$
-select distinct seta.name, seta.EUPATH_0010049, seta.EUPATH_0010375 from apidbtuning.participantattributes seta, apidbtuning.participantattributes setb
+select distinct seta.name, seta.EUPATH_0010049, seta.EUPATH_0010375 from apidbtuning.Participants seta, apidbtuning.Participants setb
       where $$use_rel_case_control$$ = 1
-      and setb.protocol_app_node_id in ($$relative_event_gems$$)
-      and seta.protocol_app_node_id in ($$event_gems$$)
+      and setb.pan_id in ($$relative_event_gems$$)
+      and seta.pan_id in ($$event_gems$$)
       and seta.EUPATH_0010049 = setb.EUPATH_0010049)
 )
 select name as source_id, '@PROJECT_ID@' as project_id from core
 where 'selected' = $$return_case_control$$
 UNION
 select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
-from core, apidbtuning.participantattributes pa
+from core, apidbtuning.Participants pa
 where 'caseid' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
 /*
 UNION
 select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
-from core, apidbtuning.participantattributes pa
+from core, apidbtuning.Participants pa
 where 'matching' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
 and core.EUPATH_0010375 != pa.EUPATH_0010375
@@ -280,26 +280,26 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
 with core as (
 select distinct name, EUPATH_0010049, EUPATH_0010375
 from (
-select distinct name, EUPATH_0010049, EUPATH_0010375 from apidbtuning.participantattributes
-      where protocol_app_node_id in ($$all_data_gems$$) -- (select protocol_app_node_id from apidbtuning.participantattributes)
+select distinct name, EUPATH_0010049, EUPATH_0010375 from apidbtuning.Participants
+      where pan_id in ($$all_data_gems$$) -- (select pan_id from apidbtuning.Participants)
 $$dateOperator_fv$$
-select distinct seta.name, seta.EUPATH_0010049, seta.EUPATH_0010375 from apidbtuning.participantattributes seta, apidbtuning.participantattributes setb
+select distinct seta.name, seta.EUPATH_0010049, seta.EUPATH_0010375 from apidbtuning.Participants seta, apidbtuning.Participants setb
       where $$use_relative_visits$$ = 1
-      and setb.protocol_app_node_id in ($$relative_event_gems$$)
-      and seta.protocol_app_node_id in ($$all_data_gems$$)
+      and setb.pan_id in ($$relative_event_gems$$)
+      and seta.pan_id in ($$all_data_gems$$)
       and seta.EUPATH_0010049 = setb.EUPATH_0010049)
 )
 select name as source_id, '@PROJECT_ID@' as project_id from core
 where 'selected' = $$return_case_control$$
 UNION
 select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
-from core, apidbtuning.participantattributes pa
+from core, apidbtuning.Participants pa
 where 'caseid' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
 /*
 UNION
 select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
-from core, apidbtuning.participantattributes pa
+from core, apidbtuning.Participants pa
 where 'matching' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
 and core.EUPATH_0010375 != pa.EUPATH_0010375
@@ -321,10 +321,10 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
         <sql>
             <![CDATA[
 SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
-              FROM ($$household_result$$) source_set, apidbtuning.PANIO io, apidbtuning.householdattributes da, apidbtuning.participantattributes pa
+              FROM ($$household_result$$) source_set, apidbtuning.PANIO io, apidbtuning.Households da, apidbtuning.Participants pa
               WHERE source_set.source_id = da.name 
-              AND da.protocol_app_node_id = io.input_pan_id
-              AND  io.output_pan_id = pa.protocol_app_node_id
+              AND da.pan_id = io.input_pan_id
+              AND  io.output_pan_id = pa.pan_id
              ]]>
         </sql>
     </sqlQuery>
@@ -340,10 +340,10 @@ SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as househo
         <sql>
             <![CDATA[
 SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, count(*) as num_of_visits , max(source_set.wdk_weight) as wdk_weight
-              FROM ($$clinical_visit_result$$) source_set, apidbtuning.PANIO io, apidbtuning.eventattributes cva, apidbtuning.participantattributes pa
+              FROM ($$clinical_visit_result$$) source_set, apidbtuning.PANIO io, apidbtuning.Observations cva, apidbtuning.Participants pa
               WHERE source_set.source_id = cva.name 
-              AND cva.protocol_app_node_id = io.output_pan_id
-              AND  io.input_pan_id = pa.protocol_app_node_id
+              AND cva.pan_id = io.output_pan_id
+              AND  io.input_pan_id = pa.pan_id
               GROUP BY pa.name
              ]]>
         </sql>

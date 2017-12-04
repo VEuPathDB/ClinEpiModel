@@ -81,7 +81,7 @@
 
       
       <testRowCountSql>
-select count(*) from apidbtuning.LightTrapAttributes
+select count(*) from apidbtuning.LightTraps
        </testRowCountSql>
        <sqlQuery name="LightTrapAlias" doNotTest="true">
          <column name="source_id"/>
@@ -89,7 +89,7 @@ select count(*) from apidbtuning.LightTrapAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.LightTrapAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.LightTraps
          </sql>
        </sqlQuery>
 
@@ -107,9 +107,9 @@ select count(*) from apidbtuning.LightTrapAttributes
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
                      from apidbtuning.PANIO io
-                        , apidbtuning.lighttrapattributes pa
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.householdattributes) da
-                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID (+)
+                        , apidbtuning.LightTraps pa
+                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.Households) da
+                     where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
                      and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
           </sql>  
@@ -195,7 +195,7 @@ SELECT pa.name                AS source_id,
   o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
   ontology_term_name          AS term
 FROM apidbtuning.metadataontology o,
-  apidbtuning.lighttrapattributes pa
+  apidbtuning.LightTraps pa
 WHERE o.dataset_name = '&&datasetName&&'
 **/
             ]]>

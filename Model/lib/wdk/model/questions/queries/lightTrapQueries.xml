@@ -15,7 +15,7 @@
       <column name="project_id" />
       <sql>
 
-	<![CDATA[select distinct lta.name as source_id, '@PROJECT_ID@' as project_id from APIDBTUNING.LIGHTTRAPATTRIBUTES lta,
+	<![CDATA[select distinct lta.name as source_id, '@PROJECT_ID@' as project_id from apidbtuning.LightTraps lta,
         ($$collectionsBySourceID$$) ds WHERE lta.name = ds.source_id]]>
       </sql>
     </sqlQuery>
@@ -32,8 +32,8 @@
          <sql>
            <![CDATA[
 select lta.name as source_id, '@PROJECT_ID@' as project_id
-from apidbtuning.lighttrapattributes lta
-where lta.protocol_app_node_id in ($$lighttraps_nf$$)
+from apidbtuning.LightTraps lta
+where lta.pan_id in ($$lighttraps_nf$$)
                 ]]>   
         </sql>
      </sqlQuery>
@@ -50,10 +50,10 @@ where lta.protocol_app_node_id in ($$lighttraps_nf$$)
         <sql>
             <![CDATA[
 SELECT   lta.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
-              FROM ($$household_result$$) source_set, apidbtuning.PANIO io, apidbtuning.householdattributes da, apidbtuning.lighttrapattributes lta
+              FROM ($$household_result$$) source_set, apidbtuning.PANIO io, apidbtuning.Households da, apidbtuning.LightTraps lta
               WHERE source_set.source_id = da.name 
-              AND da.protocol_app_node_id = io.input_pan_id
-              AND  io.output_pan_id = lta.protocol_app_node_id
+              AND da.pan_id = io.input_pan_id
+              AND  io.output_pan_id = lta.pan_id
              ]]>
         </sql>
     </sqlQuery>

@@ -122,7 +122,7 @@ prop=householdSourceIdsForHouseholdMemberTable
               
 
       <testRowCountSql>
-select count(*) from apidbtuning.householdattributes
+select count(*) from apidbtuning.Households
        </testRowCountSql>
 
        <sqlQuery name="HouseholdAlias" doNotTest="true">
@@ -131,7 +131,7 @@ select count(*) from apidbtuning.householdattributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM Apidbtuning.Householdattributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.Households
          </sql>
        </sqlQuery>
 
@@ -141,7 +141,7 @@ select count(*) from apidbtuning.householdattributes
 
           <sql>
             <![CDATA[
-                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.householdattributes d
+                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.Households d
             ]]>
           </sql>  
          </sqlQuery>
@@ -250,7 +250,7 @@ SELECT a.name                AS source_id,
   o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
   ontology_term_name          AS term
 FROM apidbtuning.metadataontology o,
-  apidbtuning.householdattributes a
+  apidbtuning.Households a
 WHERE o.dataset_name = '&&datasetName&&'
 **/
             ]]>
@@ -276,12 +276,12 @@ SELECT ha.name AS source_id,
   '@PROJECT_ID@' AS project_id,
   pa.name as participant,
   &&householdMemberColumns&&
-FROM apidbtuning.PARTICIPANTATTRIBUTES pa
-   , apidbtuning.HOUSEHOLDATTRIBUTES ha
+FROM apidbtuning.Participants pa
+   , apidbtuning.Households ha
    , apidbtuning.PANIO io
 WHERE
-  pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID
-  and io.INPUT_PAN_ID = ha.PROTOCOL_APP_NODE_ID
+  pa.PAN_ID = io.OUTPUT_PAN_ID
+  and io.INPUT_PAN_ID = ha.PAN_ID
 order by source_id
             ]]>
             </sql>
@@ -297,7 +297,7 @@ order by source_id
 
             <sql>
             <![CDATA[
-            select EUPATH_0000094 as source_id, '@PROJECT_ID@' as project_id, &&lightTrapSourceIds&& from apidbtuning.lighttrapattributes order by &&orderBySourceIds&&
+            select EUPATH_0000094 as source_id, '@PROJECT_ID@' as project_id, &&lightTrapSourceIds&& from apidbtuning.LightTraps order by &&orderBySourceIds&&
             ]]>
             </sql>
         </sqlQuery>

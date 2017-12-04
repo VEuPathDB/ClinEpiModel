@@ -229,7 +229,7 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
               >
 
       <testRowCountSql>
-select count(*) from apidbtuning.ParticipantAttributes
+select count(*) from apidbtuning.Participants
        </testRowCountSql>
 
 
@@ -238,7 +238,7 @@ select count(*) from apidbtuning.ParticipantAttributes
          <column name="source_id"/>
          <column name="project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id FROM ApidbTuning.ParticipantAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id FROM apidbtuning.Participants
          </sql>
        </sqlQuery>
 
@@ -248,7 +248,7 @@ select count(*) from apidbtuning.ParticipantAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ParticipantAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.Participants
          </sql>
        </sqlQuery>
 
@@ -274,9 +274,9 @@ select count(*) from apidbtuning.ParticipantAttributes
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
                      from apidbtuning.PANIO io
-                        , apidbtuning.participantattributes pa
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.householdattributes) da
-                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID (+)
+                        , apidbtuning.Participants pa
+                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.Households) da
+                     where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
                      and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
           </sql>  
@@ -395,7 +395,7 @@ SELECT pa.name                AS source_id,
   ontology_term_name          AS display_name,
   0 as is_leaf
 FROM apidbtuning.metadataontology o,
-  apidbtuning.participantattributes pa
+  apidbtuning.Participants pa
 WHERE o.dataset_name = '&&datasetName&&'
             ]]>
             </sql>
@@ -408,11 +408,11 @@ WHERE o.dataset_name = '&&datasetName&&'
           <sql>
             <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id, ea.*
-from APIDBTUNING.EVENTATTRIBUTES ea
-   , APIDBTUNING.PARTICIPANTATTRIBUTES pa
+from apidbtuning.Observations ea
+   , apidbtuning.Participants pa
    , apidbtuning.PANIO io
-where pa.PROTOCOL_APP_NODE_ID = io.INPUT_PAN_ID
-and io.OUTPUT_PAN_ID = ea.PROTOCOL_APP_NODE_ID
+where pa.PAN_ID = io.INPUT_PAN_ID
+and io.OUTPUT_PAN_ID = ea.PAN_ID
             ]]>
           </sql>
         </sqlQuery>
@@ -436,11 +436,11 @@ where m.category = 'Event'
           <sql>
             <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id, ha.*
-from APIDBTUNING.HOUSEHOLDATTRIBUTES ha
-   , APIDBTUNING.PARTICIPANTATTRIBUTES pa
+from apidbtuning.Households ha
+   , apidbtuning.Participants pa
    , apidbtuning.PANIO io
-where ha.PROTOCOL_APP_NODE_ID = io.INPUT_PAN_ID
-and io.OUTPUT_PAN_ID = pa.PROTOCOL_APP_NODE_ID
+where ha.PAN_ID = io.INPUT_PAN_ID
+and io.OUTPUT_PAN_ID = pa.PAN_ID
             ]]>
           </sql>
         </sqlQuery>
@@ -464,7 +464,7 @@ where m.category = 'Household'
           <sql>
             <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*
-from APIDBTUNING.PARTICIPANTATTRIBUTES pa
+from apidbtuning.Participants pa
             ]]>
           </sql>
         </sqlQuery>
@@ -528,11 +528,11 @@ ICEMR
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&observationSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
-              from Apidbtuning.Eventattributes cv
-              , apidbtuning.participantattributes pa
+              from apidbtuning.Observations cv
+              , apidbtuning.Participants pa
               , apidbtuning.PANIO io
-              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = pa.PROTOCOL_APP_NODE_ID
+              where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
               order by &&orderBy&&
             ]]>
             </sql>
@@ -556,15 +556,15 @@ select pa.name as source_id,
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
-              from Apidbtuning.Eventattributes cv
-              , apidbtuning.participantattributes pa
-              , apidbtuning.sampleattributes sa
+              from apidbtuning.Observations cv
+              , apidbtuning.Participants pa
+              , apidbtuning.samples sa
               , apidbtuning.PANIO io
               , apidbtuning.PANIO io2
-              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = pa.PROTOCOL_APP_NODE_ID
-              and sa.protocol_app_node_id = io2.output_pan_id
-              and io2.INPUT_PAN_ID = cv.PROTOCOL_APP_NODE_ID
+              where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
+              and sa.pan_id = io2.output_pan_id
+              and io2.INPUT_PAN_ID = cv.PAN_ID
               order by &&orderBy&&
                   ]]>
             </sql>

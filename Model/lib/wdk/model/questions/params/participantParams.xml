@@ -463,13 +463,13 @@ select distinct m.protocol_app_node_id as internal, m.term as ontology_term_name
    from apidbtuning.clinicalvisitattributes 
    where protocol_app_node_id in ($$visits_visitage_metadata_nf$$)
    ) age,
-   apidbtuning.participantattributes pa, apidbtuning.PANIO iov, ApidbTuning.MetaDataWithoutNulls m
-   where pa.protocol_app_node_id in ($$geographic_region$$)
+   apidbtuning.Participants pa, apidbtuning.PANIO iov, ApidbTuning.MetaDataWithoutNulls m
+   where pa.pan_id in ($$geographic_region$$)
    AND least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
-       and pa.protocol_app_node_id = iov.input_pan_id
+       and pa.pan_id = iov.input_pan_id
        and iov.output_pan_id in ($$visits_visitage_metadata_nf$$)
-       and pa.protocol_app_node_id = m.protocol_app_node_id
+       and pa.pan_id = m.protocol_app_node_id
        and m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
        and m.category = 'Child'
           ]]>
@@ -701,8 +701,8 @@ select distinct protocol_app_node_id as internal, term as ontology_term_name, st
       <column name="string_value"/>
       <sql>
         <![CDATA[
- select pa.protocol_app_node_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value, cast(null as number) as number_value, cast(null as date) as date_value
- from apidbtuning.participantattributes pa, apidbtuning.householdattributes da, apidbtuning.metadatatype mt
+ select pa.pan_id as internal, mt.property as ontology_term_name, da.EUPATH_0000054 as string_value, cast(null as number) as number_value, cast(null as date) as date_value
+ from apidbtuning.Participants pa, apidbtuning.Households da, apidbtuning.metadatatype mt
  where pa.EUPATH_0000094 = da.name
  and mt.source_id = 'EUPATH_0000054'
         ]]>
@@ -765,9 +765,9 @@ first as (
       <sql>
          <![CDATA[
 with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
-  from apidbtuning.participantattributes pa, apidbtuning.PANIO io
-   where pa.protocol_app_node_id in ($$participants_nf$$)
-       and pa.protocol_app_node_id = io.output_pan_id)
+  from apidbtuning.Participants pa, apidbtuning.PANIO io
+   where pa.pan_id in ($$participants_nf$$)
+       and pa.pan_id = io.output_pan_id)
  select distinct Part.household_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
@@ -775,14 +775,14 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  and part.household_id = m.protocol_app_node_id
  union
  select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
-  from apidbtuning.householdattributes da, apidbtuning.PANIO io, apidbtuning.lighttrapattributes la
-  where da.protocol_app_node_id = io.input_pan_id
-  and la.protocol_app_node_id = io.output_pan_id
+ from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from apidbtuning.Households da, apidbtuning.PANIO io, apidbtuning.LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
   and la.OBI_0001619 >= $$visit_date.min$$ 
   and la.OBI_0001619 <= $$visit_date.max$$ 
-  group by da.protocol_app_node_id) mos, part
-  where part.household_id = mos.protocol_app_node_id(+)
+  group by da.pan_id) mos, part
+  where part.household_id = mos.pan_id(+)
           ]]>
     </sql>    
 
@@ -802,8 +802,8 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
       <sql>
          <![CDATA[
 with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
-  from apidbtuning.participantattributes pa, apidbtuning.PANIO io
-   where pa.protocol_app_node_id = io.output_pan_id)
+  from apidbtuning.Participants pa, apidbtuning.PANIO io
+   where pa.pan_id = io.output_pan_id)
  select distinct Part.household_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
@@ -811,12 +811,12 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  and part.household_id = m.protocol_app_node_id
  union
  select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select da.protocol_app_node_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
-  from apidbtuning.householdattributes da, apidbtuning.PANIO io, apidbtuning.lighttrapattributes la
-  where da.protocol_app_node_id = io.input_pan_id
-  and la.protocol_app_node_id = io.output_pan_id
-  group by da.protocol_app_node_id) mos, part
-  where part.household_id = mos.protocol_app_node_id(+)
+ from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from apidbtuning.Households da, apidbtuning.PANIO io, apidbtuning.LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  group by da.pan_id) mos, part
+  where part.household_id = mos.pan_id(+)
           ]]>
     </sql>    
 
@@ -1036,9 +1036,9 @@ from apidbtuning.metadataontology o
       <sql>
          <![CDATA[
 with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
-  from apidbtuning.participantattributes pa, apidbtuning.PANIO io
-   where pa.protocol_app_node_id in ($$participants_nf_maled$$)
-       and pa.protocol_app_node_id = io.output_pan_id)
+  from apidbtuning.Participants pa, apidbtuning.PANIO io
+   where pa.pan_id in ($$participants_nf_maled$$)
+       and pa.pan_id = io.output_pan_id)
  select distinct Part.household_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
@@ -1060,8 +1060,8 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
       <sql>
          <![CDATA[
 with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
-  from apidbtuning.participantattributes pa, apidbtuning.PANIO io
-   where pa.protocol_app_node_id = io.output_pan_id)
+  from apidbtuning.Participants pa, apidbtuning.PANIO io
+   where pa.pan_id = io.output_pan_id)
  select distinct Part.household_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m, part
  where m.dataset_name = $$dataset$$
@@ -1212,8 +1212,8 @@ from apidbtuning.metadataontology o
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.protocol_app_node_id in ($$geographic_region_gems$$)
    and m.protocol_app_node_id
-       in (select protocol_app_node_id
-       from apidbTuning.participantAttributes
+       in (select pan_id
+       from apidbtuning.Participants
        where EUPATH_0010375 in ($$case_control$$)
            )
          ]]>
@@ -1253,8 +1253,8 @@ order by display_name
  select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.protocol_app_node_id
-       in (select protocol_app_node_id
-       from apidbTuning.participantAttributes
+       in (select pan_id
+       from apidbtuning.Participants
        where EUPATH_0010375 in ($$case_control$$)
            )
           ]]>
@@ -1356,8 +1356,8 @@ and m.category = 'Child'
  select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.MetaDataWithoutNulls m 
  where m.protocol_app_node_id
-       in (select protocol_app_node_id
-       from apidbTuning.participantAttributes
+       in (select pan_id
+       from apidbtuning.Participants
        where EUPATH_0010375 not in ($$case_control$$)
            )
           ]]>
