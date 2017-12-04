@@ -321,7 +321,7 @@ ICEMR
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct mo.display_name || ' (' || mo.parent_ontology_term_name || ')' as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.metadatatype mt, apidbtuning.metadataontology mo
+                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.metadatatype mt, apidbtuning.Ontology mo
                            where m.pan_type = 'Child'
                            and ot.ontology_term_id = m.PROPERTY_ID
                            and mt.term_id = m.PROPERTY_id
@@ -394,7 +394,7 @@ SELECT pa.name                AS source_id,
   o.ONTOLOGY_TERM_SOURCE_ID AS unique_id,
   ontology_term_name          AS display_name,
   0 as is_leaf
-FROM apidbtuning.metadataontology o,
+FROM apidbtuning.Ontology o,
   apidbtuning.Participants pa
 WHERE o.dataset_name = '&&datasetName&&'
             ]]>

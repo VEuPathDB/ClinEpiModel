@@ -270,7 +270,7 @@ SELECT a.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
   o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
   ontology_term_name          AS term
-FROM apidbtuning.metadataontology o,
+FROM apidbtuning.Ontology o,
   apidbtuning.Observations a
 WHERE o.dataset_name = '&&datasetName&&'
 **/
