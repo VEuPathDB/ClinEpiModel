@@ -141,16 +141,16 @@ select count(*) from apidbtuning.LightTrapAttributes
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'CDC light trap assay'
-                           and ot.ontology_term_id = m.TERM_ID
-                           and mt.term_id = m.term_id
+                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.pan_type = 'CDC light trap assay'
+                           and ot.ontology_term_id = m.property_id
+                           and mt.term_id = m.property_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'CDC light trap assay'
-                           and ot.ontology_term_id = m.TERM_ID
-                           and mt.term_id = m.term_id
+                           from apidbtuning.InferredParams m, sres.ontologyterm ot, apidbtuning.metadatatype mt
+                           where m.pan_type = 'CDC light trap assay'
+                           and ot.ontology_term_id = m.property_id
+                           and mt.term_id = m.property_id
 --                           union
 --                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
                            union
