@@ -262,9 +262,9 @@ prop=tblPrefix
             <![CDATA[
 SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
-  term           AS parentTerm,
+  property           AS parentTerm,
   string_value   AS term
-FROM apidbtuning.metadata
+FROM apidbtuning.${tblPrefix}metadata
 WHERE dataset_name = '&&datasetName&&'
 AND category       = 'Visit'
 /** TODO:  add this back in when we can make this a tree on the record page

@@ -382,11 +382,11 @@ prop=tblPrefix
             <![CDATA[
 SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
-  nvl(source_id, 'root')      AS parent_source_id,
-  protocol_app_node_id ||'_'||term_id ||'_'||string_value as unique_id,
+  nvl(property_source_id, 'root')      AS parent_source_id,
+  pan_id ||'_'||property_id ||'_'||string_value as unique_id,
   string_value   AS display_name,
   1 as is_leaf
-FROM apidbtuning.metadata
+FROM apidbtuning.${tblPrefix}metadata
 WHERE dataset_name = '&&datasetName&&'
 AND string_value is not null
 AND category       = 'Child'
@@ -425,9 +425,9 @@ and io.OUTPUT_PAN_ID = ea.PAN_ID
           <column name="display_name" />
           <sql>
             <![CDATA[
-select distinct source_id as name, source_id as display_name
-from ApidbTuning.MetaDataWithoutNulls m
-where m.category = 'Event'
+select distinct property_source_id as name, property_source_id as display_name
+from ApidbTuning.${tblPrefix}MetaData m
+where m.category = 'Observation'
             ]]>
           </sql>
         </sqlQuery>
@@ -453,8 +453,8 @@ and io.OUTPUT_PAN_ID = pa.PAN_ID
           <column name="display_name" />
           <sql>
             <![CDATA[
-select distinct source_id as name, source_id as display_name
-from ApidbTuning.MetaDataWithoutNulls m
+select distinct property_source_id as name, property_source_id as display_name
+from ApidbTuning.${tblPrefix}MetaData m
 where m.category = 'Household'
             ]]>
           </sql>
@@ -477,8 +477,8 @@ from apidbtuning.${tblPrefix}Participants pa
           <column name="display_name" />
           <sql>
             <![CDATA[
-select distinct source_id as name, source_id as display_name
-from ApidbTuning.MetaDataWithoutNulls m
+select distinct property_source_id as name, property_source_id as display_name
+from ApidbTuning.${tblPrefix}MetaData m
 where m.category = 'Child'
             ]]>
           </sql>
