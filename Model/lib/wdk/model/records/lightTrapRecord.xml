@@ -81,7 +81,7 @@
 
       
       <testRowCountSql>
-select count(*) from apidbtuning.LightTraps
+select count(*) from apidbtuning.D841A9F5259LightTraps
        </testRowCountSql>
        <sqlQuery name="LightTrapAlias" doNotTest="true">
          <column name="source_id"/>
@@ -89,7 +89,7 @@ select count(*) from apidbtuning.LightTraps
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.LightTraps
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.D841A9F5259LightTraps
          </sql>
        </sqlQuery>
 
@@ -106,9 +106,9 @@ select count(*) from apidbtuning.LightTraps
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
-                     from apidbtuning.PANIO io
-                        , apidbtuning.LightTraps pa
-                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.Households) da
+                     from apidbtuning.D841A9F5259PANIO io
+                        , apidbtuning.D841A9F5259LightTraps pa
+                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.D841A9F5259Households) da
                      where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
                      and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
@@ -141,20 +141,20 @@ select count(*) from apidbtuning.LightTraps
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredChars m, sres.ontologyterm ot, apidbtuning.PropertyTypes mt
+                           from apidbtuning.D841A9F5259InferredChars m, sres.ontologyterm ot, apidbtuning.D841A9F5259PropertyTypes mt
                            where m.pan_type = 'CDC light trap assay'
                            and ot.ontology_term_id = m.property_id
                            and mt.property_id = m.property_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.InferredParams m, sres.ontologyterm ot, apidbtuning.PropertyTypes mt
+                           from apidbtuning.D841A9F5259InferredParams m, sres.ontologyterm ot, apidbtuning.D841A9F5259PropertyTypes mt
                            where m.pan_type = 'CDC light trap assay'
                            and ot.ontology_term_id = m.property_id
                            and mt.property_id = m.property_id
 --                           union
 --                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
                            union
-                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.PropertyTypes mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.D841A9F5259PropertyTypes mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
                            ) meta
             ]]>
          </sql>
@@ -194,8 +194,8 @@ SELECT pa.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
   o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
   ontology_term_name          AS term
-FROM apidbtuning.Ontology o,
-  apidbtuning.LightTraps pa
+FROM apidbtuning.D841A9F5259Ontology o,
+  apidbtuning.D841A9F5259LightTraps pa
 WHERE o.dataset_name = '&&datasetName&&'
 **/
             ]]>
