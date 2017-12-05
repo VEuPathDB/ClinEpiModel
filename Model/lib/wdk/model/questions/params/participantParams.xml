@@ -53,6 +53,14 @@
       <suggest default="Default Study"/>
     </stringParam>
 
+        <stringParam name="tbl_prefix"
+		 prompt="Table Prefix: "
+		 number="false"
+                 isSql="true">
+      <help>Specify the dataset for this study</help>
+      <suggest default="Default prefix"/>
+    </stringParam>
+
     <numberParam name="duration_observation"
 		 prompt="Days of observation &gt;= "
 		 integer="true"
@@ -253,7 +261,7 @@
                        prompt="Study Site"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.dataset">
+                       dependedParamRef="participantParams.tbl_prefix">
          <help>
            Select participants based on their personal and household
            characteristics.
@@ -1078,7 +1086,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
     <!--************************************************************-->
 
     <sqlQuery name="GeographicRegionOntology_gems">
-      <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -1088,22 +1096,22 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
       <column name="precision"/>
       <column name="is_range"/>
       <sql>
+         <![CDATA[
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from apidbtuning.Ontology o
+from apidbtuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('OBI_0001627')
-     and dataset_name = $$dataset$$ 
      UNION
       select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from apidbtuning.Ontology o
+from apidbtuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.ontology_term_source_id = PRIOR o.parent_ontology_term_source_id
      START WITH o.ontology_term_source_id in ('OBI_0001627')
-     and dataset_name = $$dataset$$ 
+          ]]>
       </sql>
     </sqlQuery>
 
     <sqlQuery name="GeographicRegionMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1111,16 +1119,16 @@ from apidbtuning.Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select m.protocol_app_node_id as internal, m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.MetaDataWithoutNulls m 
-where category = 'Child'
-and source_id = 'OBI_0001627'
+select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$MetaData m
+where m.category = 'Child'
+and m.property_source_id = 'OBI_0001627'
           ]]>
     </sql>    
     </sqlQuery>
     
     <sqlQuery name="GeographicRegionOntologyValues_gems" isCacheable="true">
-      <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1129,12 +1137,12 @@ and source_id = 'OBI_0001627'
       <sql>
          <![CDATA[
 select distinct m.source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.Ontology o
+from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$Ontology o
 where o.type is not null
 and o.is_range = 0
-and m.source_id = o.ontology_term_source_id
+and m.property_source_id = o.ontology_term_source_id
 and m.category = 'Child'
-and source_id = 'OBI_0001627'
+and m.property_source_id = 'OBI_0001627'
           ]]>
       </sql>    
     </sqlQuery>
