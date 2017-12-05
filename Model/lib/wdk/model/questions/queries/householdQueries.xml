@@ -18,14 +18,14 @@
       <column name="project_id" />
       <sql>
 
-	<![CDATA[select distinct da.name as source_id, '@PROJECT_ID@' as project_id from apidbtuning.Households da,
+	<![CDATA[select distinct da.name as source_id, '@PROJECT_ID@' as project_id from ApidbTuning.$$tbl_prefix$$Households da,
         ($$householdsBySourceID$$) ds WHERE da.name=ds.source_id]]>
       </sql>
       
     </sqlQuery>
 
     <sqlQuery name="HouseholdsByCharacteristics" isCacheable="true">
-       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
        <paramRef ref="householdParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" groupRef="metaDataGroups.household_daterange"/>
        <paramRef ref="householdParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
@@ -40,11 +40,11 @@ select dwpct.name as source_id, '@PROJECT_ID@' as project_id,
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
-from apidbtuning.PANIO io, apidbtuning.Households da
+from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da
 where io.output_pan_id in ($$participants_nf$$)
 and da.pan_id = io.input_pan_id
 group by da.pan_id,da.name
-) dwpct, apidbtuning.PANIO io, apidbtuning.LightTraps la
+) dwpct, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where  dwpct.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
   and la.OBI_0001619 >= $$date_range.min$$
@@ -73,7 +73,7 @@ group by da.pan_id,da.name
 SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct source_set.source_id) as participant_count,
  listagg (pa.name, ',') WITHIN GROUP (order by pa.name )  as participants,
  max(source_set.wdk_weight) as wdk_weight
-              FROM ($$participant_result$$) source_set, apidbtuning.PANIO io, apidbtuning.Households da, apidbtuning.Participants pa
+              FROM ($$participant_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$Participants pa
               WHERE source_set.source_id = pa.name 
               AND pa.pan_id = io.output_pan_id
               AND  io.input_pan_id = da.pan_id
@@ -95,7 +95,7 @@ SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct sou
             <![CDATA[
                      SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, max(source_set.wdk_weight) as wdk_weight, count(*) as lt_count,
                       round(avg(nvl(avg(lta.EUPATH_0000192),0)+nvl(avg(lta.EUPATH_0000193),0)+nvl(avg(lta.EUPATH_0000204),0)+nvl(avg(lta.EUPATH_0000205),0)),1) as ave_anoph
-              FROM ($$lighttrap_result$$) source_set, apidbtuning.PANIO io, apidbtuning.Households da, apidbtuning.LightTraps lta
+              FROM ($$lighttrap_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$LightTraps lta
               WHERE source_set.source_id = lta.name 
               AND lta.pan_id = io.output_pan_id
               AND  io.input_pan_id = da.pan_id

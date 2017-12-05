@@ -28,7 +28,7 @@
                     ontologyQueryRef="HouseholdVQ.RegionOntology"
                     prompt="Household"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset">
+                    dependedParamRef="participantParams.tbl_prefix">
       <idTransformSql>%%lightTrapIdTransformSql1%%</idTransformSql>
       <help>
         Select light trap collections based on geographic region. 
@@ -41,7 +41,7 @@
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd"
                     prompt="Household"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset,lightTrapParams.geographic_region,householdParams.date_range">
+                    dependedParamRef="participantParams.tbl_prefix,lightTrapParams.geographic_region,householdParams.date_range">
       <idTransformSql>%%lightTrapIdTransformSql1%%</idTransformSql>
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
@@ -54,7 +54,7 @@
                     backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd"
                     prompt="Household"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.dataset,lightTrapParams.geographic_region,householdParams.date_range,lightTrapParams.households_nf">
+                    dependedParamRef="participantParams.tbl_prefix,lightTrapParams.geographic_region,householdParams.date_range,lightTrapParams.households_nf">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
       </help>
@@ -125,19 +125,19 @@
          <![CDATA[
    with leaf as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from apidbtuning.Ontology o, 
+from ApidbTuning.$$tbl_prefix$$Ontology o, 
 (select distinct term
- from apidbtuning.metadata
+ from ApidbTuning.$$tbl_prefix$$MetaData
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
  and category = 'Household type') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from apidbtuning.Ontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
  where o.ontology_term_name = par.parent_ontology_term_name),
  second as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from apidbtuning.Ontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
  where o.ontology_term_name = gpar.parent_ontology_term_name)
  select * from leaf
  union
@@ -146,7 +146,7 @@ first as (
  select * from second
  union
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from apidbtuning.Ontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
  union
  select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
@@ -158,7 +158,7 @@ first as (
     <sqlQuery name="HouseholdMetaDataBkgd">
      <paramRef ref="householdParams.date_range" />  
      <paramRef ref="lightTrapParams.geographic_region" />  
-     <paramRef ref="participantParams.dataset" />  
+     <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -166,14 +166,14 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.MetaDataWithoutNulls m
+select distinct m.ApidbTuning.pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Household type'
  union
  select da.pan_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.Households da, apidbtuning.PANIO io, apidbtuning.LightTraps la
+  from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
   group by da.pan_id
@@ -184,7 +184,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
     <sqlQuery name="HouseholdMetaData" isCacheable="true">
       <paramRef ref="householdParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
-      <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -192,13 +192,13 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.MetaDataWithoutNulls m
- where m.protocol_app_node_id in ($$geographic_region$$)
+select distinct m.ApidbTuning.pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m
+ where m.ApidbTuning.pan_id in ($$geographic_region$$)
  union
  select da.pan_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from apidbtuning.Households da, apidbtuning.PANIO io, apidbtuning.LightTraps la
+  from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id in ($$geographic_region$$)
   and da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
@@ -222,20 +222,20 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
         <![CDATA[
    with leaf as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from apidbtuning.Ontology o, 
+from ApidbTuning.$$tbl_prefix$$Ontology o, 
 (select distinct term
- from apidbtuning.metadata
+ from ApidbTuning.$$tbl_prefix$$MetaData
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
  and category = 'CDC light trap assay'
   and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from apidbtuning.Ontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
+ from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
  where o.ontology_term_name = par.parent_ontology_term_name),
  second as (
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from apidbtuning.Ontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
+ from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
  where o.ontology_term_name = gpar.parent_ontology_term_name)
  select * from leaf
  union
@@ -244,7 +244,7 @@ first as (
  select * from second
  union
  select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from apidbtuning.Ontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
+ from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
  where o.ontology_term_name = ggpar.parent_ontology_term_name
         ]]>
       </sql>
@@ -254,7 +254,7 @@ first as (
       <paramRef ref="householdParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <paramRef ref="lightTrapParams.households_nf" />  
-      <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -262,14 +262,14 @@ first as (
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.MetaDataWithoutNulls m, apidbtuning.PANIO io, apidbtuning.LightTraps lta
+select distinct m.ApidbTuning.pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps lta
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'CDC light trap assay'
- and m.protocol_app_node_id = lta.pan_id
+ and m.ApidbTuning.pan_id = lta.pan_id
  and lta.OBI_0001619 >= $$date_range.min$$
  and lta.OBI_0001619 <= $$date_range.max$$ 
- and m.protocol_app_node_id = io.output_pan_id
+ and m.ApidbTuning.pan_id = io.output_pan_id
  and io.input_pan_id in ($$households_nf$$)
         ]]>
       </sql>
@@ -279,7 +279,7 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <paramRef ref="householdParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region" />  
       <paramRef ref="lightTrapParams.households_nf" />  
-      <paramRef ref="participantParams.dataset" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -287,8 +287,8 @@ select distinct m.protocol_app_node_id as internal, term as ontology_term_name, 
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.protocol_app_node_id as internal, term as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.MetaDataWithoutNulls m
+select distinct m.ApidbTuning.pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'CDC light trap assay'
         ]]>

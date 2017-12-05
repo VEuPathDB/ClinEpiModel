@@ -40,7 +40,7 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -49,13 +49,13 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
            <![CDATA[
 with vis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.PANIO io
+from APIDBTUNING.CLINICALVISITATTRIBUTES ca,ApidbTuning.$$tbl_prefix$$PANIO io
 where ca.pan_id in ($$visits_nf$$)
 and ca.pan_id = io.output_pan_id
 ),
 relvis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.PANIO io
+from APIDBTUNING.CLINICALVISITATTRIBUTES ca,ApidbTuning.$$tbl_prefix$$PANIO io
 where ca.pan_id in ($$relative_visits_nf$$)
 and ca.pan_id = io.output_pan_id
 ),
@@ -103,7 +103,7 @@ group by name
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf_maled" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.relative_events"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -112,13 +112,13 @@ group by name
            <![CDATA[
 with vis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000644 
-from apidbtuning.Observations ca,apidbtuning.PANIO io
+from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
 where ca.pan_id in ($$visits_nf_maled$$)
 and ca.pan_id = io.output_pan_id
 ),
 relvis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000644 
-from apidbtuning.Observations ca,apidbtuning.PANIO io
+from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
 where ca.pan_id in ($$relative_visits_nf_maled$$)
 and ca.pan_id = io.output_pan_id
 ),
@@ -166,7 +166,7 @@ group by name
        <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
-       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <sql>
@@ -192,7 +192,7 @@ where pan_id in ($$visits_nf$$)
         <sql>
           <![CDATA[
  SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
-              FROM ($$participant_result$$) source_set, apidbtuning.PANIO io, apidbtuning.Observations cva, apidbtuning.Participants pa
+              FROM ($$participant_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations cva, ApidbTuning.$$tbl_prefix$$Participants pa
               WHERE source_set.source_id = pa.name 
               AND pa.pan_id = io.input_pan_id
               AND  io.output_pan_id = cva.pan_id
