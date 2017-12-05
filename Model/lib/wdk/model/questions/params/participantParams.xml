@@ -466,10 +466,10 @@ first as (
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.ApidbTuning.pan_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
-   from apidbtuning.clinicalvisitattributes 
-   where ApidbTuning.pan_id in ($$visits_visitage_metadata_nf$$)
+   from ApidbTuning.$$tbl_prefix$$Observations 
+   where pan_id in ($$visits_visitage_metadata_nf$$)
    ) age,
    ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m
    where pa.pan_id in ($$geographic_region$$)
@@ -477,7 +477,7 @@ select distinct m.ApidbTuning.pan_id as internal, m.term as ontology_term_name, 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
        and pa.pan_id = iov.input_pan_id
        and iov.output_pan_id in ($$visits_visitage_metadata_nf$$)
-       and pa.pan_id = m.ApidbTuning.pan_id
+       and pa.pan_id = m.pan_id
        and m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
        and m.category = 'Child'
           ]]>
@@ -496,7 +496,7 @@ select distinct m.ApidbTuning.pan_id as internal, m.term as ontology_term_name, 
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.ApidbTuning.pan_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Child'
@@ -569,14 +569,14 @@ select distinct valid.visit_id as internal, term as ontology_term_name, string_v
  from ApidbTuning.$$tbl_prefix$$MetaData m, valid
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Visit'
- and m.ApidbTuning.pan_id = valid.visit_id
+ and m.pan_id = valid.visit_id
   union
  select valid.visit_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, valid, ApidbTuning.$$tbl_prefix$$PANIO ios
 where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
-and ios.output_pan_id = m.ApidbTuning.pan_id
+and ios.output_pan_id = m.pan_id
 and ios.input_pan_id = valid.visit_id
           ]]>
     </sql>
@@ -596,7 +596,7 @@ and ios.input_pan_id = valid.visit_id
          <column name="string_value"/>
          <sql>
            <![CDATA[
- select distinct ApidbTuning.pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
+ select distinct pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData 
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'Visit'
@@ -606,7 +606,7 @@ from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
 where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
 and m.category = 'Specimen type' 
 and m.term = 'Specimen type'
-and io.output_pan_id = m.ApidbTuning.pan_id
+and io.output_pan_id = m.pan_id
           ]]>
     </sql>
     </sqlQuery>
@@ -643,7 +643,7 @@ union
       <sql>
         <![CDATA[
 select distinct pa.output_pan_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.clinicalvisitattributes cva,
+ from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Observations cva,
  (select distinct io.input_pan_id, io.output_pan_id
   from ApidbTuning.$$tbl_prefix$$PANIO io
   where io.input_pan_id in ($$geographic_region$$)
@@ -651,8 +651,8 @@ select distinct pa.output_pan_id as internal, m.term as ontology_term_name, m.st
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Visit'
  and m.property_source_id = 'EUPATH_0000113'
- and pa.output_pan_id = m.ApidbTuning.pan_id
- and pa.output_pan_id = cva.ApidbTuning.pan_id
+ and pa.output_pan_id = m.pan_id
+ and pa.output_pan_id = cva.pan_id
  and cva.EUPATH_0000091 >= $$visit_date.min$$
  and cva.EUPATH_0000091 <= $$visit_date.max$$
          ]]>   
@@ -669,7 +669,7 @@ select distinct pa.output_pan_id as internal, m.term as ontology_term_name, m.st
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct ApidbTuning.pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
+select distinct pan_id as internal, term as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and category = 'Visit'
@@ -780,7 +780,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Household type'
- and part.household_id = m.ApidbTuning.pan_id
+ and part.household_id = m.pan_id
  union
  select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
@@ -816,7 +816,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where m.dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC'
  and m.category = 'Household type'
- and part.household_id = m.ApidbTuning.pan_id
+ and part.household_id = m.pan_id
  union
  select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
@@ -869,11 +869,11 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.ApidbTuning.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
- and m.ApidbTuning.pan_id in ($$geographic_region_maled$$)
+ and m.pan_id in ($$geographic_region_maled$$)
           ]]>
     </sql>
     </sqlQuery>
@@ -888,7 +888,7 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.ApidbTuning.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.dataset_name = $$dataset$$
  and m.category = 'Participant'
@@ -941,7 +941,7 @@ and io.output_pan_type_source_id = 'EUPATH_0000738'
 ) valid
  where m.dataset_name = $$dataset$$
  and m.category = 'Event'
- and m.ApidbTuning.pan_id = valid.visit_id
+ and m.pan_id = valid.visit_id
           ]]>
     </sql>
     </sqlQuery>    
@@ -956,7 +956,7 @@ and io.output_pan_type_source_id = 'EUPATH_0000738'
       <column name="string_value"/>
       <sql>
         <![CDATA[
- select distinct ApidbTuning.pan_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
+ select distinct pan_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData 
  where dataset_name = $$dataset$$
  and category = 'Event'
@@ -1004,7 +1004,7 @@ select io.output_pan_id as internal, m.property_source_id as ontology_term_name,
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
- and m.ApidbTuning.pan_id = io.input_pan_id
+ and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000096'
         ]]>
       </sql>
@@ -1051,7 +1051,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
- and part.household_id = m.ApidbTuning.pan_id
+ and part.household_id = m.pan_id
           ]]>
     </sql>    
 
@@ -1074,7 +1074,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where m.dataset_name = $$dataset$$
  and m.category = 'Household'
- and part.household_id = m.ApidbTuning.pan_id
+ and part.household_id = m.pan_id
           ]]>
     </sql>    
 
@@ -1156,7 +1156,7 @@ and m.property_source_id = 'OBI_0001627'
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select m.ApidbTuning.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
 where category = 'Child'
           ]]>
@@ -1215,11 +1215,11 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-  select m.ApidbTuning.pan_id as internal, m.property_source_id as ontology_term_name,
+  select m.pan_id as internal, m.property_source_id as ontology_term_name,
                   m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.ApidbTuning.pan_id in ($$geographic_region_gems$$)
-   and m.ApidbTuning.pan_id
+ where m.pan_id in ($$geographic_region_gems$$)
+   and m.pan_id
        in (select pan_id
        from ApidbTuning.$$tbl_prefix$$Participants
        where EUPATH_0010375 in ($$case_control$$)
@@ -1258,9 +1258,9 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select m.ApidbTuning.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.ApidbTuning.pan_id
+ where m.pan_id
        in (select pan_id
        from ApidbTuning.$$tbl_prefix$$Participants
        where EUPATH_0010375 in ($$case_control$$)
@@ -1302,9 +1302,9 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select m.ApidbTuning.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.ApidbTuning.pan_id in ($$participant_dwelling_gems$$)
+ where m.pan_id in ($$participant_dwelling_gems$$)
           ]]>
     </sql>    
     </sqlQuery>
@@ -1361,9 +1361,9 @@ and m.category = 'Child'
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select m.ApidbTuning.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.ApidbTuning.pan_id
+ where m.pan_id
        in (select pan_id
        from ApidbTuning.$$tbl_prefix$$Participants
        where EUPATH_0010375 not in ($$case_control$$)

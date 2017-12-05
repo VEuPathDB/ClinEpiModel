@@ -20,7 +20,7 @@
       <column name="project_id"/>
      <sql>
           <![CDATA[
-Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLINICALVISITATTRIBUTES cv,
+Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  ApidbTuning.$$tbl_prefix$$Observations cv,
 ($$clinical_visits_by_sourceid$$) cs where cv.name = cs.source_id
                ]]>   
        </sql>
@@ -49,13 +49,13 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
            <![CDATA[
 with vis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca,ApidbTuning.$$tbl_prefix$$PANIO io
+from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
 where ca.pan_id in ($$visits_nf$$)
 and ca.pan_id = io.output_pan_id
 ),
 relvis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca,ApidbTuning.$$tbl_prefix$$PANIO io
+from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
 where ca.pan_id in ($$relative_visits_nf$$)
 and ca.pan_id = io.output_pan_id
 ),
@@ -172,7 +172,7 @@ group by name
        <sql>
            <![CDATA[
 select name as source_id,'@PROJECT_ID@' as project_id
-from APIDBTUNING.CLINICALVISITATTRIBUTES
+from ApidbTuning.$$tbl_prefix$$Observations
 where pan_id in ($$visits_nf$$)
                 ]]>   
         </sql>
