@@ -228,7 +228,7 @@ and count(*) <= $$visit_count.max$$
        <paramRef ref="participantParams.keep_remove" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.relative_event_gems" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.return_case_control" groupRef="metaDataGroups.results_options"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_Gates_GEMS_gems1_case_control_RSRC" groupRef="metaDataGroups.relative_case_control"/> 
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D841A9F5259" groupRef="metaDataGroups.relative_case_control"/> 
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>

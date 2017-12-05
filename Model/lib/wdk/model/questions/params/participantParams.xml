@@ -851,8 +851,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id IN 
 (select distinct source_id
  from ApidbTuning.$$tbl_prefix$$MetaData
- where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
- and category = 'Participant'
+ where category = 'Participant'
  and source_id != 'EUPATH_0000032')
  order by display_name
          ]]>
@@ -871,8 +870,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <![CDATA[
 select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.dataset_name = $$dataset$$
- and m.category = 'Participant'
+ where m.category = 'Participant'
  and m.pan_id in ($$geographic_region_maled$$)
           ]]>
     </sql>
@@ -890,8 +888,7 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
          <![CDATA[
 select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.dataset_name = $$dataset$$
- and m.category = 'Participant'
+ where m.category = 'Participant'
           ]]>
     </sql>
     </sqlQuery>
@@ -914,8 +911,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id IN 
 (select distinct source_id
  from ApidbTuning.$$tbl_prefix$$MetaData
- where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
- and category = 'Event'
+ where category = 'Event'
  and source_id != 'EUPATH_0000094')
  order by display_name
          ]]>
@@ -939,8 +935,7 @@ from ApidbTuning.$$tbl_prefix$$PANIO io
 where io.input_pan_id in ($$households_nf_maled$$)
 and io.output_pan_type_source_id = 'EUPATH_0000738'
 ) valid
- where m.dataset_name = $$dataset$$
- and m.category = 'Event'
+ where m.category = 'Event'
  and m.pan_id = valid.visit_id
           ]]>
     </sql>
@@ -958,8 +953,7 @@ and io.output_pan_type_source_id = 'EUPATH_0000738'
         <![CDATA[
  select distinct pan_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData 
- where dataset_name = $$dataset$$
- and category = 'Event'
+ where category = 'Event'
           ]]>
     </sql>
     </sqlQuery>
@@ -979,8 +973,7 @@ and io.output_pan_type_source_id = 'EUPATH_0000738'
 select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
                   from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct source_id
                   from ApidbTuning.$$tbl_prefix$$MetaData
-                  where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
-                  and source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+                  where source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
                   and category = 'Household') ds
                   where ds.source_id = o.ontology_term_source_id
                   union
@@ -1001,8 +994,7 @@ select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontolo
         <![CDATA[
 select io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
- where m.dataset_name = $$dataset$$
- and m.category = 'Household'
+ where m.category = 'Household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000096'
@@ -1026,8 +1018,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id IN 
 (select distinct source_id
  from ApidbTuning.$$tbl_prefix$$MetaData
- where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$ 
- and category = 'Household'
+ where category = 'Household'
  and source_id != 'EUPATH_0000094')
  order by display_name
     </sql>
@@ -1049,8 +1040,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
        and pa.pan_id = io.output_pan_id)
  select distinct Part.household_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
- where m.dataset_name = $$dataset$$
- and m.category = 'Household'
+ where m.category = 'Household'
  and part.household_id = m.pan_id
           ]]>
     </sql>    
@@ -1072,8 +1062,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
    where pa.pan_id = io.output_pan_id)
  select distinct Part.household_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
- where m.dataset_name = $$dataset$$
- and m.category = 'Household'
+ where m.category = 'Household'
  and part.household_id = m.pan_id
           ]]>
     </sql>    
@@ -1198,7 +1187,6 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
-     and o.dataset_name = $$dataset$$ 
      order by display_name
 ) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
       </sql>
@@ -1242,7 +1230,6 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where o.dataset_name = $$dataset$$ 
 order by display_name
 ) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
       </sql>
@@ -1285,7 +1272,6 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000738'
-     and o.dataset_name = $$dataset$$ 
 order by display_name
 ) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
       </sql>
@@ -1324,7 +1310,6 @@ select distinct o.ontology_term_source_id, o.type, o.is_range
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000738'
-     and o.dataset_name = $$dataset$$ 
 ) where type is not null
   and is_range = 0
   and ontology_term_source_id not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')) ont
