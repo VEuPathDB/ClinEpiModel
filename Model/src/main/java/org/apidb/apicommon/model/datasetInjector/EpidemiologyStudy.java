@@ -27,6 +27,10 @@ public class EpidemiologyStudy extends DatasetInjector {
       //String datasetName = getDatasetName();
       //String includeProjects = getPropValueAsBoolean("isPublic") ? "ClinEpiDB," + projectName : projectName;
 
+      String tblPrefix = "D" + getPropValue("datasetDigest");
+      setPropValue("tblPrefix", tblPrefix);
+
+
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
