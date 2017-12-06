@@ -77,12 +77,12 @@
         ]]>
       </shortDescription>
       <description/>
-      <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
       <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
+      <property name="datasetTblPrefix">D841A9F5259</property>
     </stepAnalysisPlugin>
 
     <stepAnalysisPlugin
@@ -97,13 +97,14 @@
         ]]>
       </shortDescription>
       <description/>
-      <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
       <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
+      <property name="datasetTblPrefix">D841A9F5259</property>
     </stepAnalysisPlugin>
+
 
     <stepAnalysisPlugin
         name="clinepi-summaries"
@@ -119,12 +120,12 @@
         ]]>
       </shortDescription>
       <description/>
-      <property name="dataset_name"><![CDATA[ISASimple_Gates_MAL-ED_stdm_tp_RSRC]]></property>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_Summaries]]></property>
       <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
+      <property name="datasetTblPrefix">D841A9F5259</property>
     </stepAnalysisPlugin>
 
   </stepAnalysisPlugins>
