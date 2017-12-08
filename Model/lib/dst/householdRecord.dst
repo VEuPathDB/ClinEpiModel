@@ -6,12 +6,14 @@ prop=householdRecordOverview
 prop=householdAttributesList
 prop=householdSourceIdsForHouseholdMemberTable
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <recordClassSet name="HouseholdRecordClasses">
-      <recordClass name="HouseholdRecordClass" urlName="household" displayName="Household"> 
+    <recordClassSet name="${presenterId}HouseholdRecordClasses" includeProjects="${includeProjects}">
+      <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" displayName="Household" includeProjects="${includeProjects}"> 
 
             <!-- primary key definition -->
-            <primaryKey aliasQueryRef="HouseholdAttributes.HouseholdAlias">
+            <primaryKey aliasQueryRef="${presenterId}HouseholdAttributes.HouseholdAlias">
               <columnRef>source_id</columnRef>
               <columnRef>project_id</columnRef>
             </primaryKey>
@@ -25,6 +27,12 @@ prop=tblPrefix
                 </text>                
             </idAttribute>
 
+
+<!-- TODO
+           <attributesList summary="${householdAttributesList}"/>
+-->
+
+
       <!-- =============================================================== -->
       <!--   Reporters -->  
       <!-- =============================================================== -->
@@ -35,27 +43,12 @@ prop=tblPrefix
         <property name="page_size">500</property>
       </reporter>
 
-      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
-                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
-             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
-      </reporter>
-
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
                 implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
 
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
-<!--
-         <textAttribute name="record_overview" displayName="Overview">
-
-           <text>
-              <![CDATA[
-                  Subcounty: $$EUPATH_0000054$$<br>
-              ]]>
-           </text>
-         </textAttribute>
--->
 
          <textAttribute name="record_overview" displayName="Overview">
 
@@ -67,11 +60,11 @@ prop=tblPrefix
          </textAttribute>
 
 
-         <attributeQueryRef ref="HouseholdAttributes.HouseholdAttributes" attributeMetaQueryRef="HouseholdAttributes.HouseholdAttributesMeta"/>
+         <attributeQueryRef ref="${presenterId}HouseholdAttributes.HouseholdAttributes" attributeMetaQueryRef="${presenterId}HouseholdAttributes.HouseholdAttributesMeta"/>
 
         <table name="Characteristics"
                displayName="Household Characteristics"
-               queryRef="HouseholdTables.Characteristics">
+               queryRef="${presenterId}HouseholdTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="term" displayName="Value"/>
@@ -80,8 +73,8 @@ prop=tblPrefix
 
          <table name="HouseholdMembers"
                  displayName="Household Members"
-                 queryRef="HouseholdTables.HouseholdMembers"
-                 attributeMetaQueryRef="HouseholdTables.HouseholdMembersColumnAttributes">
+                 queryRef="${presenterId}HouseholdTables.HouseholdMembers"
+                 attributeMetaQueryRef="${presenterId}HouseholdTables.HouseholdMembersColumnAttributes">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="participant" inReportMaker="true" internal="true"/>
@@ -99,8 +92,8 @@ prop=tblPrefix
 
 	  <table name="LightTraps"
                  displayName="Mosquitoe Light Trap Collections"
-                 queryRef="HouseholdTables.LightTraps"
-                 attributeMetaQueryRef="HouseholdTables.LightTrapColumnAttributes">
+                 queryRef="${presenterId}HouseholdTables.LightTraps"
+                 attributeMetaQueryRef="${presenterId}HouseholdTables.LightTrapColumnAttributes">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
     </table>
@@ -118,8 +111,10 @@ prop=datasetName
 prop=householdAttributesList
 prop=householdSourceIdsForHouseholdMemberTable
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="HouseholdAttributes" queryType="attribute" doNotTest="true"  
+    <querySet name="${presenterId}HouseholdAttributes" queryType="attribute" doNotTest="true" includeProjects="${includeProjects}"  
               isCacheable='false'>
               
 
@@ -137,7 +132,7 @@ select count(*) from apidbtuning.${tblPrefix}Households
          </sql>
        </sqlQuery>
 
-       <sqlQuery name="HouseholdAttributes" attributeMetaQueryRef="HouseholdAttributes.HouseholdAttributesMeta">
+       <sqlQuery name="HouseholdAttributes" attributeMetaQueryRef="${presenterId}HouseholdAttributes.HouseholdAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
 
@@ -202,8 +197,10 @@ prop=householdAttributesList
 prop=householdSourceIdsForHouseholdMemberTable
 prop=householdSourceIdsForHouseholdMemberTableQuote
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="HouseholdTables" queryType="table" 
+    <querySet name="${presenterId}HouseholdTables" queryType="table" includeProjects="${includeProjects}" 
               isCacheable='false'>
 
 
@@ -261,14 +258,13 @@ WHERE o.dataset_name = '&&datasetName&&'
         </sqlQuery>
 
 
-      <sqlQuery name="HouseholdMembers"  isCacheable='false' attributeMetaQueryRef="HouseholdTables.HouseholdMembersColumnAttributes">
+      <sqlQuery name="HouseholdMembers"  isCacheable='false' attributeMetaQueryRef="${presenterId}HouseholdTables.HouseholdMembersColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="participant"/>
 
 <!--
-            <sqlParamValue name="householdMemberColumns"><![CDATA[EUPATH_0000033,EUPATH_0000034,EUPATH_0000035 ]]></sqlParamValue>
-
+maled
             <sqlParamValue name="householdMemberColumns"><![CDATA[ PATO_0000047, EUPATH_0000741, EUPATH_0000657, EUPATH_0000660, EUPATH_0000744, EUPATH_0000742 ]]></sqlParamValue>
 -->
             <sqlParamValue name="householdMemberColumns"><![CDATA[ ${householdSourceIdsForHouseholdMemberTable}  ]]></sqlParamValue>
@@ -291,7 +287,7 @@ order by source_id
         </sqlQuery>
 
 
-       <sqlQuery name="LightTraps"  isCacheable='false' attributeMetaQueryRef="HouseholdTables.LightTrapColumnAttributes">
+       <sqlQuery name="LightTraps"  isCacheable='false' attributeMetaQueryRef="${presenterId}HouseholdTables.LightTrapColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
 

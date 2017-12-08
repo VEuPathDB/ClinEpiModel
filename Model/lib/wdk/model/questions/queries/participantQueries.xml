@@ -4,13 +4,13 @@
 
    -->
 
-   <querySet name="ParticipantId" queryType="id" isCacheable="false" excludeProjects="TrichDB">
+   <querySet name="ParticipantId" queryType="id" isCacheable="false">
 
      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
      <!-- Source id  -->
      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-    <sqlQuery name="ParticipantsBySourceID"
+    <sqlQuery name="ParticipantsBySourceID" includeProjects="ICEMR"
           isCacheable="true">
       <!-- <paramRef ref="participantParams.participantsBySourceID"/> -->
        <paramRef ref="participantParams.participantsBySourceID"/>
@@ -310,7 +310,7 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
     
 <!-- transform(s) -->
 
-    <sqlQuery name="ParticipantsByHouseholdIds" doNotTest="true"
+    <sqlQuery name="ParticipantsByHouseholdIds" doNotTest="true"  includeProjects="ICEMR"
               displayName="ID" isCacheable="true">
       <paramRef ref="householdParams.household_result"/>
         <column name="project_id"/>
@@ -329,7 +329,7 @@ SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as househo
         </sql>
     </sqlQuery>
     
-      <sqlQuery name="ParticipantsByClinicalVisits" doNotTest="true"
+      <sqlQuery name="ParticipantsByClinicalVisits" doNotTest="true" includeProjects="ICEMR"
               displayName="ID" isCacheable="true">
       <paramRef ref="clinicalVisitParams.clinical_visit_result"/>
         <column name="project_id"/>

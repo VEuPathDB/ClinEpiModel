@@ -12,7 +12,7 @@
               displayName="Select a Set of Households"
               shortDisplayName="Household Details"
               queryRef="HouseholdId.HouseholdsByCharacteristics" 
-              recordClassRef="HouseholdRecordClasses.HouseholdRecordClass">
+              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass">
 
 <!--
         <attributesList 
@@ -77,7 +77,8 @@
               displayName="Household ID"
               shortDisplayName="Household ID"
               queryRef="HouseholdId.HouseholdsBySourceID" 
-              recordClassRef="HouseholdRecordClasses.HouseholdRecordClass"
+              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
+              includeProjects="ICEMR"
              >
 
         <attributesList 
@@ -104,7 +105,7 @@
               displayName="Transform to Households"
               shortDisplayName="participant->household"
               queryRef="HouseholdId.HouseholdsByParticipantIds" 
-              recordClassRef="HouseholdRecordClasses.HouseholdRecordClass"
+              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
               noSummaryOnSingleRecord="false">
  
 
@@ -144,7 +145,7 @@
               displayName="Transform to Households"
               shortDisplayName="lighttrap->households"
               queryRef="HouseholdId.HouseholdsByLightTrapIds"
-              recordClassRef="HouseholdRecordClasses.HouseholdRecordClass"
+              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
               noSummaryOnSingleRecord="true">
     
 <!--

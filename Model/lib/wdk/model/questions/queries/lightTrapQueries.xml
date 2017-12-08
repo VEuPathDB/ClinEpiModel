@@ -2,13 +2,13 @@
 
   <!-- notes-->
 
-  <querySet name="LightTrapId" queryType="id" isCacheable="false">
+  <querySet name="LightTrapId" queryType="id" isCacheable="false" includeProjects="ICEMR">
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!-- Source id  -->
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-    <sqlQuery name="CollectionsBySourceID"
+    <sqlQuery name="CollectionsBySourceID"  includeProjects="ICEMR"
 	      isCacheable="true">
       <paramRef ref="lightTrapParams.collectionsBySourceID" />
       <column name="source_id" />
@@ -41,7 +41,7 @@ where lta.pan_id in ($$lighttraps_nf$$)
 
     <!-- Transforms -->
       
-    <sqlQuery name="LightTrapsByHouseholdIds" doNotTest="true" displayName="ID" isCacheable="true">
+    <sqlQuery name="LightTrapsByHouseholdIds" doNotTest="true" displayName="ID" isCacheable="true" includeProjects="ICEMR">
     <paramRef ref="householdParams.household_result"/>
         <column name="project_id"/>
         <column name="source_id"/>

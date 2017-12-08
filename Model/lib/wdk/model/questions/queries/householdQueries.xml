@@ -60,7 +60,7 @@ group by da.pan_id,da.name
 <!-- transform(s) -->
 
     <sqlQuery name="HouseholdsByParticipantIds" doNotTest="true"
-              displayName="ID" isCacheable="true">
+              displayName="ID" isCacheable="true" includeProjects="ICEMR">
       <paramRef ref="participantParams.participant_result"/>
         <column name="project_id"/>
         <column name="source_id"/>
@@ -82,7 +82,7 @@ SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct sou
         </sql>
     </sqlQuery>
 
-     <sqlQuery name="HouseholdsByLightTrapIds" doNotTest="true"
+     <sqlQuery name="HouseholdsByLightTrapIds" doNotTest="true" includeProjects="ICEMR"
               displayName="ID" isCacheable="true">
       <paramRef ref="lightTrapParams.lighttrap_result"/>
         <column name="project_id"/>

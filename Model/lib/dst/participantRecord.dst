@@ -11,16 +11,19 @@ prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsToOrderParticipantsObservationsTable
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <recordClassSet name="ParticipantRecordClasses">
+    <recordClassSet name="${presenterId}ParticipantRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="ParticipantRecordClass" 
-                   urlName="participant" 
+      <recordClass name="${presenterId}ParticipantRecordClass" 
+                   urlName="${presenterId}_participant" 
                    displayName="Participant"
-                   allRecordsQueryRef="ParticipantAttributes.AllParticipants"> 
+                   allRecordsQueryRef="${presenterId}ParticipantAttributes.AllParticipants"
+                   includeProjects="${includeProjects}"> 
 
             <!-- primary key definition -->
-            <primaryKey aliasQueryRef="ParticipantAttributes.ParticipantAlias">
+            <primaryKey aliasQueryRef="${presenterId}ParticipantAttributes.ParticipantAlias">
                 <columnRef>source_id</columnRef>
                 <columnRef>project_id</columnRef>
             </primaryKey>
@@ -37,8 +40,9 @@ prop=tblPrefix
             <attributesList summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741" />
              -->        
 
+<!-- todo
             <attributesList summary="${participantAttributesList}" />
-
+-->
            
            ${participantGraphAttributes}
 
@@ -89,11 +93,6 @@ BEGIN MALED
         <property name="page_size">500</property>
       </reporter>
 
-      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
-                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
-             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
-      </reporter>
-
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
                 implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
 
@@ -125,11 +124,11 @@ BEGIN MALED
 
 
 
-         <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
+         <attributeQueryRef ref="${presenterId}ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ParticipantAttributesMeta"/>
 
         <table name="Characteristics"
                displayName="Participant Characteristics"
-               queryRef="ParticipantTables.Characteristics">
+               queryRef="${presenterId}ParticipantTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="display_name" displayName="Value"/>
@@ -139,35 +138,10 @@ BEGIN MALED
             <propertyList name="tableIsTree"><value>true</value></propertyList>
         </table>
 
-         <table name="ShinyParticipants"
-                 displayName="ShinyParticipants"
-                 queryRef="ParticipantTables.ShinyParticipants"
-                 attributeMetaQueryRef="ParticipantTables.ShinyParticipantsColumnAttributes">
-            <columnAttribute name="source_id" internal="true"/>
-            <columnAttribute name="project_id" internal="true"/>
-         </table>
-
-         <table name="ShinyHouseholds"
-                 displayName="ShinyHouseholds"
-                 queryRef="ParticipantTables.ShinyHouseholds"
-                 attributeMetaQueryRef="ParticipantTables.ShinyHouseholdsColumnAttributes">
-            <columnAttribute name="source_id" internal="true"/>
-            <columnAttribute name="project_id" internal="true"/>
-         </table>
-
-         <table name="ShinyObservations"
-                 displayName="ShinyObservations"
-                 queryRef="ParticipantTables.ShinyObservations"
-                 attributeMetaQueryRef="ParticipantTables.ShinyObservationsColumnAttributes">
-            <columnAttribute name="source_id" internal="true"/>
-            <columnAttribute name="project_id" internal="true"/>
-         </table>
-
-
          <table name="Observations"
                  displayName="Observations"
-                 queryRef="ParticipantTables.Observations"
-                 attributeMetaQueryRef="ParticipantTables.ObservationsColumnAttributes">
+                 queryRef="${presenterId}ParticipantTables.Observations"
+                 attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
             <columnAttribute name="source_id" internal="true"/>
             <columnAttribute name="project_id" internal="true"/>
             <columnAttribute name="link" internal="true"/>
@@ -188,7 +162,7 @@ BEGIN MALED
 
         <table name="Samples"
                displayName="Samples Collected From Participant"
-               queryRef="ParticipantTables.Samples">
+               queryRef="${presenterId}ParticipantTables.Samples">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="link" internal="true"/>
@@ -225,8 +199,10 @@ prop=participantSourceIdsExcludedFromParticipantAttributesQuote
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsToOrderParticipantsObservationsTable
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="ParticipantAttributes" queryType="attribute" doNotTest="true"  
+    <querySet name="${presenterId}ParticipantAttributes" queryType="attribute" doNotTest="true" includeProjects="${includeProjects}"
               isCacheable='false'
               >
 
@@ -255,7 +231,7 @@ select count(*) from apidbtuning.${tblPrefix}Participants
        </sqlQuery>
 
 
-       <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta">
+       <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ParticipantAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
 
@@ -324,7 +300,7 @@ ICEMR
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct mo.display_name || ' (' || mo.parent_ontology_term_name || ')' as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt, apidbtuning.${tblPrefix}Ontology mo
-                           where m.pan_type = 'Child'
+                           where m.pan_type in ('Child','Participant') -- todo add pan_type_source_id to this table
                            and ot.ontology_term_id = m.PROPERTY_ID
                            and mt.property_id = m.PROPERTY_id
                            and mt.property_id = mo.ontology_term_id
@@ -332,7 +308,7 @@ ICEMR
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
-                           where m.pan_type = 'Child'
+                           where m.pan_type in ('Child','Participant') -- todo add pan_type_source_id to this table
                            and ot.ontology_term_id = m.property_ID
                            and mt.property_id = m.property_id
                            and ot.source_id not in (&&excludeParticipantSourceIds&&)
@@ -365,8 +341,10 @@ prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsForParticipantsObservationsTableQuote
 prop=observationSourceIdsToOrderParticipantsObservationsTable
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="ParticipantTables" queryType="table" 
+    <querySet name="${presenterId}ParticipantTables" queryType="table" includeProjects="${includeProjects}" 
               isCacheable='false'>
 
       <sqlQuery name="Characteristics"  isCacheable='false'>
@@ -389,7 +367,7 @@ SELECT pan_name  AS source_id,
 FROM apidbtuning.${tblPrefix}metadata
 WHERE dataset_name = '&&datasetName&&'
 AND string_value is not null
-AND category       = 'Child'
+AND category       in ('Child','Participant')
 UNION
 SELECT pa.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
@@ -403,87 +381,6 @@ WHERE o.dataset_name = '&&datasetName&&'
             ]]>
             </sql>
         </sqlQuery>
-
-
-      <sqlQuery name="ShinyObservations"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyObservationsColumnAttributes">
-          <column name="source_id" />
-          <column name="project_id" />
-          <sql>
-            <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id, ea.*
-from apidbtuning.${tblPrefix}Observations ea
-   , apidbtuning.${tblPrefix}Participants pa
-   , apidbtuning.${tblPrefix}PANIO io
-where pa.PAN_ID = io.INPUT_PAN_ID
-and io.OUTPUT_PAN_ID = ea.PAN_ID
-            ]]>
-          </sql>
-        </sqlQuery>
-
-      <sqlQuery name="ShinyObservationsColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-          <sql>
-            <![CDATA[
-select distinct property_source_id as name, property_source_id as display_name
-from ApidbTuning.${tblPrefix}MetaData m
-where m.category = 'Observation'
-            ]]>
-          </sql>
-        </sqlQuery>
-
-
-      <sqlQuery name="ShinyHouseholds"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyHouseholdsColumnAttributes">
-          <column name="source_id" />
-          <column name="project_id" />
-          <sql>
-            <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id, ha.*
-from apidbtuning.${tblPrefix}Households ha
-   , apidbtuning.${tblPrefix}Participants pa
-   , apidbtuning.${tblPrefix}PANIO io
-where ha.PAN_ID = io.INPUT_PAN_ID
-and io.OUTPUT_PAN_ID = pa.PAN_ID
-            ]]>
-          </sql>
-        </sqlQuery>
-
-      <sqlQuery name="ShinyHouseholdsColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-          <sql>
-            <![CDATA[
-select distinct property_source_id as name, property_source_id as display_name
-from ApidbTuning.${tblPrefix}MetaData m
-where m.category = 'Household'
-            ]]>
-          </sql>
-        </sqlQuery>
-
-
-      <sqlQuery name="ShinyParticipants"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyParticipantsColumnAttributes">
-          <column name="source_id" />
-          <column name="project_id" />
-          <sql>
-            <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*
-from apidbtuning.${tblPrefix}Participants pa
-            ]]>
-          </sql>
-        </sqlQuery>
-
-      <sqlQuery name="ShinyParticipantsColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-          <sql>
-            <![CDATA[
-select distinct property_source_id as name, property_source_id as display_name
-from ApidbTuning.${tblPrefix}MetaData m
-where m.category = 'Child'
-            ]]>
-          </sql>
-        </sqlQuery>
-
 
       <sqlQuery name="ObservationsColumnAttributes"  isCacheable='false'>
           <column name="name" />
@@ -505,7 +402,7 @@ ICEMR
         </sqlQuery>
 
 
-      <sqlQuery name="Observations"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ObservationsColumnAttributes">
+      <sqlQuery name="Observations"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
 

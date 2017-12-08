@@ -11,7 +11,8 @@
               displayName="Select a Set of Participants (no Relative Observations)"
               shortDisplayName="Part Details"
               queryRef="ParticipantId.ParticipantsByCharWiz" 
-              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
+              recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" 
+              includeProjects="ICEMR">
 
 
 <!--
@@ -95,13 +96,14 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
     </question>
 
-<!--
+
     <question name="ParticipantsByRelativeVisits" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants (PRISM)"
               shortDisplayName="Particip PRISM"
               queryRef="ParticipantId.ParticipantsByCharWizRelVis" 
-              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
+              includeProjects="ICEMR"
+              recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" >
 	<dynamicAttributes>
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of observations meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -172,8 +174,9 @@ Use the filters above to select a set of Participants or to explore the data.  S
         </propertyList>
  
       </question>
--->
-        <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="NotUsed"
+
+
+        <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="Gates"
               searchCategory="Participant"
               displayName="Select a Set of Participants (MAL-ED)"
               shortDisplayName="Particip MAL-ED"
@@ -236,12 +239,12 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-      <question name="ParticipantsByCaseControlVisits_gems" newBuild="1" includeProjects="ClinEpiDB,Gates"
+      <question name="ParticipantsByCaseControlVisits_gems" newBuild="1" includeProjects="Gates,ClinEpiDB"
               searchCategory="Participant"
               displayName="Select a Set of Participants (GEMS)"
               shortDisplayName="Particip GEMS"
               queryRef="ParticipantId.ParticipantsByCaseControl_gems" 
-              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
+              recordClassRef="DS_841a9f5259ParticipantRecordClasses.DS_841a9f5259ParticipantRecordClass" >
 
 
         <attributesList 
@@ -284,12 +287,12 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-       <question name="ParticipantsByCaseControlVisitsShort_gems" newBuild="1" includeProjects="NotUsed"
+       <question name="ParticipantsByCaseControlVisitsShort_gems" newBuild="1" includeProjects="ClinEpiDB,Gates"
               searchCategory="Participant"
               displayName="Shorter: Select a Set of Participants (GEMS)"
               shortDisplayName="Particip GEMS"
               queryRef="ParticipantId.ParticipantsByCaseControlShort_gems" 
-              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass" >
+              recordClassRef="DS_841a9f5259ParticipantRecordClasses.DS_841a9f5259ParticipantRecordClass" >
 
 
         <attributesList 
@@ -332,12 +335,13 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-   <question name="ParticipantsByHouseholdId"   newBuild="1" includeProjects="ICEMR"
+   <question name="ParticipantsByHouseholdId"   newBuild="1"
               displayName="Transform to Participants"
               shortDisplayName="household->participant"
               queryRef="ParticipantId.ParticipantsByHouseholdIds" 
-              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
-              noSummaryOnSingleRecord="true">
+              recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
+              noSummaryOnSingleRecord="true"
+              includeProjects="ICEMR">
 
 	<dynamicAttributes>
 	     <columnAttribute name="household" displayName="Household Transformed" help="Household Participant is associated with" align="center"> 
@@ -359,18 +363,20 @@ Use the filters above to select a set of Participants or to explore the data.  S
              </description>
     </question>
 
-      <question name="ParticipantsByClinicalVisit"   newBuild="22" includeProjects="ICEMR"
+      <question name="ParticipantsByClinicalVisit"   newBuild="22"
               displayName="Transform to Participants"
               shortDisplayName="clinicalvisits->participant"
               queryRef="ParticipantId.ParticipantsByClinicalVisits" 
-              recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
-              noSummaryOnSingleRecord="true">
+              recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
+              noSummaryOnSingleRecord="true"
+              includeProjects="ICEMR">
 
+<!-- todo
         <attributesList 
             summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741,num_of_visits"        
             sorting="num_of_visits desc"
         /> 
-
+-->
 	<dynamicAttributes>
 	     <columnAttribute name="num_of_visits" displayName="Observations Transformed" help="Observations associated with the participant from the previous step" align="center"> 
               <plugin name="histogram" display="Histogram"
@@ -396,8 +402,9 @@ Use the filters above to select a set of Participants or to explore the data.  S
 	     displayName="Participant ID"
 	     shortDisplayName="Participant ID"
 	     queryRef="ParticipantId.ParticipantsBySourceID" 
-             recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
-             noSummaryOnSingleRecord="false">
+             recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
+             noSummaryOnSingleRecord="false"
+             includeProjects="ICEMR">
 
 
         <attributesList 

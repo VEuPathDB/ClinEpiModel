@@ -7,15 +7,17 @@ prop=observationAttributesList
 prop=householdSourceIdsIncludedInObservationAttributes
 prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
 
-    <recordClassSet name="ObservationRecordClasses">
+    <recordClassSet name="${presenterId}ObservationRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="ObservationRecordClass" urlName="observation" displayName="Observation"> 
+      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="Observation" includeProjects="${includeProjects}"> 
 
 
             <!-- primary key definition -->
-            <primaryKey aliasQueryRef="ObservationAttributes.VisitsAlias">
+            <primaryKey aliasQueryRef="${presenterId}ObservationAttributes.VisitsAlias">
               <columnRef>source_id</columnRef>
               <columnRef>project_id</columnRef>
             </primaryKey>
@@ -27,10 +29,9 @@ prop=tblPrefix
                     ]]>
                 </text>
             </idAttribute>
-     
 
-<!-- TODO
-           <attributesList summary="visit_date,parent_id,visit_type"       
+<!--     
+           <attributesList summary="${observationAttributesList}"       
             />
 -->
 
@@ -52,6 +53,7 @@ prop=tblPrefix
         <property name="page_size">500</property>
       </reporter>
 
+      <!-- Leave this so we can dump samples -->
       <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
                 implementation="org.gusdb.wdk.model.report.TableTabularReporter">
              <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
@@ -88,12 +90,12 @@ prop=tblPrefix
           </textAttribute>
 -->
 
-         <attributeQueryRef ref="ObservationAttributes.ObservationAttributes" attributeMetaQueryRef="ObservationAttributes.ObservationAttributesMeta"/>
+         <attributeQueryRef ref="${presenterId}ObservationAttributes.ObservationAttributes" attributeMetaQueryRef="${presenterId}ObservationAttributes.ObservationAttributesMeta"/>
 
 
         <table name="Characteristics"
                displayName="Clinical Observation Characteristics"
-               queryRef="ObservationTables.Characteristics">
+               queryRef="${presenterId}ObservationTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="term" displayName="Value"/>
@@ -103,7 +105,7 @@ prop=tblPrefix
 
         <table name="Samples"
                displayName="Samples Collected During Observation"
-               queryRef="ObservationTables.Samples">
+               queryRef="${presenterId}ObservationTables.Samples">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="sample_id" displayName="Sample ID"/>
@@ -125,8 +127,10 @@ prop=householdSourceIdsIncludedInObservationAttributes
 prop=participantSourceIdsIncludedInObservationAttributes
 prop=participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="ObservationAttributes" queryType="attribute" doNotTest="true"  
+    <querySet name="${presenterId}ObservationAttributes" queryType="attribute" doNotTest="true" includeProjects="${includeProjects}"  
               isCacheable='false'>
 
 
@@ -145,15 +149,13 @@ select count(*) from apidbtuning.${tblPrefix}Observations
 
 
 
-       <sqlQuery name="ObservationAttributes" attributeMetaQueryRef="ObservationAttributes.ObservationAttributesMeta">
+       <sqlQuery name="ObservationAttributes" attributeMetaQueryRef="${presenterId}ObservationAttributes.ObservationAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
 
          <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
 
-<!-- ICEMR
-         <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id,PATO_0000047, EUPATH_0000033, EUPATH_0000035, EUPATH_0000034</sqlParamValue>
-         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
+<!-- 
 
 MALED
          <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id</sqlParamValue>
@@ -246,8 +248,10 @@ prop=observationAttributesList
 prop=householdSourceIdsIncludedInObservationAttributes
 prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="ObservationTables" queryType="table" 
+    <querySet name="${presenterId}ObservationTables" queryType="table"  includeProjects="${includeProjects}"
               isCacheable='false'>
 
 

@@ -100,8 +100,8 @@
 
 
 
-    <datasetParam name="participantsBySourceID" 
-		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
+    <datasetParam name="participantsBySourceID" includeProjects="ICEMR"
+		  recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
 		  prompt="Source ID input set">
       <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
 
@@ -114,11 +114,11 @@
       
     </datasetParam>
 
-    <answerParam name="participant_result"
+    <answerParam name="participant_result"  includeProjects="ICEMR"
                  prompt="Input Result Set"
                  readonly="true"
                  visible="false">
-      <recordClass ref="ParticipantRecordClasses.ParticipantRecordClass" />
+      <recordClass ref="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" />
     </answerParam>
 
     <!--************************************************************-->

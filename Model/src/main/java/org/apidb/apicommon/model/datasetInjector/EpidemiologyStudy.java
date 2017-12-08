@@ -23,13 +23,14 @@ public class EpidemiologyStudy extends DatasetInjector {
   @Override
   public void injectTemplates() {
 
-      //String projectName = getPropValue("projectName");
-      //String datasetName = getDatasetName();
-      //String includeProjects = getPropValueAsBoolean("isPublic") ? "ClinEpiDB," + projectName : projectName;
+      String subProjectName = getPropValue("subProjectName");
+      //      String datasetName = getDatasetName();
+      String includeProjects = getPropValueAsBoolean("isPublic") ? "ClinEpiDB," + subProjectName : subProjectName;
+      setPropValue("includeProjects", includeProjects);
+
 
       String tblPrefix = "D" + getPropValue("datasetDigest");
       setPropValue("tblPrefix", tblPrefix);
-
 
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");

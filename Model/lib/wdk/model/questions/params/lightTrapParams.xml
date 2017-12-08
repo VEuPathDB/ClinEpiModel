@@ -54,6 +54,7 @@
                     backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd"
                     prompt="Household"
                     trimMetadataTerms="false"
+                    includeProjects="ICEMR"
                     dependedParamRef="participantParams.tbl_prefix,lightTrapParams.geographic_region,householdParams.date_range,lightTrapParams.households_nf">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
@@ -61,7 +62,7 @@
     </filterParamNew>
 
 
-    <datasetParam name="collectionsBySourceID"
+    <datasetParam name="collectionsBySourceID"  includeProjects="ICEMR"
 		  recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
 		  prompt="Source ID input set">
       <help><![CDATA[Input a set of source ID's, or upload a file <br><br>
@@ -78,7 +79,8 @@
     <answerParam name="lighttrap_result"
                   prompt="Input Result Set"
                   readonly="true"
-                  visible="false">
+                  visible="false"
+                  includeProjects="ICEMR">
        <recordClass ref="LightTrapRecordClasses.LightTrapRecordClass" />
     </answerParam>
 

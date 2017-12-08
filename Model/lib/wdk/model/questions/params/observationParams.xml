@@ -32,8 +32,8 @@
       </enumList>
     </enumParam>
 
-        <datasetParam name="clinical_visits_by_sourceid" 
-		  recordClassRef="ParticipantRecordClasses.ParticipantRecordClass"
+        <datasetParam name="clinical_visits_by_sourceid"  includeProjects="ICEMR"
+		  recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
 		  prompt="Source ID input set">
       <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
 
@@ -239,11 +239,11 @@
       <suggest default="after"/>
     </flatVocabParam>
 
-    <answerParam name="clinical_visit_result"
+    <answerParam name="clinical_visit_result" includeProjects="ICEMR"
                   prompt="Input Result Set"
                   readonly="true"
                   visible="false">
-       <recordClass ref="ObservationRecordClasses.ObservationRecordClass" />
+       <recordClass ref="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass" />
     </answerParam>
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->

@@ -69,7 +69,7 @@
 
 
     <datasetParam includeProjects="ICEMR" name="householdsBySourceID"
-		  recordClassRef="HouseholdRecordClasses.HouseholdRecordClass"
+		  recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
 		  prompt="Source ID input set">
       <help><![CDATA[Input a set of source ID's, or upload a file <br><br>
 
@@ -83,11 +83,11 @@
     </datasetParam>
 
 
-    <answerParam name="household_result"
+    <answerParam name="household_result" includeProjects="ICEMR"
                   prompt="Input Result Set"
                   readonly="true"
                   visible="false">
-       <recordClass ref="HouseholdRecordClasses.HouseholdRecordClass" />
+       <recordClass ref="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass" />
     </answerParam>
 
  <enumParam name="district"

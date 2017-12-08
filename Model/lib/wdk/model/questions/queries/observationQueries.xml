@@ -13,7 +13,7 @@
 
 
       <sqlQuery name="ClinicalVisitsBySourceID"
-         isCacheable="true">
+         isCacheable="true"  includeProjects="ICEMR">
      <!-- <paramRef ref="participantParams.participantsBySourceID"/> -->
       <paramRef ref="clinicalVisitParams.clinical_visits_by_sourceid"/>
       <column name="source_id"/>
@@ -182,7 +182,7 @@ where pan_id in ($$visits_nf$$)
      <!-- Transform -->
      
      <sqlQuery name="VisitsByParticipantIds" doNotTest="true" displayName="ID"
-               isCacheable="true">
+               isCacheable="true" includeProjects="ICEMR">
        <paramRef ref="participantParams.participant_result"/>
        <column name="project_id"/>
        <column name="source_id"/>     

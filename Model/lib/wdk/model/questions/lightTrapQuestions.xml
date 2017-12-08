@@ -1,6 +1,6 @@
 <wdkModel>
 
-	<questionSet name="LighttrapQuestions" displayName="Search Light Trap Data">
+	<questionSet name="LighttrapQuestions" displayName="Search Light Trap Data"  includeProjects="ICEMR">
 	<!-- ************************************************************ -->
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
@@ -46,6 +46,7 @@
               shortDisplayName="Collections by ID"
               queryRef="LightTrapId.CollectionsBySourceID"
               recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
+              includeProjects="ICEMR"
               >
 
          <attributesList summary="source_id" />
