@@ -6,13 +6,12 @@
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
 
-   <question name="ParticipantsByAllData" newBuild="1"
+   <question name="ParticipantsByAllData" newBuild="1" includeProjects="NotUsed"
               searchCategory="Participant"
               displayName="Select a Set of Participants (no Relative Observations)"
               shortDisplayName="Part Details"
               queryRef="ParticipantId.ParticipantsByCharWiz" 
-              recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" 
-              includeProjects="ICEMR">
+              recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" >
 
 
 <!--
@@ -96,12 +95,11 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
     </question>
 
-
-    <question name="ParticipantsByRelativeVisits" newBuild="1"
+    <question name="ParticipantsByRelativeVisits_prism" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants (PRISM)"
               shortDisplayName="Particip PRISM"
-              queryRef="ParticipantId.ParticipantsByCharWizRelVis" 
+              queryRef="ParticipantId.ParticipantsByCharWizRelVis_prism" 
               includeProjects="ICEMR"
               recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" >
 	<dynamicAttributes>
@@ -174,7 +172,6 @@ Use the filters above to select a set of Participants or to explore the data.  S
         </propertyList>
  
       </question>
-
 
         <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="Gates"
               searchCategory="Participant"
