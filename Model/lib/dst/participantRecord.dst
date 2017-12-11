@@ -10,16 +10,20 @@ prop=householdSourceIdsIncludedInParticipantAttributes
 prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsToOrderParticipantsObservationsTable
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <recordClassSet name="ParticipantRecordClasses">
+    <recordClassSet name="${presenterId}ParticipantRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="ParticipantRecordClass" 
-                   urlName="participant" 
+      <recordClass name="${presenterId}ParticipantRecordClass" 
+                   urlName="${presenterId}_participant" 
                    displayName="Participant"
-                   allRecordsQueryRef="ParticipantAttributes.AllParticipants"> 
+                   allRecordsQueryRef="${presenterId}ParticipantAttributes.AllParticipants"
+                   includeProjects="${includeProjects}"> 
 
             <!-- primary key definition -->
-            <primaryKey aliasQueryRef="ParticipantAttributes.ParticipantAlias">
+            <primaryKey aliasQueryRef="${presenterId}ParticipantAttributes.ParticipantAlias">
                 <columnRef>source_id</columnRef>
                 <columnRef>project_id</columnRef>
             </primaryKey>
@@ -36,8 +40,9 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
             <attributesList summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741" />
              -->        
 
+<!-- todo
             <attributesList summary="${participantAttributesList}" />
-
+-->
            
            ${participantGraphAttributes}
 
@@ -88,11 +93,6 @@ BEGIN MALED
         <property name="page_size">500</property>
       </reporter>
 
-      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
-                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
-             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
-      </reporter>
-
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
                 implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
 
@@ -124,11 +124,11 @@ BEGIN MALED
 
 
 
-         <attributeQueryRef ref="ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta"/>
+         <attributeQueryRef ref="${presenterId}ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ParticipantAttributesMeta"/>
 
         <table name="Characteristics"
                displayName="Participant Characteristics"
-               queryRef="ParticipantTables.Characteristics">
+               queryRef="${presenterId}ParticipantTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="display_name" displayName="Value"/>
@@ -138,35 +138,10 @@ BEGIN MALED
             <propertyList name="tableIsTree"><value>true</value></propertyList>
         </table>
 
-         <table name="ShinyParticipants"
-                 displayName="ShinyParticipants"
-                 queryRef="ParticipantTables.ShinyParticipants"
-                 attributeMetaQueryRef="ParticipantTables.ShinyParticipantsColumnAttributes">
-            <columnAttribute name="source_id" internal="true"/>
-            <columnAttribute name="project_id" internal="true"/>
-         </table>
-
-         <table name="ShinyHouseholds"
-                 displayName="ShinyHouseholds"
-                 queryRef="ParticipantTables.ShinyHouseholds"
-                 attributeMetaQueryRef="ParticipantTables.ShinyHouseholdsColumnAttributes">
-            <columnAttribute name="source_id" internal="true"/>
-            <columnAttribute name="project_id" internal="true"/>
-         </table>
-
-         <table name="ShinyObservations"
-                 displayName="ShinyObservations"
-                 queryRef="ParticipantTables.ShinyObservations"
-                 attributeMetaQueryRef="ParticipantTables.ShinyObservationsColumnAttributes">
-            <columnAttribute name="source_id" internal="true"/>
-            <columnAttribute name="project_id" internal="true"/>
-         </table>
-
-
          <table name="Observations"
                  displayName="Observations"
-                 queryRef="ParticipantTables.Observations"
-                 attributeMetaQueryRef="ParticipantTables.ObservationsColumnAttributes">
+                 queryRef="${presenterId}ParticipantTables.Observations"
+                 attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
             <columnAttribute name="source_id" internal="true"/>
             <columnAttribute name="project_id" internal="true"/>
             <columnAttribute name="link" internal="true"/>
@@ -187,7 +162,7 @@ BEGIN MALED
 
         <table name="Samples"
                displayName="Samples Collected From Participant"
-               queryRef="ParticipantTables.Samples">
+               queryRef="${presenterId}ParticipantTables.Samples">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="link" internal="true"/>
@@ -223,13 +198,16 @@ prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=participantSourceIdsExcludedFromParticipantAttributesQuote
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsToOrderParticipantsObservationsTable
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="ParticipantAttributes" queryType="attribute" doNotTest="true"  
+    <querySet name="${presenterId}ParticipantAttributes" queryType="attribute" doNotTest="true" includeProjects="${includeProjects}"
               isCacheable='false'
               >
 
       <testRowCountSql>
-select count(*) from apidbtuning.ParticipantAttributes
+select count(*) from apidbtuning.${tblPrefix}Participants
        </testRowCountSql>
 
 
@@ -238,7 +216,7 @@ select count(*) from apidbtuning.ParticipantAttributes
          <column name="source_id"/>
          <column name="project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id FROM ApidbTuning.ParticipantAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id FROM apidbtuning.${tblPrefix}Participants
          </sql>
        </sqlQuery>
 
@@ -248,12 +226,12 @@ select count(*) from apidbtuning.ParticipantAttributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM ApidbTuning.ParticipantAttributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.${tblPrefix}Participants
          </sql>
        </sqlQuery>
 
 
-       <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="ParticipantAttributes.ParticipantAttributesMeta">
+       <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ParticipantAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
 
@@ -273,11 +251,11 @@ select count(*) from apidbtuning.ParticipantAttributes
             <![CDATA[
                      select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
                      da.*
-                     from APIDBTUNING.PROTOCOLAPPNODEIO io
-                        , apidbtuning.participantattributes pa
-                        , (select protocol_app_node_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.householdattributes) da
-                     where pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID (+)
-                     and io.input_node_id = da.hh_PROTOCOL_APP_NODE_ID (+)
+                     from apidbtuning.${tblPrefix}PANIO io
+                        , apidbtuning.${tblPrefix}Participants pa
+                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.${tblPrefix}Households) da
+                     where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
+                     and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
           </sql>  
         </sqlQuery>
@@ -321,23 +299,23 @@ ICEMR
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct mo.display_name || ' (' || mo.parent_ontology_term_name || ')' as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt, apidbtuning.metadataontology mo
-                           where m.protocol_app_node_type = 'Child'
-                           and ot.ontology_term_id = m.TERM_ID
-                           and mt.term_id = m.term_id
-                           and mt.term_id = mo.ontology_term_id
+                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt, apidbtuning.${tblPrefix}Ontology mo
+                           where m.pan_type in ('Child','Participant') -- todo add pan_type_source_id to this table
+                           and ot.ontology_term_id = m.PROPERTY_ID
+                           and mt.property_id = m.PROPERTY_id
+                           and mt.property_id = mo.ontology_term_id
                            and ot.source_id not in (&&excludeParticipantSourceIds&&)
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Child'
-                           and ot.ontology_term_id = m.TERM_ID
-                           and mt.term_id = m.term_id
+                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           where m.pan_type in ('Child','Participant') -- todo add pan_type_source_id to this table
+                           and ot.ontology_term_id = m.property_ID
+                           and mt.property_id = m.property_id
                            and ot.source_id not in (&&excludeParticipantSourceIds&&)
                            union
 --                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
 --                           union
-                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.metadatatype mt, sres.ontologyterm ot where ot.source_id = mt.source_id and mt.source_id in (&&householdSourceIds&&)
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.${tblPrefix}PropertyTypes mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
                            ) meta
             ]]>
          </sql>
@@ -362,8 +340,11 @@ prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsForParticipantsObservationsTableQuote
 prop=observationSourceIdsToOrderParticipantsObservationsTable
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="ParticipantTables" queryType="table" 
+    <querySet name="${presenterId}ParticipantTables" queryType="table" includeProjects="${includeProjects}" 
               isCacheable='false'>
 
       <sqlQuery name="Characteristics"  isCacheable='false'>
@@ -379,14 +360,14 @@ prop=observationSourceIdsToOrderParticipantsObservationsTable
             <![CDATA[
 SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
-  nvl(source_id, 'root')      AS parent_source_id,
-  protocol_app_node_id ||'_'||term_id ||'_'||string_value as unique_id,
+  nvl(property_source_id, 'root')      AS parent_source_id,
+  pan_id ||'_'||property_id ||'_'||string_value as unique_id,
   string_value   AS display_name,
   1 as is_leaf
-FROM apidbtuning.metadata
+FROM apidbtuning.${tblPrefix}metadata
 WHERE dataset_name = '&&datasetName&&'
 AND string_value is not null
-AND category       = 'Child'
+AND category       in ('Child','Participant')
 UNION
 SELECT pa.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
@@ -394,93 +375,12 @@ SELECT pa.name                AS source_id,
   o.ONTOLOGY_TERM_SOURCE_ID AS unique_id,
   ontology_term_name          AS display_name,
   0 as is_leaf
-FROM apidbtuning.metadataontology o,
-  apidbtuning.participantattributes pa
+FROM apidbtuning.${tblPrefix}Ontology o,
+  apidbtuning.${tblPrefix}Participants pa
 WHERE o.dataset_name = '&&datasetName&&'
             ]]>
             </sql>
         </sqlQuery>
-
-
-      <sqlQuery name="ShinyObservations"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyObservationsColumnAttributes">
-          <column name="source_id" />
-          <column name="project_id" />
-          <sql>
-            <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id, ea.*
-from APIDBTUNING.EVENTATTRIBUTES ea
-   , APIDBTUNING.PARTICIPANTATTRIBUTES pa
-   , APIDBTUNING.PROTOCOLAPPNODEIO io
-where pa.PROTOCOL_APP_NODE_ID = io.INPUT_NODE_ID
-and io.OUTPUT_NODE_ID = ea.PROTOCOL_APP_NODE_ID
-            ]]>
-          </sql>
-        </sqlQuery>
-
-      <sqlQuery name="ShinyObservationsColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-          <sql>
-            <![CDATA[
-select distinct source_id as name, source_id as display_name
-from ApidbTuning.MetaDataWithoutNulls m
-where m.category = 'Event'
-            ]]>
-          </sql>
-        </sqlQuery>
-
-
-      <sqlQuery name="ShinyHouseholds"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyHouseholdsColumnAttributes">
-          <column name="source_id" />
-          <column name="project_id" />
-          <sql>
-            <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id, ha.*
-from APIDBTUNING.HOUSEHOLDATTRIBUTES ha
-   , APIDBTUNING.PARTICIPANTATTRIBUTES pa
-   , APIDBTUNING.PROTOCOLAPPNODEIO io
-where ha.PROTOCOL_APP_NODE_ID = io.INPUT_NODE_ID
-and io.OUTPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
-            ]]>
-          </sql>
-        </sqlQuery>
-
-      <sqlQuery name="ShinyHouseholdsColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-          <sql>
-            <![CDATA[
-select distinct source_id as name, source_id as display_name
-from ApidbTuning.MetaDataWithoutNulls m
-where m.category = 'Household'
-            ]]>
-          </sql>
-        </sqlQuery>
-
-
-      <sqlQuery name="ShinyParticipants"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ShinyParticipantsColumnAttributes">
-          <column name="source_id" />
-          <column name="project_id" />
-          <sql>
-            <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*
-from APIDBTUNING.PARTICIPANTATTRIBUTES pa
-            ]]>
-          </sql>
-        </sqlQuery>
-
-      <sqlQuery name="ShinyParticipantsColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-          <sql>
-            <![CDATA[
-select distinct source_id as name, source_id as display_name
-from ApidbTuning.MetaDataWithoutNulls m
-where m.category = 'Child'
-            ]]>
-          </sql>
-        </sqlQuery>
-
 
       <sqlQuery name="ObservationsColumnAttributes"  isCacheable='false'>
           <column name="name" />
@@ -496,13 +396,13 @@ ICEMR
 -->
           <sql>
             <![CDATA[
-                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&eventColumns&&)
+                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyTypes where property_source_id in (&&eventColumns&&)
             ]]>
           </sql>
         </sqlQuery>
 
 
-      <sqlQuery name="Observations"  isCacheable='false' attributeMetaQueryRef="ParticipantTables.ObservationsColumnAttributes">
+      <sqlQuery name="Observations"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
 
@@ -528,11 +428,11 @@ ICEMR
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&observationSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
-              from Apidbtuning.Eventattributes cv
-              , apidbtuning.participantattributes pa
-              , apidbtuning.protocolappnodeio io
-              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
-              and io.INPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
+              from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}Participants pa
+              , apidbtuning.${tblPrefix}PANIO io
+              where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
               order by &&orderBy&&
             ]]>
             </sql>
@@ -556,15 +456,15 @@ select pa.name as source_id,
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
-              from Apidbtuning.Eventattributes cv
-              , apidbtuning.participantattributes pa
-              , apidbtuning.sampleattributes sa
-              , apidbtuning.protocolappnodeio io
-              , apidbtuning.protocolappnodeio io2
-              where cv.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
-              and io.INPUT_NODE_ID = pa.PROTOCOL_APP_NODE_ID
-              and sa.protocol_app_node_id = io2.output_node_id
-              and io2.INPUT_NODE_ID = cv.PROTOCOL_APP_NODE_ID
+              from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}Participants pa
+              , apidbtuning.${tblPrefix}samples sa
+              , apidbtuning.${tblPrefix}PANIO io
+              , apidbtuning.${tblPrefix}PANIO io2
+              where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
+              and sa.pan_id = io2.output_pan_id
+              and io2.INPUT_PAN_ID = cv.PAN_ID
               order by &&orderBy&&
                   ]]>
             </sql>

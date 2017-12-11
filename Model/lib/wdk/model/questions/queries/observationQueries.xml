@@ -13,14 +13,14 @@
 
 
       <sqlQuery name="ClinicalVisitsBySourceID"
-         isCacheable="true">
+         isCacheable="true"  includeProjects="ICEMR">
      <!-- <paramRef ref="participantParams.participantsBySourceID"/> -->
       <paramRef ref="clinicalVisitParams.clinical_visits_by_sourceid"/>
       <column name="source_id"/>
       <column name="project_id"/>
      <sql>
           <![CDATA[
-Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTUNING.CLINICALVISITATTRIBUTES cv,
+Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  ApidbTuning.$$tbl_prefix$$Observations cv,
 ($$clinical_visits_by_sourceid$$) cs where cv.name = cs.source_id
                ]]>   
        </sql>
@@ -40,7 +40,7 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -48,25 +48,25 @@ Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  APIDBTU
        <sql>
            <![CDATA[
 with vis as (
-select distinct ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000091 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.protocolappnodeio io
-where ca.protocol_app_node_id in ($$visits_nf$$)
-and ca.protocol_app_node_id = io.output_node_id
+select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
+from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
+where ca.pan_id in ($$visits_nf$$)
+and ca.pan_id = io.output_pan_id
 ),
 relvis as (
-select distinct ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000091 
-from APIDBTUNING.CLINICALVISITATTRIBUTES ca,apidbtuning.protocolappnodeio io
-where ca.protocol_app_node_id in ($$relative_visits_nf$$)
-and ca.protocol_app_node_id = io.output_node_id
+select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
+from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
+where ca.pan_id in ($$relative_visits_nf$$)
+and ca.pan_id = io.output_pan_id
 ),
 visits as (
 select * from vis
 $$dateOperator_fv$$
-select vis.protocol_app_node_id,vis.name, vis.input_node_id,vis.EUPATH_0000091
+select vis.pan_id,vis.name, vis.input_pan_id,vis.EUPATH_0000091
 from vis, relvis rv
 where $$use_relative_visits$$ = 1
-and vis.input_node_id = rv.input_node_id
-and vis.protocol_app_node_id != rv.protocol_app_node_id
+and vis.input_pan_id = rv.input_pan_id
+and vis.pan_id != rv.pan_id
 and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
@@ -74,17 +74,17 @@ and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 select name as source_id,'@PROJECT_ID@' as project_id
 , CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
-select visits.protocol_app_node_id,visits.name,visits.input_node_id as parent_id,visits.EUPATH_0000091, abs(inter.EUPATH_0000091 - visits.EUPATH_0000091) as days_between
+select visits.pan_id,visits.name,visits.input_pan_id as parent_id,visits.EUPATH_0000091, abs(inter.EUPATH_0000091 - visits.EUPATH_0000091) as days_between
 from (
-select vis.protocol_app_node_id,vis.name, vis.input_node_id,rv.EUPATH_0000091
+select vis.pan_id,vis.name, vis.input_pan_id,rv.EUPATH_0000091
 from vis, relvis rv
-where vis.input_node_id = rv.input_node_id
-and vis.protocol_app_node_id != rv.protocol_app_node_id
+where vis.input_pan_id = rv.input_pan_id
+and vis.pan_id != rv.pan_id
 and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 ) inter, visits
-where visits.protocol_app_node_id = inter.protocol_app_node_id(+)
+where visits.pan_id = inter.pan_id(+)
 )
 group by name
                 ]]>   
@@ -103,7 +103,7 @@ group by name
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_nf_maled" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.relative_events"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -111,45 +111,45 @@ group by name
        <sql>
            <![CDATA[
 with vis as (
-select distinct ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000644 
-from APIDBTUNING.EventATTRIBUTES ca,apidbtuning.protocolappnodeio io
-where ca.protocol_app_node_id in ($$visits_nf_maled$$)
-and ca.protocol_app_node_id = io.output_node_id
+select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000644 
+from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
+where ca.pan_id in ($$visits_nf_maled$$)
+and ca.pan_id = io.output_pan_id
 ),
 relvis as (
-select distinct ca.protocol_app_node_id, ca.name, io.input_node_id ,ca.EUPATH_0000644 
-from APIDBTUNING.EventATTRIBUTES ca,apidbtuning.protocolappnodeio io
-where ca.protocol_app_node_id in ($$relative_visits_nf_maled$$)
-and ca.protocol_app_node_id = io.output_node_id
+select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000644 
+from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
+where ca.pan_id in ($$relative_visits_nf_maled$$)
+and ca.pan_id = io.output_pan_id
 ),
 visits as (
 select * from vis
 $$dateOperator_fv$$
-select vis.protocol_app_node_id,vis.name, vis.input_node_id,vis.EUPATH_0000644
+select vis.pan_id,vis.name, vis.input_pan_id,vis.EUPATH_0000644
 from vis, relvis rv
 where $$use_relative_visits$$ = 1
-and vis.input_node_id = rv.input_node_id
-and vis.protocol_app_node_id != rv.protocol_app_node_id
+and vis.input_pan_id = rv.input_pan_id
+and vis.pan_id != rv.pan_id
 and rv.EUPATH_0000644 $$date_direction_fv$$ vis.EUPATH_0000644
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) >= $$days_between.min$$
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
-group by vis.protocol_app_node_id,vis.name, vis.input_node_id,vis.EUPATH_0000644
+group by vis.pan_id,vis.name, vis.input_pan_id,vis.EUPATH_0000644
 having count(*) >= $$num_relative_events.min$$ and count(*) <= $$num_relative_events.max$$
 )
 select name as source_id,'@PROJECT_ID@' as project_id
 , CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
-select visits.protocol_app_node_id,visits.name,visits.input_node_id as parent_id,visits.EUPATH_0000644, abs(inter.EUPATH_0000644 - visits.EUPATH_0000644) as days_between
+select visits.pan_id,visits.name,visits.input_pan_id as parent_id,visits.EUPATH_0000644, abs(inter.EUPATH_0000644 - visits.EUPATH_0000644) as days_between
 from (
-select vis.protocol_app_node_id,vis.name, vis.input_node_id,rv.EUPATH_0000644
+select vis.pan_id,vis.name, vis.input_pan_id,rv.EUPATH_0000644
 from vis, relvis rv
-where vis.input_node_id = rv.input_node_id
-and vis.protocol_app_node_id != rv.protocol_app_node_id
+where vis.input_pan_id = rv.input_pan_id
+and vis.pan_id != rv.pan_id
 and rv.EUPATH_0000644 $$date_direction_fv$$ vis.EUPATH_0000644
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) >= $$days_between.min$$
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
 ) inter, visits
-where visits.protocol_app_node_id = inter.protocol_app_node_id(+)
+where visits.pan_id = inter.pan_id(+)
 )
 group by name
                 ]]>   
@@ -166,14 +166,14 @@ group by name
        <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
-       <paramRef ref="participantParams.dataset" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <sql>
            <![CDATA[
 select name as source_id,'@PROJECT_ID@' as project_id
-from APIDBTUNING.CLINICALVISITATTRIBUTES
-where protocol_app_node_id in ($$visits_nf$$)
+from ApidbTuning.$$tbl_prefix$$Observations
+where pan_id in ($$visits_nf$$)
                 ]]>   
         </sql>
      </sqlQuery>
@@ -182,7 +182,7 @@ where protocol_app_node_id in ($$visits_nf$$)
      <!-- Transform -->
      
      <sqlQuery name="VisitsByParticipantIds" doNotTest="true" displayName="ID"
-               isCacheable="true">
+               isCacheable="true" includeProjects="ICEMR">
        <paramRef ref="participantParams.participant_result"/>
        <column name="project_id"/>
        <column name="source_id"/>     
@@ -192,10 +192,10 @@ where protocol_app_node_id in ($$visits_nf$$)
         <sql>
           <![CDATA[
  SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
-              FROM ($$participant_result$$) source_set, ApidbTuning.protocolappnodeio io, apidbtuning.eventattributes cva, apidbtuning.participantattributes pa
+              FROM ($$participant_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations cva, ApidbTuning.$$tbl_prefix$$Participants pa
               WHERE source_set.source_id = pa.name 
-              AND pa.protocol_app_node_id = io.input_node_id
-              AND  io.output_node_id = cva.protocol_app_node_id
+              AND pa.pan_id = io.input_pan_id
+              AND  io.output_pan_id = cva.pan_id
                ]]>   
        </sql>
     </sqlQuery>                

@@ -11,7 +11,8 @@
               displayName="Select a Set of Clinical Observations (PRISM)"
               shortDisplayName="Clinical Observations"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits" 
-              recordClassRef="ObservationRecordClasses.ObservationRecordClass" >
+              recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass" 
+              includeProjects="ICEMR">
 
 
 <!--
@@ -61,7 +62,7 @@
  
     </question>
 
-    <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1"
+    <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1" includeProjects="Gates"
               searchCategory="Observation"
               displayName="Select a Set of Observations (MAL-ED)"
               shortDisplayName="Observations"
@@ -129,7 +130,7 @@
  
     </question>
 
-       <question name="ClinicalVisitsByAllData" newBuild="2"
+       <question name="ClinicalVisitsByAllData" newBuild="2" includeProjects="notUsed"
               searchCategory="Clinical Observation"
               displayName="Select a Set of Clinical Observations (no Relative Observations)"
               shortDisplayName="Clinical Observations noRel"
@@ -172,13 +173,12 @@
  
     </question>
 
-    <question name="ClinicalVisitBySourceID" newBuild="22"
+    <question name="ClinicalVisitBySourceID" newBuild="22"  includeProjects="ICEMR"
               searchCategory="Clinical Observation"
               displayName="Clinical Observation ID"
               shortDisplayName="Observation ID"
               queryRef="ClinicalVisitId.ClinicalVisitsBySourceID" 
-              recordClassRef="ObservationRecordClasses.ObservationRecordClass">
-
+              recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass">
 
 <!--
         <attributesList 
@@ -205,8 +205,9 @@
 	      displayName="Transform to clinical observations"
 	      shortDisplayName="participants->clinicalvisits"
 	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
-	      recordClassRef="ObservationRecordClasses.ObservationRecordClass"
-	      noSummaryOnSingleRecord="false">
+	      recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass"
+	      noSummaryOnSingleRecord="false"
+              includeProjects="ICEMR">
 
 <!--
       <attributesList

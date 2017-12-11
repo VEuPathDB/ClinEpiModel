@@ -5,12 +5,15 @@ prop=datasetName
 prop=householdRecordOverview
 prop=householdAttributesList
 prop=householdSourceIdsForHouseholdMemberTable
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <recordClassSet name="HouseholdRecordClasses">
-      <recordClass name="HouseholdRecordClass" urlName="household" displayName="Household"> 
+    <recordClassSet name="${presenterId}HouseholdRecordClasses" includeProjects="${includeProjects}">
+      <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" displayName="Household" includeProjects="${includeProjects}"> 
 
             <!-- primary key definition -->
-            <primaryKey aliasQueryRef="HouseholdAttributes.HouseholdAlias">
+            <primaryKey aliasQueryRef="${presenterId}HouseholdAttributes.HouseholdAlias">
               <columnRef>source_id</columnRef>
               <columnRef>project_id</columnRef>
             </primaryKey>
@@ -24,6 +27,12 @@ prop=householdSourceIdsForHouseholdMemberTable
                 </text>                
             </idAttribute>
 
+
+<!-- TODO
+           <attributesList summary="${householdAttributesList}"/>
+-->
+
+
       <!-- =============================================================== -->
       <!--   Reporters -->  
       <!-- =============================================================== -->
@@ -34,27 +43,12 @@ prop=householdSourceIdsForHouseholdMemberTable
         <property name="page_size">500</property>
       </reporter>
 
-      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
-                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
-             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
-      </reporter>
-
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
                 implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
 
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
-<!--
-         <textAttribute name="record_overview" displayName="Overview">
-
-           <text>
-              <![CDATA[
-                  Subcounty: $$EUPATH_0000054$$<br>
-              ]]>
-           </text>
-         </textAttribute>
--->
 
          <textAttribute name="record_overview" displayName="Overview">
 
@@ -66,11 +60,11 @@ prop=householdSourceIdsForHouseholdMemberTable
          </textAttribute>
 
 
-         <attributeQueryRef ref="HouseholdAttributes.HouseholdAttributes" attributeMetaQueryRef="HouseholdAttributes.HouseholdAttributesMeta"/>
+         <attributeQueryRef ref="${presenterId}HouseholdAttributes.HouseholdAttributes" attributeMetaQueryRef="${presenterId}HouseholdAttributes.HouseholdAttributesMeta"/>
 
         <table name="Characteristics"
                displayName="Household Characteristics"
-               queryRef="HouseholdTables.Characteristics">
+               queryRef="${presenterId}HouseholdTables.Characteristics">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="term" displayName="Value"/>
@@ -79,8 +73,8 @@ prop=householdSourceIdsForHouseholdMemberTable
 
          <table name="HouseholdMembers"
                  displayName="Household Members"
-                 queryRef="HouseholdTables.HouseholdMembers"
-                 attributeMetaQueryRef="HouseholdTables.HouseholdMembersColumnAttributes">
+                 queryRef="${presenterId}HouseholdTables.HouseholdMembers"
+                 attributeMetaQueryRef="${presenterId}HouseholdTables.HouseholdMembersColumnAttributes">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="participant" inReportMaker="true" internal="true"/>
@@ -98,8 +92,8 @@ prop=householdSourceIdsForHouseholdMemberTable
 
 	  <table name="LightTraps"
                  displayName="Mosquitoe Light Trap Collections"
-                 queryRef="HouseholdTables.LightTraps"
-                 attributeMetaQueryRef="HouseholdTables.LightTrapColumnAttributes">
+                 queryRef="${presenterId}HouseholdTables.LightTraps"
+                 attributeMetaQueryRef="${presenterId}HouseholdTables.LightTrapColumnAttributes">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
     </table>
@@ -116,13 +110,16 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/records/householdRecord.xml
 prop=datasetName
 prop=householdAttributesList
 prop=householdSourceIdsForHouseholdMemberTable
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="HouseholdAttributes" queryType="attribute" doNotTest="true"  
+    <querySet name="${presenterId}HouseholdAttributes" queryType="attribute" doNotTest="true" includeProjects="${includeProjects}"  
               isCacheable='false'>
               
 
       <testRowCountSql>
-select count(*) from apidbtuning.householdattributes
+select count(*) from apidbtuning.${tblPrefix}Households
        </testRowCountSql>
 
        <sqlQuery name="HouseholdAlias" doNotTest="true">
@@ -131,17 +128,17 @@ select count(*) from apidbtuning.householdattributes
          <column name="old_source_id"/>
          <column name="old_project_id"/>
          <sql>
-             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM Apidbtuning.Householdattributes
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.${tblPrefix}Households
          </sql>
        </sqlQuery>
 
-       <sqlQuery name="HouseholdAttributes" attributeMetaQueryRef="HouseholdAttributes.HouseholdAttributesMeta">
+       <sqlQuery name="HouseholdAttributes" attributeMetaQueryRef="${presenterId}HouseholdAttributes.HouseholdAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
 
           <sql>
             <![CDATA[
-                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.householdattributes d
+                     select d.name as source_id, '@PROJECT_ID@' as project_id, d.* from apidbtuning.${tblPrefix}Households d
             ]]>
           </sql>  
          </sqlQuery>
@@ -166,16 +163,16 @@ select count(*) from apidbtuning.householdattributes
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from APIDBTUNING.PANCHARACTERISTICMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Household'
-                           and ot.ontology_term_id = m.TERM_ID
-                           and mt.term_id = m.term_id
+                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           where m.pan_type = 'Household'
+                           and ot.ontology_term_id = m.PROPERTY_ID
+                           and mt.property_id = m.property_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from APIDBTUNING.PANPROTOCOLMETADATA m, sres.ontologyterm ot, apidbtuning.metadatatype mt
-                           where m.protocol_app_node_type = 'Household'
-                           and ot.ontology_term_id = m.TERM_ID
-                           and mt.term_id = m.term_id
+                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           where m.pan_type = 'Household'
+                           and ot.ontology_term_id = m.property_id
+                           and mt.property_id = m.property_id
                            union
                            select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
                            ) meta
@@ -199,8 +196,11 @@ prop=datasetName
 prop=householdAttributesList
 prop=householdSourceIdsForHouseholdMemberTable
 prop=householdSourceIdsForHouseholdMemberTableQuote
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
 >templateTextStart<
-    <querySet name="HouseholdTables" queryType="table" 
+    <querySet name="${presenterId}HouseholdTables" queryType="table" includeProjects="${includeProjects}" 
               isCacheable='false'>
 
 
@@ -218,7 +218,7 @@ prop=householdSourceIdsForHouseholdMemberTableQuote
 
           <sql>
             <![CDATA[
-                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&householdMemberColumns&&)
+                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyTypes where property_source_id in (&&householdMemberColumns&&)
             ]]>
           </sql>
         </sqlQuery>
@@ -238,9 +238,9 @@ prop=householdSourceIdsForHouseholdMemberTableQuote
             <![CDATA[
 SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
-  term           AS parentTerm,
+  property           AS parentTerm,
   string_value   AS term
-FROM apidbtuning.metadata
+FROM apidbtuning.${tblPrefix}metadata
 WHERE dataset_name = '&&datasetName&&'
 AND category       = 'Household'
 /** TODO:  add this back in when we can make this a tree on the record page
@@ -249,8 +249,8 @@ SELECT a.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
   o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
   ontology_term_name          AS term
-FROM apidbtuning.metadataontology o,
-  apidbtuning.householdattributes a
+FROM apidbtuning.${tblPrefix}Ontology o,
+  apidbtuning.${tblPrefix}Households a
 WHERE o.dataset_name = '&&datasetName&&'
 **/
             ]]>
@@ -258,14 +258,13 @@ WHERE o.dataset_name = '&&datasetName&&'
         </sqlQuery>
 
 
-      <sqlQuery name="HouseholdMembers"  isCacheable='false' attributeMetaQueryRef="HouseholdTables.HouseholdMembersColumnAttributes">
+      <sqlQuery name="HouseholdMembers"  isCacheable='false' attributeMetaQueryRef="${presenterId}HouseholdTables.HouseholdMembersColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="participant"/>
 
 <!--
-            <sqlParamValue name="householdMemberColumns"><![CDATA[EUPATH_0000033,EUPATH_0000034,EUPATH_0000035 ]]></sqlParamValue>
-
+maled
             <sqlParamValue name="householdMemberColumns"><![CDATA[ PATO_0000047, EUPATH_0000741, EUPATH_0000657, EUPATH_0000660, EUPATH_0000744, EUPATH_0000742 ]]></sqlParamValue>
 -->
             <sqlParamValue name="householdMemberColumns"><![CDATA[ ${householdSourceIdsForHouseholdMemberTable}  ]]></sqlParamValue>
@@ -276,19 +275,19 @@ SELECT ha.name AS source_id,
   '@PROJECT_ID@' AS project_id,
   pa.name as participant,
   &&householdMemberColumns&&
-FROM apidbtuning.PARTICIPANTATTRIBUTES pa
-   , apidbtuning.HOUSEHOLDATTRIBUTES ha
-   , apidbtuning.protocolappnodeio io
+FROM apidbtuning.${tblPrefix}Participants pa
+   , apidbtuning.${tblPrefix}Households ha
+   , apidbtuning.${tblPrefix}PANIO io
 WHERE
-  pa.PROTOCOL_APP_NODE_ID = io.OUTPUT_NODE_ID
-  and io.INPUT_NODE_ID = ha.PROTOCOL_APP_NODE_ID
+  pa.PAN_ID = io.OUTPUT_PAN_ID
+  and io.INPUT_PAN_ID = ha.PAN_ID
 order by source_id
             ]]>
             </sql>
         </sqlQuery>
 
 
-       <sqlQuery name="LightTraps"  isCacheable='false' attributeMetaQueryRef="HouseholdTables.LightTrapColumnAttributes">
+       <sqlQuery name="LightTraps"  isCacheable='false' attributeMetaQueryRef="${presenterId}HouseholdTables.LightTrapColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
 
@@ -297,7 +296,7 @@ order by source_id
 
             <sql>
             <![CDATA[
-            select EUPATH_0000094 as source_id, '@PROJECT_ID@' as project_id, &&lightTrapSourceIds&& from apidbtuning.lighttrapattributes order by &&orderBySourceIds&&
+            select EUPATH_0000094 as source_id, '@PROJECT_ID@' as project_id, &&lightTrapSourceIds&& from apidbtuning.${tblPrefix}LightTraps order by &&orderBySourceIds&&
             ]]>
             </sql>
         </sqlQuery>
@@ -315,7 +314,7 @@ order by source_id
           <sqlParamValue name="lightTrapSourceIds"><![CDATA['DUMMY' ]]></sqlParamValue>
           <sql>
             <![CDATA[
-                     select source_id as name, property as display_name from apidbtuning.metadatatype where source_id in (&&lightTrapSourceIds&&)
+                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyTypes where property_source_id in (&&lightTrapSourceIds&&)
             ]]>
           </sql>
         </sqlQuery>
