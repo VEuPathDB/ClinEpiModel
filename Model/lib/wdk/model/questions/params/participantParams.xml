@@ -177,10 +177,10 @@
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_prism"
                     countPredictsAnswerCount="true"
                     useIdTransformSqlForInternalValue="true"
-                    prompt="Households"
+                    prompt="Participants"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visit_date,participantParams.participants_prism"
                     trimMetadataTerms="false">
-      <idTransformSql>%%participantIdTransformSql1%%</idTransformSql>             
+<!--      <idTransformSql>%%participantIdTransformSql1%%</idTransformSql>             -->
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
@@ -441,7 +441,7 @@
 
 
 
-   <sqlQuery name="RegionOntology_prism">
+   <sqlQuery name="RegionOntology_prism" isCacheable="true">
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
@@ -513,7 +513,7 @@ and m.property_source_id = o.ontology_term_source_id
       </sql>    
     </sqlQuery>
 
-       <sqlQuery name="VisitAgeOntology_prism">
+       <sqlQuery name="VisitAgeOntology_prism" isCacheable="true">
          <paramRef ref="participantParams.tbl_prefix" />  
          <column name="ontology_term_name"/>
          <column name="parent_ontology_term_name"/>
@@ -695,7 +695,7 @@ and m.property_source_id = o.ontology_term_source_id
     </sqlQuery>  
 
    
-    <sqlQuery name="HouseholdOntology_prism">
+    <sqlQuery name="HouseholdOntology_prism" isCacheable="true">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
@@ -732,13 +732,13 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <![CDATA[
 with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
   from ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO io
-   where pa.pan_id in ($$participants_prism$$)
-       and pa.pan_id = io.output_pan_id)
- select distinct Part.household_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+   where io.output_pan_id in ($$participants_prism$$)
+       and io.input_pan_type_source_id = 'PCO_0000024')
+ select distinct Part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
  union
- select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.part_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -764,11 +764,11 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
 with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
   from ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO io
    where pa.pan_id = io.output_pan_id)
- select distinct Part.household_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct Part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
  union
- select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.part_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -798,7 +798,7 @@ and m.property_source_id = o.ontology_term_source_id
       </sql>    
     </sqlQuery>  
 
-    <sqlQuery name="VisitOntology_prism">
+    <sqlQuery name="VisitOntology_prism" isCacheable="true">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
