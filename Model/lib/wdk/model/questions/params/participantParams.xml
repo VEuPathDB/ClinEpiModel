@@ -130,7 +130,7 @@
                     backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_prism"
                     countPredictsAnswerCount="false"
                     prompt="Age at visit"
-                    dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_prism,clinicalVisitParams.visit_date"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_prism"
                     trimMetadataTerms="false">
       <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>                 
       <help>
@@ -521,7 +521,6 @@ union
       <sqlQuery name="VisitAgeMetaData_prism" isCacheable="false">
         <paramRef ref="participantParams.tbl_prefix" />  
         <paramRef ref="participantParams.geographic_region_prism" /> 
-        <paramRef ref="clinicalVisitParams.visit_date" /> 
         <column name="ontology_term_name"/>
         <column name="internal"/>
         <column name="number_value"/>
@@ -530,28 +529,14 @@ union
         <sql>
         <![CDATA[
 select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$Observations obs, ApidbTuning.$$tbl_prefix$$metadata m,
- (select distinct io.input_pan_id, io.output_pan_id
-  from ApidbTuning.$$tbl_prefix$$PANIO io
-  where io.input_pan_id in ($$geographic_region_prism$$)
-  and output_pan_type_source_id = 'EUPATH_0000738'
-  ) pa
-  where pa.output_pan_id = obs.pan_id
-  and pa.output_pan_id = m.pan_id
-  and m.property_source_id = 'EUPATH_0000113'
-  and obs.EUPATH_0000091 >= $$visit_date.min$$
-  and obs.EUPATH_0000091 <= $$visit_date.max$$
-  /*
-select m.pan_id as internal, 'EUPATH_0000113' as ontology_term_name, to_char(EUPATH_0000113) as string_value, EUPATH_0000113 as number_value, cast(null as date) as date_value
- from ApidbTuning.$$tbl_prefix$$Observations m,
+ from  ApidbTuning.$$tbl_prefix$$metadata m,
  (select distinct io.input_pan_id, io.output_pan_id
   from ApidbTuning.$$tbl_prefix$$PANIO io
   where io.input_pan_id in ($$geographic_region_prism$$)
   and output_pan_type_source_id = 'EUPATH_0000738'
   ) pa
   where pa.output_pan_id = m.pan_id
-  and m.EUPATH_0000091 >= $$visit_date.min$$
-  and m.EUPATH_0000091 <= $$visit_date.max$$ */
+  and m.property_source_id = 'EUPATH_0000113'
          ]]>   
       </sql>
    </sqlQuery>
