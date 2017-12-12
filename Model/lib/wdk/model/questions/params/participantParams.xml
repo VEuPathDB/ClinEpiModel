@@ -80,12 +80,12 @@
     </numberRangeParam>
 
         <numberRangeParam name="visits_per_year"
-                      prompt="Observations per year:"
+                      prompt="Matching Observations per year:"
                       integer="false"
                       min="0"
                       max="365"
                       step="0.1">
-      <help>Set the range of number of observations that match your search criteria.</help>
+      <help>Set the range of number of observations that match your search criteria to restrict the number of participants returned.</help>
       <!--         <suggest default="{'min': '1', 'max': '10'}" />  -->
     </numberRangeParam>
 
@@ -192,7 +192,7 @@
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     countPredictsAnswerCount="false"
-                    prompt="Clincial Observations"
+                    prompt="Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.visits_visitage_metadata_prism,participantParams.households_prism">
       <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>    
@@ -206,7 +206,7 @@
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     countPredictsAnswerCount="false"
-                    prompt="Clincial Observations"
+                    prompt="Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix">
       <idTransformSql>%%participantIdTransformSql3%%</idTransformSql>    
@@ -1499,10 +1499,10 @@ You can restrict the observations returned in your search by selecting character
              ]]>
             </description>
         </group>
-       <group name="part_visit_characteristics" displayName="Visits" displayType="ShowHide">
+       <group name="part_visit_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on observations at visits.  Visits shown are for the selected set of participants when they were within the age range specified in the Age filter.    
+    Filter participants based on observations at visits.  Observations shown are for the selected set of participants when they were within the age range specified in the Age filter.  Change the default values for the Observations per Year parameter to restrict the participants based on your selected observation values.
                 ]]>
             </description>
         </group>
@@ -1527,10 +1527,10 @@ You can further restrict the participants returned in your search by setting a r
                 ]]>
             </description>
         </group>
-        <group name="relative_visits" displayName="Relative visits" displayType="ShowHide">
+        <group name="relative_visits" displayName="Related Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-                         You can further restrict the visits you have selected above by removing (or keeping) those visits based on a relative visit you define below.  For example, you may want to only keep visits with a diagnosis of asymptomatic parasitemia from above if they are not followed within 14 days by a visit where the participant was diagnosed with malaria.  In this instance, set the number of days to 14, direction after and remove visits where diagnosis of malaria = yes.
+                         You can further restrict the observations you have previously selected above by removing (or keeping) those observations based on a related observations you define below.  For example, you may want to only keep observations with a diagnosis of asymptomatic parasitemia if they are not followed within 14 days by an observation where the participant was diagnosed with malaria.  In this instance, set the days between observations to 1 to 14, direction before and remove observations where the related observation diagnosis of malaria = yes.
                 ]]>
             </description>
         </group>

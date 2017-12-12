@@ -128,11 +128,27 @@ greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_ag
 from
 (select pa.pan_id, nvl(visits.visit_count,0) as visit_count
 from ApidbTuning.$$tbl_prefix$$Participants pa, 
-(select io.input_pan_id, count(*) as visit_count
+(select input_pan_id,count(*) as visit_count
+from
+(select distinct io.input_pan_id, io.output_pan_id
 from  ApidbTuning.$$tbl_prefix$$Panio io 
 where io.output_pan_id in ($$visits_prism$$)
 and Io.Input_Pan_Type_Source_Id = 'EUPATH_0000096'
-group by io.input_pan_id) visits
+$$dateOperator_fv$$
+select distinct ioa.input_pan_id, ioa.output_pan_id
+from ApidbTuning.$$tbl_prefix$$Panio ioa, ApidbTuning.$$tbl_prefix$$Panio iob, ApidbTuning.$$tbl_prefix$$Observations seta, ApidbTuning.$$tbl_prefix$$Observations setb
+where seta.pan_id in ($$visits_prism$$)
+and $$use_relative_visits$$ = 1
+and setb.pan_id in ($$relative_visits_prism$$)
+and seta.pan_id = ioa.output_pan_id
+and setb.pan_id = iob.output_pan_id
+and ioa.input_pan_id = iob.input_pan_id
+and seta.pan_id != setb.pan_id
+and seta.EUPATH_0000091 $$date_direction_fv$$ setb.EUPATH_0000091  
+and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$days_between.min$$
+and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$days_between.max$$
+)
+group by input_pan_id) visits
 where pa.pan_id in ($$households_prism$$)
 and pa.pan_id = visits.input_pan_id(+)) core, ApidbTuning.$$tbl_prefix$$Participants pa,
 (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
@@ -144,20 +160,6 @@ and round(core.visit_count / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.E
 greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) >= $$visits_per_year.min$$
 and round(core.visit_count / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) -
 greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) <= $$visits_per_year.max$$
-/*
-select * from (
-select pa.name, pa.name as source_id, 'ICEMR' as project_id, nvl(visits.visit_count,0) as visit_count
-from ApidbTuning.$$tbl_prefix$$Participants pa, 
-(select io.input_pan_id, count(*) as visit_count 
-from  ApidbTuning.$$tbl_prefix$$Panio io
-where io.output_pan_id in ($$visits_prism$$)
-and Io.Input_Pan_Type_Source_Id = 'EUPATH_0000096'
-group by io.input_pan_id) visits
-where pa.pan_id in ($$households_prism$$)
-and pa.pan_id = visits.input_pan_id(+))
-where visit_count >= $$visits_per_year.min$$
-and visit_count <= $$visits_per_year.max$$
-*/
                 ]]>   
         </sql>
      </sqlQuery>
