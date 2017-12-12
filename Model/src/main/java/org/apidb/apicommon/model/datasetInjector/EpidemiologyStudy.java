@@ -9,7 +9,7 @@ import org.apidb.apicommon.datasetPresenter.DatasetInjector;
 
 public class EpidemiologyStudy extends DatasetInjector {
 
-    private String addQuotes(String s) {
+    protected String addQuotes(String s) {
         List<String> split = Arrays.asList(s.split("\\s*,\\s*"));
         List<String> quoted = new ArrayList<>();
 
@@ -164,6 +164,11 @@ public class EpidemiologyStudy extends DatasetInjector {
 
       addWdkReference(observationRecordClass, "table", "Characteristics", new String[]{"record"}, categoryIri);
       // TODO Samples table of observation record page
+
+      addWdkReference(householdRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, categoryIri);
+      addWdkReference(participantRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, categoryIri);
+      addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, categoryIri);
+
 
       // Add the Text Attributes
       String participantGraphAttributeNames = getPropValue("participantGraphAttributeNames");

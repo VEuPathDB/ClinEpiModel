@@ -78,46 +78,8 @@
     <!-- transforms -->
 
       <!-- TEMPLATE_ANCHOR householdsByParticipantQuestion -->
+
+      <!-- TEMPLATE_ANCHOR householdsByLightTrapsQuestion -->
    
-    
-    <question name="HouseholdsByLightTrapId"   newBuild="1"
-              displayName="Transform to Households"
-              shortDisplayName="lighttrap->households"
-              queryRef="HouseholdId.HouseholdsByLightTrapIds"
-              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
-              noSummaryOnSingleRecord="true">
-    
-<!--
-    <attributesList
-            summary="EUPATH_0000054,lt_count,ave_anoph"
-        />
--->
-	<dynamicAttributes>
-	     <columnAttribute name="lt_count" displayName="# Collections" help="number of light trap collections from transformed result set associated with this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	     <columnAttribute name="ave_anoph" displayName="Average Anopheles" help="Average of the anopheles collected from the transformed collections for this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	</dynamicAttributes>
-
-             <summary>
-             Find households by light trap collections from the household.
-             </summary>
-
-             <description>
-               <![CDATA[
-              Find households by light trap collections from the household.
-               ]]>
-             </description>
-    </question>
-  
-
   </questionSet>
 </wdkModel>
