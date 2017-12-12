@@ -66,7 +66,7 @@
 -->
 
     <stepAnalysisPlugin
-        name="clinepi-cont-table" displayName="2x2 Contingency Tables"
+        name="clinepi-cont-table" displayName="Contingency Tables"
         releaseVersion="1" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         customThumbnail="images/analysis_plugins/contingency_tables.jpg"
@@ -78,11 +78,12 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
-      <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
+      <property name="attributesToExtract">source_id</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
       <property name="datasetTblPrefix">D841A9F5259</property>
+      <property name="datasetName">ISASimple_Gates_GEMS_gems1_case_control_RSRC</property>
     </stepAnalysisPlugin>
 
     <stepAnalysisPlugin
@@ -98,11 +99,12 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
-      <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
+      <property name="attributesToExtract">source_id</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
       <property name="datasetTblPrefix">D841A9F5259</property>
+      <property name="datasetName">ISASimple_Gates_GEMS_gems1_case_control_RSRC</property>
     </stepAnalysisPlugin>
 
 
@@ -121,11 +123,12 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_Summaries]]></property>
-      <property name="tablesToExtract">ShinyParticipants,ShinyObservations,ShinyHouseholds</property>
+      <property name="attributesToExtract">source_id</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
       <property name="datasetTblPrefix">D841A9F5259</property>
+      <property name="datasetName">ISASimple_Gates_GEMS_gems1_case_control_RSRC</property>
     </stepAnalysisPlugin>
 
   </stepAnalysisPlugins>
