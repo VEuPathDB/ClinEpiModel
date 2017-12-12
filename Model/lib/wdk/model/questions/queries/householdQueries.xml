@@ -11,18 +11,8 @@
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
 
-    <sqlQuery name="HouseholdsBySourceID" includeProjects="ICEMR"
-	      isCacheable="true">
-      <paramRef ref="householdParams.householdsBySourceID" />
-      <column name="source_id" />
-      <column name="project_id" />
-      <sql>
+    <!-- TEMPLATE_ANCHOR householdSourceIdQuery -->
 
-	<![CDATA[select distinct da.name as source_id, '@PROJECT_ID@' as project_id from ApidbTuning.$$tbl_prefix$$Households da,
-        ($$householdsBySourceID$$) ds WHERE da.name=ds.source_id]]>
-      </sql>
-      
-    </sqlQuery>
 
     <sqlQuery name="HouseholdsByCharacteristics" isCacheable="true">
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
@@ -59,28 +49,7 @@ group by da.pan_id,da.name
 
 <!-- transform(s) -->
 
-    <sqlQuery name="HouseholdsByParticipantIds" doNotTest="true"
-              displayName="ID" isCacheable="true" includeProjects="ICEMR">
-      <paramRef ref="participantParams.participant_result"/>
-        <column name="project_id"/>
-        <column name="source_id"/>
-        <column name="participants"/>
-        <column name="participant_count"/>
-        <column name="wdk_weight"/>
-
-        <sql>
-            <![CDATA[
-SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct source_set.source_id) as participant_count,
- listagg (pa.name, ',') WITHIN GROUP (order by pa.name )  as participants,
- max(source_set.wdk_weight) as wdk_weight
-              FROM ($$participant_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$Participants pa
-              WHERE source_set.source_id = pa.name 
-              AND pa.pan_id = io.output_pan_id
-              AND  io.input_pan_id = da.pan_id
-              GROUP BY da.name
-             ]]>
-        </sql>
-    </sqlQuery>
+    <!-- TEMPLATE_ANCHOR householdsByParticipantQuery -->
 
      <sqlQuery name="HouseholdsByLightTrapIds" doNotTest="true" includeProjects="ICEMR"
               displayName="ID" isCacheable="true">

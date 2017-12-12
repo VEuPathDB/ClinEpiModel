@@ -71,75 +71,14 @@
  
     </question>
 
-    <!--Find records by Source ID-->
-   <question name="HouseholdsBySourceID" newBuild="22"
-              searchCategory="Household"
-              displayName="Household ID"
-              shortDisplayName="Household ID"
-              queryRef="HouseholdId.HouseholdsBySourceID" 
-              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
-              includeProjects="ICEMR"
-             >
 
-        <attributesList 
-            summary="source_id"
-                  /> 
+      <!-- TEMPLATE_ANCHOR householdSourceIdQuestion -->
 
-        <summary>
-            <![CDATA[ 
-           Find Households based on Sourcd ID.
-            ]]>
-        </summary>
-
-        <description
->
-            <![CDATA[
-             Find households based on Source ID. <br />
-            ]]>
-        </description>
-    </question>
 
     <!-- transforms -->
+
+      <!-- TEMPLATE_ANCHOR householdsByParticipantQuestion -->
    
-   <question name="HouseholdsByParticipantId"   newBuild="1" 
-              displayName="Transform to Households"
-              shortDisplayName="participant->household"
-              queryRef="HouseholdId.HouseholdsByParticipantIds" 
-              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
-              noSummaryOnSingleRecord="false">
- 
-
-<!--
-        <attributesList 
-            summary="EUPATH_0000054,participants,participant_count"   
-            sorting ="participant_count desc"
-        /> 
--->
-	<dynamicAttributes>
-	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	     <columnAttribute name="participants" displayName="Participants Transformed" help="list of participant ids from transformed result set associated with this household " align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	</dynamicAttributes>
-
-             <summary>
-             Find household by participants who are household members.
-             </summary>
-
-             <description>
-               <![CDATA[
-              Find household by participants who are household members.
-               ]]>
-             </description>
-    </question>
     
     <question name="HouseholdsByLightTrapId"   newBuild="1"
               displayName="Transform to Households"

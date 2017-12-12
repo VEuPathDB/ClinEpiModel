@@ -1,5 +1,7 @@
 			recordClassName	targetType	name	displayName	shortDisplayName	description	geneOrTranscript	displayOrder	scope	scope	scope
 			eupath/eupath.owl#recordClassName	eupath/eupath.owl#targetType	eupath/eupath.owl#name	EUPATH_0000052	eupath/eupath.owl#shortDisplayName	eupath/eupath.owl#description	eupath/eupath.owl#geneOrTranscript	EUPATH_0000274	eupath/eupath.owl#scope	eupath/eupath.owl#scope	eupath/eupath.owl#scope
+
+
 ##ClinicalVisitRecordClasses.ClinicalVisitRecordClass.ClinicalVisitQuestions.ClinicalVisitsByAllData	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	search	ClinicalVisitQuestions.ClinicalVisitsByAllData						menu	webservice	
 ClinicalVisitRecordClasses.ClinicalVisitRecordClass.ClinicalVisitQuestions.ClinicalVisitBySourceID	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	search	ClinicalVisitQuestions.ClinicalVisitBySourceID						menu	webservice	
 ClinicalVisitRecordClasses.ClinicalVisitRecordClass.ClinicalVisitQuestions.ClinicalVisitsByRelativeVisits_maled	http://edamontology.org/topic_3305	Epidemiology	ClinicalVisitRecordClasses.ClinicalVisitRecordClass	search	ClinicalVisitQuestions.ClinicalVisitsByRelativeVisits_maled						menu	webservice	
@@ -54,3 +56,5 @@ ParticipantAttributes.ShinyHouseholdsColumnAttributes	http://edamontology.org/to
 ParticipantRecordClasses.ParticipantRecordClass.ShinyHouseholds	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	ShinyHouseholds					2		download	
 ParticipantAttributes.ShinyEventsColumnAttributes	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	attributeMetaQuery	ParticipantTables.ShinyEventsColumnAttributes							record-internal	
 ParticipantRecordClasses.ParticipantRecordClass.ShinyEvents	http://edamontology.org/topic_3305	Epidemiology	ParticipantRecordClasses.ParticipantRecordClass	table	ShinyEvents					2		download	
+
+## TEMPLATE_ANCHOR clinEpiCategory 

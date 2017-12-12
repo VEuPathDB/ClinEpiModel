@@ -99,27 +99,10 @@
     </numberRangeParam> 
 
 
+    <!-- TEMPLATE_ANCHOR participantSourceIdParam -->
 
-    <datasetParam name="participantsBySourceID" includeProjects="ICEMR"
-		  recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
-		  prompt="Source ID input set">
-      <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
+    <!-- TEMPLATE_ANCHOR participantResultParam -->
 
-             It can be delimited by a comma, semi colon or any white space.<br><br>
-             Its possible that not all the IDs in the list will be found in the database
-             due to anumber of reasons such as unavailable ID mapping. It is currenly not
-             possible to inform which IDs did not match anything in the database]]> </help>
-     <suggest includeProjects="INIT" default="FILL" />
-     <suggest default="3001" />
-      
-    </datasetParam>
-
-    <answerParam name="participant_result"  includeProjects="ICEMR"
-                 prompt="Input Result Set"
-                 readonly="true"
-                 visible="false">
-      <recordClass ref="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" />
-    </answerParam>
 
     <!--************************************************************-->
     <!--   PRISM section ... should be injected  -->

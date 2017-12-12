@@ -68,27 +68,10 @@
        </filterParamNew>
 
 
-    <datasetParam includeProjects="ICEMR" name="householdsBySourceID"
-		  recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
-		  prompt="Source ID input set">
-      <help><![CDATA[Input a set of source ID's, or upload a file <br><br>
-
-               It can be delimited by a comma, semi colon or any white space<br><br>
-
-               Its possible that not all ID's in the list will be found in the database
-               due to a number of reasons such as unavailable ID maping. Its also currently not
-               possible to inform which ID's did not match anything in the database]]></help>
-      <suggest default="HH101009801" />
-      
-    </datasetParam>
+    <!-- TEMPLATE_ANCHOR householdSourceIdParam -->
 
 
-    <answerParam name="household_result" includeProjects="ICEMR"
-                  prompt="Input Result Set"
-                  readonly="true"
-                  visible="false">
-       <recordClass ref="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass" />
-    </answerParam>
+    <!-- TEMPLATE_ANCHOR householdResultParam -->
 
  <enumParam name="district"
                prompt="Study site "

@@ -11,20 +11,7 @@
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
 
-
-      <sqlQuery name="ClinicalVisitsBySourceID"
-         isCacheable="true"  includeProjects="ICEMR">
-     <!-- <paramRef ref="participantParams.participantsBySourceID"/> -->
-      <paramRef ref="clinicalVisitParams.clinical_visits_by_sourceid"/>
-      <column name="source_id"/>
-      <column name="project_id"/>
-     <sql>
-          <![CDATA[
-Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  ApidbTuning.$$tbl_prefix$$Observations cv,
-($$clinical_visits_by_sourceid$$) cs where cv.name = cs.source_id
-               ]]>   
-       </sql>
-    </sqlQuery>
+    <!-- TEMPLATE_ANCHOR observationSourceIdQuery -->
 
      <sqlQuery name="ClinicalVisitsByRelativeVisits"
           isCacheable="true">
@@ -181,24 +168,7 @@ where pan_id in ($$visits_nf$$)
 
      <!-- Transform -->
      
-     <sqlQuery name="VisitsByParticipantIds" doNotTest="true" displayName="ID"
-               isCacheable="true" includeProjects="ICEMR">
-       <paramRef ref="participantParams.participant_result"/>
-       <column name="project_id"/>
-       <column name="source_id"/>     
-       <column name="participant"/>
-       <column name="wdk_weight"/>
-
-        <sql>
-          <![CDATA[
- SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
-              FROM ($$participant_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations cva, ApidbTuning.$$tbl_prefix$$Participants pa
-              WHERE source_set.source_id = pa.name 
-              AND pa.pan_id = io.input_pan_id
-              AND  io.output_pan_id = cva.pan_id
-               ]]>   
-       </sql>
-    </sqlQuery>                
+      <!-- TEMPLATE_ANCHOR observationsByParticipantsQuery -->
           
   </querySet>
 </wdkModel>

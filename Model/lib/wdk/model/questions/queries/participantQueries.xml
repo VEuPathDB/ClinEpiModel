@@ -10,20 +10,7 @@
      <!-- Source id  -->
      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-    <sqlQuery name="ParticipantsBySourceID" includeProjects="ICEMR"
-          isCacheable="true">
-      <!-- <paramRef ref="participantParams.participantsBySourceID"/> -->
-       <paramRef ref="participantParams.participantsBySourceID"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-      <sql>
-           <![CDATA[
- Select distinct pa.name as source_id, '@PROJECT_ID@' as project_id from  ApidbTuning.$$tbl_prefix$$Participants pa,
- ($$participantsBySourceID$$) ds where pa.name = ds.source_id
-                ]]>   
-        </sql>
-     </sqlQuery>
-
+    <!-- TEMPLATE_ANCHOR participantSourceIdQuery -->
      
      <!-- not used ..... no relative visits but leave in case decide to use at some point .... -->
      
@@ -304,45 +291,9 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
     
 <!-- transform(s) -->
 
-    <sqlQuery name="ParticipantsByHouseholdIds" doNotTest="true"  includeProjects="ICEMR"
-              displayName="ID" isCacheable="true">
-      <paramRef ref="householdParams.household_result"/>
-        <column name="project_id"/>
-        <column name="source_id"/>
-        <column name="household"/>
-        <column name="wdk_weight"/>
+      <!-- TEMPLATE_ANCHOR participantsByHouseholdsQuery -->                   
 
-        <sql>
-            <![CDATA[
-SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
-              FROM ($$household_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$Participants pa
-              WHERE source_set.source_id = da.name 
-              AND da.pan_id = io.input_pan_id
-              AND  io.output_pan_id = pa.pan_id
-             ]]>
-        </sql>
-    </sqlQuery>
-    
-      <sqlQuery name="ParticipantsByClinicalVisits" doNotTest="true" includeProjects="ICEMR"
-              displayName="ID" isCacheable="true">
-      <paramRef ref="clinicalVisitParams.clinical_visit_result"/>
-        <column name="project_id"/>
-        <column name="source_id"/>
-        <column name="num_of_visits"/>
-        <column name="wdk_weight"/>
-
-        <sql>
-            <![CDATA[
-SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, count(*) as num_of_visits , max(source_set.wdk_weight) as wdk_weight
-              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations cva, ApidbTuning.$$tbl_prefix$$Participants pa
-              WHERE source_set.source_id = cva.name 
-              AND cva.pan_id = io.output_pan_id
-              AND  io.input_pan_id = pa.pan_id
-              GROUP BY pa.name
-             ]]>
-        </sql>
-    </sqlQuery>
-                   
+      <!-- TEMPLATE_ANCHOR participantsByObservationsQuery -->                   
 
   </querySet>
 </wdkModel>

@@ -32,18 +32,9 @@
       </enumList>
     </enumParam>
 
-        <datasetParam name="clinical_visits_by_sourceid"  includeProjects="ICEMR"
-		  recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
-		  prompt="Source ID input set">
-      <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
 
-             It can be delimited by a comma, semi colon or any white space.<br><br>
-             Its possible that not all the IDs in the list will be found in the database
-             due to anumber of reasons such as unavailable ID mapping. It is currenly not
-             possible to inform which IDs did not match anything in the database]]> </help>
-     <suggest default="100118844" />
-      
-    </datasetParam>
+    <!-- TEMPLATE_ANCHOR observationSourceIdParam -->
+
 
     <filterParamNew name="visits_nf" 
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData"
@@ -239,12 +230,9 @@
       <suggest default="after"/>
     </flatVocabParam>
 
-    <answerParam name="clinical_visit_result" includeProjects="ICEMR"
-                  prompt="Input Result Set"
-                  readonly="true"
-                  visible="false">
-       <recordClass ref="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass" />
-    </answerParam>
+
+    <!-- TEMPLATE_ANCHOR observationResultParam -->
+
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!--  MAL-ED specific .. should be injected -->  

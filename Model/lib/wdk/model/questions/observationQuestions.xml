@@ -173,65 +173,12 @@
  
     </question>
 
-    <question name="ClinicalVisitBySourceID" newBuild="22"  includeProjects="ICEMR"
-              searchCategory="Clinical Observation"
-              displayName="Clinical Observation ID"
-              shortDisplayName="Observation ID"
-              queryRef="ClinicalVisitId.ClinicalVisitsBySourceID" 
-              recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass">
 
-<!--
-        <attributesList 
-            summary="EUPATH_0000091,parent_id,EUPATH_0000113,EUPATH_0000311"
-        /> 
---> 
+      <!-- TEMPLATE_ANCHOR observationSourceIdQuestion -->
 
-        <summary>
-            <![CDATA[ 
-           Find subjects based on source ID's
-            ]]>
-        </summary>
+      <!-- TEMPLATE_ANCHOR observationsByParticipantsQuestion -->
 
-        <description>
-            <![CDATA[
-             Find subjects based on Source ID's <br />
-            ]]>
-        </description>
 
- 
-    </question>
 
-    <question name="ClinicalVisitsByParticipants" newBuild="22"
-	      displayName="Transform to clinical observations"
-	      shortDisplayName="participants->clinicalvisits"
-	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
-	      recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass"
-	      noSummaryOnSingleRecord="false"
-              includeProjects="ICEMR">
-
-<!--
-      <attributesList
-	 summary="EUPATH_0000091,participant,EUPATH_0000113,EUPATH_0000311"
-	 sorting="participant DESC"
-	
-	 />
--->
-      <dynamicAttributes>
-	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical observations are associated with" align="center">
-	  <plugin name="histogram" display="Histogram"
-		  description="Display a histogram of the values"
-		  implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-		  view="/wdk/jsp/results/histogram.jsp" />
-	  </columnAttribute>
-	</dynamicAttributes>
-      
-      <summary>
-	Find clinical observations by participant ID's
-      </summary>
-      <description>
-      Find clincal observations by participant ID's
-      </description>
-
-  </question>
   </questionSet>
 </wdkModel>
