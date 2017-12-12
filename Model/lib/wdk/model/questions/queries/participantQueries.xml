@@ -90,83 +90,76 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_00000
 
      <sqlQuery name="ParticipantsByCharWizRelVis_prism"
           isCacheable="true">
-       <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="participantParams.visits_visitage_metadata_prism" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.part_visit_characteristics"/> 
        <paramRef ref="participantParams.visits_prism" groupRef="metaDataGroups.part_visit_characteristics"/>
-       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
+<!--       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.relative_visits_prism" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.parasite_density" groupRef="metaDataGroups.summary_params"/>
-       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.summary_params"/>
+-->
        <column name="source_id"/>
        <column name="project_id"/>
+       <column name="visit_count"/>
+       <column name="visits_per_year_obs"/>
+       <column name="time_of_obs"/>
+<!--
        <column name="ave_anoph"/>
        <column name="avg_hemo"/>
        <column name="avg_weight"/>
        <column name="ave_para_density"/>
        <column name="ave_age_visit"/>
-       <column name="visit_count"/>
        <column name="visits_per_year_obs"/>
        <column name="time_of_obs"/>
+-->
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
-round(count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) -
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, core.visit_count,
+round(core.visit_count / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) -
 greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
                     round((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
-                    count(*) as visit_count, mos.ave_anoph, 
-   round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) as ave_para_density,
-   round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
-   round(avg(ca.EUPATH_0000047),1) as avg_hemo,
-   round(avg(ca.IAO_0000414),1) as avg_weight
-from (select distinct io.input_pan_id,io.output_pan_id from ApidbTuning.$$tbl_prefix$$Observations ca, ApidbTuning.$$tbl_prefix$$PANIO io
-      where ca.pan_id in ($$visits_prism$$)
-      and ca.pan_id = io.output_pan_id
-$$dateOperator_fv$$
- select distinct ioa.input_pan_id,ioa.output_pan_id
- from ApidbTuning.$$tbl_prefix$$Observations seta, ApidbTuning.$$tbl_prefix$$Observations setb, ApidbTuning.$$tbl_prefix$$PANIO ioa, ApidbTuning.$$tbl_prefix$$PANIO iob
- where seta.pan_id in ($$visits_prism$$)
-and $$use_relative_visits$$ = 1
-and setb.pan_id in ($$relative_visits_prism$$)
-and seta.pan_id = ioa.output_pan_id
-and setb.pan_id = iob.output_pan_id
-and ioa.input_pan_id = iob.input_pan_id
-and seta.pan_id != setb.pan_id
-and setb.EUPATH_0000091 $$date_direction_fv$$ seta.EUPATH_0000091  
-and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$days_between.min$$
-and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$days_between.max$$
-) main,
-ApidbTuning.$$tbl_prefix$$Observations ca, ApidbTuning.$$tbl_prefix$$Participants pa,
-   (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs  
+from
+(select pa.pan_id, nvl(visits.visit_count,0) as visit_count
+from ApidbTuning.$$tbl_prefix$$Participants pa, 
+(select io.input_pan_id, count(*) as visit_count
+from  ApidbTuning.$$tbl_prefix$$Panio io 
+where io.output_pan_id in ($$visits_prism$$)
+and Io.Input_Pan_Type_Source_Id = 'EUPATH_0000096'
+group by io.input_pan_id) visits
+where pa.pan_id in ($$households_prism$$)
+and pa.pan_id = visits.input_pan_id(+)) core, ApidbTuning.$$tbl_prefix$$Participants pa,
+(select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from ApidbTuning.$$tbl_prefix$$Observations 
    where pan_id in ($$visits_visitage_metadata_prism$$)
-   ) age,
-   (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
-  from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
-  where da.pan_id = io.input_pan_id
-  and la.pan_id = io.output_pan_id
-  and la.OBI_0001619 >= $$visit_date.min$$ 
-  and la.OBI_0001619 <= $$visit_date.max$$ 
-  group by da.pan_id) mos, ApidbTuning.$$tbl_prefix$$PANIO iom
-where ca.pan_id = main.output_pan_id
-and pa.pan_id = main.input_pan_id
-and iom.output_pan_id = pa.pan_id
-and iom.input_pan_id = mos.pan_id(+)
-group by pa.name, pa.EUPATH_0000152, pa.EUPATH_0000032, pa.EUPATH_0000151,age.max_age,age.min_age,mos.ave_anoph 
-having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) >= $$visits_per_year.min$$
- and count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365) <= $$visits_per_year.max$$
- and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) >= $$parasite_density.min$$
- and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) <= $$parasite_density.max$$
+   ) age
+where pa.pan_id = core.pan_id
+and round(core.visit_count / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) -
+greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) >= $$visits_per_year.min$$
+and round(core.visit_count / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) -
+greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1) / 365),1) <= $$visits_per_year.max$$
+/*
+select * from (
+select pa.name, pa.name as source_id, 'ICEMR' as project_id, nvl(visits.visit_count,0) as visit_count
+from ApidbTuning.$$tbl_prefix$$Participants pa, 
+(select io.input_pan_id, count(*) as visit_count 
+from  ApidbTuning.$$tbl_prefix$$Panio io
+where io.output_pan_id in ($$visits_prism$$)
+and Io.Input_Pan_Type_Source_Id = 'EUPATH_0000096'
+group by io.input_pan_id) visits
+where pa.pan_id in ($$households_prism$$)
+and pa.pan_id = visits.input_pan_id(+))
+where visit_count >= $$visits_per_year.min$$
+and visit_count <= $$visits_per_year.max$$
+*/
                 ]]>   
         </sql>
      </sqlQuery>

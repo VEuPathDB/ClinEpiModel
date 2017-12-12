@@ -3,7 +3,7 @@
   <constant name="participantIdTransformSql1">
     <![CDATA[
       select distinct io.output_pan_id as internal
-       from ApidbTuning.$$tbl_prefix$$PANIO io,
+       from ApidbTuning.D0ad509829ePANIO io,
          (##FILTERED_IDS##) fi
        where io.input_pan_id = fi.internal
         and io.output_pan_type_source_id = 'EUPATH_0000096'
@@ -13,7 +13,7 @@
   <constant name="participantIdTransformSql2">
     <![CDATA[
       select distinct io.input_pan_id as internal
-       from ApidbTuning.$$tbl_prefix$$PANIO io,
+       from ApidbTuning.D0ad509829ePANIO io,
         (##FILTERED_IDS##) fi
        where io.output_pan_id = fi.internal
         and io.input_pan_type_source_id = 'EUPATH_0000096'
@@ -126,10 +126,10 @@
     <!--   TODO: DELETE THIS AND COPY OVER FROM BRANCH ... ADD PRISM SUFFIX -->
     <!--************************************************************-->
 
+<!--                       ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism" -->
        <filterParamNew name="geographic_region_prism" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData_prism"
                        ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
-                       ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism"
                        filterDataTypeDisplayName="Participants"
                        prompt="Geographic region"
                        countPredictsAnswerCount="true"
@@ -140,26 +140,26 @@
          </help>
     </filterParamNew>
 
+<!--                    ontologyValuesQueryRef="ParticipantVQ.VisitAgeOntologyValues_prism" -->
     <filterParamNew name="visits_visitage_metadata_prism" 
                     metadataQueryRef="ParticipantVQ.VisitAgeMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.VisitAgeOntology_prism"
                     backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.VisitAgeOntologyValues_prism"
                     countPredictsAnswerCount="false"
                     prompt="Age at visit"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_prism,clinicalVisitParams.visit_date"
                     trimMetadataTerms="false">
-      <idTransformSql>%%participantIdTransformSql3%%</idTransformSql>                 
+      <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>                 
       <help>
         Select reference samples. 
       </help>
     </filterParamNew>
     
+<!--                    ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism" -->
     <filterParamNew name="participants_prism" 
                     metadataQueryRef="ParticipantVQ.ParticipantMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism"
                     countPredictsAnswerCount="true"
                     prompt="Participants"
                     trimMetadataTerms="false"
@@ -170,41 +170,41 @@
     </filterParamNew>
 
 
+<!--                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism" -->
     <filterParamNew name="households_prism" 
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism"
                     countPredictsAnswerCount="true"
                     useIdTransformSqlForInternalValue="true"
                     prompt="Households"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visit_date,participantParams.participants_prism"
                     trimMetadataTerms="false">
-      <idTransformSql>%%participantIdTransformSql3%%</idTransformSql>             
+      <idTransformSql>%%participantIdTransformSql1%%</idTransformSql>             
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
     </filterParamNew>
 
+<!--                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism" -->
     <filterParamNew name="visits_prism" 
                     metadataQueryRef="ParticipantVQ.VisitMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism"
-                    countPredictsAnswerCount="true"
+                    countPredictsAnswerCount="false"
                     prompt="Clincial Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.visits_visitage_metadata_prism,participantParams.households_prism">
-      <idTransformSql>%%participantIdTransformSql3%%</idTransformSql>    
+      <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>    
       <help>
         Select participants based on their visit characteristics. 
       </help>
     </filterParamNew>
 
+<!--                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism" -->
         <filterParamNew name="relative_visits_prism" 
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism"
                     countPredictsAnswerCount="false"
                     prompt="Clincial Observations"
                     trimMetadataTerms="false"
@@ -453,13 +453,13 @@
      <column name="is_range"/>
     <sql>
       <![CDATA[
-select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+/*select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'EUPATH_0000054'
 union
 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-null as precision from dual
-/* select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+null as precision from dual */
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000054')
@@ -467,7 +467,7 @@ from apidbtuning.$$tbl_prefix$$Ontology o
       select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from apidbtuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.ontology_term_source_id = PRIOR o.parent_ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000054') */
+     START WITH o.ontology_term_source_id in ('EUPATH_0000054') 
          ]]>
     </sql>
    </sqlQuery>
@@ -525,7 +525,7 @@ and m.property_source_id = o.ontology_term_source_id
          <column name="is_range"/>
          <sql>
            <![CDATA[
-                       select o.ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+                       select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'EUPATH_0000113'
 union
@@ -546,16 +546,29 @@ union
         <column name="string_value"/>
         <sql>
         <![CDATA[
-select distinct cva.pan_id as internal, 'EUPATH_0000113' as ontology_term_name, null as string_value, cva.EUPATH_0000113 as number_value, null as date_value
- from ApidbTuning.$$tbl_prefix$$Observations cva,
+select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$Observations obs, ApidbTuning.$$tbl_prefix$$metadata m,
  (select distinct io.input_pan_id, io.output_pan_id
-  from ApidbTuning.D0ad509829ePANIO io
+  from ApidbTuning.$$tbl_prefix$$PANIO io
   where io.input_pan_id in ($$geographic_region_prism$$)
   and output_pan_type_source_id = 'EUPATH_0000738'
   ) pa
-  where pa.output_pan_id = cva.pan_id
-  and cva.EUPATH_0000091 >= $$visit_date.min$$
-  and cva.EUPATH_0000091 <= $$visit_date.max$$
+  where pa.output_pan_id = obs.pan_id
+  and pa.output_pan_id = m.pan_id
+  and m.property_source_id = 'EUPATH_0000113'
+  and obs.EUPATH_0000091 >= $$visit_date.min$$
+  and obs.EUPATH_0000091 <= $$visit_date.max$$
+  /*
+select m.pan_id as internal, 'EUPATH_0000113' as ontology_term_name, to_char(EUPATH_0000113) as string_value, EUPATH_0000113 as number_value, cast(null as date) as date_value
+ from ApidbTuning.$$tbl_prefix$$Observations m,
+ (select distinct io.input_pan_id, io.output_pan_id
+  from ApidbTuning.$$tbl_prefix$$PANIO io
+  where io.input_pan_id in ($$geographic_region_prism$$)
+  and output_pan_type_source_id = 'EUPATH_0000738'
+  ) pa
+  where pa.output_pan_id = m.pan_id
+  and m.EUPATH_0000091 >= $$visit_date.min$$
+  and m.EUPATH_0000091 <= $$visit_date.max$$ */
          ]]>   
       </sql>
    </sqlQuery>
@@ -569,8 +582,9 @@ select distinct cva.pan_id as internal, 'EUPATH_0000113' as ontology_term_name, 
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct cva.pan_id as internal, 'EUPATH_0000113' as ontology_term_name, null as string_value, cva.EUPATH_0000113 as number_value, null as date_value
- from ApidbTuning.$$tbl_prefix$$Observations cva
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$MetaData m
+where m.property_source_id = 'EUPATH_0000113'
           ]]>   
       </sql>
    </sqlQuery>
@@ -636,8 +650,7 @@ select distinct m.pan_id as internal, m.property_source_id as ontology_term_name
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
    ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m
-   where pa.pan_id in ($$geographic_region_prism$$)
-   AND least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
+   where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
        and pa.pan_id = iov.input_pan_id
        and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
@@ -655,7 +668,7 @@ select distinct m.pan_id as internal, m.property_source_id as ontology_term_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as internal, m.term as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.category = 'Participant'
           ]]>
