@@ -10,7 +10,7 @@
 
       <!-- TEMPLATE_ANCHOR lightTrapSourceIdQuery -->
 
-    <sqlQuery name="LightTrapsByCharacteristics"
+    <sqlQuery name="DS_0ad509829eLightTrapsByCharacteristics"
               isCacheable="true">
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
        <paramRef ref="lightTrapParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>

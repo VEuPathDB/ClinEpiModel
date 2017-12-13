@@ -21,9 +21,12 @@ public class EpidemiologyStudy extends DatasetInjector {
         return result;
     }
 
+    public void injectAttributeMetaQuery(String record) {
+
+    }
+
   @Override
   public void injectTemplates() {
-
       addModelReferences();
 
       String subProjectName = getPropValue("subProjectName");
@@ -186,25 +189,6 @@ public class EpidemiologyStudy extends DatasetInjector {
       addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByHouseholds", new String[]{"webservice"}, categoryIri); 
       addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByObservations", new String[]{"webservice"}, categoryIri); 
       addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByParticipants", new String[]{"webservice"}, categoryIri); 
-
-
-      /**
-      addWdkReference("ClinicalVisitRecordClasses.ClinicalVisitRecordClass", "question", "ClinicalVisitQuestions.ClinicalVisitsByAllData"); 
-      addWdkReference("ClinicalVisitRecordClasses.ClinicalVisitRecordClass", "question", "ClinicalVisitQuestions.ClinicalVisitsByRelativeVisits"); 
-
-      addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "question", "ParticipantQuestions.ParticipantsByAllData"); 
-      addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "question", "ParticipantQuestions.ParticipantsByRelativeVisits"); 
-
-      addWdkReference("ClinicalVisitRecordClasses.ClinicalVisitRecordClass", "question", "ClinicalVisitQuestions.ClinicalVisitsByRelativeVisits_maled"); 
-      addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "question", "ParticipantQuestions.ParticipantsByRelativeVisits_maled"); 
-
-      addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "table", "Visits");
-      addWdkReference("ParticipantRecordClasses.ParticipantRecordClass", "table", "Samples");
-
-      addWdkReference("ClinicalVisitRecordClasses.ClinicalVisitRecordClass", "table", "Samples");
-
-
-      **/
   }
 
 

@@ -11,7 +11,7 @@ prop=includeProjects
               displayName="Household ID"
               shortDisplayName="Household ID"
               queryRef="HouseholdId.${presenterId}HouseholdsBySourceID" 
-              recordClassRef="${presenterId}RecordClasses.${presenterId}HouseholdRecordClass"
+              recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass"
               includeProjects="${includeProjects}"
              >
         <summary>
@@ -427,7 +427,7 @@ prop=includeProjects
       <question name="${presenterId}ParticipantsByObservation"
               displayName="Transform to Participants"
               shortDisplayName="observations->participant"
-              queryRef="${presenterId}ParticipantId.${presenterId}ParticipantsByObservations" 
+              queryRef="ParticipantId.${presenterId}ParticipantsByObservations" 
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass"
               noSummaryOnSingleRecord="true"
               includeProjects="${includeProjects}">

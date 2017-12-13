@@ -10,3 +10,14 @@ prop=scopes
 >templateTextStart<
 ${uniqueName}	${categoryIri}		${recordClassName}	${targetType}	${targetName}						${scopes}	
 >templateTextEnd<
+
+[templateStart] 
+name=clinEpiAttributeMetaQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/ontology/individuals.txt
+prop=uniqueName
+prop=categoryIri
+prop=recordClassName
+prop=targetName
+>templateTextStart<
+${recordClassName}.${targetName}	${categoryIri}		${recordClassName}	attributeMetaQuery	${targetName}						results	download
+>templateTextEnd<

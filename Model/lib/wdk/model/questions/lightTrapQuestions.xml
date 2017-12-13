@@ -9,8 +9,8 @@
     		searchCategory="Lighttraps"
     		displayName="Select a Set of Light Trap Collections"
     		shortDisplayName="Light Traps"
-    		queryRef="LightTrapId.LightTrapsByCharacteristics"
-    		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
+    		queryRef="LightTrapId.DS_0ad509829eLightTrapsByCharacteristics"
+    		recordClassRef="DS_0ad509829eLightTrapRecordClasses.DS_0ad509829eLightTrapRecordClass">
 
 <!--
           <attributesList summary="EUPATH_0000094,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
