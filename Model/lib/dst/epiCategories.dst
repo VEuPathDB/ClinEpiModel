@@ -19,5 +19,5 @@ prop=categoryIri
 prop=recordClassName
 prop=targetName
 >templateTextStart<
-${recordClassName}.${targetName}	${categoryIri}		${recordClassName}	attributeMetaQuery	${targetName}						results	download
+${targetName}	${categoryIri}		${recordClassName}	attributeMetaQuery	${targetName}						results	download
 >templateTextEnd<
