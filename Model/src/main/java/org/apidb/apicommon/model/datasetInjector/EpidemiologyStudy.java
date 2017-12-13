@@ -21,12 +21,33 @@ public class EpidemiologyStudy extends DatasetInjector {
         return result;
     }
 
-    public void injectAttributeMetaQuery(String record) {
-
+    protected void injectAttributeMetaQuery(String recordClassName, String targetName) {
+        setPropValue("categoryIri", CATEGORY_IRI);
+        setPropValue("recordClassName", recordClassName);
+        setPropValue("targetName", targetName);
+        injectTemplate("clinEpiAttributeMetaQuery");
     }
+
+
+    protected String makeRecordClassName(String prefix) {
+        String presenterId = getPropValue("presenterId");
+
+        return(presenterId + prefix + "RecordClasses." + presenterId + prefix + "RecordClass");
+    }
+
+    public static final String CATEGORY_IRI = "http://edamontology.org/topic_3305";
+    public static final String OBSERVATION_RECORD_CLASS_PREFIX = "Observation";
+    public static final String PARTICIPANT_RECORD_CLASS_PREFIX = "Participant";
+    public static final String HOUSEHOLD_RECORD_CLASS_PREFIX = "Household";
+
+
+    
+
 
   @Override
   public void injectTemplates() {
+      String presenterId = getPropValue("presenterId");
+
       addModelReferences();
 
       String subProjectName = getPropValue("subProjectName");
@@ -145,50 +166,60 @@ public class EpidemiologyStudy extends DatasetInjector {
           }
       }
 
+
+      String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
+      String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
+      String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
+
+      // Add meta attribute queries to categories / individuals
+      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdTables.HouseholdMembersColumnAttributes");
+      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdAttributes.HouseholdAttributesMeta");
+      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdTables.LightTrapColumnAttributes");
+      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.ParticipantAttributesMeta");
+      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantTables.ObservationsColumnAttributes ");
+      injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ObservationAttributesMeta");
   }
 
   @Override
   public void addModelReferences() {
 
-      String categoryIri = "http://edamontology.org/topic_3305";
-
       String presenterId = getPropValue("presenterId");
+      
+      String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
+      String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
+      String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
 
-      String observationRecordClass = presenterId + "ObservationRecordClasses." + presenterId + "ObservationRecordClass";
-      String participantRecordClass = presenterId + "ParticipantRecordClasses." + presenterId + "ParticipantRecordClass";
-      String householdRecordClass = presenterId + "HouseholdRecordClasses." + presenterId + "HouseholdRecordClass";
+      addWdkReference(householdRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI);
+      addWdkReference(householdRecordClass, "table", "HouseholdMembers", new String[]{"record"}, CATEGORY_IRI);
 
-      addWdkReference(householdRecordClass, "table", "Characteristics", new String[]{"record"}, categoryIri);
-      addWdkReference(householdRecordClass, "table", "HouseholdMembers", new String[]{"record"}, categoryIri);
-
-      addWdkReference(participantRecordClass, "table", "Characteristics", new String[]{"record"}, categoryIri);
-      addWdkReference(participantRecordClass, "table", "Observations", new String[]{"record"}, categoryIri);
+      addWdkReference(participantRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI);
+      addWdkReference(participantRecordClass, "table", "Observations", new String[]{"record"}, CATEGORY_IRI);
       // TODO Samples table of participant record page
 
-      addWdkReference(observationRecordClass, "table", "Characteristics", new String[]{"record"}, categoryIri);
+      addWdkReference(observationRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI);
       // TODO Samples table of observation record page
 
-      addWdkReference(householdRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, categoryIri);
-      addWdkReference(participantRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, categoryIri);
-      addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, categoryIri);
+      addWdkReference(householdRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
+      addWdkReference(participantRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
+      addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
 
 
       // Add the Text Attributes
       String participantGraphAttributeNames = getPropValue("participantGraphAttributeNames");
       String[] participantGraphsArray = participantGraphAttributeNames.split(",");
       for (int i = 0; i < participantGraphsArray.length; i++) {
-          addWdkReference(participantRecordClass, "attribute", participantGraphsArray[i], new String[]{"record","results"}, categoryIri);
+          addWdkReference(participantRecordClass, "attribute", participantGraphsArray[i], new String[]{"record","results"}, CATEGORY_IRI);
       }
 
       // By Source Id Questions
-      addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySourceID", new String[]{"menu","webservice"}, categoryIri); 
-      addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsBySourceID", new String[]{"menu","webservice"}, categoryIri); 
-      addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, categoryIri); 
+      addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+      addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+      addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
 
-      addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationsByParticipants", new String[]{"webservice"}, categoryIri); 
-      addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByHouseholds", new String[]{"webservice"}, categoryIri); 
-      addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByObservations", new String[]{"webservice"}, categoryIri); 
-      addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByParticipants", new String[]{"webservice"}, categoryIri); 
+      addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationsByParticipants", new String[]{"webservice"}, CATEGORY_IRI); 
+      addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByHouseholds", new String[]{"webservice"}, CATEGORY_IRI); 
+      addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByObservations", new String[]{"webservice"}, CATEGORY_IRI); 
+      addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByParticipants", new String[]{"webservice"}, CATEGORY_IRI); 
   }
 
 
