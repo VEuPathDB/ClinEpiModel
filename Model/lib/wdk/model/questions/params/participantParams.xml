@@ -130,6 +130,7 @@
                     backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_prism"
                     countPredictsAnswerCount="false"
                     prompt="Age at visit"
+                    filterDataTypeDisplayName="Participants"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_prism"
                     trimMetadataTerms="false">
       <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>                 

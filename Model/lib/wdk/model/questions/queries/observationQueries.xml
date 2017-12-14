@@ -13,21 +13,21 @@
 
     <!-- TEMPLATE_ANCHOR observationSourceIdQuery -->
 
-     <sqlQuery name="ClinicalVisitsByRelativeVisits"
+     <sqlQuery name="ClinicalVisitsByRelativeVisits_prism"
           isCacheable="true">
-       <paramRef ref="clinicalVisitParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="clinicalVisitParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_prism" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="clinicalVisitParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_prism" groupRef="metaDataGroups.part_visit_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="clinicalVisitParams.relative_visits_nf" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.relative_visits_prism" groupRef="metaDataGroups.relative_visits"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.part_visit_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -37,13 +37,13 @@
 with vis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
 from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
-where ca.pan_id in ($$visits_nf$$)
+where ca.pan_id in ($$visits_prism$$)
 and ca.pan_id = io.output_pan_id
 ),
 relvis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
 from ApidbTuning.$$tbl_prefix$$Observations ca,ApidbTuning.$$tbl_prefix$$PANIO io
-where ca.pan_id in ($$relative_visits_nf$$)
+where ca.pan_id in ($$relative_visits_prism$$)
 and ca.pan_id = io.output_pan_id
 ),
 visits as (
@@ -139,28 +139,6 @@ and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
 where visits.pan_id = inter.pan_id(+)
 )
 group by name
-                ]]>   
-        </sql>
-     </sqlQuery>
-
-
-     <sqlQuery name="ClinicalVisitsByAllData"
-          isCacheable="true">
-       <paramRef ref="clinicalVisitParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_nf" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="clinicalVisitParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_nf" groupRef="metaDataGroups.part_visit_characteristics"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.part_visit_characteristics"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-       <sql>
-           <![CDATA[
-select name as source_id,'@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$Observations
-where pan_id in ($$visits_nf$$)
                 ]]>   
         </sql>
      </sqlQuery>
