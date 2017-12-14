@@ -62,7 +62,7 @@
  
     </question>
 
-    <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1" includeProjects="Gates"
+    <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1" includeProjects="NotUsed"
               searchCategory="Observation"
               displayName="Select a Set of Observations (MAL-ED)"
               shortDisplayName="Observations"

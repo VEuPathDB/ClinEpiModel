@@ -10,7 +10,7 @@
     ]]> 
   </constant>   
 
-  <paramSet name="lightTrapParams">
+  <paramSet name="lightTrapParams" includeProjects="ICEMR">
     
     <enumParam name="type"
                prompt="type"
@@ -104,7 +104,7 @@
     <!--  Vocab queries-->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
- <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true">
+ <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true" includeProjects="ICEMR">
 
 
     <sqlQuery name="HouseholdMetaData_prism" isCacheable="true">

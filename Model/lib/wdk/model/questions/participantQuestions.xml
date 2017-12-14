@@ -195,7 +195,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-        <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="Gates"
+        <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="NotUsed"
               searchCategory="Participant"
               displayName="Select a Set of Participants (MAL-ED)"
               shortDisplayName="Particip MAL-ED"
