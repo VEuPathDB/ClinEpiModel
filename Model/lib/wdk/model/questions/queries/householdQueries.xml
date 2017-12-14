@@ -14,12 +14,12 @@
     <!-- TEMPLATE_ANCHOR householdSourceIdQuery -->
 
 
-    <sqlQuery name="HouseholdsByCharacteristics" isCacheable="true">
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
-       <paramRef ref="householdParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
+    <sqlQuery name="HouseholdsByCharacteristics_prism" isCacheable="true">
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="householdParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="householdParams.participants_nf" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_anoph"/>
@@ -31,7 +31,7 @@ select dwpct.name as source_id, '@PROJECT_ID@' as project_id,
 from (
 select da.pan_id,da.name,count(*) as part_count
 from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da
-where io.output_pan_id in ($$participants_nf$$)
+where io.output_pan_id in ($$participants_prism$$)
 and da.pan_id = io.input_pan_id
 group by da.pan_id,da.name
 ) dwpct, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la

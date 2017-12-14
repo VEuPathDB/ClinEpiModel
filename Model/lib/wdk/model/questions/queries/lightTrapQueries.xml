@@ -10,20 +10,20 @@
 
       <!-- TEMPLATE_ANCHOR lightTrapSourceIdQuery -->
 
-    <sqlQuery name="DS_0ad509829eLightTrapsByCharacteristics"
+    <sqlQuery name="DS_0ad509829eLightTrapsByCharacteristics_prism"
               isCacheable="true">
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
-       <paramRef ref="lightTrapParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="lightTrapParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="lightTrapParams.lighttraps_nf" groupRef="metaDataGroups.lighttrap_characteristics"/>
+       <paramRef ref="lightTrapParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.lighttraps_prism" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
            <![CDATA[
 select lta.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.$$tbl_prefix$$LightTraps lta
-where lta.pan_id in ($$lighttraps_nf$$)
+where lta.pan_id in ($$lighttraps_prism$$)
                 ]]>   
         </sql>
      </sqlQuery>

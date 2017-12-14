@@ -48,17 +48,6 @@
       </help>
     </filterParamNew>
 
-     <filterParamNew name="relative_visits_prism" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
-                    metadataQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd_prism"
-                    filterDataTypeDisplayName="Observations"
-                    prompt="Relative Observations"
-                    trimMetadataTerms="false"
-                    dependedParamRef="participantParams.tbl_prefix">
-      <help>
-        Select relative observations based on their observation characteristics. 
-      </help>
-    </filterParamNew>
 
        <filterParamNew name="visits_visitage_metadata_prism" 
                        ontologyQueryRef="ParticipantVQ.VisitAgeOntology_prism"

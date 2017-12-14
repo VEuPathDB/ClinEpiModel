@@ -7,18 +7,16 @@
     <!-- ************************************************************ -->
 
 
-   <question name="HouseholdsByCharacteristics" newBuild="1"
+   <question name="HouseholdsByCharacteristics_prism" newBuild="1"
               searchCategory="Household"
               displayName="Select a Set of Households"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics" 
+              queryRef="HouseholdId.HouseholdsByCharacteristics_prism" 
               recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass">
 
-<!--
         <attributesList 
             summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,part_count,EUPATH_0000019"        
         /> 
--->
 
 	<dynamicAttributes>
 	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this household over the time frame specified" align="center"> 
