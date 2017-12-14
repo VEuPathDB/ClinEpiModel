@@ -71,11 +71,13 @@ prop=includeProjects
         <table name="Characteristics"
                displayName="Lighttrap Characteristics"
                queryRef="${presenterId}LightTrapTables.Characteristics">
-
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="term" displayName="Value"/>
-            <columnAttribute name="parentTerm" displayName="Category"/>
+            <columnAttribute name="display_name" displayName="Value"/>
+            <columnAttribute name="parent_source_id" displayName="Category"/>
+            <columnAttribute name="unique_id" displayName="unique_id"/>
+            <columnAttribute name="is_leaf" displayName="is_leaf"/>
+            <propertyList name="tableIsTree"><value>true</value></propertyList>
         </table>
     </recordClass>
     </recordClassSet>
@@ -200,31 +202,33 @@ prop=includeProjects
       
       <sqlQuery name="Characteristics"  isCacheable='false'>
             <column name="source_id"/>
-         <column name="project_id"/>
-            <column name="name"/>
-            <column name="parent_category"/>
-            <column name="category"/>
-            <column name="value"/>
+            <column name="project_id"/>
+            <column name="display_name"/>
+            <column name="parent_source_id"/>
+            <column name="unique_id"/>
+            <column name="is_leaf"/>
          <sqlParamValue name="datasetName"><![CDATA[${datasetName}]]></sqlParamValue>
        <sql>
           <![CDATA[
 SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
-  term           AS parentTerm,
-  string_value   AS term
+  nvl(property_source_id, 'root')      AS parent_source_id,
+  pan_id ||'_'||property_id ||'_'||string_value as unique_id,
+  string_value   AS display_name,
+  1 as is_leaf
 FROM apidbtuning.${tblPrefix}metadata
 WHERE dataset_name = '&&datasetName&&'
 AND category       = 'CDC light trap assay'
-/** TODO:  add this back in when we can make this a tree on the record page
 UNION
 SELECT pa.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
-  o.PARENT_ONTOLOGY_TERM_NAME AS parentTerm,
-  ontology_term_name          AS term
+  nvl(o.PARENT_ONTOLOGY_TERM_SOURCE_ID, 'root') AS parent_source_id,
+  o.ONTOLOGY_TERM_SOURCE_ID AS unique_id,
+  ontology_term_name          AS display_name,
+  0 as is_leaf
 FROM apidbtuning.${tblPrefix}Ontology o,
   apidbtuning.${tblPrefix}LightTraps pa
 WHERE o.dataset_name = '&&datasetName&&'
-**/
             ]]>
         </sql>
       </sqlQuery>
