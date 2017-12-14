@@ -79,10 +79,18 @@ BEGIN MALED
       <!-- =============================================================== -->
 
 
-      <stepAnalysisRef name="clinepi-event-dist"/> 
-      <stepAnalysisRef name="clinepi-cont-table"/>    
-      <stepAnalysisRef name="clinepi-summaries"/>
- 
+      <stepAnalysisRef name="clinepi-event-dist"> 
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
+      <stepAnalysisRef name="clinepi-cont-table">    
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
+      <stepAnalysisRef name="clinepi-summaries">
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
       <!-- =============================================================== -->
       <!--   Reporters -->  
       <!-- =============================================================== -->

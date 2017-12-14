@@ -82,8 +82,11 @@
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
-      <property name="datasetTblPrefix">D841A9F5259</property>
-      <property name="datasetName">ISASimple_Gates_GEMS_gems1_case_control_RSRC</property>
+
+<!--
+      <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
+      <property name="datasetName">OVERRIDE_FROM_RECORD</property>
+-->
     </stepAnalysisPlugin>
 
     <stepAnalysisPlugin
@@ -103,8 +106,10 @@
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
-      <property name="datasetTblPrefix">D841A9F5259</property>
-      <property name="datasetName">ISASimple_Gates_GEMS_gems1_case_control_RSRC</property>
+<!--
+      <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
+      <property name="datasetName">OVERRIDE_FROM_RECORD</property>
+-->
     </stepAnalysisPlugin>
 
 
@@ -127,8 +132,11 @@
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
-      <property name="datasetTblPrefix">D841A9F5259</property>
-      <property name="datasetName">ISASimple_Gates_GEMS_gems1_case_control_RSRC</property>
+
+<!--
+      <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
+      <property name="datasetName">OVERRIDE_FROM_RECORD</property>
+-->
     </stepAnalysisPlugin>
 
   </stepAnalysisPlugins>
