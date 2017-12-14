@@ -202,6 +202,9 @@ prop=householdSourceIdsForHouseholdMemberTableQuote
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
+prop=lightTrapSourceIdsForHouseholdsLightTrapTable
+prop=lightTrapSourceIdsForHouseholdsLightTrapTableQuote
+prop=lightTrapSourceIdsToOrderHouseholdsLightTrapTable
 >templateTextStart<
     <querySet name="${presenterId}HouseholdTables" queryType="table" includeProjects="${includeProjects}" 
               isCacheable='false'>
@@ -297,8 +300,9 @@ order by source_id
             <column name="source_id"/>
             <column name="project_id"/>
 
-            <sqlParamValue name="lightTrapSourceIds"><![CDATA[EUPATH_0000200,EUPATH_0000198,EUPATH_0000192,EUPATH_0000196,EUPATH_0000203,EUPATH_0000193,EUPATH_0000197,EUPATH_0000218,EUPATH_0000202,EUPATH_0000204,EUPATH_0000195,EUPATH_0000205,OBI_0001619,EUPATH_0000217,EUPATH_0000194]]></sqlParamValue>
-            <sqlParamValue name="orderBySourceIds"><![CDATA[OBI_0001619]]></sqlParamValue>
+
+            <sqlParamValue name="lightTrapSourceIds"><![CDATA[${lightTrapSourceIdsForHouseholdsLightTrapTable}]]></sqlParamValue>
+            <sqlParamValue name="orderBySourceIds"><![CDATA[${lightTrapSourceIdsToOrderHouseholdsLightTrapTable}]]></sqlParamValue>
 
             <sql>
             <![CDATA[
@@ -312,12 +316,10 @@ order by source_id
           <column name="name" />
           <column name="display_name" />
 
-<!--
-          <sqlParamValue name="lightTrapSourceIds"><![CDATA['EUPATH_0000200','EUPATH_0000198','EUPATH_0000192','EUPATH_0000196','EUPATH_0000203','EUPATH_0000193','EUPATH_0000197','EUPATH_0000218','EUPATH_0000202','EUPATH_0000204','EUPATH_0000195','EUPATH_0000205','OBI_0001619','EUPATH_0000217','EUPATH_0000194' ]]></sqlParamValue>
+
+          <sqlParamValue name="lightTrapSourceIds"><![CDATA[${lightTrapSourceIdsForHouseholdsLightTrapTableQuote}]]></sqlParamValue>
 
 
--->
-          <sqlParamValue name="lightTrapSourceIds"><![CDATA['DUMMY' ]]></sqlParamValue>
           <sql>
             <![CDATA[
                      select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyTypes where property_source_id in (&&lightTrapSourceIds&&)

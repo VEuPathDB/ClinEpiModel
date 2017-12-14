@@ -59,11 +59,32 @@ public class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy {
         addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
 
         if(hasHouseholds) {
+            String lightTrapSourceIdsForHouseholdsLightTrapTable = getPropValue("lightTrapSourceIdsForHouseholdsLightTrapTable");
+            setPropValue("lightTrapSourceIdsForHouseholdsLightTrapTableQuote", addQuotes(lightTrapSourceIdsForHouseholdsLightTrapTable));
+
             addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsByHouseholdId", new String[]{"webservice"}, CATEGORY_IRI); 
             addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByLightTrapId", new String[]{"webservice"}, CATEGORY_IRI); 
+
+            addWdkReference(householdRecordClass, "table", "LightTraps", new String[]{"record"}, CATEGORY_IRI);
         }
 
     }
+
+
+
+  @Override
+  public String[][] getPropertiesDeclaration() {
+        String[][] exprDeclaration = super.getPropertiesDeclaration();
+        
+        String [][] declaration = {{"householdSourceIdsIncludedInLightTrapAttributes", ""},
+                                   {"lightTrapRecordOverview", ""},
+                                   {"lightTrapAttributesList", ""},
+                                   {"lightTrapSourceIdsForHouseholdsLightTrapTable", ""},
+                                   {"lightTrapSourceIdsToOrderHouseholdsLightTrapTable", ""},
+        };
+
+        return combinePropertiesDeclarations(exprDeclaration, declaration);
+  }
 
 
 }
