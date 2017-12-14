@@ -46,6 +46,8 @@ public class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy {
 
         String presenterId = getPropValue("presenterId");
 
+        boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
+
         String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
         String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
         String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
@@ -56,8 +58,11 @@ public class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy {
 
         addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
 
-        addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsByHouseholdId", new String[]{"webservice"}, CATEGORY_IRI); 
-        addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByLightTrapId", new String[]{"webservice"}, CATEGORY_IRI); 
+        if(hasHouseholds) {
+            addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsByHouseholdId", new String[]{"webservice"}, CATEGORY_IRI); 
+            addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByLightTrapId", new String[]{"webservice"}, CATEGORY_IRI); 
+        }
+
     }
 
 
