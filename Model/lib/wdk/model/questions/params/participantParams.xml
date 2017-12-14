@@ -178,7 +178,7 @@
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.tbl_prefix,participantParams.visits_visitage_metadata_prism,participantParams.households_prism">
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.visits_visitage_metadata_prism,participantParams.households_prism,clinicalVisitParams.visit_date">
       <idTransformSql>%%participantIdTransformSql2%%</idTransformSql>    
       <help>
         Select participants based on their visit characteristics. 
@@ -791,6 +791,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
        <sqlQuery name="VisitMetaData_prism" isCacheable="false">
          <paramRef ref="participantParams.tbl_prefix" />  
          <paramRef ref="participantParams.visits_visitage_metadata_prism" />
+         <paramRef ref="clinicalVisitParams.visit_date" /> 
          <paramRef ref="participantParams.households_prism" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -801,9 +802,12 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
            <![CDATA[
 with valid as (
 select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
-from ApidbTuning.$$tbl_prefix$$PANIO io
+from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations obs
 where io.input_pan_id in ($$households_prism$$)
 and io.output_pan_id in ($$visits_visitage_metadata_prism$$)
+and obs.pan_id = io.output_pan_id
+and obs.EUPATH_0000091 >= $$visit_date.min$$ 
+and obs.EUPATH_0000091 <= $$visit_date.max$$ 
 )
 select distinct valid.visit_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, valid

@@ -41,6 +41,7 @@
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData_prism"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     prompt="Observations"
+                    countPredictsAnswerCount="false"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visits_visitage_metadata_prism,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.households_prism,clinicalVisitParams.geographic_region_prism,clinicalVisitParams.participants_prism">
       <help>
@@ -55,6 +56,7 @@
                        backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_prism"
                        filterDataTypeDisplayName="Participants"
                        prompt="Age at observation"
+                       countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_prism"
                        trimMetadataTerms="false">
          <help>
@@ -69,6 +71,7 @@
                        filterDataTypeDisplayName="Participants"
                        prompt="Geographic Region"
                        dependedParamRef="participantParams.tbl_prefix"
+                       countPredictsAnswerCount="true"
                        trimMetadataTerms="false">
          <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>              
          <help>
@@ -83,6 +86,7 @@
                        useIdTransformSqlForInternalValue="false"
                        filterDataTypeDisplayName="Participants"
                        prompt="Households"
+                       countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visit_date,clinicalVisitParams.participants_prism"
                        trimMetadataTerms="false">
          <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>                
@@ -97,6 +101,7 @@
                        backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
                        useIdTransformSqlForInternalValue="false"
                        prompt="Participants"
+                       countPredictsAnswerCount="false"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visits_visitage_metadata_prism,clinicalVisitParams.visit_date,participantParams.duration_observation">
          <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>   
@@ -565,6 +570,7 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
        <sqlQuery name="VisitMetaData_prism" >
          <paramRef ref="clinicalVisitParams.households_prism" />  
          <paramRef ref="clinicalVisitParams.visits_visitage_metadata_prism" />
+         <paramRef ref="clinicalVisitParams.visit_date" /> 
          <paramRef ref="participantParams.tbl_prefix" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -575,9 +581,12 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
            <![CDATA[
 with valid as (
 select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
-from ApidbTuning.$$tbl_prefix$$PANIO io
+from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations obs
 where io.input_pan_id in ($$households_prism$$)
 and io.output_pan_id in ($$visits_visitage_metadata_prism$$)
+and obs.pan_id = io.output_pan_id
+and obs.EUPATH_0000091 >= $$visit_date.min$$ 
+and obs.EUPATH_0000091 <= $$visit_date.max$$ 
 )
 select distinct valid.visit_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, valid
