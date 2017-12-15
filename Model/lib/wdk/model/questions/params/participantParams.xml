@@ -467,7 +467,7 @@ from apidbtuning.$$tbl_prefix$$Ontology o
         <![CDATA[
 select io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
- where m.category = 'Household'
+ where lower(m.category) = 'household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000096'
@@ -489,7 +489,7 @@ select io.output_pan_id as internal, m.property_source_id as ontology_term_name,
 where o.type is not null
 and o.is_range = 0
 and m.property_source_id = o.ontology_term_source_id
- and m.category = 'Household'
+ and lower(m.category) = 'household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000096'
@@ -572,7 +572,7 @@ select io.output_pan_id as internal, m.property_source_id as ontology_term_name,
 where o.type is not null
 and o.is_range = 0
 and m.property_source_id = o.ontology_term_source_id
- and m.category = 'Household'
+ and lower(m.category) = 'household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000096'
@@ -762,7 +762,7 @@ select m.pan_id as internal, m.property_source_id as ontology_term_name, m.strin
 where o.type is not null
 and o.is_range = 0
 and m.property_source_id = o.ontology_term_source_id
- and m.category = 'Household'
+ and lower(m.category) = 'household'
           ]]>
       </sql>    
     </sqlQuery>  
@@ -1016,7 +1016,7 @@ select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontolo
                   from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct source_id
                   from ApidbTuning.$$tbl_prefix$$MetaData
                   where source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
-                  and category = 'Household') ds
+                  and lower(category) = 'household') ds
                   where ds.source_id = o.ontology_term_source_id
                   union
                   select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
@@ -1036,7 +1036,7 @@ select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontolo
         <![CDATA[
 select io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
- where m.category = 'Household'
+ where lower(m.category) = 'household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000096'
@@ -1060,7 +1060,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id IN 
 (select distinct source_id
  from ApidbTuning.$$tbl_prefix$$MetaData
- where category = 'Household'
+ where lower(category) = 'household'
  and source_id != 'EUPATH_0000094')
  order by display_name
     </sql>
@@ -1082,7 +1082,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
        and pa.pan_id = io.output_pan_id)
  select distinct Part.household_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
- where m.category = 'Household'
+ where lower(m.category) = 'household'
  and part.household_id = m.pan_id
           ]]>
     </sql>    
@@ -1104,7 +1104,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
    where pa.pan_id = io.output_pan_id)
  select distinct Part.household_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
- where m.category = 'Household'
+ where lower(m.category) = 'household'
  and part.household_id = m.pan_id
           ]]>
     </sql>    

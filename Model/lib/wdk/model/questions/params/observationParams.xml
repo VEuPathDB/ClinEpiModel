@@ -462,7 +462,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o,
 (select distinct term
  from ApidbTuning.$$tbl_prefix$$MetaData
  where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
- and category = 'Household type'
+ and lower(category) = 'household'
  and source_id != 'EUPATH_0000094') md
  where o.ontology_term_name = md.term),
 first as (
@@ -750,7 +750,7 @@ select io.part_id as internal, m.property_source_id as ontology_term_name, m.str
  and ioe.output_pan_type_source_id = 'EUPATH_0000738') io
  where m.pan_id = io.hh_id
  and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and m.category = 'Household'
+ and lower(m.category) = 'household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
         ]]>
       </sql>
@@ -773,7 +773,7 @@ select io.part_id as internal, m.property_source_id as ontology_term_name, m.str
  and io.input_pan_type_source_id = 'PCO_0000024') io
  where m.pan_id = io.hh_id
  and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and m.category = 'Household'
+ and lower(m.category) = 'household'
           ]]>
     </sql>    
 
@@ -796,7 +796,7 @@ select io.part_id as internal, m.property_source_id as ontology_term_name, m.str
  and io.input_pan_type_source_id = 'PCO_0000024') io
  where m.pan_id = io.hh_id
  and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and m.category = 'Household'
+ and lower(m.category) = 'household'
           ]]>
     </sql>    
 
