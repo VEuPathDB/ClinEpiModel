@@ -246,7 +246,7 @@ select count(*) from apidbtuning.${tblPrefix}Participants
          <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
          <!--
            ICEMR
-         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
+         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000054,ENVO_01000744]]></sqlParamValue>
 
 
            MALED
@@ -285,9 +285,9 @@ select count(*) from apidbtuning.${tblPrefix}Participants
 MALED
           <sqlParamValue name="householdSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>
 ICEMR
-          <sqlParamValue name="householdSourceIds"><![CDATA['EUPATH_0000054', 'EUPATH_0000002']]></sqlParamValue>
+          <sqlParamValue name="householdSourceIds"><![CDATA['EUPATH_0000054', 'ENVO_01000744']]></sqlParamValue>
 
-          <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EUPATH_0000032']]></sqlParamValue>
+          <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EFO_0004950']]></sqlParamValue>
  -->
 
           <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInParticipantAttributesQuote}]]></sqlParamValue>

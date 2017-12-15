@@ -15,7 +15,7 @@
               recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass">
 
         <attributesList 
-            summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,part_count,EUPATH_0000019"        
+            summary="EUPATH_0000054,ENVO_01000744,ave_anoph,part_count,EUPATH_0000019"        
         /> 
 
 	<dynamicAttributes>

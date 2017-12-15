@@ -199,7 +199,7 @@ MALED
 
          <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
          <!-- ICEMR
-          <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA['EUPATH_0000054','EUPATH_0000002', 'PATO_0000047', 'EUPATH_0000033', 'EUPATH_0000035', 'EUPATH_0000034']]></sqlParamValue>
+          <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA['EUPATH_0000054','ENVO_01000744', 'PATO_0000047', 'EUPATH_0000033', 'EUPATH_0000035', 'EUPATH_0000034']]></sqlParamValue>
 
 MALED
           <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>

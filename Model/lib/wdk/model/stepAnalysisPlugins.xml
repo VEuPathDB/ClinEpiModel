@@ -18,7 +18,7 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/App-2-ps]]></property>
-      <property name="attributesToExtract">name,avg_hemo,avg_weight,ave_anoph,ave_para_density,visits_per_year_obs,visit_count,time_of_obs,ave_age_visit,EUPATH_0000034,EUPATH_0000054,EUPATH_0000033,EUPATH_0000035,PATO_0000047,EUPATH_0000002</property>
+      <property name="attributesToExtract">name,avg_hemo,avg_weight,ave_anoph,ave_para_density,visits_per_year_obs,visit_count,time_of_obs,ave_age_visit,EUPATH_0000034,EUPATH_0000054,EUPATH_0000033,EUPATH_0000035,PATO_0000047,ENVO_01000744</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1000</property>
       <property name="iframeLengthPx">800</property>

@@ -619,8 +619,8 @@ select distinct m.pan_id as internal, m.property_source_id as ontology_term_name
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
    ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m
-   where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EUPATH_0000032 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EUPATH_0000032 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
+   where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
        and pa.pan_id = iov.input_pan_id
        and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
        and pa.pan_id = m.pan_id
@@ -679,7 +679,7 @@ select * from (
  select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('PCO_0000024','EUPATH_0000002')
+     START WITH o.ontology_term_source_id in ('PCO_0000024','ENVO_01000744')
      and ontology_term_source_id != 'EUPATH_0000094'
  union
  select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
@@ -894,7 +894,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
 (select distinct source_id
  from ApidbTuning.$$tbl_prefix$$MetaData
  where category = 'Participant'
- and source_id != 'EUPATH_0000032')
+ and source_id != 'EFO_0004950')
  order by display_name
          ]]>
     </sql>
