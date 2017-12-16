@@ -1,0 +1,831 @@
+[templateStart] 
+name=householdSourceIdQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/householdQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+   <question name="${presenterId}HouseholdsBySourceID"
+              searchCategory="Household"
+              displayName="Household ID"
+              shortDisplayName="Household ID"
+              queryRef="HouseholdId.${presenterId}HouseholdsBySourceID" 
+              recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass"
+              includeProjects="${includeProjects}"
+             >
+        <summary>
+            <![CDATA[ 
+           Find Households based on Sourcd ID.
+            ]]>
+        </summary>
+
+        <description>
+            <![CDATA[
+             Find households based on Source ID. <br />
+            ]]>
+        </description>
+    </question>
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=participantSourceIdQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/participantQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+   <question name="${presenterId}ParticipantsBySourceID"
+	     displayName="Participant ID"
+	     shortDisplayName="Participant ID"
+	     queryRef="ParticipantId.${presenterId}ParticipantsBySourceID" 
+             recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass"
+             noSummaryOnSingleRecord="false"
+             includeProjects="${includeProjects}">
+
+             <summary>
+             Find participant by source id.
+             </summary>
+
+             <description>
+               <![CDATA[
+             Find participant by source id.
+               ]]>
+             </description>
+    </question>
+>templateTextEnd<
+
+
+[templateStart] 
+name=observationSourceIdQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/observationQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <question name="${presenterId}ObservationsBySourceID" includeProjects="${includeProjects}"
+              searchCategory="Observation"
+              displayName="Observation ID"
+              shortDisplayName="Observation ID"
+              queryRef="ClinicalVisitId.${presenterId}ClinicalVisitsBySourceID" 
+              recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass">
+        <summary>
+            <![CDATA[ 
+           Find observations based on source ID's
+            ]]>
+        </summary>
+
+        <description>
+            <![CDATA[
+             Find observations based on Source ID's <br />
+            ]]>
+        </description>
+    </question>
+>templateTextEnd<
+
+[templateStart] 
+name=householdSourceIdQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <sqlQuery name="${presenterId}HouseholdsBySourceID"
+	      isCacheable="true" includeProjects="${includeProjects}">
+      <paramRef ref="householdParams.${presenterId}householdsBySourceID" />
+      <column name="source_id" />
+      <column name="project_id" />
+      <sql>
+	<![CDATA[select distinct da.name as source_id, '@PROJECT_ID@' as project_id from ApidbTuning.${tblPrefix}Households da,
+        ($$${presenterId}householdsBySourceID$$) ds WHERE da.name=ds.source_id]]>
+      </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=participantSourceIdQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <sqlQuery name="${presenterId}ParticipantsBySourceID" includeProjects="${includeProjects}"
+          isCacheable="true">
+      <!-- <paramRef ref="participantParams.participantsBySourceID"/> -->
+       <paramRef ref="participantParams.${presenterId}participantsBySourceID"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+      <sql>
+           <![CDATA[
+ Select distinct pa.name as source_id, '@PROJECT_ID@' as project_id from  ApidbTuning.${tblPrefix}Participants pa,
+ ($$${presenterId}participantsBySourceID$$) ds where pa.name = ds.source_id
+                ]]>   
+        </sql>
+     </sqlQuery>
+
+>templateTextEnd<
+
+
+[templateStart] 
+name=observationSourceIdQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+      <sqlQuery name="${presenterId}ClinicalVisitsBySourceID"
+         isCacheable="true"  includeProjects="${includeProjects}">
+      <paramRef ref="clinicalVisitParams.${presenterId}clinical_visits_by_sourceid"/>
+      <column name="source_id"/>
+      <column name="project_id"/>
+     <sql>
+          <![CDATA[
+Select distinct cv.name as source_id, '@PROJECT_ID@' as project_id from  ApidbTuning.${tblPrefix}Observations cv,
+($$${presenterId}clinical_visits_by_sourceid$$) cs where cv.name = cs.source_id
+               ]]>   
+       </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=householdSourceIdParam
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <datasetParam includeProjects="${includeProjects}" name="${presenterId}householdsBySourceID"
+		  recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass"
+		  prompt="Source ID input set">
+      <help><![CDATA[Input a set of source ID's, or upload a file <br><br>
+
+               It can be delimited by a comma, semi colon or any white space<br><br>
+
+               Its possible that not all ID's in the list will be found in the database
+               due to a number of reasons such as unavailable ID maping. Its also currently not
+               possible to inform which ID's did not match anything in the database]]></help>
+      <suggest default="HH101009801" />
+    </datasetParam>
+>templateTextEnd<
+
+[templateStart] 
+name=participantSourceIdParam
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/participantParams.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <datasetParam name="${presenterId}participantsBySourceID" includeProjects="${includeProjects}"
+		  recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass"
+		  prompt="Source ID input set">
+      <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
+
+             It can be delimited by a comma, semi colon or any white space.<br><br>
+             Its possible that not all the IDs in the list will be found in the database
+             due to anumber of reasons such as unavailable ID mapping. It is currenly not
+             possible to inform which IDs did not match anything in the database]]> </help>
+     <suggest default="3001" />
+    </datasetParam>
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=observationSourceIdParam
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+        <datasetParam name="${presenterId}clinical_visits_by_sourceid"  includeProjects="${includeProjects}"
+		  recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass"
+		  prompt="Source ID input set">
+      <help><![CDATA[Input a set of source IDs, or upload a file<br><br>
+
+             It can be delimited by a comma, semi colon or any white space.<br><br>
+             Its possible that not all the IDs in the list will be found in the database
+             due to anumber of reasons such as unavailable ID mapping. It is currenly not
+             possible to inform which IDs did not match anything in the database]]> </help>
+     <suggest default="100118844" />
+    </datasetParam>
+>templateTextEnd<
+
+
+
+
+[templateStart] 
+name=householdsByParticipantQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/householdQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+   <question name="${presenterId}HouseholdsByParticipants"
+              displayName="Transform to Households"
+              shortDisplayName="participant->household"
+              queryRef="HouseholdId.${presenterId}HouseholdsByParticipantIds" 
+              recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass"
+              noSummaryOnSingleRecord="false"
+              includeProjects="${includeProjects}">
+ 
+
+        <attributesList 
+            summary="participants,participant_count"   
+            sorting ="participant_count desc"
+        /> 
+	<dynamicAttributes>
+	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this household" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="participants" displayName="Participants Transformed" help="list of participant ids from transformed result set associated with this household " align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	</dynamicAttributes>
+
+             <summary>
+             Find household by participants who are household members.
+             </summary>
+
+             <description>
+               <![CDATA[
+              Find household by participants who are household members.
+               ]]>
+             </description>
+    </question>
+>templateTextEnd<
+
+
+[templateStart] 
+name=householdsByParticipantQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <sqlQuery name="${presenterId}HouseholdsByParticipantIds" doNotTest="true"
+              displayName="ID" isCacheable="true" includeProjects="${includeProjects}">
+      <paramRef ref="participantParams.${presenterId}participant_result"/>
+        <column name="project_id"/>
+        <column name="source_id"/>
+        <column name="participants"/>
+        <column name="participant_count"/>
+        <column name="wdk_weight"/>
+
+        <sql>
+            <![CDATA[
+SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, count(distinct source_set.source_id) as participant_count,
+ listagg (pa.name, ',') WITHIN GROUP (order by pa.name )  as participants,
+ max(source_set.wdk_weight) as wdk_weight
+              FROM ($$${presenterId}participant_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}Participants pa
+              WHERE source_set.source_id = pa.name 
+              AND pa.pan_id = io.output_pan_id
+              AND  io.input_pan_id = da.pan_id
+              GROUP BY da.name
+             ]]>
+        </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+
+[templateStart] 
+name=participantResultParam
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/participantParams.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <answerParam name="${presenterId}participant_result"  includeProjects="${includeProjects}"
+                 prompt="Input Result Set"
+                 readonly="true"
+                 visible="false">
+      <recordClass ref="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" />
+    </answerParam>
+>templateTextEnd<
+
+
+[templateStart] 
+name=householdResultParam
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <answerParam name="${presenterId}household_result" includeProjects="${includeProjects}"
+                  prompt="Input Result Set"
+                  readonly="true"
+                  visible="false">
+       <recordClass ref="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass" />
+    </answerParam>
+>templateTextEnd<
+
+[templateStart] 
+name=observationResultParam
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <answerParam name="${presenterId}clinical_visit_result" includeProjects="${includeProjects}"
+                  prompt="Input Result Set"
+                  readonly="true"
+                  visible="false">
+       <recordClass ref="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" />
+    </answerParam>
+>templateTextEnd<
+
+
+[templateStart] 
+name=lightTrapResultParam
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/lightTrapParams.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <answerParam name="${presenterId}lighttrap_result"
+                  prompt="Input Result Set"
+                  readonly="true"
+                  visible="false"
+                  includeProjects="${includeProjects}">
+       <recordClass ref="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass" />
+    </answerParam>
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=participantsByHouseholdsQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/participantQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+   <question name="${presenterId}ParticipantsByHouseholds"
+              displayName="Transform to Participants"
+              shortDisplayName="household->participant"
+              queryRef="ParticipantId.${presenterId}ParticipantsByHouseholdIds" 
+              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass"
+              noSummaryOnSingleRecord="true"
+              includeProjects="${includeProjects}">
+
+	<dynamicAttributes>
+	     <columnAttribute name="household" displayName="Household Transformed" help="Household Participant is associated with" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	</dynamicAttributes>
+
+             <summary>
+             Find participant by household id.
+             </summary>
+
+             <description>
+               <![CDATA[
+             Find participant by household id.
+               ]]>
+             </description>
+    </question>
+>templateTextEnd<
+
+
+[templateStart] 
+name=participantsByObservationsQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/participantQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+      <question name="${presenterId}ParticipantsByObservation"
+              displayName="Transform to Participants"
+              shortDisplayName="observations->participant"
+              queryRef="ParticipantId.${presenterId}ParticipantsByObservations" 
+              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass"
+              noSummaryOnSingleRecord="true"
+              includeProjects="${includeProjects}">
+
+        <attributesList 
+            summary="num_of_visits"        
+            sorting="num_of_visits desc"
+        /> 
+
+	<dynamicAttributes>
+	     <columnAttribute name="num_of_visits" displayName="Observations Transformed" help="Observations associated with the participant from the previous step" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	</dynamicAttributes>
+
+             <summary>
+             Find participants by by clinical observations.
+             </summary>
+
+             <description>
+               <![CDATA[
+             Find participants by clinical observations.
+               ]]>
+             </description>
+    </question>
+>templateTextEnd<
+
+
+
+
+
+[templateStart] 
+name=participantsByHouseholdsQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <sqlQuery name="${presenterId}ParticipantsByHouseholdIds" doNotTest="true"  includeProjects="${includeProjects}"
+              displayName="ID" isCacheable="true">
+      <paramRef ref="householdParams.${presenterId}household_result"/>
+        <column name="project_id"/>
+        <column name="source_id"/>
+        <column name="household"/>
+        <column name="wdk_weight"/>
+
+        <sql>
+            <![CDATA[
+SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
+              FROM ($$household_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}Participants pa
+              WHERE source_set.source_id = da.name 
+              AND da.pan_id = io.input_pan_id
+              AND  io.output_pan_id = pa.pan_id
+             ]]>
+        </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+
+[templateStart] 
+name=participantsByObservationsQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+      <sqlQuery name="${presenterId}ParticipantsByObservations" doNotTest="true" includeProjects="${includeProjects}"
+              displayName="ID" isCacheable="true">
+      <paramRef ref="clinicalVisitParams.${presenterId}clinical_visit_result"/>
+        <column name="project_id"/>
+        <column name="source_id"/>
+        <column name="num_of_visits"/>
+        <column name="wdk_weight"/>
+
+        <sql>
+            <![CDATA[
+SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, count(*) as num_of_visits , max(source_set.wdk_weight) as wdk_weight
+              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Participants pa
+              WHERE source_set.source_id = cva.name 
+              AND cva.pan_id = io.output_pan_id
+              AND  io.input_pan_id = pa.pan_id
+              GROUP BY pa.name
+             ]]>
+        </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+
+
+
+
+
+[templateStart] 
+name=observationsByParticipantsQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/observationQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <question name="${presenterId}ObservationsByParticipants"
+	      displayName="Transform to clinical observations"
+	      shortDisplayName="participants->observations"
+	      queryRef="ClinicalVisitId.${presenterId}ObservationsByParticipantIds"
+	      recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass"
+	      noSummaryOnSingleRecord="false"
+              includeProjects="${includeProjects}">
+
+
+      <attributesList
+	 summary="participant"
+	 sorting="participant DESC"
+	
+	 />
+
+      <dynamicAttributes>
+	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical observations are associated with" align="center">
+	  <plugin name="histogram" display="Histogram"
+		  description="Display a histogram of the values"
+		  implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+		  view="/wdk/jsp/results/histogram.jsp" />
+	  </columnAttribute>
+	</dynamicAttributes>
+      
+      <summary>
+	Find clinical observations by participant ID's
+      </summary>
+      <description>
+      Find clincal observations by participant ID's
+      </description>
+
+  </question>
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=observationsByParticipantsQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+     <sqlQuery name="${presenterId}ObservationsByParticipantIds" doNotTest="true" displayName="ID"
+               isCacheable="true" includeProjects="${includeProjects}">
+       <paramRef ref="participantParams.${presenterId}participant_result"/>
+       <column name="project_id"/>
+       <column name="source_id"/>     
+       <column name="participant"/>
+       <column name="wdk_weight"/>
+
+        <sql>
+          <![CDATA[
+ SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
+              FROM ($$participant_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Participants pa
+              WHERE source_set.source_id = pa.name 
+              AND pa.pan_id = io.input_pan_id
+              AND  io.output_pan_id = cva.pan_id
+               ]]>   
+       </sql>
+    </sqlQuery>                
+>templateTextEnd<
+
+
+[templateStart] 
+name=lightTrapSourceIdQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/lightTrapQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+         <!--Find records by Source ID-->
+        <question name="${presenterId}CollectionsBySourceID"
+              searchCategory="Lighttraps"
+              displayName="Collections by ID(s)"
+              shortDisplayName="Collections by ID"
+              queryRef="LightTrapId.${presenterId}CollectionsBySourceID"
+              recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass"
+              includeProjects="${includeProjects}"
+              >
+
+         <attributesList summary="source_id" />
+
+        <summary>
+            <![CDATA[
+           Find Households based on Sourcd ID.
+            ]]>
+        </summary>
+
+        <description>
+            <![CDATA[
+             Find households based on Source ID. <br />
+            ]]>
+        </description>
+       </question>
+>templateTextEnd<
+
+
+[templateStart] 
+name=lightTrapSourceIdQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/lightTrapQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <sqlQuery name="${presenterId}CollectionsBySourceID"  includeProjects="${includeProjects}"
+	      isCacheable="true">
+      <paramRef ref="lightTrapParams.${presenterId}collectionsBySourceID" />
+      <column name="source_id" />
+      <column name="project_id" />
+      <sql>
+
+	<![CDATA[select distinct lta.name as source_id, '@PROJECT_ID@' as project_id from ApidbTuning.${tblPrefix}LightTraps lta,
+        ($$${presenterId}collectionsBySourceID$$) ds WHERE lta.name = ds.source_id]]>
+      </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+[templateStart] 
+name=lightTrapSourceIdParam
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/lightTrapParams.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <datasetParam name="${presenterId}collectionsBySourceID"  includeProjects="${includeProjects}"
+		  recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass"
+		  prompt="Source ID input set">
+      <help><![CDATA[Input a set of source ID's, or upload a file <br><br>
+
+               It can be delimited by a comma, semi colon or any white space<br><br>
+
+               Its possible that not all ID's in the list will be found in the database
+               due to a number of reasons such as unavailable ID maping. Its also currently not
+               possible to inform which ID's did not match anything in the database]]></help>
+      <suggest default="T3-WSWX" />      
+    </datasetParam>
+>templateTextEnd<
+
+[templateStart] 
+name=householdsByLightTrapsQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/householdQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <question name="${presenterId}HouseholdsByLightTrapId"
+              displayName="Transform to Households"
+              shortDisplayName="lighttrap->households"
+              queryRef="HouseholdId.${presenterId}HouseholdsByLightTrapIds"
+              recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass"
+              noSummaryOnSingleRecord="true" 
+              includeProjects="${includeProjects}">
+    
+        <attributesList summary="lt_count,ave_anoph" />
+
+	<dynamicAttributes>
+	     <columnAttribute name="lt_count" displayName="# Collections" help="number of light trap collections from transformed result set associated with this household" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="ave_anoph" displayName="Average Anopheles" help="Average of the anopheles collected from the transformed collections for this household" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	</dynamicAttributes>
+
+             <summary>
+             Find households by light trap collections from the household.
+             </summary>
+
+             <description>
+               <![CDATA[
+              Find households by light trap collections from the household.
+               ]]>
+             </description>
+    </question>
+>templateTextEnd<
+
+
+[templateStart] 
+name=householdsByLightTrapsQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+     <sqlQuery name="${presenterId}HouseholdsByLightTrapIds" doNotTest="true" includeProjects="${includeProjects}"
+              displayName="ID" isCacheable="true">
+      <paramRef ref="lightTrapParams.${presenterId}lighttrap_result"/>
+        <column name="project_id"/>
+        <column name="source_id"/>
+        <column name="ave_anoph"/>
+        <column name="lt_count"/>
+        <column name="wdk_weight"/>
+
+        <!-- TODO:  Do we need these source_ids in this query?  there are no dynamic attributes included. they are commented -->
+        <sql>
+            <![CDATA[
+                     SELECT   da.name as source_id , '@PROJECT_ID@' as project_id, max(source_set.wdk_weight) as wdk_weight, count(*) as lt_count,
+                      round(avg(nvl(avg(lta.EUPATH_0000192),0)+nvl(avg(lta.EUPATH_0000193),0)+nvl(avg(lta.EUPATH_0000204),0)+nvl(avg(lta.EUPATH_0000205),0)),1) as ave_anoph
+              FROM ($$${presenterId}lighttrap_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}LightTraps lta
+              WHERE source_set.source_id = lta.name 
+              AND lta.pan_id = io.output_pan_id
+              AND  io.input_pan_id = da.pan_id
+              GROUP BY da.name
+             ]]>
+        </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+[templateStart] 
+name=lightTrapsByHouseholdsQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/lightTrapQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+        <question name="${presenterId}CollectionsByHouseholdId"
+              displayName="Transform to Lighttraps"
+              shortDisplayName="households->lighttraps"
+              queryRef="LightTrapId.${presenterId}LightTrapsByHouseholdIds"
+              recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass"
+              noSummaryOnSingleRecord="false"
+              includeProjects="${includeProjects}">
+    
+
+
+       <!-- <dynamicAttributes>
+             <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with th\
+is household" align="center">
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+             <columnAttribute name="collections" displayName="Collection Transformed" help="list of light trap ids from transformed result set associated with this\
+ household " align="center">
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute> 
+        </dynamicAttributes> -->
+
+             <summary>
+             Find light trap collections by households.
+             </summary>
+
+             <description>
+               <![CDATA[
+              Find light trap collections by households.
+               ]]>
+             </description>
+    </question>
+>templateTextEnd<
+
+
+[templateStart] 
+name=lightTrapsByHouseholdsQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/lightTrapQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <sqlQuery name="${presenterId}LightTrapsByHouseholdIds" doNotTest="true" displayName="ID" isCacheable="true" includeProjects="${includeProjects}">
+    <paramRef ref="householdParams.${presenterId}household_result"/>
+        <column name="project_id"/>
+        <column name="source_id"/>
+        <column name="wdk_weight"/>
+
+        <sql>
+            <![CDATA[
+SELECT   lta.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
+              FROM ($$household_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}LightTraps lta
+              WHERE source_set.source_id = da.name 
+              AND da.pan_id = io.input_pan_id
+              AND  io.output_pan_id = lta.pan_id
+             ]]>
+        </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+

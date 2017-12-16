@@ -79,10 +79,18 @@ BEGIN MALED
       <!-- =============================================================== -->
 
 
-      <stepAnalysisRef name="clinepi-event-dist"/> 
-      <stepAnalysisRef name="clinepi-cont-table"/>    
-      <stepAnalysisRef name="clinepi-summaries"/>
- 
+      <stepAnalysisRef name="clinepi-event-dist"> 
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
+      <stepAnalysisRef name="clinepi-cont-table">    
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
+      <stepAnalysisRef name="clinepi-summaries">
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
       <!-- =============================================================== -->
       <!--   Reporters -->  
       <!-- =============================================================== -->
@@ -238,7 +246,7 @@ select count(*) from apidbtuning.${tblPrefix}Participants
          <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
          <!--
            ICEMR
-         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000054,EUPATH_0000002]]></sqlParamValue>
+         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000054,ENVO_01000744]]></sqlParamValue>
 
 
            MALED
@@ -277,9 +285,9 @@ select count(*) from apidbtuning.${tblPrefix}Participants
 MALED
           <sqlParamValue name="householdSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>
 ICEMR
-          <sqlParamValue name="householdSourceIds"><![CDATA['EUPATH_0000054', 'EUPATH_0000002']]></sqlParamValue>
+          <sqlParamValue name="householdSourceIds"><![CDATA['EUPATH_0000054', 'ENVO_01000744']]></sqlParamValue>
 
-          <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EUPATH_0000032']]></sqlParamValue>
+          <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EFO_0004950']]></sqlParamValue>
  -->
 
           <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInParticipantAttributesQuote}]]></sqlParamValue>

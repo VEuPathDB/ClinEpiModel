@@ -1,0 +1,237 @@
+[templateStart] 
+name=lightTrapRecord
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/lightTrapRecord.xml
+prop=datasetName
+prop=lightTrapRecordOverview
+prop=lightTrapAttributesList
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <recordClassSet name="${presenterId}LightTrapRecordClasses" includeProjects="${includeProjects}">
+
+      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" displayName="Light Trap Collection"> 
+
+
+            <!-- primary key definition -->
+            <primaryKey aliasQueryRef="${presenterId}LightTrapAttributes.LightTrapAlias">
+                <columnRef>source_id</columnRef>
+                <columnRef>project_id</columnRef>
+              </primaryKey>
+
+              <idAttribute name="primary_key" displayName="Collection Barcode">
+                <text>
+                    <![CDATA[
+                      $$source_id$$
+                    ]]>
+                </text>                
+            </idAttribute>
+	     <!-- =============================================================== -->
+      <!--  Step Analysis Plugins -->
+      <!-- =============================================================== -->
+
+<!--             <stepAnalysisRef name="light-trap-plots"/>  -->
+
+      <!-- =============================================================== -->
+      <!--   Reporters -->  
+      <!-- =============================================================== -->
+
+
+
+      <reporter name="attributesTabular" displayName="%%attributesReporterDisplayName%%" scopes="results"
+                implementation="org.gusdb.wdk.model.report.AttributesTabularReporter">
+        <property name="page_size">500</property>
+      </reporter>
+
+      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
+                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
+             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
+      </reporter>
+
+      <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
+                implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
+
+      <!-- =================================================================== -->
+      <!--  Text Attributes  ++++++++-->
+      <!-- =================================================================== -->
+
+
+         <textAttribute name="record_overview" displayName="Overview">
+
+           <text>
+              <![CDATA[
+              ${lightTrapRecordOverview}
+              ]]>
+           </text>
+         </textAttribute>
+
+
+  <attributeQueryRef ref="${presenterId}LightTrapAttributes.LightTrapAttributes" attributeMetaQueryRef="${presenterId}LightTrapAttributes.LightTrapAttributesMeta"/>
+
+        <table name="Characteristics"
+               displayName="Lighttrap Characteristics"
+               queryRef="${presenterId}LightTrapTables.Characteristics">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="display_name" displayName="Value"/>
+            <columnAttribute name="parent_source_id" displayName="Category"/>
+            <columnAttribute name="unique_id" displayName="unique_id"/>
+            <columnAttribute name="is_leaf" displayName="is_leaf"/>
+            <propertyList name="tableIsTree"><value>true</value></propertyList>
+        </table>
+    </recordClass>
+    </recordClassSet>
+>templateTextEnd<
+
+
+
+[templateStart] 
+name=lightTrapRecordAttributeQueries
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/lightTrapRecord.xml
+prop=datasetName
+prop=householdAttributesList
+prop=householdSourceIdsIncludedInLightTrapAttributes
+prop=householdSourceIdsIncludedInLightTrapAttributesQuote
+prop=householdSourceIdsForHouseholdMemberTable
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <querySet name="${presenterId}LightTrapAttributes" queryType="attribute" doNotTest="true"  
+              isCacheable='false'  includeProjects="${includeProjects}">
+
+      
+      <testRowCountSql>
+select count(*) from apidbtuning.${tblPrefix}LightTraps
+       </testRowCountSql>
+       <sqlQuery name="LightTrapAlias" doNotTest="true">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="old_source_id"/>
+         <column name="old_project_id"/>
+         <sql>
+             SELECT name as source_id, '@PROJECT_ID@' AS project_id, name as old_source_id, '@PROJECT_ID@' AS old_project_id FROM apidbtuning.${tblPrefix}LightTraps
+         </sql>
+       </sqlQuery>
+
+       <sqlQuery name="LightTrapAttributes" attributeMetaQueryRef="${presenterId}LightTrapAttributes.LightTrapAttributesMeta">
+         <column name="source_id"/>
+         <column name="project_id"/>
+
+
+          <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInLightTrapAttributes}]]></sqlParamValue>
+
+          <sql>
+            <![CDATA[
+                     select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
+                     da.*
+                     from apidbtuning.${tblPrefix}PANIO io
+                        , apidbtuning.${tblPrefix}LightTraps pa
+                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.${tblPrefix}Households) da
+                     where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
+                     and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
+            ]]>
+          </sql>  
+         </sqlQuery>
+
+       <sqlQuery name="LightTrapAttributesMeta" isCacheable="false">
+          <column name="name" />
+          <column name="display_name" />
+          <column name="help" />
+          <column name="plugin_name" />
+          <column name="plugin_display" />
+          <column name="plugin_description" />
+          <column name="plugin_implementation" />
+          <column name="plugin_view" />
+          <column name="plugin_properties" />
+
+         <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
+
+          <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInLightTrapAttributesQuote}]]></sqlParamValue>
+
+         <sql>
+            <![CDATA[
+                     select meta.display_name, meta.name, meta.help, 
+                            decode(meta.type, 'string', 'wordCloud', 'number', 'histogram', null) as plugin_name,
+                            decode(meta.type, 'string', 'Word Cloud', 'number', 'Histogram', null) as plugin_display,
+                            decode(meta.type, 'string', 'Display the terms in the attribute as word clouds', 'number', 'Display a histogram of the values', null) as plugin_description,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
+                            decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
+                            decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
+                     from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           where m.pan_type = 'CDC light trap assay'
+                           and ot.ontology_term_id = m.property_id
+                           and mt.property_id = m.property_id
+                           union
+                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
+                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           where m.pan_type = 'CDC light trap assay'
+                           and ot.ontology_term_id = m.property_id
+                           and mt.property_id = m.property_id
+--                           union
+--                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
+                           union
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.${tblPrefix}PropertyTypes mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
+                           ) meta
+            ]]>
+         </sql>
+
+         </sqlQuery>
+
+
+
+    </querySet>
+>templateTextEnd<
+
+
+[templateStart] 
+name=lightTrapRecordTableQueries
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/lightTrapRecord.xml
+prop=datasetName
+prop=householdAttributesList
+prop=householdSourceIdsIncludedInLightTrapAttributes
+prop=householdSourceIdsIncludedInLightTrapAttributesQuote
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+    <querySet name="${presenterId}LightTrapTables" queryType="table" 
+              isCacheable='false'  includeProjects="${includeProjects}">
+
+      
+      <sqlQuery name="Characteristics"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="display_name"/>
+            <column name="parent_source_id"/>
+            <column name="unique_id"/>
+            <column name="is_leaf"/>
+         <sqlParamValue name="datasetName"><![CDATA[${datasetName}]]></sqlParamValue>
+       <sql>
+          <![CDATA[
+SELECT pan_name  AS source_id,
+  '@PROJECT_ID@' AS project_id,
+  nvl(property_source_id, 'root')      AS parent_source_id,
+  pan_id ||'_'||property_id ||'_'||string_value as unique_id,
+  string_value   AS display_name,
+  1 as is_leaf
+FROM apidbtuning.${tblPrefix}metadata
+WHERE dataset_name = '&&datasetName&&'
+AND category       = 'CDC light trap assay'
+UNION
+SELECT pa.name                AS source_id,
+  '@PROJECT_ID@'              AS project_id,
+  nvl(o.PARENT_ONTOLOGY_TERM_SOURCE_ID, 'root') AS parent_source_id,
+  o.ONTOLOGY_TERM_SOURCE_ID AS unique_id,
+  ontology_term_name          AS display_name,
+  0 as is_leaf
+FROM apidbtuning.${tblPrefix}Ontology o,
+  apidbtuning.${tblPrefix}LightTraps pa
+WHERE o.dataset_name = '&&datasetName&&'
+            ]]>
+        </sql>
+      </sqlQuery>
+    </querySet>
+>templateTextEnd<
+

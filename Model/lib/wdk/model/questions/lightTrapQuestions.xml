@@ -5,16 +5,14 @@
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
 
-    	<question name="CollectionsByCharacteristics" newBuild="22"
+    	<question name="CollectionsByCharacteristics_prism" newBuild="22"
     		searchCategory="Lighttraps"
     		displayName="Select a Set of Light Trap Collections"
     		shortDisplayName="Light Traps"
-    		queryRef="LightTrapId.LightTrapsByCharacteristics"
-    		recordClassRef="LightTrapRecordClasses.LightTrapRecordClass">
+    		queryRef="LightTrapId.DS_0ad509829eLightTrapsByCharacteristics_prism"
+    		recordClassRef="DS_0ad509829eLightTrapRecordClasses.DS_0ad509829eLightTrapRecordClass">
 
-<!--
           <attributesList summary="EUPATH_0000094,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
--->
  
           <dynamicAttributes>
           </dynamicAttributes>
@@ -39,67 +37,11 @@
         </description>
     	</question>
         
-         <!--Find records by Source ID-->
-        <question name="CollectionsBySourceID" newBuild="22"
-              searchCategory="Lighttraps"
-              displayName="Collections by ID(s)"
-              shortDisplayName="Collections by ID"
-              queryRef="LightTrapId.CollectionsBySourceID"
-              recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
-              includeProjects="ICEMR"
-              >
 
-         <attributesList summary="source_id" />
+      <!-- TEMPLATE_ANCHOR lightTrapSourceIdQuestion -->
 
-        <summary>
-            <![CDATA[
-           Find Households based on Sourcd ID.
-            ]]>
-        </summary>
+      <!-- TEMPLATE_ANCHOR lightTrapsByHouseholdsQuestion -->
 
-        <description>
-            <![CDATA[
-             Find households based on Source ID. <br />
-            ]]>
-        </description>
-       </question>
-
-        <question name="CollectionsByHouseholdId"   newBuild="1"
-              displayName="Transform to Lighttraps"
-              shortDisplayName="households->lighttraps"
-              queryRef="LightTrapId.LightTrapsByHouseholdIds"
-              recordClassRef="LightTrapRecordClasses.LightTrapRecordClass"
-              noSummaryOnSingleRecord="false">
-    
-
-
-       <!-- <dynamicAttributes>
-             <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with th\
-is household" align="center">
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-             <columnAttribute name="collections" displayName="Collection Transformed" help="list of light trap ids from transformed result set associated with this\
- household " align="center">
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute> 
-        </dynamicAttributes> -->
-
-             <summary>
-             Find light trap collections by households.
-             </summary>
-
-             <description>
-               <![CDATA[
-              Find light trap collections by households.
-               ]]>
-             </description>
-    </question>
 
       </questionSet>
 </wdkModel>

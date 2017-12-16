@@ -8,32 +8,22 @@
     <!-- Source id  -->
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-    <sqlQuery name="CollectionsBySourceID"  includeProjects="ICEMR"
-	      isCacheable="true">
-      <paramRef ref="lightTrapParams.collectionsBySourceID" />
-      <column name="source_id" />
-      <column name="project_id" />
-      <sql>
+      <!-- TEMPLATE_ANCHOR lightTrapSourceIdQuery -->
 
-	<![CDATA[select distinct lta.name as source_id, '@PROJECT_ID@' as project_id from ApidbTuning.$$tbl_prefix$$LightTraps lta,
-        ($$collectionsBySourceID$$) ds WHERE lta.name = ds.source_id]]>
-      </sql>
-    </sqlQuery>
-
-    <sqlQuery name="LightTrapsByCharacteristics"
+    <sqlQuery name="DS_0ad509829eLightTrapsByCharacteristics_prism"
               isCacheable="true">
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC"/>
-       <paramRef ref="lightTrapParams.geographic_region" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="lightTrapParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.households_nf" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="lightTrapParams.lighttraps_nf" groupRef="metaDataGroups.lighttrap_characteristics"/>
+       <paramRef ref="lightTrapParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.lighttraps_prism" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
            <![CDATA[
 select lta.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.$$tbl_prefix$$LightTraps lta
-where lta.pan_id in ($$lighttraps_nf$$)
+where lta.pan_id in ($$lighttraps_prism$$)
                 ]]>   
         </sql>
      </sqlQuery>
@@ -41,22 +31,7 @@ where lta.pan_id in ($$lighttraps_nf$$)
 
     <!-- Transforms -->
       
-    <sqlQuery name="LightTrapsByHouseholdIds" doNotTest="true" displayName="ID" isCacheable="true" includeProjects="ICEMR">
-    <paramRef ref="householdParams.household_result"/>
-        <column name="project_id"/>
-        <column name="source_id"/>
-        <column name="wdk_weight"/>
+      <!-- TEMPLATE_ANCHOR lightTrapsByHouseholdsQuery  -->
 
-        <sql>
-            <![CDATA[
-SELECT   lta.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
-              FROM ($$household_result$$) source_set, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$LightTraps lta
-              WHERE source_set.source_id = da.name 
-              AND da.pan_id = io.input_pan_id
-              AND  io.output_pan_id = lta.pan_id
-             ]]>
-        </sql>
-    </sqlQuery>
- 
   </querySet>
 </wdkModel>

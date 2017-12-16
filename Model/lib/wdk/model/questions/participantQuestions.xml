@@ -16,7 +16,7 @@
 
 <!--
         <attributesList 
-            summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
+            summary="EUPATH_0000054,ENVO_01000744,ave_anoph,ave_para_density,time_of_obs,visit_count,visits_per_year_obs,avg_weight, avg_hemo"        
         /> 
 -->
 	<dynamicAttributes>
@@ -102,7 +102,12 @@ Use the filters above to select a set of Participants or to explore the data.  S
               queryRef="ParticipantId.ParticipantsByCharWizRelVis_prism" 
               includeProjects="ICEMR"
               recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" >
+
+        <attributesList 
+            summary="EUPATH_0000054,EUPATH_0000120,visits_per_year_obs,time_of_obs,ave_anoph"        
+        /> 
 	<dynamicAttributes>
+<!--
 	    <columnAttribute name="avg_hemo" displayName="Avg Hemoglobin" help="Average hemoglobin of observations meeting search criteria over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
@@ -116,13 +121,20 @@ Use the filters above to select a set of Participants or to explore the data.  S
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>   
              
-	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this participants household over the time frame specified" align="center"> 
+            <columnAttribute name="ave_para_density" displayName="Geo Mean Parasite Density" help="Average parasite density of participant in observations meeting search criteria" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-            <columnAttribute name="ave_para_density" displayName="Geo Mean Parasite Density" help="Average parasite density of participant in observations meeting search criteria" align="center"> 
+	     <columnAttribute name="ave_age_visit" displayName="Avg age at observation" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+-->
+	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of female anopheles mosquitos collected in this participants household over the time frame specified" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -134,19 +146,13 @@ Use the filters above to select a set of Participants or to explore the data.  S
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations matching the search criteria for this participant"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
 	     <columnAttribute name="time_of_obs" displayName="Years of Observation" align="center" help="Number of years this person was observed matching date and age ranges"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-	     <columnAttribute name="ave_age_visit" displayName="Avg age at observation" align="center"> 
+	     <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations matching the search criteria for this participant"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -161,6 +167,22 @@ Use the filters above to select a set of Participants or to explore the data.  S
             ]]>
         </summary>
 
+<!--
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "part_event_characteristics",
+              "relatedObservationsGroupName": "relative_visits",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "numRelativeEventsParamName": "num_relative_events", 
+              "relativeVisitsParamName": "relative_visits_prism"
+            }
+          </value>
+        </propertyList>
+-->
         <propertyList name="organism">
            <value>H. sapien</value>
         </propertyList>
@@ -173,7 +195,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-        <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="Gates"
+        <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="NotUsed"
               searchCategory="Participant"
               displayName="Select a Set of Participants (MAL-ED)"
               shortDisplayName="Particip MAL-ED"
@@ -332,93 +354,11 @@ Use the filters above to select a set of Participants or to explore the data.  S
  
       </question>
 
-   <question name="ParticipantsByHouseholdId"   newBuild="1"
-              displayName="Transform to Participants"
-              shortDisplayName="household->participant"
-              queryRef="ParticipantId.ParticipantsByHouseholdIds" 
-              recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
-              noSummaryOnSingleRecord="true"
-              includeProjects="ICEMR">
+      <!-- TEMPLATE_ANCHOR participantsByHouseholdsQuestion -->
 
-	<dynamicAttributes>
-	     <columnAttribute name="household" displayName="Household Transformed" help="Household Participant is associated with" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	</dynamicAttributes>
+      <!-- TEMPLATE_ANCHOR participantsByObservationsQuestion -->
 
-             <summary>
-             Find participant by household id.
-             </summary>
-
-             <description>
-               <![CDATA[
-             Find participant by household id.
-               ]]>
-             </description>
-    </question>
-
-      <question name="ParticipantsByClinicalVisit"   newBuild="22"
-              displayName="Transform to Participants"
-              shortDisplayName="clinicalvisits->participant"
-              queryRef="ParticipantId.ParticipantsByClinicalVisits" 
-              recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
-              noSummaryOnSingleRecord="true"
-              includeProjects="ICEMR">
-
-<!-- todo
-        <attributesList 
-            summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741,num_of_visits"        
-            sorting="num_of_visits desc"
-        /> 
--->
-	<dynamicAttributes>
-	     <columnAttribute name="num_of_visits" displayName="Observations Transformed" help="Observations associated with the participant from the previous step" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	</dynamicAttributes>
-
-             <summary>
-             Find participants by by clinical observations.
-             </summary>
-
-             <description>
-               <![CDATA[
-             Find participants by clinical observations.
-               ]]>
-             </description>
-    </question>
-
-
-   <question name="ParticipantsBySourceID" newBuild="22"
-	     displayName="Participant ID"
-	     shortDisplayName="Participant ID"
-	     queryRef="ParticipantId.ParticipantsBySourceID" 
-             recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass"
-             noSummaryOnSingleRecord="false"
-             includeProjects="ICEMR">
-
-
-        <attributesList 
-            summary="source_id"   
-            sorting="source_id desc"
-        /> 
-             <summary>
-             Find participant by source id.
-             </summary>
-
-             <description>
-               <![CDATA[
-             Find participant by source id.
-               ]]>
-             </description>
-    </question>
-
+      <!-- TEMPLATE_ANCHOR participantSourceIdQuestion -->
 
   </questionSet>
 </wdkModel>

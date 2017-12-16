@@ -6,11 +6,11 @@
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
 
-   <question name="ClinicalVisitsByRelativeVisits" newBuild="2"
+   <question name="ClinicalVisitsByRelativeVisits_prism" newBuild="2"
               searchCategory="Clinical Observation"
               displayName="Select a Set of Clinical Observations (PRISM)"
               shortDisplayName="Clinical Observations"
-              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits" 
+              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_prism" 
               recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass" 
               includeProjects="ICEMR">
 
@@ -62,7 +62,7 @@
  
     </question>
 
-    <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1" includeProjects="Gates"
+    <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1" includeProjects="NotUsed"
               searchCategory="Observation"
               displayName="Select a Set of Observations (MAL-ED)"
               shortDisplayName="Observations"
@@ -130,108 +130,12 @@
  
     </question>
 
-       <question name="ClinicalVisitsByAllData" newBuild="2" includeProjects="notUsed"
-              searchCategory="Clinical Observation"
-              displayName="Select a Set of Clinical Observations (no Relative Observations)"
-              shortDisplayName="Clinical Observations noRel"
-              queryRef="ClinicalVisitId.ClinicalVisitsByAllData" 
-              recordClassRef="ObservationRecordClasses.ObservationRecordClass" >
+
+      <!-- TEMPLATE_ANCHOR observationSourceIdQuestion -->
+
+      <!-- TEMPLATE_ANCHOR observationsByParticipantsQuestion -->
 
 
-<!--
-        <attributesList 
-            summary="EUPATH_0000091"
-        /> 
--->
 
-        <dynamicAttributes>
-	</dynamicAttributes>
-          
-
-        <summary>
-            <![CDATA[
-            In this search, you will build a set of Observations using all characteristics associated with that observation including participant and household information.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
-            More here...
-            ]]>
-        </summary>
-         <description>
-            <![CDATA[
-            In this search, you will build a set of Observations using all characteristics associated with that observation including participant and household information.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
-            More here...
-            ]]>
-</description>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
- 
-    </question>
-
-    <question name="ClinicalVisitBySourceID" newBuild="22"  includeProjects="ICEMR"
-              searchCategory="Clinical Observation"
-              displayName="Clinical Observation ID"
-              shortDisplayName="Observation ID"
-              queryRef="ClinicalVisitId.ClinicalVisitsBySourceID" 
-              recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass">
-
-<!--
-        <attributesList 
-            summary="EUPATH_0000091,parent_id,EUPATH_0000113,EUPATH_0000311"
-        /> 
---> 
-
-        <summary>
-            <![CDATA[ 
-           Find subjects based on source ID's
-            ]]>
-        </summary>
-
-        <description>
-            <![CDATA[
-             Find subjects based on Source ID's <br />
-            ]]>
-        </description>
-
- 
-    </question>
-
-    <question name="ClinicalVisitsByParticipants" newBuild="22"
-	      displayName="Transform to clinical observations"
-	      shortDisplayName="participants->clinicalvisits"
-	      queryRef="ClinicalVisitId.VisitsByParticipantIds"
-	      recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass"
-	      noSummaryOnSingleRecord="false"
-              includeProjects="ICEMR">
-
-<!--
-      <attributesList
-	 summary="EUPATH_0000091,participant,EUPATH_0000113,EUPATH_0000311"
-	 sorting="participant DESC"
-	
-	 />
--->
-      <dynamicAttributes>
-	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical observations are associated with" align="center">
-	  <plugin name="histogram" display="Histogram"
-		  description="Display a histogram of the values"
-		  implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-		  view="/wdk/jsp/results/histogram.jsp" />
-	  </columnAttribute>
-	</dynamicAttributes>
-      
-      <summary>
-	Find clinical observations by participant ID's
-      </summary>
-      <description>
-      Find clincal observations by participant ID's
-      </description>
-
-  </question>
   </questionSet>
 </wdkModel>

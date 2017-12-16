@@ -7,18 +7,16 @@
     <!-- ************************************************************ -->
 
 
-   <question name="HouseholdsByCharacteristics" newBuild="1"
+   <question name="HouseholdsByCharacteristics_prism" newBuild="1"
               searchCategory="Household"
               displayName="Select a Set of Households"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics" 
+              queryRef="HouseholdId.HouseholdsByCharacteristics_prism" 
               recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass">
 
-<!--
         <attributesList 
-            summary="EUPATH_0000054,EUPATH_0000002,ave_anoph,part_count,EUPATH_0000019"        
+            summary="EUPATH_0000054,ENVO_01000744,ave_anoph,part_count,EUPATH_0000019"        
         /> 
--->
 
 	<dynamicAttributes>
 	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this household over the time frame specified" align="center"> 
@@ -71,114 +69,15 @@
  
     </question>
 
-    <!--Find records by Source ID-->
-   <question name="HouseholdsBySourceID" newBuild="22"
-              searchCategory="Household"
-              displayName="Household ID"
-              shortDisplayName="Household ID"
-              queryRef="HouseholdId.HouseholdsBySourceID" 
-              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
-              includeProjects="ICEMR"
-             >
 
-        <attributesList 
-            summary="source_id"
-                  /> 
+      <!-- TEMPLATE_ANCHOR householdSourceIdQuestion -->
 
-        <summary>
-            <![CDATA[ 
-           Find Households based on Sourcd ID.
-            ]]>
-        </summary>
-
-        <description
->
-            <![CDATA[
-             Find households based on Source ID. <br />
-            ]]>
-        </description>
-    </question>
 
     <!-- transforms -->
+
+      <!-- TEMPLATE_ANCHOR householdsByParticipantQuestion -->
+
+      <!-- TEMPLATE_ANCHOR householdsByLightTrapsQuestion -->
    
-   <question name="HouseholdsByParticipantId"   newBuild="1" 
-              displayName="Transform to Households"
-              shortDisplayName="participant->household"
-              queryRef="HouseholdId.HouseholdsByParticipantIds" 
-              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
-              noSummaryOnSingleRecord="false">
- 
-
-<!--
-        <attributesList 
-            summary="EUPATH_0000054,participants,participant_count"   
-            sorting ="participant_count desc"
-        /> 
--->
-	<dynamicAttributes>
-	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	     <columnAttribute name="participants" displayName="Participants Transformed" help="list of participant ids from transformed result set associated with this household " align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	</dynamicAttributes>
-
-             <summary>
-             Find household by participants who are household members.
-             </summary>
-
-             <description>
-               <![CDATA[
-              Find household by participants who are household members.
-               ]]>
-             </description>
-    </question>
-    
-    <question name="HouseholdsByLightTrapId"   newBuild="1"
-              displayName="Transform to Households"
-              shortDisplayName="lighttrap->households"
-              queryRef="HouseholdId.HouseholdsByLightTrapIds"
-              recordClassRef="DS_0ad509829eHouseholdRecordClasses.DS_0ad509829eHouseholdRecordClass"
-              noSummaryOnSingleRecord="true">
-    
-<!--
-    <attributesList
-            summary="EUPATH_0000054,lt_count,ave_anoph"
-        />
--->
-	<dynamicAttributes>
-	     <columnAttribute name="lt_count" displayName="# Collections" help="number of light trap collections from transformed result set associated with this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	     <columnAttribute name="ave_anoph" displayName="Average Anopheles" help="Average of the anopheles collected from the transformed collections for this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-	</dynamicAttributes>
-
-             <summary>
-             Find households by light trap collections from the household.
-             </summary>
-
-             <description>
-               <![CDATA[
-              Find households by light trap collections from the household.
-               ]]>
-             </description>
-    </question>
-  
-
   </questionSet>
 </wdkModel>
