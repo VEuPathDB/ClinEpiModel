@@ -122,7 +122,7 @@
          <![CDATA[
 select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m
- where lower(m.category) = 'household'
+ where m.category = 'household'
  union
  select da.pan_id, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value

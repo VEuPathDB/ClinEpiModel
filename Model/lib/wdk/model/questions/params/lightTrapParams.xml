@@ -1,15 +1,5 @@
 <wdkModel>
 
-  <constant name="lightTrapIdTransformSql1">
-    <![CDATA[
-      select distinct io.output_pan_id as internal
-       from ApidbTuning.D0ad509829ePANIO io,
-        (##FILTERED_IDS##) fi
-       where io.input_pan_id = fi.internal
-        and io.output_pan_type_source_id = 'EUPATH_0000055'
-    ]]> 
-  </constant>   
-
   <paramSet name="lightTrapParams">
     
     <enumParam name="type"
@@ -30,12 +20,12 @@
     <filterParamNew name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="HouseholdVQ.RegionMetaData_prism"
+                    idTransformQueryRef="lightTrapVQ.XformHouseholdsToLighttraps_prism"
                     prompt="Geographic Region"
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix">
-      <idTransformSql>%%lightTrapIdTransformSql1%%</idTransformSql>
       <help>
         Select light trap collections based on geographic region. 
       </help>
@@ -45,11 +35,11 @@
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     metadataQueryRef="lightTrapVQ.HouseholdMetaData_prism"
                     backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_prism"
+                    idTransformQueryRef="lightTrapVQ.XformHouseholdsToLighttraps_prism"
                     prompt="Households"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix,lightTrapParams.geographic_region_prism,householdParams.date_range">
-      <idTransformSql>%%lightTrapIdTransformSql1%%</idTransformSql>
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
       </help>
@@ -105,6 +95,19 @@
 
  <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true">
 
+   <sqlQuery name="XformHouseholdsToLighttraps_prism" isCacheable="true">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="internal"/>
+      <sql>
+        <![CDATA[
+                 select distinct io.output_pan_id as internal
+                 from ApidbTuning.$$tbl_prefix$$PANIO io,
+                 (##FILTERED_IDS##) fi
+                 where io.input_pan_id = fi.internal
+                 and io.output_pan_type_source_id = 'EUPATH_0000055'
+        ]]>
+      </sql>
+    </sqlQuery>
 
     <sqlQuery name="HouseholdMetaData_prism" isCacheable="true">
       <paramRef ref="householdParams.date_range" />  
