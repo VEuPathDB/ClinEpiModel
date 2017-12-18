@@ -100,7 +100,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
               displayName="Select a Set of Participants (PRISM)"
               shortDisplayName="Particip PRISM"
               queryRef="ParticipantId.ParticipantsByCharWizRelVis_prism" 
-              includeProjects="ICEMR"
+              includeProjects="ICEMR,ClinEpiDB"
               recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" >
 
         <attributesList 
