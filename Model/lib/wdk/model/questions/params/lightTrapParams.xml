@@ -10,7 +10,7 @@
     ]]> 
   </constant>   
 
-  <paramSet name="lightTrapParams" includeProjects="ICEMR">
+  <paramSet name="lightTrapParams">
     
     <enumParam name="type"
                prompt="type"
@@ -63,7 +63,6 @@
                     filterDataTypeDisplayName="Collections"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="false"
-                    includeProjects="ICEMR"
                     dependedParamRef="participantParams.tbl_prefix,householdParams.date_range,lightTrapParams.households_prism">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
@@ -104,7 +103,7 @@
     <!--  Vocab queries-->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
- <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true" includeProjects="ICEMR">
+ <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true">
 
 
     <sqlQuery name="HouseholdMetaData_prism" isCacheable="true">
