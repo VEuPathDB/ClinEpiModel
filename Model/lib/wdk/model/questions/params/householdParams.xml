@@ -1,15 +1,5 @@
 <wdkModel>
 
-  <constant name="householdIdTransformSql1">
-    <![CDATA[
-      select distinct io.input_pan_id as internal
-       from ApidbTuning.D0ad509829ePANIO io,
-        (##FILTERED_IDS##) fi
-       where io.output_pan_id = fi.internal
-        and io.input_pan_type_source_id = 'PCO_0000024'
-    ]]> 
-  </constant>   
-
   <paramSet name="householdParams">
     
     <enumParam name="type"
@@ -65,11 +55,11 @@
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                       metadataQueryRef="HouseholdVQ.ParticipantMetaData_prism"
                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
+                      idTransformQueryRef="HouseholdVQ.XformParticipantsToHouseholds_prism"
                       prompt="Participants"
                       countPredictsAnswerCount="true"
                       trimMetadataTerms="false"
                       dependedParamRef="participantParams.tbl_prefix,householdParams.households_prism">
-         <idTransformSql>%%householdIdTransformSql1%%</idTransformSql> 
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -110,6 +100,21 @@
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
  <querySet name="HouseholdVQ" queryType="vocab" isCacheable="true">
+
+   <sqlQuery name="XformParticipantsToHouseholds_prism" isCacheable="true">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="internal"/>
+      <sql>
+        <![CDATA[
+                 select distinct io.input_pan_id as internal
+                 from ApidbTuning.$$tbl_prefix$$PANIO io,
+                 (##FILTERED_IDS##) fi
+                 where io.output_pan_id = fi.internal
+                 and io.input_pan_type_source_id = 'PCO_0000024'
+        ]]>
+      </sql>
+    </sqlQuery>
+
 
     <sqlQuery name="HouseholdMetaDataBkgd_prism">
      <paramRef ref="participantParams.tbl_prefix" />  
