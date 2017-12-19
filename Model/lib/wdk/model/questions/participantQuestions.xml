@@ -33,7 +33,7 @@
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>   
              
-	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this participants household over the time frame specified" align="center"> 
+	     <columnAttribute name="ave_anoph" displayName="Avg Female Anopheles" help="Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
@@ -100,7 +100,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
               displayName="Select a Set of Participants (PRISM)"
               shortDisplayName="Particip PRISM"
               queryRef="ParticipantId.ParticipantsByCharWizRelVis_prism" 
-              includeProjects="ICEMR"
+              includeProjects="ICEMR,ClinEpiDB"
               recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" >
 
         <attributesList 
@@ -134,7 +134,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
 -->
-	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of female anopheles mosquitos collected in this participants household over the time frame specified" align="center"> 
+	     <columnAttribute name="ave_anoph" displayName="Avg Female Anopheles" help="Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search" align="center"> 
               <plugin name="histogram" display="Histogram"
                       description="Display a histogram of the values"
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"

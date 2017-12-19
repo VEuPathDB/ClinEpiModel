@@ -1,12 +1,13 @@
 <wdkModel>
 
-	<questionSet name="LighttrapQuestions" displayName="Search Light Trap Data"  includeProjects="ICEMR">
+	<questionSet name="LighttrapQuestions" displayName="Search Light Trap Data">
 	<!-- ************************************************************ -->
     <!-- Characteristics -->  
     <!-- ************************************************************ -->
 
     	<question name="CollectionsByCharacteristics_prism" newBuild="22"
     		searchCategory="Lighttraps"
+                includeProjects="ClinEpiDB,ICEMR"
     		displayName="Select a Set of Light Trap Collections"
     		shortDisplayName="Light Traps"
     		queryRef="LightTrapId.DS_0ad509829eLightTrapsByCharacteristics_prism"

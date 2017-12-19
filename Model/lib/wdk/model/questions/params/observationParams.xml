@@ -1,21 +1,5 @@
 <wdkModel>
 
-  <constant name="clinicalVisitIdTransformSql1">
-    <![CDATA[
-      select distinct io.output_pan_id as internal
-       from ApidbTuning.D0ad509829ePANIO io,
-        (##FILTERED_IDS##) md
-       where io.input_pan_id = md.internal
-       and io.output_pan_type_source_id = 'EUPATH_0000738'
-     ]]>   
-   </constant>
-   
-   <constant name="clinicalVisitIdTransformSql2">
-     <![CDATA[
-       select internal from (##FILTERED_IDS##)
-     ]]> 
-   </constant>   
-
   <paramSet name="clinicalVisitParams">
     
     <enumParam name="type"
@@ -67,13 +51,13 @@
        <filterParamNew name="geographic_region_prism" 
                        ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                        metadataQueryRef="ParticipantVQ.RegionMetaData_prism"
+                       idTransformQueryRef="ClinicalVisitVQ.XformHouseholdsToObservations_prism"
                        useIdTransformSqlForInternalValue="false"
-                       filterDataTypeDisplayName="Participants"
+                       filterDataTypeDisplayName="Households"
                        prompt="Geographic Region"
                        dependedParamRef="participantParams.tbl_prefix"
                        countPredictsAnswerCount="true"
                        trimMetadataTerms="false">
-         <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>              
          <help>
            Select observations based on the subcounty where the participant lives. 
          </help>
@@ -83,13 +67,13 @@
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_prism"
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_prism"
+                       idTransformQueryRef="ClinicalVisitVQ.XformHouseholdsToObservations_prism"
                        useIdTransformSqlForInternalValue="false"
-                       filterDataTypeDisplayName="Participants"
+                       filterDataTypeDisplayName="Households"
                        prompt="Households"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visit_date,clinicalVisitParams.participants_prism"
                        trimMetadataTerms="false">
-         <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>                
          <help>
               Select observations based on the household characteristics where the participant lives. 
          </help>
@@ -99,12 +83,12 @@
                        ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_prism"
                        backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
+                       idTransformQueryRef="ClinicalVisitVQ.XformParticipantsToObservations_prism"
                        useIdTransformSqlForInternalValue="false"
                        prompt="Participants"
                        countPredictsAnswerCount="false"
                        trimMetadataTerms="false"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visits_visitage_metadata_prism,clinicalVisitParams.visit_date,participantParams.duration_observation">
-         <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>   
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -232,7 +216,6 @@
                        prompt="Participant"
                        dependedParamRef="participantParams.tbl_prefix"
                        trimMetadataTerms="false">
-         <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>  
          <help>
            Select observations based on the participants subcounty where they live. 
          </help>
@@ -246,7 +229,6 @@
                       prompt="Households"
                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_nf_maled"
                       trimMetadataTerms="false">
-         <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>          
          <help>
               Select observations based on the household characteristics where the participants live. 
          </help>
@@ -259,7 +241,6 @@
                       prompt="Participants"
                       trimMetadataTerms="false"
                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_maled">
-         <idTransformSql>%%clinicalVisitIdTransformSql1%%</idTransformSql>               
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -361,6 +342,36 @@ select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal
     <!--  PRISM specific .. should be injected -->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
+    <sqlQuery name="XformHouseholdsToObservations_prism" isCacheable="true">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="internal"/>
+      <sql>
+        <![CDATA[
+                 select distinct iov.output_pan_id as internal
+                 from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$PANIO iov,
+                 (##FILTERED_IDS##) fi
+                 where io.input_pan_id = fi.internal
+                 and io.output_pan_type_source_id = 'EUPATH_0000096'
+                 and io.output_pan_id = iov.input_pan_id
+                 and iov.output_pan_type_source_id = 'EUPATH_0000738'
+        ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="XformParticipantsToObservations_prism" isCacheable="true">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="internal"/>
+      <sql>
+        <![CDATA[
+                 select distinct io.output_pan_id as internal
+                 from ApidbTuning.$$tbl_prefix$$PANIO io,
+                 (##FILTERED_IDS##) fi
+                 where io.input_pan_id = fi.internal
+                 and io.output_pan_type_source_id = 'EUPATH_0000738'
+        ]]>
+      </sql>
+    </sqlQuery>
+
    <sqlQuery name="ClinicalVisitAgeOntology_prism">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
@@ -393,12 +404,14 @@ union
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from  ApidbTuning.$$tbl_prefix$$metadata m,
- (select distinct io.input_pan_id, io.output_pan_id
-  from ApidbTuning.$$tbl_prefix$$PANIO io
+ (select iov.output_pan_id
+  from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$PANIO iov
   where io.input_pan_id in ($$geographic_region_prism$$)
-  and output_pan_type_source_id = 'EUPATH_0000738'
+  and io.output_pan_type_source_id = 'EUPATH_0000096'
+  and io.output_pan_id = iov.input_pan_id
+  and iov.output_pan_type_source_id = 'EUPATH_0000738'
   ) pa
   where pa.output_pan_id = m.pan_id
   and m.property_source_id = 'EUPATH_0000113'
@@ -445,50 +458,6 @@ and mt.property_source_id = 'EUPATH_0000054'
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="HouseholdOntology_prism">
-      <column name="ontology_term_name"/>
-      <column name="parent_ontology_term_name"/>
-      <column name="display_name"/>
-      <column name="description"/>
-      <column name="type"/>
-      <column name="units"/>
-      <column name="precision"/>
-      <column name="is_range"/>
-      <sql>
-        <![CDATA[
-   with leaf as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from ApidbTuning.$$tbl_prefix$$Ontology o, 
-(select distinct term
- from ApidbTuning.$$tbl_prefix$$MetaData
- where dataset_name = 'ISASimple_ICEMR_PRISM_surveillance_RSRC' --$$dataset$$
- and lower(category) = 'household'
- and source_id != 'EUPATH_0000094') md
- where o.ontology_term_name = md.term),
-first as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
- where o.ontology_term_name = par.parent_ontology_term_name),
- second as (
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
- where o.ontology_term_name = gpar.parent_ontology_term_name)
- select * from leaf
- union
- select * from first
- union
- select * from second
- union
- select o.ontology_term_name, CASE WHEN o.parent_ontology_term_name = 'Thing' THEN null ELSE o.parent_ontology_term_name END as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
- where o.ontology_term_name = ggpar.parent_ontology_term_name
- union
- select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Anopheles Collected' as display_name, 'Average number of Anopheles collected in monthly CDC light traps during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
- null as precision from dual
-      ]]>
-      </sql>
-      </sqlQuery>
-
     <sqlQuery name="HouseholdMetaData_prism" >
       <paramRef ref="clinicalVisitParams.participants_prism" />  
       <paramRef ref="clinicalVisitParams.visit_date" /> 
@@ -504,11 +473,11 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
   from ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO io
    where io.output_pan_id in ($$participants_prism$$)
        and io.input_pan_type_source_id = 'PCO_0000024')
- select distinct Part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
  union
- select part.part_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.household_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -580,11 +549,13 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
          <sql>
            <![CDATA[
 with valid as (
-select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
-from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations obs
+select distinct iov.output_pan_id as visit_id, io.input_pan_id as part_id
+from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations obs, ApidbTuning.$$tbl_prefix$$PANIO iov
 where io.input_pan_id in ($$households_prism$$)
-and io.output_pan_id in ($$visits_visitage_metadata_prism$$)
-and obs.pan_id = io.output_pan_id
+and io.output_pan_type_source_id = 'EUPATH_0000096'
+and io.output_pan_id = iov.input_pan_id
+and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
+and obs.pan_id = iov.output_pan_id
 and obs.EUPATH_0000091 >= $$visit_date.min$$ 
 and obs.EUPATH_0000091 <= $$visit_date.max$$ 
 )
