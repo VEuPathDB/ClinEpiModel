@@ -1,8 +1,24 @@
 package org.apidb.apicommon.model.datasetInjector.custom.ICEMR;
 
 import org.apidb.apicommon.model.datasetInjector.EpidemiologyStudyWithLightTraps;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PRISMCohort extends EpidemiologyStudyWithLightTraps {
+
+    @Override
+    protected String participantGraphAttributes() {
+      return(getTemplateInstanceText("PRISMCaseControlGraphAttributes"));
+    }
+
+    @Override
+    protected Map<String,String> participantGraphAttributeNames() {
+      Map<String,String> map = new HashMap<String,String>();
+      map.put("malariaCatCompact", "malaria_cat_compact");
+      map.put("malariaCatTimeline", "malaria_cat_timeline");
+
+      return(map);
+    }
 
     @Override
     public void addModelReferences() {

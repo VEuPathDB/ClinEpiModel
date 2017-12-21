@@ -1,8 +1,20 @@
 package org.apidb.apicommon.model.datasetInjector.custom.Gates;
 
 import org.apidb.apicommon.model.datasetInjector.EpidemiologyStudy;
+import java.util.Map;
+import java.util.HashMap;
 
 public class GEMS1CaseControl extends EpidemiologyStudy {
+
+    @Override
+    protected String participantGraphAttributes(){
+      return("");
+    }
+
+    @Override
+    protected Map<String,String> participantGraphAttributeNames(){
+      return(new HashMap<String,String>());
+    }
 
     @Override
     public void addModelReferences() {

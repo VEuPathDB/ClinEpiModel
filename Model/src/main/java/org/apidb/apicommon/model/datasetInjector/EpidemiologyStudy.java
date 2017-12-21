@@ -3,11 +3,16 @@ package org.apidb.apicommon.model.datasetInjector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apidb.apicommon.datasetPresenter.ModelReference;
 import org.apidb.apicommon.datasetPresenter.DatasetInjector;
 
-public class EpidemiologyStudy extends DatasetInjector {
+public abstract class EpidemiologyStudy extends DatasetInjector {
+  
+    protected abstract Map<String,String> participantGraphAttributeNames();
+
+    protected abstract String participantGraphAttributes();
 
     protected String addQuotes(String s) {
         List<String> split = Arrays.asList(s.split("\\s*,\\s*"));
@@ -46,6 +51,17 @@ public class EpidemiologyStudy extends DatasetInjector {
 
   @Override
   public void injectTemplates() {
+      Map<String,String> participantGraphAttributeNames = participantGraphAttributeNames();
+
+      for (Map.Entry<String, String> entry : participantGraphAttributeNames.entrySet()) {
+        setPropValue(entry.getKey(), entry.getValue());
+        System.out.println("entry = " + entry.getKey() + " " + entry.getValue());
+      }
+   
+      String participantGraphAttributes = participantGraphAttributes();   
+
+      setPropValue("participantGraphAttributes", participantGraphAttributes);
+
       String presenterId = getPropValue("presenterId");
 
       addModelReferences();
@@ -182,6 +198,7 @@ public class EpidemiologyStudy extends DatasetInjector {
 
   @Override
   public void addModelReferences() {
+      Map<String,String> participantGraphAttributeNames = participantGraphAttributeNames();
 
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
@@ -210,10 +227,8 @@ public class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(participantRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
 
           // Add the Text Attributes
-          String participantGraphAttributeNames = getPropValue("participantGraphAttributeNames");
-          String[] participantGraphsArray = participantGraphAttributeNames.split(",");
-          for (int i = 0; i < participantGraphsArray.length; i++) {
-              addWdkReference(participantRecordClass, "attribute", participantGraphsArray[i], new String[]{"record","results"}, CATEGORY_IRI);
+          for (Map.Entry<String, String> entry : participantGraphAttributeNames.entrySet()) {
+              addWdkReference(participantRecordClass, "attribute", entry.getValue(), new String[]{"record","results"}, CATEGORY_IRI);
           }
 
           addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
@@ -260,8 +275,6 @@ public class EpidemiologyStudy extends DatasetInjector {
 
                                  {"participantAttributesList", ""},
                                  {"participantRecordOverview", ""},
-                                 {"participantGraphAttributes", ""},
-                                 {"participantGraphAttributeNames", ""},
                                  {"householdSourceIdsIncludedInParticipantAttributes", ""},
                                  {"participantSourceIdsExcludedFromParticipantAttributes", ""},
                                  {"observationSourceIdsForParticipantsObservationsTable", ""},

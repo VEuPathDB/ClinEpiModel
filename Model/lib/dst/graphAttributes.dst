@@ -1,0 +1,91 @@
+[templateStart]
+name=PRISMCaseControlGraphAttributes
+anchorFile=ClinEpiModel/Model/lib/dst/graphAttributes.dst
+prop=presenterId
+prop=malariaCatCompact
+prop=malariaCatTimeline
+>templateTextStart<
+ <textAttribute name="${malariaCatCompact}" displayName="Malaria status timeline"  truncateTo="100000">
+                    <text>
+                      <![CDATA[
+                        <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=40&w=800&thumb=1&datasetId=${presenterId}"/>
+                      ]]>
+                    </text>
+                  </textAttribute>
+                  <textAttribute name="${malariaCatTimeline}" displayName="Observations timeline">
+                    <text>
+                      <![CDATA[
+                        <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&w=1000&h=125&datasetId=${presenterId}" type="image/svg+xml"/>
+                      ]]>
+                    </text>
+                 </textAttribute>
+>templateTextEnd<
+
+[templateStart]
+name=MALEDGraphAttributes
+anchorFile=ClinEpiModel/Model/lib/dst/graphAttributes.dst
+prop=presenterId
+prop=allCompact
+prop=weightHeight
+prop=weightAge
+prop=heightAge
+prop=allThree
+prop=length
+prop=weight
+>templateTextStart<
+<textAttribute name="${allCompact}" displayName="Z-Score Observations Summary"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689,EUPATH_0000734,EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&h=250&w=450&thumb=1" type="image/svg+xml"/>
+]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="${weightHeight}" displayName="Weight for Height Z-score">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type="image/svg+xml"/>
+]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="${weightAge}" displayName="Weight for Age Z-score">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type="image/svg+xml"/>
+]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="${heightAge}" displayName="Height for Age Z-score">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type="image/svg+xml"/>
+]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="${allThree}" displayName="Z-score Observations Graph">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689,EUPATH_0000734,EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350&datasetId=${presenterId}" type="image/svg+xml"/>
+]]>
+              </text>
+            </textAttribute>
+<textAttribute name="${length}" displayName="Length Over Time">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000719&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type="image/svg+xml"/>
+]]>
+              </text>
+            </textAttribute>
+
+            <textAttribute name="${weight}" displayName="Weight Over Time">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000732&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type=""image/svg+xml"/>
+]]>
+              </text>
+            </textAttribute>
+
+>templateTextEnd<
