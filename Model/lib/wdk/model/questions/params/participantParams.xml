@@ -559,7 +559,7 @@ select m.pan_id as internal, m.property_source_id as ontology_term_name, m.strin
       </sql>
    </sqlQuery>
 
-      <sqlQuery name="VisitAgeMetaDataBkgd_prism" isCacheable="true">
+      <sqlQuery name="VisitAgeMetaDataBkgd_prism" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -645,7 +645,7 @@ select distinct m.pan_id as internal, m.property_source_id as ontology_term_name
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkgd_prism" isCacheable="true">
+    <sqlQuery name="ParticipantMetaDataBkgd_prism" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -738,7 +738,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
 
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaDataBkgd_prism" isCacheable="true">
+    <sqlQuery name="HouseholdMetaDataBkgd_prism" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -836,7 +836,7 @@ and ios.input_pan_id = valid.visit_id
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_prism" isCacheable="true">
+    <sqlQuery name="VisitMetaDataBkgd_prism" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
