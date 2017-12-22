@@ -23,6 +23,7 @@
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="ParticipantVQ.RegionMetaData_prism"
                     idTransformQueryRef="ClinicalVisitVQ.XformRegionToObservations_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism"
                     useIdTransformSqlForInternalValue="true"
                     filterDataTypeDisplayName="Households"
                     prompt="Geographic Region"
@@ -39,6 +40,7 @@
                        ontologyQueryRef="ParticipantVQ.VisitAgeOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetaData_prism"
                        backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_prism"
+                       ontologyValuesQueryRef="ParticipantVQ.VisitAgeOntologyValues_prism"
                        filterDataTypeDisplayName="Participants"
                        prompt="Age at observation"
                        countPredictsAnswerCount="false"
@@ -54,6 +56,7 @@
                        metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_prism"
                        backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
                        idTransformQueryRef="ClinicalVisitVQ.XformParticipantsToObservations_prism"
+                       ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism"
                        useIdTransformSqlForInternalValue="true"
                        prompt="Participants"
                        countPredictsAnswerCount="false"
@@ -70,6 +73,7 @@
                        metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_prism"
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_prism"
                        idTransformQueryRef="ClinicalVisitVQ.XformHouseholdsToObservations_prism"
+                       ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism"
                        useIdTransformSqlForInternalValue="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Households"
@@ -86,6 +90,7 @@
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData_prism"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism"
                     prompt="Observations"
                     countPredictsAnswerCount="false"
                     trimMetadataTerms="false"
@@ -504,7 +509,7 @@ select m.pan_id as internal, m.property_source_id as ontology_term_name, m.strin
  select ios.input_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO ios
 where m.category = 'Specimen type' 
-and m.property = 'Specimen type'
+and m.property_source_id = 'OBI_0100051'
 and ios.input_pan_id in ($$households_prism$$)
 and ios.output_pan_id = m.pan_id
           ]]>
