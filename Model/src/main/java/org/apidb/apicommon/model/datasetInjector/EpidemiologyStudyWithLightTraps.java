@@ -1,7 +1,7 @@
 package org.apidb.apicommon.model.datasetInjector;
 
 
-public class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy {
+public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy {
 
     @Override
     public void injectTemplates() {

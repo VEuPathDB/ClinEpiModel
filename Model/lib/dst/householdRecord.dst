@@ -10,7 +10,7 @@ prop=presenterId
 prop=includeProjects
 >templateTextStart<
     <recordClassSet name="${presenterId}HouseholdRecordClasses" includeProjects="${includeProjects}">
-      <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" displayName="Household" includeProjects="${includeProjects}"> 
+      <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" displayName="Household" iconName="home" includeProjects="${includeProjects}"> 
 
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="${presenterId}HouseholdAttributes.HouseholdAlias">

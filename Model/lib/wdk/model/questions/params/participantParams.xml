@@ -83,11 +83,11 @@
     <!--   TODO: DELETE THIS AND COPY OVER FROM BRANCH ... ADD PRISM SUFFIX -->
     <!--************************************************************-->
 
-<!--                       ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism" -->
        <filterParamNew name="geographic_region_prism" 
                        ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                        metadataQueryRef="ParticipantVQ.RegionMetaData_prism"
                        idTransformQueryRef="ParticipantVQ.XformHouseholdsToParticipants_prism"
+                       ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism"
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
                        countPredictsAnswerCount="true"
@@ -99,12 +99,12 @@
          </help>
     </filterParamNew>
 
-<!--                    ontologyValuesQueryRef="ParticipantVQ.VisitAgeOntologyValues_prism" -->
     <filterParamNew name="visits_visitage_metadata_prism" 
                     ontologyQueryRef="ParticipantVQ.VisitAgeOntology_prism"
                     metadataQueryRef="ParticipantVQ.VisitAgeMetaData_prism"
                     backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_prism"
                     idTransformQueryRef="ParticipantVQ.XformObservationsToParticipants_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.VisitAgeOntologyValues_prism"
                     countPredictsAnswerCount="false"
                     prompt="Age at visit"
                     filterDataTypeDisplayName="Participants"
@@ -115,11 +115,11 @@
       </help>
     </filterParamNew>
     
-<!--                    ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism" -->
     <filterParamNew name="participants_prism" 
                     metadataQueryRef="ParticipantVQ.ParticipantMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism"
                     countPredictsAnswerCount="true"
                     prompt="Participants"
                     trimMetadataTerms="false"
@@ -130,12 +130,12 @@
     </filterParamNew>
 
 
-<!--                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism" -->
     <filterParamNew name="households_prism" 
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_prism"
                     idTransformQueryRef="ParticipantVQ.XformHouseholdsToParticipants_part_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism"
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
                     useIdTransformSqlForInternalValue="true"
@@ -147,12 +147,11 @@
       </help>
     </filterParamNew>
 
-<!--                    idTransformQueryRef="ParticipantVQ.XformObservationsToParticipants_prism" -->
-<!--                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism" -->
     <filterParamNew name="visits_prism" 
                     metadataQueryRef="ParticipantVQ.VisitMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="false"
@@ -162,10 +161,10 @@
       </help>
     </filterParamNew>
 
-<!--                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism" -->
         <filterParamNew name="relative_visits_prism" 
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.VisitOntologyValues_prism"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="false"
@@ -584,15 +583,12 @@ where m.property_source_id = 'EUPATH_0000113'
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io, apidbtuning.$$tbl_prefix$$Ontology o
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$Ontology o
 where o.type is not null
 and o.is_range = 0
 and m.property_source_id = o.ontology_term_source_id
- and lower(m.category) = 'household'
- and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
- and m.pan_id = io.input_pan_id
- and io.output_pan_type_source_id = 'EUPATH_0000096'
+and m.property_source_id = 'EUPATH_0000113'
           ]]>
       </sql>    
     </sqlQuery>
@@ -670,9 +666,9 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io, apidbtuning.$$tbl_prefix$$Ontology o
-where o.type is not null
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$Ontology o
+ where o.type is not null
 and o.is_range = 0
 and m.property_source_id = o.ontology_term_source_id
  and m.category = 'Participant'
@@ -829,7 +825,7 @@ select distinct valid.visit_id as internal, m.property_source_id as ontology_ter
  select valid.visit_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, valid, ApidbTuning.$$tbl_prefix$$PANIO ios
 where m.category = 'Specimen type' 
-and m.property = 'Specimen type'
+and m.property_source_id = 'OBI_0100051'
 and ios.output_pan_id = m.pan_id
 and ios.input_pan_id = valid.visit_id
           ]]>
@@ -852,7 +848,7 @@ and ios.input_pan_id = valid.visit_id
  select io.input_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
 where m.category = 'Specimen type' 
-and m.property = 'Specimen type'
+and m.property_source_id = 'OBI_0100051'
 and io.output_pan_id = m.pan_id
           ]]>
     </sql>
@@ -867,19 +863,19 @@ and io.output_pan_id = m.pan_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select meta.* from (
+select m.* from (
  select distinct pan_id as internal, property_source_id  as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData 
- where category = 'Event'
+ where category = 'Event/Observation'
  union
  select io.input_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
 where m.category = 'Specimen type' 
-and m.property = 'Specimen type'
-and io.output_pan_id = m.pan_id) meta, apidbtuning.$$tbl_prefix$$Ontology o
+and m.property_source_id = 'OBI_0100051'
+and io.output_pan_id = m.pan_id) m, apidbtuning.$$tbl_prefix$$Ontology o
 where o.type is not null
 and o.is_range = 0
-and meta.ontology_term_name = o.ontology_term_source_id
+and m.ontology_term_name = o.ontology_term_source_id
           ]]>
       </sql>    
     </sqlQuery>

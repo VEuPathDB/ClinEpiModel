@@ -13,7 +13,7 @@ prop=includeProjects
 
     <recordClassSet name="${presenterId}ObservationRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="Observation" includeProjects="${includeProjects}"> 
+      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="Observation" iconName="stethoscope" includeProjects="${includeProjects}"> 
 
 
             <!-- primary key definition -->

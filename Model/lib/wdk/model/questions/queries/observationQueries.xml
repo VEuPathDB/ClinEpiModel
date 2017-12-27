@@ -27,7 +27,7 @@
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.relative_visits_prism" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.relative_visits"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>

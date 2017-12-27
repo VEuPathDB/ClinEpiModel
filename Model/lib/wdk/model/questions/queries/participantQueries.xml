@@ -15,7 +15,6 @@
      <!-- not used ..... no relative visits but leave in case decide to use at some point .... -->
      
      <sqlQuery name="ParticipantsByCharWiz" isCacheable="true" includeProjects="NotUsed">
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_ICEMR_PRISM_surveillance_RSRC" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
@@ -25,6 +24,7 @@
        <paramRef ref="participantParams.visits_prism" groupRef="metaDataGroups.part_visit_characteristics"/>
        <paramRef ref="participantParams.parasite_density" groupRef="metaDataGroups.summary_params"/>
        <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.summary_params"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.summary_params"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_anoph"/>
@@ -76,7 +76,6 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 
      </sqlQuery>
 
      <sqlQuery name="ParticipantsByCharWizRelVis_prism" isCacheable="true">
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
@@ -90,6 +89,7 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.relative_visits_prism" groupRef="metaDataGroups.relative_visits"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.relative_visits"/>
 <!--       <paramRef ref="participantParams.parasite_density" groupRef="metaDataGroups.summary_params"/> -->
        <column name="source_id"/>
        <column name="project_id"/>
@@ -264,7 +264,7 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.relative_event_gems" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.return_case_control" groupRef="metaDataGroups.results_options"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_Gates_GEMS_gems1_case_control_RSRC" groupRef="metaDataGroups.relative_case_control"/> 
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D841A9F5259" groupRef="metaDataGroups.relative_case_control"/> 
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
