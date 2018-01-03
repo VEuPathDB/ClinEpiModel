@@ -25,11 +25,11 @@
 
        </dateRangeParam>    
 
+<!--                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism" -->
     <filterParamNew name="households_prism" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     metadataQueryRef="HouseholdVQ.HouseholdMetaData_prism"
-                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism"
+                    backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_prism"
                     prompt="Households"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="false"
@@ -39,10 +39,10 @@
       </help>
     </filterParamNew>
 
+<!--                    ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism" -->
      <filterParamNew name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
-                    metadataQueryRef="ParticipantVQ.RegionMetaData_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism"
+                    metadataQueryRef="HouseholdVQ.RegionMetaData_prism"
                     prompt="Geographic Region"
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
@@ -53,12 +53,11 @@
       </help>
     </filterParamNew>          
 
+<!--                      ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism" -->
     <filterParamNew name="participants_prism" 
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                       metadataQueryRef="HouseholdVQ.ParticipantMetaData_prism"
-                      backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
-                      ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism"
-                      idTransformQueryRef="HouseholdVQ.XformParticipantsToHouseholds_prism"
+                      backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_prism"
                       prompt="Participants"
                       countPredictsAnswerCount="true"
                       trimMetadataTerms="false"
@@ -104,19 +103,24 @@
 
  <querySet name="HouseholdVQ" queryType="vocab" isCacheable="true">
 
-   <sqlQuery name="XformParticipantsToHouseholds_prism" isCacheable="true">
+   <sqlQuery name="RegionMetaData_prism" isCacheable="false" >
       <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="internal_for_counts"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
       <sql>
         <![CDATA[
-                 select distinct io.input_pan_id as internal
-                 from ApidbTuning.$$tbl_prefix$$PANIO io,
-                 (##FILTERED_IDS##) fi
-                 where io.output_pan_id = fi.internal
-                 and io.input_pan_type_source_id = 'PCO_0000024'
+select m.pan_id as internal,  m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m
+ where m.category = 'household'
+ and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
         ]]>
       </sql>
     </sqlQuery>
+
 
     <sqlQuery name="HouseholdMetaData_prism" isCacheable="true">
       <paramRef ref="householdParams.date_range" />  
@@ -130,10 +134,7 @@
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.pan_id in ($$geographic_region_prism$$)
- union
+with mos as (
  select da.pan_id as internal, da.pan_id as internal_for_counts, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
@@ -143,12 +144,21 @@ select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_
   and la.OBI_0001619 >= $$date_range.min$$
   and la.OBI_0001619 <= $$date_range.max$$ 
   group by da.pan_id
+  )
+select distinct m.pan_id as internal, m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, mos
+ where m.pan_id in ($$geographic_region_prism$$)
+ and m.pan_id = mos.internal
+ union 
+ select * from mos
           ]]>
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="RegionMetaData_prism">
-     <paramRef ref="participantParams.tbl_prefix" />  
+    <sqlQuery name="HouseholdMetaDataBkgd_prism" isCacheable="true">
+      <paramRef ref="householdParams.date_range" />  
+      <paramRef ref="householdParams.geographic_region_prism" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="internal_for_counts"/>
@@ -157,14 +167,20 @@ select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct pan_id as internal, pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData
- where lower(category) = 'household'
- and property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m
+ where m.category = 'household'
+ union
+ select da.pan_id as internal, da.pan_id as internal_for_counts, 'average anopheles' as ontology_term_name, null as string_value, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
+  from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  group by da.pan_id
           ]]>
     </sql>
     </sqlQuery>
-    
+
    <sqlQuery name="ParticipantMetaData_prism" isCacheable="true">
      <paramRef ref="householdParams.households_prism" />  
      <paramRef ref="participantParams.tbl_prefix" />  
@@ -176,11 +192,30 @@ select distinct pan_id as internal, pan_id as internal_for_counts, property_sour
      <column name="string_value"/>
      <sql>
          <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal, io.input_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
- where m.category = 'Participant'
+ where io.input_pan_id in ($$households_prism$$)
+ and io.output_pan_type_source_id = 'EUPATH_0000096'
  and m.pan_id = io.output_pan_id
- and io.input_pan_id in ($$households_prism$$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_prism" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="internal_for_counts"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+         <![CDATA[
+select distinct m.pan_id as internal, io.input_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
+ where io.output_pan_type_source_id = 'EUPATH_0000096'
+ and io.input_pan_type_source_id = 'PCO_0000024'
+ and m.pan_id = io.output_pan_id
           ]]>
     </sql>
     </sqlQuery>
