@@ -118,16 +118,17 @@
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.pan_id in ($$geographic_region_prism$$)
  union
- select da.pan_id, 'average anopheles' as ontology_term_name, null as string_value, 
+ select da.pan_id as internal, da.pan_id as internal_for_counts, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id in ($$geographic_region_prism$$)
@@ -166,12 +167,13 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps lta
  where m.category = 'CDC light trap assay'
  and m.pan_id = lta.pan_id
@@ -187,12 +189,13 @@ select distinct m.pan_id as internal, property_source_id as ontology_term_name, 
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.category = 'CDC light trap assay'
         ]]>
