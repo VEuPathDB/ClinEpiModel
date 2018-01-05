@@ -115,8 +115,7 @@
         <![CDATA[
 select m.pan_id as internal,  m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.category = 'household'
- and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+ where m.property_source_id = 'EUPATH_0000054'
         ]]>
       </sql>
     </sqlQuery>
@@ -169,7 +168,7 @@ select distinct m.pan_id as internal, m.pan_id as internal_for_counts, m.propert
          <![CDATA[
 select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.category = 'household'
+ where m.category = 'Household'
  union
  select da.pan_id as internal, da.pan_id as internal_for_counts, 'average anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value

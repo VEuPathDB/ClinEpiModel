@@ -433,7 +433,7 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
 
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaDataBkgd_prism" isCacheable="false">
+    <sqlQuery name="HouseholdMetaDataBkgd_prism" isCacheable="true">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -495,7 +495,7 @@ select distinct m.pan_id as internal, iov.output_pan_id as internal_for_counts, 
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkgd_prism" isCacheable="false">
+    <sqlQuery name="ParticipantMetaDataBkgd_prism" isCacheable="true">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -642,7 +642,7 @@ select io.part_id as internal, io.event_id as internal_for_counts, m.property_so
  and ioe.output_pan_type_source_id = 'EUPATH_0000738') io
  where m.pan_id = io.hh_id
  and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and lower(m.category) = 'household'
+ and lower(m.category) = 'Household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
         ]]>
       </sql>
@@ -666,7 +666,7 @@ select io.part_id as internal, io.part_id as internal_for_counts, m.property_sou
  and io.input_pan_type_source_id = 'PCO_0000024') io
  where m.pan_id = io.hh_id
  and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and lower(m.category) = 'household'
+ and lower(m.category) = 'Household'
           ]]>
     </sql>    
 
@@ -690,7 +690,7 @@ select io.part_id as internal, io.part_id as internal_for_counts, m.property_sou
  and io.input_pan_type_source_id = 'PCO_0000024') io
  where m.pan_id = io.hh_id
  and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and lower(m.category) = 'household'
+ and lower(m.category) = 'Household'
           ]]>
     </sql>    
 

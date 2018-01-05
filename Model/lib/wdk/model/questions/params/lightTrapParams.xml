@@ -31,11 +31,12 @@
       </help>
      </filterParamNew>
      
+<!--                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism" -->
      <filterParamNew name="households_prism" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     metadataQueryRef="lightTrapVQ.HouseholdMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism"
+                    useIdTransformSqlForInternalValue="true"
                     prompt="Households"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="false"
@@ -45,11 +46,11 @@
       </help>
     </filterParamNew>
 
+<!--                    ontologyValuesQueryRef="lightTrapVQ.LightTrapOntologyValues_prism" -->
     <filterParamNew name="lighttraps_prism" 
                     ontologyQueryRef="lightTrapVQ.LightTrapOntology_prism"
                     metadataQueryRef="lightTrapVQ.LightTrapMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="lightTrapVQ.LightTrapOntologyValues_prism"
                     prompt="CDC Light Trap Collections"
                     filterDataTypeDisplayName="Collections"
                     countPredictsAnswerCount="true"
@@ -108,8 +109,7 @@
         <![CDATA[
 select m.pan_id as internal,  io.output_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
- where m.category = 'household'
- and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+ where m.property_source_id = 'EUPATH_0000054'
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000055'
         ]]>
@@ -219,13 +219,11 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <sql>
         <![CDATA[
 select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps lta
- where m.category = 'CDC light trap assay'
- and m.pan_id = lta.pan_id
+ from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$LightTraps lta
+ where lta.pan_id in ($$households_prism$$)
  and lta.OBI_0001619 >= $$date_range.min$$
  and lta.OBI_0001619 <= $$date_range.max$$ 
- and m.pan_id = io.output_pan_id
- and io.input_pan_id in ($$households_prism$$)
+ and m.pan_id = lta.pan_id 
         ]]>
       </sql>
     </sqlQuery>
