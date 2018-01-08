@@ -88,7 +88,7 @@ prop=includeProjects
                     $$participant$$
                     ]]>
                  </displayText>
-                 <url>@WEBAPP_BASE_URL@/record/participant/$$participant$$/@PROJECT_ID@</url>
+                 <url>@WEBAPP_BASE_URL@/record/${presenterId}_participant/$$participant$$/@PROJECT_ID@</url>
             </linkAttribute>
           </table>
 

@@ -96,7 +96,7 @@ prop=includeProjects
              <text>
                   <![CDATA[
 
-                  Visit from <i>$$EUPATH_0000091$$</i> for Participant <a href="@WEBAPP_BASE_URL@/record/participant/$$parent_id$$/@PROJECT_ID@">$$parent_id$$</a>.
+                  Visit from <i>$$EUPATH_0000091$$</i> for Participant <a href="@WEBAPP_BASE_URL@/record/${presenterId}_participant/$$parent_id$$/@PROJECT_ID@">$$parent_id$$</a>.
                   ]]>
              </text>
           </textAttribute>
