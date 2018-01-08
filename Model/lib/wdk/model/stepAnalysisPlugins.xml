@@ -78,11 +78,10 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
-      <property name="attributesToExtract">source_id</property>
+      <property name="attributesToExtract">primary_key</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
-
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
       <property name="datasetName">OVERRIDE_FROM_RECORD</property>
@@ -102,7 +101,7 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
-      <property name="attributesToExtract">source_id</property>
+      <property name="attributesToExtract">primary_key</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
@@ -128,11 +127,10 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_Summaries]]></property>
-      <property name="attributesToExtract">source_id</property>
+      <property name="attributesToExtract">primary_key</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
-
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
       <property name="datasetName">OVERRIDE_FROM_RECORD</property>
