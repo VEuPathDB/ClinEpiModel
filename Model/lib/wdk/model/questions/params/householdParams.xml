@@ -113,9 +113,10 @@
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select m.pan_id as internal,  m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m
+select distinct m.pan_id as internal,  m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Households h
  where m.property_source_id = 'EUPATH_0000054'
+ and m.pan_id = h.pan_id
         ]]>
       </sql>
     </sqlQuery>
