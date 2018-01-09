@@ -168,7 +168,6 @@ Use the filters above to select a set of Participants or to explore the data.  S
         </summary>
 
 <!--              "numRelativeEventsParamName": "num_relative_events",  -->
-<!--
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
@@ -182,7 +181,6 @@ Use the filters above to select a set of Participants or to explore the data.  S
             }
           </value>
         </propertyList>
--->
 
         <propertyList name="organism">
            <value>H. sapien</value>

@@ -60,6 +60,20 @@
           <value>hideAttrDescr</value>
         </propertyList>
  
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "part_visit_characteristics",
+              "relatedObservationsGroupName": "relative_visits",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "relativeVisitsParamName": "relative_visits_prism"
+            }
+          </value>
+        </propertyList>
+
     </question>
 
     <question name="ClinicalVisitsByRelativeVisits_maled" newBuild="1" includeProjects="NotUsed"
