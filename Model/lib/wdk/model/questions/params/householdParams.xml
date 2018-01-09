@@ -25,11 +25,11 @@
 
        </dateRangeParam>    
 
-<!--                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism" -->
     <filterParamNew name="households_prism" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     metadataQueryRef="HouseholdVQ.HouseholdMetaData_prism"
                     backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism"
                     prompt="Households"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="false"
@@ -39,10 +39,10 @@
       </help>
     </filterParamNew>
 
-<!--                    ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism" -->
      <filterParamNew name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="HouseholdVQ.RegionMetaData_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism"
                     prompt="Geographic Region"
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
@@ -53,11 +53,11 @@
       </help>
     </filterParamNew>          
 
-<!--                      ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism" -->
     <filterParamNew name="participants_prism" 
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                       metadataQueryRef="HouseholdVQ.ParticipantMetaData_prism"
                       backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_prism"
+                      ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism"
                       prompt="Participants"
                       countPredictsAnswerCount="true"
                       trimMetadataTerms="false"

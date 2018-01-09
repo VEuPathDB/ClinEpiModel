@@ -17,10 +17,10 @@
     </enumParam>
 
 
-<!--                    ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism" -->
     <filterParamNew name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="lightTrapVQ.RegionMetaData_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism"
                     prompt="Geographic Region"
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
@@ -31,11 +31,11 @@
       </help>
      </filterParamNew>
      
-<!--                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism" -->
      <filterParamNew name="households_prism" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     metadataQueryRef="lightTrapVQ.HouseholdMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_prism"
+                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism"
                     useIdTransformSqlForInternalValue="true"
                     prompt="Households"
                     countPredictsAnswerCount="true"
@@ -46,11 +46,11 @@
       </help>
     </filterParamNew>
 
-<!--                    ontologyValuesQueryRef="lightTrapVQ.LightTrapOntologyValues_prism" -->
     <filterParamNew name="lighttraps_prism" 
                     ontologyQueryRef="lightTrapVQ.LightTrapOntology_prism"
                     metadataQueryRef="lightTrapVQ.LightTrapMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd_prism"
+                    ontologyValuesQueryRef="lightTrapVQ.LightTrapOntologyValues_prism"
                     prompt="CDC Light Trap Collections"
                     filterDataTypeDisplayName="Collections"
                     countPredictsAnswerCount="true"
@@ -248,13 +248,12 @@ select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_
     <sqlQuery name="LightTrapOntologyValues_prism" isCacheable="true">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
-      <column name="internal"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
- select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
+ select distinct  property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$Ontology o
  where o.type is not null
 and o.is_range = 0
