@@ -15,7 +15,6 @@ public class PRISMCohort extends EpidemiologyStudyWithLightTraps {
     protected Map<String,String> participantGraphAttributeNames() {
       Map<String,String> map = new HashMap<String,String>();
       map.put("malariaCatCompact", "malaria_cat_compact");
-      map.put("malariaCatTimeline", "malaria_cat_timeline");
 
       return(map);
     }
