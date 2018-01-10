@@ -1,3 +1,4 @@
+<!-- XXX releaseVersion is set to "99999" to prevent the popup and new icons from appearing. A number smaller than "1" will cause a "coming soon" icon to appear. -->
 <wdkModel>
   <stepAnalysisPlugins>
 
@@ -7,7 +8,7 @@
     <stepAnalysisPlugin
         name="person-graph-analysis"
         displayName="Graph Person Results"
-        releaseVersion="1"
+        releaseVersion="99999"
         hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
@@ -26,7 +27,7 @@
 
     <stepAnalysisPlugin
         name="light-trap-plots" displayName="Total Anopheles graphed by Month Year"
-        releaseVersion="1" hasParameters="false"
+        releaseVersion="99999" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
@@ -45,7 +46,7 @@
 <!--
     <stepAnalysisPlugin
         name="clinepi-event-dist" displayName="Participant Analysis"
-        releaseVersion="1" hasParameters="false"
+        releaseVersion="99999" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
@@ -67,7 +68,7 @@
 
     <stepAnalysisPlugin
         name="clinepi-cont-table" displayName="Contingency Tables"
-        releaseVersion="1" hasParameters="false"
+        releaseVersion="99999" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         customThumbnail="images/analysis_plugins/contingency_tables.jpg"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
@@ -90,7 +91,7 @@
 
     <stepAnalysisPlugin
         name="clinepi-event-dist" displayName="Distributions"
-        releaseVersion="1" hasParameters="false"
+        releaseVersion="99999" hasParameters="false"
         customThumbnail="images/analysis_plugins/distributions.jpg"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
@@ -115,7 +116,7 @@
     <stepAnalysisPlugin
         name="clinepi-summaries"
         displayName="Data Summaries"
-        releaseVersion="1"
+        releaseVersion="99999"
         hasParameters="false"
         customThumbnail="images/analysis_plugins/data_summaries.jpg"
         analysisViewName="eupathExternalAnalysisResult"
