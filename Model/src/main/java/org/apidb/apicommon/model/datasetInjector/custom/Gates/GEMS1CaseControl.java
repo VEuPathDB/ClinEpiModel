@@ -17,6 +17,11 @@ public class GEMS1CaseControl extends EpidemiologyStudy {
     }
 
     @Override
+    protected Map<String,String[]> participantGraphAttributeScopes() {
+      return(new HashMap<String,String[]>());
+    }
+
+    @Override
     public void addModelReferences() {
         super.addModelReferences();
 
