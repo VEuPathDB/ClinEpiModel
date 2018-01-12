@@ -119,6 +119,7 @@
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
                     ontologyValuesQueryRef="ParticipantVQ.ParticipantOntologyValues_prism" 
                     countPredictsAnswerCount="true"
+                    internalForCountsIsEqualToInternal="true"
                     prompt="Participants"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.visits_visitage_metadata_prism,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region_prism">
