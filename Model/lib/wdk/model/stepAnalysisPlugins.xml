@@ -1,3 +1,4 @@
+<!-- XXX releaseVersion is set to "99999" to prevent the popup and new icons from appearing. A number smaller than "1" will cause a "coming soon" icon to appear. -->
 <wdkModel>
   <stepAnalysisPlugins>
 
@@ -7,7 +8,7 @@
     <stepAnalysisPlugin
         name="person-graph-analysis"
         displayName="Graph Person Results"
-        releaseVersion="1"
+        releaseVersion="99999"
         hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
@@ -26,7 +27,7 @@
 
     <stepAnalysisPlugin
         name="light-trap-plots" displayName="Total Anopheles graphed by Month Year"
-        releaseVersion="1" hasParameters="false"
+        releaseVersion="99999" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.eupathdb.common.model.analysis.EuPathExternalAnalyzer">
       <shortDescription>
@@ -45,7 +46,7 @@
 <!--
     <stepAnalysisPlugin
         name="clinepi-event-dist" displayName="Participant Analysis"
-        releaseVersion="1" hasParameters="false"
+        releaseVersion="99999" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
@@ -67,7 +68,7 @@
 
     <stepAnalysisPlugin
         name="clinepi-cont-table" displayName="Contingency Tables"
-        releaseVersion="1" hasParameters="false"
+        releaseVersion="99999" hasParameters="false"
         analysisViewName="eupathExternalAnalysisResult"
         customThumbnail="images/analysis_plugins/contingency_tables.jpg"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
@@ -78,11 +79,10 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
-      <property name="attributesToExtract">source_id</property>
+      <property name="attributesToExtract">primary_key</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
-
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
       <property name="datasetName">OVERRIDE_FROM_RECORD</property>
@@ -91,7 +91,7 @@
 
     <stepAnalysisPlugin
         name="clinepi-event-dist" displayName="Distributions"
-        releaseVersion="1" hasParameters="false"
+        releaseVersion="99999" hasParameters="false"
         customThumbnail="images/analysis_plugins/distributions.jpg"
         analysisViewName="eupathExternalAnalysisResult"
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
@@ -102,7 +102,7 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
-      <property name="attributesToExtract">source_id</property>
+      <property name="attributesToExtract">primary_key</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
@@ -116,7 +116,7 @@
     <stepAnalysisPlugin
         name="clinepi-summaries"
         displayName="Data Summaries"
-        releaseVersion="1"
+        releaseVersion="99999"
         hasParameters="false"
         customThumbnail="images/analysis_plugins/data_summaries.jpg"
         analysisViewName="eupathExternalAnalysisResult"
@@ -128,11 +128,10 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_Summaries]]></property>
-      <property name="attributesToExtract">source_id</property>
+      <property name="attributesToExtract">primary_key</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
-
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
       <property name="datasetName">OVERRIDE_FROM_RECORD</property>

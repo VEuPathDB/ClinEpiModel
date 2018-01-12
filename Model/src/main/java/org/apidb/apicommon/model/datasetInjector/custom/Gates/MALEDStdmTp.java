@@ -26,6 +26,20 @@ public class MALEDStdmTp extends EpidemiologyStudy {
     }
 
     @Override
+    protected Map<String,String[]> participantGraphAttributeScopes() {
+      Map<String,String[]> scopeMap = new HashMap<String,String[]>();
+      scopeMap.put("allCompact", new String[] {"results"});
+      scopeMap.put("weightHeight", new String[] {"record"});
+      scopeMap.put("weightAge", new String[] {"record"});
+      scopeMap.put("heightAge", new String[] {"record"});
+      scopeMap.put("allThree", new String[] {"record"});
+      scopeMap.put("length", new String[] {"record"});
+      scopeMap.put("weight", new String[] {"record"});
+
+      return(scopeMap);
+    }
+
+    @Override
     public void addModelReferences() {
         super.addModelReferences();
 

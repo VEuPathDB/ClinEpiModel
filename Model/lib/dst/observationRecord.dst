@@ -41,6 +41,18 @@ prop=includeProjects
 
 <!--             <stepAnalysisRef name="clinical-visit-dist"/> -->
 
+      <stepAnalysisRef name="clinepi-event-dist">
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
+      <stepAnalysisRef name="clinepi-cont-table">
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
+      <stepAnalysisRef name="clinepi-summaries">
+        <property name="datasetTblPrefix">${tblPrefix}</property>
+        <property name="datasetName">${datasetName}</property>
+      </stepAnalysisRef>
      
  <!-- =============================================================== -->
       <!--   Reporters -->  
@@ -84,7 +96,7 @@ prop=includeProjects
              <text>
                   <![CDATA[
 
-                  Visit from <i>$$EUPATH_0000091$$</i> for Participant <a href="@WEBAPP_BASE_URL@/record/participant/$$parent_id$$/@PROJECT_ID@">$$parent_id$$</a>.
+                  Visit from <i>$$EUPATH_0000091$$</i> for Participant <a href="@WEBAPP_BASE_URL@/record/${presenterId}_participant/$$parent_id$$/@PROJECT_ID@">$$parent_id$$</a>.
                   ]]>
              </text>
           </textAttribute>
@@ -217,13 +229,13 @@ MALED
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
-                           where m.pan_type in ('Visit','Event')
+                           where m.pan_type in ('Visit','Event', 'Event/Observation')
                            and ot.ontology_term_id = m.PROPERTY_ID
                            and mt.property_id = m.property_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
-                           where m.pan_type in ('Visit','Event')
+                           where m.pan_type in ('Visit','Event', 'Event/Observation')
                            and ot.ontology_term_id = m.PROPERTY_ID
                            and mt.property_id = m.property_id
                            union
@@ -277,7 +289,7 @@ SELECT pan_name  AS source_id,
   1 as is_leaf
 FROM apidbtuning.${tblPrefix}metadata
 WHERE dataset_name = '&&datasetName&&'
-AND category       in ('Visit','Event')
+AND category       in ('Visit','Event', 'Event/Observation')
 UNION
 SELECT a.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,

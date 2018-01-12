@@ -481,7 +481,7 @@ prop=includeProjects
         <sql>
             <![CDATA[
 SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
-              FROM ($$household_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}Participants pa
+              FROM ($$${presenterId}household_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}Participants pa
               WHERE source_set.source_id = da.name 
               AND da.pan_id = io.input_pan_id
               AND  io.output_pan_id = pa.pan_id
@@ -510,7 +510,7 @@ prop=includeProjects
         <sql>
             <![CDATA[
 SELECT   pa.name as source_id , '@PROJECT_ID@' as project_id, count(*) as num_of_visits , max(source_set.wdk_weight) as wdk_weight
-              FROM ($$clinical_visit_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Participants pa
+              FROM ($$${presenterId}clinical_visit_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Participants pa
               WHERE source_set.source_id = cva.name 
               AND cva.pan_id = io.output_pan_id
               AND  io.input_pan_id = pa.pan_id
@@ -588,7 +588,7 @@ prop=includeProjects
         <sql>
           <![CDATA[
  SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
-              FROM ($$participant_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Participants pa
+              FROM ($$${presenterId}participant_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Participants pa
               WHERE source_set.source_id = pa.name 
               AND pa.pan_id = io.input_pan_id
               AND  io.output_pan_id = cva.pan_id
@@ -819,7 +819,7 @@ prop=includeProjects
         <sql>
             <![CDATA[
 SELECT   lta.name as source_id , '@PROJECT_ID@' as project_id, da.name as household, wdk_weight
-              FROM ($$household_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}LightTraps lta
+              FROM ($$${presenterId}household_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}LightTraps lta
               WHERE source_set.source_id = da.name 
               AND da.pan_id = io.input_pan_id
               AND  io.output_pan_id = lta.pan_id

@@ -3,7 +3,7 @@ name=PRISMCaseControlGraphAttributes
 anchorFile=ClinEpiModel/Model/lib/dst/graphAttributes.dst
 prop=presenterId
 prop=malariaCatCompact
-prop=malariaCatTimeline
+prop=malariaCatSvg
 >templateTextStart<
  <textAttribute name="${malariaCatCompact}" displayName="Malaria status timeline"  truncateTo="100000">
                     <text>
@@ -12,13 +12,14 @@ prop=malariaCatTimeline
                       ]]>
                     </text>
                   </textAttribute>
-                  <textAttribute name="${malariaCatTimeline}" displayName="Observations timeline">
+
+<textAttribute name="${malariaCatSvg}" displayName="Malaria timeline"  truncateTo="100000">
                     <text>
                       <![CDATA[
-                        <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&w=1000&h=125&datasetId=${presenterId}" type="image/svg+xml"/>
+                        <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=100&w=1200&datasetId=${presenterId}" type="image/svg+xml"/>
                       ]]>
                     </text>
-                 </textAttribute>
+                  </textAttribute>
 >templateTextEnd<
 
 [templateStart]

@@ -12,6 +12,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   
     protected abstract Map<String,String> participantGraphAttributeNames();
 
+    protected abstract Map<String,String[]> participantGraphAttributeScopes();
+
     protected abstract String participantGraphAttributes();
 
     protected String addQuotes(String s) {
@@ -52,6 +54,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   @Override
   public void injectTemplates() {
       Map<String,String> participantGraphAttributeNames = participantGraphAttributeNames();
+      Map<String,String[]> participantGraphAttributeScopes = participantGraphAttributeScopes();
 
       for (Map.Entry<String, String> entry : participantGraphAttributeNames.entrySet()) {
         setPropValue(entry.getKey(), entry.getValue());
@@ -199,6 +202,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   @Override
   public void addModelReferences() {
       Map<String,String> participantGraphAttributeNames = participantGraphAttributeNames();
+      Map<String,String[]> participantGraphAttributeScopes = participantGraphAttributeScopes();
 
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
@@ -228,7 +232,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
           // Add the Text Attributes
           for (Map.Entry<String, String> entry : participantGraphAttributeNames.entrySet()) {
-              addWdkReference(participantRecordClass, "attribute", entry.getValue(), new String[]{"record","results"}, CATEGORY_IRI);
+              addWdkReference(participantRecordClass, "attribute", entry.getValue(), participantGraphAttributeScopes.get(entry.getKey()), CATEGORY_IRI);
           }
 
           addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 

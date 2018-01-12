@@ -115,7 +115,7 @@ BEGIN MALED
 
              <text>
                   <![CDATA[
-                  Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
+                  Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/${presenterId}_household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
                   ]]>
              </text>
           </textAttribute>
@@ -436,7 +436,7 @@ ICEMR
             <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&observationSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
+                   '@WEBAPP_BASE_URL@/record/${presenterId}_observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
               from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}Participants pa
               , apidbtuning.${tblPrefix}PANIO io
@@ -464,7 +464,7 @@ select pa.name as source_id,
                  <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
+                   '@WEBAPP_BASE_URL@/record/${presenterId}_observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id
               from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}Participants pa
               , apidbtuning.${tblPrefix}samples sa
