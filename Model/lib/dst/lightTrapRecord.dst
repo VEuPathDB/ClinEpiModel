@@ -10,7 +10,7 @@ prop=includeProjects
 >templateTextStart<
     <recordClassSet name="${presenterId}LightTrapRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" displayName="Light Trap Collection" iconName="lightbulb-o fa-flip-vertical" > 
+      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" displayName="Light Trap Collection" iconName="bug" > 
 
 
             <!-- primary key definition -->
