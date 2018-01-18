@@ -11,6 +11,17 @@
                  recordClassRef="XmlRecordClasses.StudyApprovalRecord"
                  xmlDataURL="studyApprovals.xml">
     </xmlQuestion>
+
+ <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- News -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  
+    <xmlQuestion name="News"
+                  displayName="@PROJECT_ID@ News"
+                  recordClassRef="XmlRecordClasses.NewsRecord"
+                  xmlDataURL="@PROJECT_ID@/news.xml">
+    </xmlQuestion>
+
     
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!-- WdkVerbiage -->

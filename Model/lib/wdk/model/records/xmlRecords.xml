@@ -11,6 +11,23 @@
   <xmlRecordClassSet name="XmlRecordClasses">
 
 
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- News -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <xmlRecordClass
+          name="NewsRecord"
+          type="News"
+          idPrefix="NEWS."
+          delimiter="@">
+            <xmlAttribute name="headline"/>
+            <xmlAttribute name="date"/>
+            <xmlAttribute name="item"/>
+            <xmlAttribute name="tag"/>
+            <xmlAttribute name="category"/>
+    </xmlRecordClass>
+
+
   <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
   <!-- WdkVerbiage -->
   <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
