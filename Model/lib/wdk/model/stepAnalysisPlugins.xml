@@ -74,7 +74,7 @@
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
         <![CDATA[
-          Build 2x2 contingency tables for the chosen set of participants
+          Build 2x2 contingency tables with p-values, Odds Ratio and Relative Risk
         ]]>
       </shortDescription>
       <description/>
@@ -97,7 +97,7 @@
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
         <![CDATA[
-          Plot a histogram of the distribution of any available data for the chosen set of participants
+          Plot a histogram of the distribution of any available data
         ]]>
       </shortDescription>
       <description/>
@@ -123,7 +123,7 @@
         analyzerClass="org.clinepi.model.analysis.ShinyAnalysisPlugin">
       <shortDescription>
         <![CDATA[
-          Make plots of summary data using custom facets within the chosen set of participants
+          Make plots of summary data using custom facets
         ]]>
       </shortDescription>
       <description/>
