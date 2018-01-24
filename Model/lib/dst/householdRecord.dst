@@ -166,13 +166,13 @@ select count(*) from apidbtuning.${tblPrefix}Households
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
                            where lower(m.pan_type) = 'household'
                            and ot.ontology_term_id = m.PROPERTY_ID
                            and mt.property_id = m.property_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
                            where lower(m.pan_type) = 'household'
                            and ot.ontology_term_id = m.property_id
                            and mt.property_id = m.property_id
@@ -224,7 +224,7 @@ prop=lightTrapSourceIdsToOrderHouseholdsLightTrapTable
 
           <sql>
             <![CDATA[
-                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyTypes where property_source_id in (&&householdMemberColumns&&)
+                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyType where property_source_id in (&&householdMemberColumns&&)
             ]]>
           </sql>
         </sqlQuery>
@@ -322,7 +322,7 @@ order by source_id
 
           <sql>
             <![CDATA[
-                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyTypes where property_source_id in (&&lightTrapSourceIds&&)
+                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyType where property_source_id in (&&lightTrapSourceIds&&)
             ]]>
           </sql>
         </sqlQuery>
