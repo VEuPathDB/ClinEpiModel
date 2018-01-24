@@ -276,9 +276,9 @@
             <!-- `display` is the opposite of `term` because it is arranged in a sentence where the operands are the opposite of the query -->
             <sql>
               <![CDATA[
-                       SELECT 'before' as display, 'after' as term, '>=' as internal from dual
+                       SELECT 'before' as display, 'after' as term, '<=' as internal from dual
                        UNION
-                       SELECT 'after' as display, 'before' as term, '<=' as internal from dual
+                       SELECT 'after' as display, 'before' as term, '>=' as internal from dual
               ]]>
             </sql>
         </sqlQuery>
