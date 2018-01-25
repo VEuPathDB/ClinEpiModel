@@ -159,20 +159,20 @@ select count(*) from apidbtuning.${tblPrefix}LightTraps
                             decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
                            where m.pan_type = 'CDC light trap assay'
                            and ot.ontology_term_id = m.property_id
                            and mt.property_id = m.property_id
                            union
                            select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyTypes mt
+                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
                            where m.pan_type = 'CDC light trap assay'
                            and ot.ontology_term_id = m.property_id
                            and mt.property_id = m.property_id
 --                           union
 --                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
                            union
-                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.${tblPrefix}PropertyTypes mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
+                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.${tblPrefix}PropertyType mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
                            ) meta
             ]]>
          </sql>

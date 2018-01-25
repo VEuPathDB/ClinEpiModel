@@ -745,8 +745,9 @@ select * from (
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'EUPATH_0000328'
---     and ontology_term_source_id != 'EUPATH_0000094'
-) order by display_name
+     )
+     where ontology_term_name != 'EFO_0004950'
+     order by display_name
         ]]>
       </sql>
     </sqlQuery>

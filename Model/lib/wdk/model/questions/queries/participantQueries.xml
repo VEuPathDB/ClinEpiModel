@@ -90,28 +90,19 @@ having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.relative_visits_prism" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.relative_visits"/>
-<!--       <paramRef ref="participantParams.parasite_density" groupRef="metaDataGroups.summary_params"/> -->
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="visit_count"/>
        <column name="visits_per_year_obs"/>
        <column name="time_of_obs"/>
        <column name="ave_anoph"/>
-<!--
-       <column name="avg_hemo"/>
-       <column name="avg_weight"/>
-       <column name="ave_para_density"/>
-       <column name="ave_age_visit"/>
-       <column name="visits_per_year_obs"/>
-       <column name="time_of_obs"/>
--->
-         <sql>
+       <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, core.visit_count,
-round(core.visit_count / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
-      greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
-round((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
-      greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs,
+round(core.visit_count / ((abs(least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
+      greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365),1) as visits_per_year_obs,
+round((abs(least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
+      greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365,1) as time_of_obs,
 mos.ave_anoph
 from
 (select pa.pan_id, nvl(visits.visit_count,0) as visit_count
@@ -153,10 +144,10 @@ and pa.pan_id = visits.input_pan_id(+)) core, ApidbTuning.$$tbl_prefix$$Particip
   and la.OBI_0001619 <= $$visit_date.max$$ 
   group by iop.output_pan_id) mos
 where pa.pan_id = core.pan_id
-and round(core.visit_count / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
-greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1) / 365),1) >= $$visits_per_year.min$$
-and round(core.visit_count / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
-greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1) / 365),1) <= $$visits_per_year.max$$
+and round(core.visit_count / ((abs(least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
+greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365),1) >= $$visits_per_year.min$$
+and round(core.visit_count / ((abs(least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
+greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365),1) <= $$visits_per_year.max$$
 and pa.pan_id = mos.part_id(+)
                 ]]>   
         </sql>
