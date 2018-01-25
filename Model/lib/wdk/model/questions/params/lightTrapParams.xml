@@ -1,5 +1,6 @@
 <wdkModel>
 
+<wdkModel>
   <paramSet name="lightTrapParams">
     
     <enumParam name="type"
@@ -20,7 +21,7 @@
     <filterParamNew name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="lightTrapVQ.RegionMetaData_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.RegionOntologyValues_prism"
+                    backgroundQueryRef="lightTrapVQ.RegionMetaData_prism"
                     prompt="Geographic Region"
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
@@ -35,8 +36,6 @@
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     metadataQueryRef="lightTrapVQ.HouseholdMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="ParticipantVQ.HouseholdOntologyValues_prism"
-                    useIdTransformSqlForInternalValue="true"
                     prompt="Households"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="false"
@@ -50,7 +49,6 @@
                     ontologyQueryRef="lightTrapVQ.LightTrapOntology_prism"
                     metadataQueryRef="lightTrapVQ.LightTrapMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd_prism"
-                    ontologyValuesQueryRef="lightTrapVQ.LightTrapOntologyValues_prism"
                     prompt="CDC Light Trap Collections"
                     filterDataTypeDisplayName="Collections"
                     countPredictsAnswerCount="true"
@@ -101,13 +99,13 @@
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select m.pan_id as internal,  io.output_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select m.pan_id as internal,  io.output_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
  where m.property_source_id = 'EUPATH_0000054'
  and m.pan_id = io.input_pan_id
@@ -122,7 +120,7 @@ select m.pan_id as internal,  io.output_pan_id as internal_for_counts, m.propert
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
@@ -139,14 +137,14 @@ with mos as (
   and la.OBI_0001619 <= $$date_range.max$$ 
   group by da.pan_id
   )
-select distinct m.pan_id as internal, io.output_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, mos, ApidbTuning.$$tbl_prefix$$PANIO io
  where m.pan_id in ($$geographic_region_prism$$)
  and m.pan_id = mos.pan_id
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000055'
  union 
- select mos.pan_id as internal, io.output_pan_id as internal_for_counts, mos.ontology_term_name, mos.string_value,mos.number_value, mos.date_value 
+ select mos.pan_id as filter_item_id, io.output_pan_id as internal, mos.ontology_term_name, mos.string_value,mos.number_value, mos.date_value 
  from mos, ApidbTuning.$$tbl_prefix$$PANIO io
  where mos.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000055'
@@ -158,7 +156,7 @@ select distinct m.pan_id as internal, io.output_pan_id as internal_for_counts, m
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
@@ -172,13 +170,13 @@ with mos as (
   and la.pan_id = io.output_pan_id
   group by da.pan_id
   )
-select distinct m.pan_id as internal, io.output_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, mos, ApidbTuning.$$tbl_prefix$$PANIO io
  where m.pan_id = mos.pan_id
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000055'
  union 
- select mos.pan_id as internal, io.output_pan_id as internal_for_counts, mos.ontology_term_name, mos.string_value,mos.number_value, mos.date_value 
+ select mos.pan_id as filter_item_id, io.output_pan_id as internal, mos.ontology_term_name, mos.string_value,mos.number_value, mos.date_value 
  from mos, ApidbTuning.$$tbl_prefix$$PANIO io
  where mos.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000055'
@@ -212,13 +210,12 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$LightTraps lta
  where lta.pan_id in ($$households_prism$$)
  and lta.OBI_0001619 >= $$date_range.min$$
@@ -232,13 +229,12 @@ select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, property_source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.category = 'CDC light trap assay'
         ]]>
