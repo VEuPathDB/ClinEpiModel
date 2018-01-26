@@ -241,24 +241,6 @@ select distinct m.pan_id as internal, property_source_id as ontology_term_name, 
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="LightTrapOntologyValues_prism" isCacheable="true">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
- select distinct  property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$Ontology o
- where o.type is not null
-and o.is_range = 0
-and m.property_source_id = o.ontology_term_source_id
-and m.category = 'CDC light trap assay'
-        ]]>
-      </sql>
-    </sqlQuery>
-
  </querySet>
 
 </wdkModel>
