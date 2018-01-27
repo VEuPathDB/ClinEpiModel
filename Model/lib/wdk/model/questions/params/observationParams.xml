@@ -23,7 +23,6 @@
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="ClinicalVisitVQ.RegionMetaData_prism"
                     backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_prism"
-                    useIdTransformSqlForInternalValue="true"
                     filterDataTypeDisplayName="Households"
                     prompt="Geographic Region"
                     dependedParamRef="participantParams.tbl_prefix"
@@ -53,7 +52,6 @@
                        ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_prism"
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_prism"
-                       useIdTransformSqlForInternalValue="true"
                        prompt="Participants"
                        countPredictsAnswerCount="false"
                        trimMetadataTerms="false"
@@ -68,7 +66,6 @@
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_prism"
                        backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_prism"
-                       useIdTransformSqlForInternalValue="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Households"
                        countPredictsAnswerCount="false"
@@ -201,6 +198,7 @@
                     metadataQueryRef="ClinicalVisitVQ.RegionMetaData_maled"
                     backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.RegionOntology_maled"
+                    countPredictsAnswerCount="true"
                     prompt="Participant"
                     dependedParamRef="participantParams.tbl_prefix"
                     trimMetadataTerms="false">
@@ -212,12 +210,13 @@
 
 
        <filterParamNew name="participants_nf_maled" 
-                      metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_maled"
-                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
-                      backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_maled"
-                      prompt="Participants"
-                      trimMetadataTerms="false"
-                      dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_maled">
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
+                       metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_maled"
+                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_maled"
+                       countPredictsAnswerCount="true"
+                       prompt="Participants"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_maled">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -227,7 +226,7 @@
                       metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_maled"
                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
                       backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_maled"
-                      useIdTransformSqlForInternalValue="true"
+                      countPredictsAnswerCount="false"
                       prompt="Households"
                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_nf_maled"
                       trimMetadataTerms="false">
@@ -240,6 +239,7 @@
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd_maled"
+                    countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_nf_maled">
@@ -349,7 +349,7 @@ select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
@@ -363,7 +363,7 @@ select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id, iov.outpu
                  and io.output_pan_id = iov.input_pan_id
                  and iov.output_pan_type_source_id = 'EUPATH_0000738'
 )
-select m.pan_id as internal,  idMap.obs_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select m.pan_id as filter_item_id,  idMap.obs_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.D0ad509829eMetaData m, idMap
  where m.pan_id = idMap.hh_id
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
@@ -377,13 +377,12 @@ select m.pan_id as internal,  idMap.obs_id as internal_for_counts, m.property_so
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from  ApidbTuning.$$tbl_prefix$$metadata m
   where m.pan_id in ($$geographic_region_prism$$)
   and m.property_source_id = 'EUPATH_0000113'
@@ -397,7 +396,7 @@ select distinct m.pan_id as internal, m.pan_id as internal_for_counts, m.propert
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
@@ -412,11 +411,11 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
                  and iov.output_pan_type_source_id = 'EUPATH_0000738'
                  and iov.output_pan_id in ($$participants_prism$$)
 )
- select distinct m.pan_id as internal, part.obs_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct m.pan_id as filter_item_id, part.obs_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
  union
- select part.household_id as internal, part.obs_id as internal_for_counts, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.household_id as filter_item_id, part.obs_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -434,7 +433,7 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
@@ -448,11 +447,11 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
                  and io.output_pan_id = iov.input_pan_id
                  and iov.output_pan_type_source_id = 'EUPATH_0000738'
 )
- select distinct m.pan_id as internal, part.obs_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select distinct m.pan_id as filter_item_id, part.obs_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
  union
- select part.household_id as internal, part.obs_id as internal_for_counts, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.household_id as filter_item_id, part.obs_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -471,13 +470,13 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as internal, iov.output_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as filter_item_id, iov.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from ApidbTuning.$$tbl_prefix$$Observations 
    where pan_id in ($$visits_visitage_metadata_prism$$)
@@ -496,13 +495,13 @@ select distinct m.pan_id as internal, iov.output_pan_id as internal_for_counts, 
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as internal, iov.output_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as filter_item_id, iov.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
   from  ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m
   where iov.output_pan_type_source_id = 'EUPATH_0000738'
   and iov.input_pan_type_source_id = 'EUPATH_0000096'
@@ -518,17 +517,16 @@ select distinct m.pan_id as internal, iov.output_pan_id as internal_for_counts, 
          <paramRef ref="participantParams.tbl_prefix" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
-         <column name="internal_for_counts"/>
          <column name="number_value"/>
          <column name="date_value"/>
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select m.pan_id as internal, m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.pan_id in ($$households_prism$$)
   union all
- select ios.input_pan_id as internal, ios.input_pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ select ios.input_pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO ios
 where m.category = 'Specimen type' 
 and m.property_source_id = 'OBI_0100051'
@@ -548,13 +546,12 @@ and ios.output_pan_id = m.pan_id
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Participant'
@@ -568,13 +565,12 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Participant'
@@ -587,13 +583,12 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
          <paramRef ref="participantParams.tbl_prefix" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
-         <column name="internal_for_counts"/>
          <column name="number_value"/>
          <column name="date_value"/>
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Event'
@@ -607,13 +602,12 @@ select distinct m.pan_id as internal, m.pan_id as internal_for_counts, source_id
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, m.pan_id as internal_for_counts, source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal,  source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
  where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and m.category = 'Event'
@@ -625,13 +619,13 @@ select distinct m.pan_id as internal, m.pan_id as internal_for_counts, source_id
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select io.part_id as internal, io.event_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select io.part_id as internal, io.event_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ( select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id, ioe.output_pan_id as event_id
  from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$PANIO ioe
  where io.input_pan_type_source_id = 'PCO_0000024'
@@ -650,13 +644,12 @@ select io.part_id as internal, io.event_id as internal_for_counts, m.property_so
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select io.part_id as internal, io.part_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select io.part_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ( select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id
  from ApidbTuning.$$tbl_prefix$$PANIO io
  where io.output_pan_id in ($$participants_nf_maled$$)
@@ -674,13 +667,12 @@ select io.part_id as internal, io.part_id as internal_for_counts, m.property_sou
       <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select io.part_id as internal, io.part_id as internal_for_counts, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select io.part_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ( select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id
  from ApidbTuning.$$tbl_prefix$$PANIO io
  where io.output_pan_type_source_id = 'EUPATH_0000096' 
@@ -738,13 +730,12 @@ first as (
    <sqlQuery name="RelVisitMetaData_maled">
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="internal_for_counts"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-                select distinct pan_id as internal, pan_id as internal_for_counts, source_id as ontology_term_name,
+                select distinct pan_id as internal,  source_id as ontology_term_name,
                        string_value, number_value, date_value
                 from ApidbTuning.$$tbl_prefix$$MetaData 
                 where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$

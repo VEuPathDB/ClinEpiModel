@@ -1,6 +1,5 @@
 <wdkModel>
 
-<wdkModel>
   <paramSet name="lightTrapParams">
     
     <enumParam name="type"
