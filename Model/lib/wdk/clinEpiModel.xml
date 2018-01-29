@@ -23,7 +23,7 @@
   <declaredMacro name="WEBAPP_BASE_URL"          usedBy="model"/>
   <declaredMacro name="LEGACY_WEBAPP_BASE_URL"   usedBy="model"/>
 
-<!--  <uiConfig showStratPanelVisibilityControls="true" showStratPanelByDefault="false"/> -->
+  <uiConfig showStratPanelByDefault="false"/>
 
 
     <!-- Categories -->
