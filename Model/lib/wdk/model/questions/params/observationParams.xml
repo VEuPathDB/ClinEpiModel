@@ -19,7 +19,7 @@
 
     <!-- TEMPLATE_ANCHOR observationSourceIdParam -->
 
-    <filterParamNew name="geographic_region_prism" 
+    <filterParam name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="ClinicalVisitVQ.RegionMetaData_prism"
                     backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_prism"
@@ -31,10 +31,10 @@
       <help>
         Select observations based on the subcounty where the participant lives. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
 
-       <filterParamNew name="visits_visitage_metadata_prism" 
+       <filterParam name="visits_visitage_metadata_prism" 
                        ontologyQueryRef="ParticipantVQ.VisitAgeOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.ClinicalVisitAgeMetaData_prism"
                        backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_prism"
@@ -46,9 +46,9 @@
          <help>
               Select the age of the participants at the time of their clinical observations.
          </help>
-       </filterParamNew>
+       </filterParam>
 
-       <filterParamNew name="participants_prism" 
+       <filterParam name="participants_prism" 
                        ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_prism"
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_prism"
@@ -59,10 +59,10 @@
          <help>
               Select participants based on their characteristics. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
 
-       <filterParamNew name="households_prism" 
+       <filterParam name="households_prism" 
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_prism"
                        backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_prism"
@@ -74,10 +74,10 @@
          <help>
               Select observations based on the household characteristics where the participant lives. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
 
-    <filterParamNew name="visits_prism" 
+    <filterParam name="visits_prism" 
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData_prism"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
@@ -88,7 +88,7 @@
       <help>
         Select observations based on their observation characteristics. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
 
        <dateRangeParam name="visit_date"
@@ -194,7 +194,7 @@
     <!--  MAL-ED specific .. should be injected -->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-    <filterParamNew name="geographic_region_maled" 
+    <filterParam name="geographic_region_maled" 
                     metadataQueryRef="ClinicalVisitVQ.RegionMetaData_maled"
                     backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.RegionOntology_maled"
@@ -205,11 +205,11 @@
       <help>
         Select observations based on the participants subcounty where they live. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
 
 
-       <filterParamNew name="participants_nf_maled" 
+       <filterParam name="participants_nf_maled" 
                        ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
                        metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_maled"
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_maled"
@@ -220,9 +220,9 @@
          <help>
               Select participants based on their characteristics. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
-       <filterParamNew name="households_nf_maled" 
+       <filterParam name="households_nf_maled" 
                       metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_maled"
                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
                       backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_maled"
@@ -233,9 +233,9 @@
          <help>
               Select observations based on the household characteristics where the participants live. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
-       <filterParamNew name="visits_nf_maled" 
+       <filterParam name="visits_nf_maled" 
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd_maled"
@@ -246,9 +246,9 @@
       <help>
         Select observations based on their observation characteristics. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
-    <filterParamNew name="relative_visits_nf_maled" 
+    <filterParam name="relative_visits_nf_maled" 
                     metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     ontologyQueryRef="ClinicalVisitVQ.RelVisitOntology_maled"
@@ -257,7 +257,7 @@
       <help>
         Select related observations based on their characteristics. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
   </paramSet>
 

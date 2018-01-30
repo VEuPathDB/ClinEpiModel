@@ -17,7 +17,7 @@
     </enumParam>
 
 
-    <filterParamNew name="geographic_region_prism" 
+    <filterParam name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="lightTrapVQ.RegionMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.RegionMetaData_prism"
@@ -29,9 +29,9 @@
       <help>
         Select light trap collections based on geographic region. 
       </help>
-     </filterParamNew>
+     </filterParam>
      
-     <filterParamNew name="households_prism" 
+     <filterParam name="households_prism" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     metadataQueryRef="lightTrapVQ.HouseholdMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_prism"
@@ -42,9 +42,9 @@
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
-    <filterParamNew name="lighttraps_prism" 
+    <filterParam name="lighttraps_prism" 
                     ontologyQueryRef="lightTrapVQ.LightTrapOntology_prism"
                     metadataQueryRef="lightTrapVQ.LightTrapMetaData_prism"
                     backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd_prism"
@@ -56,7 +56,7 @@
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
 
       <!-- TEMPLATE_ANCHOR lightTrapSourceIdParam -->

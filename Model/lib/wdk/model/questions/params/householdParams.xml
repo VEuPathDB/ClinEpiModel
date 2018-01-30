@@ -25,7 +25,7 @@
 
        </dateRangeParam>    
 
-    <filterParamNew name="households_prism" 
+    <filterParam name="households_prism" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     metadataQueryRef="HouseholdVQ.HouseholdMetaData_prism"
                     backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_prism"
@@ -36,9 +36,9 @@
       <help>
         Select participants based on their characteristics. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
-     <filterParamNew name="geographic_region_prism" 
+     <filterParam name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="HouseholdVQ.RegionMetaData_prism"
                     backgroundQueryRef="HouseholdVQ.RegionMetaData_prism"
@@ -50,9 +50,9 @@
       <help>
         Select dwellngs based on geographic region. 
       </help>
-    </filterParamNew>          
+    </filterParam>          
 
-    <filterParamNew name="participants_prism" 
+    <filterParam name="participants_prism" 
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                       metadataQueryRef="HouseholdVQ.ParticipantMetaData_prism"
                       backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_prism"
@@ -63,7 +63,7 @@
          <help>
               Select participants based on their characteristics. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
 
     <!-- TEMPLATE_ANCHOR householdSourceIdParam -->

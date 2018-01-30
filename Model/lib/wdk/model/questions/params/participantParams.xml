@@ -83,7 +83,7 @@
     <!--   TODO: DELETE THIS AND COPY OVER FROM BRANCH ... ADD PRISM SUFFIX -->
     <!--************************************************************-->
 
-       <filterParamNew name="geographic_region_prism" 
+       <filterParam name="geographic_region_prism" 
                        ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                        metadataQueryRef="ParticipantVQ.RegionMetaData_prism"
                        backgroundQueryRef="ParticipantVQ.RegionMetaData_prism"
@@ -95,9 +95,9 @@
          <help>
            Select participants based on their geographic region. 
          </help>
-    </filterParamNew>
+    </filterParam>
 
-    <filterParamNew name="visits_visitage_metadata_prism" 
+    <filterParam name="visits_visitage_metadata_prism" 
                     ontologyQueryRef="ParticipantVQ.VisitAgeOntology_prism"
                     metadataQueryRef="ParticipantVQ.VisitAgeMetaData_prism"
                     backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_prism"
@@ -109,9 +109,9 @@
       <help>
         Select reference samples. 
       </help>
-    </filterParamNew>
+    </filterParam>
     
-    <filterParamNew name="participants_prism" 
+    <filterParam name="participants_prism" 
                     ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                     metadataQueryRef="ParticipantVQ.ParticipantMetaData_prism"
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
@@ -122,10 +122,10 @@
       <help>
         Select participants based on their characteristics. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
 
-    <filterParamNew name="households_prism" 
+    <filterParam name="households_prism" 
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_prism"
@@ -137,9 +137,9 @@
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
-    <filterParamNew name="visits_prism" 
+    <filterParam name="visits_prism" 
                     metadataQueryRef="ParticipantVQ.VisitMetaData_prism"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
@@ -150,9 +150,9 @@
       <help>
         Select participants based on their visit characteristics. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
-        <filterParamNew name="relative_visits_prism" 
+        <filterParam name="relative_visits_prism" 
                     ontologyQueryRef="ParticipantVQ.VisitOntology_prism"
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
@@ -163,7 +163,7 @@
       <help>
         Select participants based on their visit characteristics. 
       </help>
-    </filterParamNew>
+    </filterParam>
 
 
 
@@ -171,7 +171,7 @@
     <!--   MAL-ED section ... should be injected  -->
     <!--************************************************************-->
 
-       <filterParamNew name="geographic_region_maled" 
+       <filterParam name="geographic_region_maled" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData_maled"
                        backgroundQueryRef="ParticipantVQ.RegionMetaData_maled"
                        ontologyQueryRef="ParticipantVQ.RegionOntology_maled"
@@ -183,9 +183,9 @@
          <help>
            Select participants based on their geographic region. 
          </help>
-    </filterParamNew>
+    </filterParam>
 
-       <filterParamNew name="households_nf_maled" 
+       <filterParam name="households_nf_maled" 
                       metadataQueryRef="ParticipantVQ.HouseholdMetaData_maled"
                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
                       backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_maled"
@@ -196,9 +196,9 @@
          <help>
               Select participants based on the characteristics of the household where they live. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
-       <filterParamNew name="participants_nf_maled" 
+       <filterParam name="participants_nf_maled" 
                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_maled"
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_maled"
@@ -210,9 +210,9 @@
          <help>
               Select participants based on their characteristics. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
-       <filterParamNew name="visits_nf_maled" 
+       <filterParam name="visits_nf_maled" 
                        metadataQueryRef="ParticipantVQ.VisitMetaData_maled"
                        ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                        backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
@@ -223,7 +223,7 @@
          <help>
            Select participants based on their visit characteristics. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
     
     <!--************************************************************-->
@@ -231,7 +231,7 @@
     <!--************************************************************-->
 
 
-       <filterParamNew name="geographic_region_gems" 
+       <filterParam name="geographic_region_gems" 
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
                        metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
@@ -244,9 +244,9 @@
            Select participants based on their personal and household
            characteristics.
          </help>
-       </filterParamNew>
+       </filterParam>
        
-       <filterParamNew name="participant_dwelling_gems" 
+       <filterParam name="participant_dwelling_gems" 
                        metadataQueryRef="ParticipantVQ.ParticipantDwellingMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.ParticipantDwellingOntology_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
@@ -258,7 +258,7 @@
          <help>
            Select participants based on study site. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
        <enumParam name="case_control"
                   prompt="Cases or Controls"
@@ -282,7 +282,7 @@
          </enumList>
        </enumParam>
 
-       <filterParamNew name="all_data_gems" 
+       <filterParam name="all_data_gems" 
                        metadataQueryRef="ParticipantVQ.AllDataMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.AllDataOntology_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
@@ -294,9 +294,9 @@
          <help>
            Select participants based on variables associated with their enrollment or followup events. 
          </help>
-       </filterParamNew>
+       </filterParam>
 
-       <filterParamNew name="event_gems" 
+       <filterParam name="event_gems" 
                        metadataQueryRef="ParticipantVQ.EventMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
@@ -308,7 +308,7 @@
          <help>
            Select participants based on variables associated with their enrollment or followup events. 
          </help>
-       </filterParamNew>       
+       </filterParam>       
 
        <enumParam name="use_rel_case_control"
                 prompt="Compare Cases / Controls"
@@ -338,7 +338,7 @@
       <help>Choose what to do as you compare cases and controls.  Do you want to keep or remove participants with cases and controls that match your selected criteria. </help>
     </flatVocabParam>
 
-       <filterParamNew name="relative_event_gems" 
+       <filterParam name="relative_event_gems" 
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        metadataQueryRef="ParticipantVQ.RelativeEventMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
@@ -350,7 +350,7 @@
          <help>
            Modify participants selected based on information about their related case or control. 
          </help>
-       </filterParamNew>    
+       </filterParam>    
 
        <enumParam name="return_case_control"
                   prompt="Which participants to return"
