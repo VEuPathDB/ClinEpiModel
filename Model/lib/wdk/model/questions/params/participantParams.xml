@@ -249,7 +249,7 @@
        <filterParam name="participant_dwelling_gems" 
                        metadataQueryRef="ParticipantVQ.ParticipantDwellingMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.ParticipantDwellingOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       backgroundQueryRef="ParticipantVQ.ParticipantDwellingMetaDataBkg_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
@@ -285,7 +285,7 @@
        <filterParam name="all_data_gems" 
                        metadataQueryRef="ParticipantVQ.AllDataMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.AllDataOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       backgroundQueryRef="ParticipantVQ.ParticipantDwellingMetaDataBkg_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
@@ -299,7 +299,7 @@
        <filterParam name="event_gems" 
                        metadataQueryRef="ParticipantVQ.EventMetaData_gems"
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       backgroundQueryRef="ParticipantVQ.ParticipantDwellingMetaDataBkg_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Observations"
                        trimMetadataTerms="false"
@@ -341,7 +341,7 @@
        <filterParam name="relative_event_gems" 
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        metadataQueryRef="ParticipantVQ.RelativeEventMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+                       backgroundQueryRef="ParticipantVQ.ParticipantDwellingMetaDataBkg_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Related Case or Control"
                        trimMetadataTerms="false"
@@ -1007,13 +1007,13 @@ from apidbtuning.$$tbl_prefix$$Ontology o
          <![CDATA[
 select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
-where m.category = 'Child'
+where m.category = 'Participant'
 and m.property_source_id = 'OBI_0001627'
           ]]>
     </sql>    
     </sqlQuery>
     
-    <sqlQuery name="AllParticipantNoDependencies_gems" isCacheable="false">
+    <sqlQuery name="ParticipantDwellingMetaDataBkg_gems" isCacheable="true">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1024,7 +1024,7 @@ and m.property_source_id = 'OBI_0001627'
          <![CDATA[
  select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
-where category = 'Child'
+where category = 'Participant'
           ]]>
     </sql>    
     </sqlQuery>
