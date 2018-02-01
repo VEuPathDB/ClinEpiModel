@@ -71,7 +71,7 @@ prop=includeProjects
              <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
       </reporter>
 
-      <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
+      <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes=""
                 implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
 
       <!-- =================================================================== -->
