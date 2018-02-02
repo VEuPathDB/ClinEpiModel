@@ -43,7 +43,7 @@ prop=includeProjects
         <property name="page_size">500</property>
       </reporter>
 
-      <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes="record"
+      <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes=""
                 implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
 
       <!-- =================================================================== -->

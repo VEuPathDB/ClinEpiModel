@@ -30,7 +30,6 @@ public class GEMS1CaseControl extends EpidemiologyStudy {
         String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
 
         addWdkReference(participantRecordClass, "question", "ParticipantQuestions.ParticipantsByCaseControlVisits_gems", new String[]{"menu", "webservice"}, CATEGORY_IRI);
-        addWdkReference(participantRecordClass, "question", "ParticipantQuestions.ParticipantsByCaseControlVisitsShort_gems", new String[]{"menu", "webservice"}, CATEGORY_IRI);
     }
 
 
