@@ -137,13 +137,13 @@ Use the filters above to select a set of Participants or to explore the data.  S
 
 
         <stepAnalysisRef name="clinepi-event-dist">
-          <property name="attributesToExtract">primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
+          <property name="attributesToExtract">project_id,primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
         </stepAnalysisRef>
         <stepAnalysisRef name="clinepi-cont-table">
-          <property name="attributesToExtract">primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
+          <property name="attributesToExtract">project_id,primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
         </stepAnalysisRef>
         <stepAnalysisRef name="clinepi-summaries">
-          <property name="attributesToExtract">primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
+          <property name="attributesToExtract">project_id,primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
         </stepAnalysisRef>
 
         <summary>
