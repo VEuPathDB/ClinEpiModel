@@ -61,7 +61,7 @@
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
-              "observationsGroupName": "part_visit_characteristics",
+              "observationsGroupName": "observ_visit_characteristics",
               "relatedObservationsGroupName": "relative_visits",
               "useRelativeObservationsParamName": "use_relative_visits",
               "dateOperatorParamName": "dateOperator_fv",

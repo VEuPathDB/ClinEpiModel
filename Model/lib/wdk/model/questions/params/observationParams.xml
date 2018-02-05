@@ -358,14 +358,16 @@ select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal
         <![CDATA[
 with idMap as (
 select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id, iov.output_pan_id as obs_id
-                 from ApidbTuning.D0ad509829ePANIO io, ApidbTuning.D0ad509829ePANIO iov
+                 from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$Observations obs
                  where io.input_pan_type_source_id = 'PCO_0000024'
                  and io.output_pan_type_source_id = 'EUPATH_0000096'
                  and io.output_pan_id = iov.input_pan_id
                  and iov.output_pan_type_source_id = 'EUPATH_0000738'
+                 and iov.output_pan_id = obs.pan_id
+                 and obs.EUPATH_0000091 is not null
 )
 select m.pan_id as filter_item_id,  idMap.obs_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.D0ad509829eMetaData m, idMap
+ from ApidbTuning.$$tbl_prefix$$MetaData m, idMap
  where m.pan_id = idMap.hh_id
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
         ]]>
