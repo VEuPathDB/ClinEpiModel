@@ -1270,6 +1270,13 @@ You can restrict the observations returned in your search by selecting character
                 ]]>
             </description>
         </group>
+        <group name="observ_visit_characteristics" displayName="Observations" displayType="ShowHide">
+            <description>
+                <![CDATA[
+    Observations shown are for the selected set of participants when they were within the age range specified in the Age filter.  Change the default values for the Observations per Year parameter to restrict observations returned based on your selected observation values.
+                ]]>
+            </description>
+        </group>
        <group name="part_event_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
@@ -1294,7 +1301,7 @@ You can further restrict the participants returned in your search by setting a r
         <group name="relative_visits" displayName="Related Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-                         You can further restrict the observations you have previously selected above by removing (or keeping) those observations based on a related observations you define below.  For example, you may want to only keep observations with a diagnosis of asymptomatic parasitemia if they are not followed within 14 days by an observation where the participant was diagnosed with malaria.  In this instance, set the days between observations to 1 to 14, direction before and remove observations where the related observation diagnosis of malaria = yes.
+                         You can further restrict the observations you selected in the previous step by removing (or keeping) those observations based on related observations you define below.  For example, you may want to only keep observations with a diagnosis of asymptomatic parasitemia if they are not followed within 14 days by an observation where the participant was diagnosed with malaria.  In this example, set the days between observations to 1 to 14 and direction to before to remove observations where the related observation diagnosis of malaria = yes.
                 ]]>
             </description>
         </group>
