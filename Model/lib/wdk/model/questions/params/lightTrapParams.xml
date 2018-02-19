@@ -137,16 +137,20 @@ with mos as (
   group by da.pan_id
   )
 select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, mos, ApidbTuning.$$tbl_prefix$$PANIO io
+ from ApidbTuning.$$tbl_prefix$$MetaData m, mos, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
  where m.pan_id in ($$geographic_region_prism$$)
  and m.pan_id = mos.pan_id
  and m.pan_id = io.input_pan_id
- and io.output_pan_type_source_id = 'EUPATH_0000055'
+  and la.pan_id = io.output_pan_id
+  and la.OBI_0001619 >= $$date_range.min$$
+  and la.OBI_0001619 <= $$date_range.max$$ 
  union 
  select mos.pan_id as filter_item_id, io.output_pan_id as internal, mos.ontology_term_name, mos.string_value,mos.number_value, mos.date_value 
- from mos, ApidbTuning.$$tbl_prefix$$PANIO io
+ from mos, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
  where mos.pan_id = io.input_pan_id
- and io.output_pan_type_source_id = 'EUPATH_0000055'
+  and la.pan_id = io.output_pan_id
+  and la.OBI_0001619 >= $$date_range.min$$
+  and la.OBI_0001619 <= $$date_range.max$$ 
           ]]>
     </sql>
     </sqlQuery>
