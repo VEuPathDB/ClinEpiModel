@@ -49,8 +49,8 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
 
         String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
-        String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
-        String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
+        //String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
+        //String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
         String lightTrapRecordClass = makeRecordClassName(LIGHT_TRAP_RECORD_CLASS_PREFIX);
 
         addWdkReference(lightTrapRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);

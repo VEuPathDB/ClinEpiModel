@@ -53,8 +53,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
   @Override
   public void injectTemplates() {
+
       Map<String,String> participantGraphAttributeNames = participantGraphAttributeNames();
-      Map<String,String[]> participantGraphAttributeScopes = participantGraphAttributeScopes();
+      //Map<String,String[]> participantGraphAttributeScopes = participantGraphAttributeScopes();
 
       for (Map.Entry<String, String> entry : participantGraphAttributeNames.entrySet()) {
         setPropValue(entry.getKey(), entry.getValue());
