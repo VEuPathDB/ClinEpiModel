@@ -12,7 +12,7 @@
               shortDisplayName="Clinical Observations"
               queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_prism" 
               recordClassRef="DS_0ad509829eObservationRecordClasses.DS_0ad509829eObservationRecordClass" 
-              includeProjects="ICEMR,ClinEpiDB">
+              includeProjects="ICEMR"> <!-- TODO: Add back ClinEpiDB -->
 
 
         <attributesList 

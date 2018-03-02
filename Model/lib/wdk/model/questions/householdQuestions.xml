@@ -7,8 +7,9 @@
     <!-- ************************************************************ -->
 
 
+    <!-- TODO:  Add back clinepidb to include projects -->
    <question name="HouseholdsByCharacteristics_prism" newBuild="1"
-             includeProjects="ClinEpiDB,ICEMR"
+             includeProjects="ICEMR"
               searchCategory="Household"
               displayName="Select a Set of Households"
               shortDisplayName="Household Details"
