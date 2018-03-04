@@ -3,8 +3,9 @@
 <!DOCTYPE datasetPresenters SYSTEM "datasetPresenters.dtd">
 <datasetPresenters>
 
-<internalDataset name="Ontology_prism_RSRC"/>
-<internalDataset name="OntologyTerm_EuPath_RSRC"/>
-<internalDataset name="Ontology_Relationship_Types_RSRC"/>
+
+  <internalDataset name="OBO_Ontology_obi_RSRC"/>
+
+  <internalDataset name="OntologyTerms" datasetNamePattern="Ontology%"/>
   
 </datasetPresenters>

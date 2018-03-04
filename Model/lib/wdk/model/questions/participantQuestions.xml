@@ -100,9 +100,9 @@ Use the filters above to select a set of Participants or to explore the data.  S
               displayName="Select a Set of Participants (PRISM)"
               shortDisplayName="Particip PRISM"
               queryRef="ParticipantId.ParticipantsByCharWizRelVis_prism" 
-              includeProjects="ICEMR,ClinEpiDB"
+              includeProjects="ICEMR"
               recordClassRef="DS_0ad509829eParticipantRecordClasses.DS_0ad509829eParticipantRecordClass" >
-
+      <!-- TODO:  Add ClinEpiDB to includeProjects -->
         <attributesList 
             summary="EUPATH_0000054,EUPATH_0000120,visits_per_year_obs,time_of_obs,ave_anoph,malaria_cat_compact"        
             sorting="visits_per_year_obs desc"
@@ -176,6 +176,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
           <value>hideAttrDescr</value>
         </propertyList>
  
+
       </question>
 
         <question name="ParticipantsByRelativeVisits_maled" newBuild="1" includeProjects="NotUsed"

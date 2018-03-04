@@ -7,12 +7,12 @@
 
     	<question name="CollectionsByCharacteristics_prism" newBuild="22"
     		searchCategory="Lighttraps"
-                includeProjects="ClinEpiDB,ICEMR"
+                includeProjects="ICEMR"
     		displayName="Select a Set of Light Trap Collections"
     		shortDisplayName="Light Traps"
     		queryRef="LightTrapId.DS_0ad509829eLightTrapsByCharacteristics_prism"
     		recordClassRef="DS_0ad509829eLightTrapRecordClasses.DS_0ad509829eLightTrapRecordClass">
-
+<!-- TODO:  Add back ClinEpiDB project -->
           <attributesList summary="EUPATH_0000094,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
  
           <dynamicAttributes>
