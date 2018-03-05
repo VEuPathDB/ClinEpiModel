@@ -1,0 +1,79 @@
+[templateStart]
+name=householdsByDataset
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/householdQuestions.xml
+prop=householdQuestionFull
+>templateTextStart<
+${householdQuestionFull}
+>templateTextEnd<
+
+
+[templateStart]
+name=HouseholdsByCharacteristics_prism
+anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
+prop=includeProjects
+prop=presenterId
+prop=householdQuestionName
+>templateTextStart<
+   <question name="${householdQuestionName}" newBuild="1"
+             includeProjects="${includeProjects}"
+              searchCategory="Household"
+              displayName="Select a Set of Households"
+              shortDisplayName="Household Details"
+              queryRef="HouseholdId.HouseholdsByCharacteristics_prism" 
+              recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
+
+        <attributesList 
+            summary="EUPATH_0000054,ENVO_01000744,ave_anoph,part_count,EUPATH_0000019"        
+        /> 
+
+	<dynamicAttributes>
+	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this household over the time frame specified" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+            <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+<!--
+            <columnAttribute internal="true" inReportMaker="false" name="start_date"/>
+            <columnAttribute internal="true" inReportMaker="false" name="end_date"/>
+             <textAttribute name="lt_graph" displayName="Mosquito Collections" inReportMaker="false" truncateTo="100000">
+                <text>
+                   <![CDATA[
+f                   <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$primary_key\$\$&enddate=\$\$end_date\$\$&startdate=\$\$start_date\$\$&type=HouseholdLightTrap&fmt=png&thumb=1"/>
+                    ]]>
+                </text>
+             </textAttribute>
+-->
+        </dynamicAttributes>
+            
+
+        <summary>
+            <![CDATA[ 
+           Find households based on household and participant details.
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+               
+        <description>
+            <![CDATA[
+             Find households based on details of the household itself and the participants participants who live there. 
+            ]]>
+        </description>
+ 
+    </question>
+>templateTextEnd<

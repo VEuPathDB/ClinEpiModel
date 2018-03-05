@@ -2,10 +2,10 @@
 name=PRISMCaseControlGraphAttributes
 anchorFile=ClinEpiModel/Model/lib/dst/graphAttributes.dst
 prop=presenterId
-prop=malariaCatCompact
-prop=malariaCatSvg
+prop=malaria_cat_compact
+prop=malaria_cat_svg
 >templateTextStart<
- <textAttribute name="${malariaCatCompact}" displayName="Malaria status timeline"  truncateTo="100000">
+ <textAttribute name="${malaria_cat_compact}" displayName="Malaria status timeline"  truncateTo="100000">
                     <text>
                       <![CDATA[
                         <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=40&w=800&thumb=1&datasetId=${presenterId}"/>
@@ -13,7 +13,7 @@ prop=malariaCatSvg
                     </text>
                   </textAttribute>
 
-<textAttribute name="${malariaCatSvg}" displayName="Malaria timeline"  truncateTo="100000">
+<textAttribute name="${malaria_cat_svg}" displayName="Malaria timeline"  truncateTo="100000">
                     <text>
                       <![CDATA[
                         <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=100&w=1200&datasetId=${presenterId}" type="image/svg+xml"/>
@@ -26,15 +26,15 @@ prop=malariaCatSvg
 name=MALEDGraphAttributes
 anchorFile=ClinEpiModel/Model/lib/dst/graphAttributes.dst
 prop=presenterId
-prop=allCompact
-prop=weightHeight
-prop=weightAge
-prop=heightAge
-prop=allThree
-prop=length
-prop=weight
+prop=demo_plot_allThree_compact
+prop=demo_plot_weightheight
+prop=demo_plot_weightage
+prop=demo_plot_heightage
+prop=demo_plot_allThree
+prop=demo_plot_xlength
+prop=demo_plot_weight
 >templateTextStart<
-<textAttribute name="${allCompact}" displayName="Z-Score Observations Summary"  truncateTo="100000">
+<textAttribute name="${demo_plot_allThree_compact}" displayName="Z-Score Observations Summary"  truncateTo="100000">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689,EUPATH_0000734,EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&h=250&w=450&thumb=1" type="image/svg+xml"/>
@@ -42,7 +42,7 @@ prop=weight
               </text>
             </textAttribute>
 
-            <textAttribute name="${weightHeight}" displayName="Weight for Height Z-score">
+            <textAttribute name="${demo_plot_weightheight}" displayName="Weight for Height Z-score">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type="image/svg+xml"/>
@@ -50,7 +50,7 @@ prop=weight
               </text>
             </textAttribute>
 
-            <textAttribute name="${weightAge}" displayName="Weight for Age Z-score">
+            <textAttribute name="${demo_plot_weightage}" displayName="Weight for Age Z-score">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type="image/svg+xml"/>
@@ -58,7 +58,7 @@ prop=weight
               </text>
             </textAttribute>
 
-            <textAttribute name="${heightAge}" displayName="Height for Age Z-score">
+            <textAttribute name="${demo_plot_heightage}" displayName="Height for Age Z-score">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type="image/svg+xml"/>
@@ -66,14 +66,14 @@ prop=weight
               </text>
             </textAttribute>
 
-            <textAttribute name="${allThree}" displayName="Z-score Observations Graph">
+            <textAttribute name="${demo_plot_allThree}" displayName="Z-score Observations Graph">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689,EUPATH_0000734,EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350&datasetId=${presenterId}" type="image/svg+xml"/>
 ]]>
               </text>
             </textAttribute>
-<textAttribute name="${length}" displayName="Length Over Time">
+<textAttribute name="${demo_plot_xlength}" displayName="Length Over Time">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000719&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type="image/svg+xml"/>
@@ -81,7 +81,7 @@ prop=weight
               </text>
             </textAttribute>
 
-            <textAttribute name="${weight}" displayName="Weight Over Time">
+            <textAttribute name="${demo_plot_weight}" displayName="Weight Over Time">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000732&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&w=800&h=350" type=""image/svg+xml"/>

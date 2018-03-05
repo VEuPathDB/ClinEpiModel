@@ -7,30 +7,33 @@ import java.util.HashMap;
 public class GEMS1CaseControl extends EpidemiologyStudy {
 
     @Override
-    protected String participantGraphAttributes(){
-      return("");
+    protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {
+      return(new HashMap<String,String[]>());
+    }
+    @Override
+    protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
+      Map<String,String[]> map = new HashMap<String,String[]>();
+      map.put("ParticipantsByCaseControlVisits_gems", new String[] {"menu", "webservice"});
+      //      map.put("ParticipantsByCaseControlVisitsShort_gems", new String[] {"menu", "webservice"});
+
+      return(map);
     }
 
     @Override
-    protected Map<String,String> participantGraphAttributeNames(){
-      return(new HashMap<String,String>());
-    }
-
-    @Override
-    protected Map<String,String[]> participantGraphAttributeScopes() {
+    protected Map<String,String[]> observationQuestionTemplateNamesToScopes() {
       return(new HashMap<String,String[]>());
     }
 
+        
     @Override
-    public void addModelReferences() {
-        super.addModelReferences();
+    protected String participantGraphAttributesTemplateName() {
+      return("");
+    }
 
-        String presenterId = getPropValue("presenterId");
 
-        String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
-
-        addWdkReference(participantRecordClass, "question", "ParticipantQuestions.ParticipantsByCaseControlVisits_gems", new String[]{"menu", "webservice"}, CATEGORY_IRI);
-        addWdkReference(participantRecordClass, "question", "ParticipantQuestions.ParticipantsByCaseControlVisitsShort_gems", new String[]{"menu", "webservice"}, CATEGORY_IRI);
+    @Override
+    protected Map<String,String[]> participantGraphAttributesToScopes() {
+      return(new HashMap<String,String[]>());
     }
 
 

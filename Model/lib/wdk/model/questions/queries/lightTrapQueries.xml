@@ -11,7 +11,7 @@
       <!-- TEMPLATE_ANCHOR lightTrapSourceIdQuery -->
 
     <sqlQuery name="DS_0ad509829eLightTrapsByCharacteristics_prism"
-              isCacheable="true" includeProjects="ICEMR"> <!-- TODO:  Add back Clinepidb -->
+              isCacheable="true"> <!-- TODO:  Add back Clinepidb -->
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="lightTrapParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" groupRef="metaDataGroups.household_daterange"/>

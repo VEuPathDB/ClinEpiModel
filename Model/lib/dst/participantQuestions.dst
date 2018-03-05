@@ -1,0 +1,228 @@
+[templateStart]
+name=participantsByDataset
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/participantQuestions.xml
+prop=participantQuestionFull
+>templateTextStart<
+${participantQuestionFull}
+>templateTextEnd<
+
+
+[templateStart]
+name=ParticipantsByRelativeVisits_prism
+anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
+prop=includeProjects
+prop=presenterId
+prop=participantQuestionName
+>templateTextStart<
+    <question name="${participantQuestionName}" newBuild="1"
+              searchCategory="Participant"
+              displayName="Select a Set of Participants (PRISM)"
+              shortDisplayName="Particip PRISM"
+              queryRef="ParticipantId.ParticipantsByCharWizRelVis_prism" 
+              includeProjects="${includeProjects}"
+              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
+        <attributesList 
+            summary="EUPATH_0000054,EUPATH_0000120,visits_per_year_obs,time_of_obs,ave_anoph,malaria_cat_compact"        
+            sorting="visits_per_year_obs desc"
+        /> 
+
+  <dynamicAttributes>
+    <columnAttribute name="ave_anoph" displayName="Avg Female Anopheles" help="Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search" align="center"> 
+            <plugin name="histogram" display="Histogram"
+                    description="Display a histogram of the values"
+                    implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                    view="/wdk/jsp/results/histogram.jsp" />
+          </columnAttribute>
+    <columnAttribute name="visits_per_year_obs" displayName="Matching Observations / Year" align="center" help="Number of observations matching search criteria / year of observation for this participant"> 
+            <plugin name="histogram" display="Histogram"
+                    description="Display a histogram of the values"
+                    implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                    view="/wdk/jsp/results/histogram.jsp" />
+          </columnAttribute>
+    <columnAttribute name="time_of_obs" displayName="Years of Observation" align="center" help="Number of years this person was observed matching date and age ranges"> 
+            <plugin name="histogram" display="Histogram"
+                    description="Display a histogram of the values"
+                    implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                    view="/wdk/jsp/results/histogram.jsp" />
+          </columnAttribute>
+    <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations matching the search criteria for this participant"> 
+            <plugin name="histogram" display="Histogram"
+                    description="Display a histogram of the values"
+                    implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                    view="/wdk/jsp/results/histogram.jsp" />
+          </columnAttribute>
+  </dynamicAttributes>
+
+
+        <stepAnalysisRef name="clinepi-event-dist">
+          <property name="attributesToExtract">project_id,primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
+        </stepAnalysisRef>
+        <stepAnalysisRef name="clinepi-cont-table">
+          <property name="attributesToExtract">project_id,primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
+        </stepAnalysisRef>
+        <stepAnalysisRef name="clinepi-summaries">
+          <property name="attributesToExtract">project_id,primary_key,ave_anoph,visits_per_year_obs,time_of_obs</property>
+        </stepAnalysisRef>
+
+        <summary>
+            <![CDATA[
+Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            ]]>
+        </summary>
+
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "part_visit_characteristics",
+              "relatedObservationsGroupName": "relative_visits",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "relativeVisitsParamName": "relative_visits_prism"
+            }
+          </value>
+        </propertyList>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+ 
+
+      </question>
+>templateTextEnd<
+
+
+[templateStart]
+name=ParticipantsByRelativeVisits_maled
+anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
+prop=includeProjects
+prop=presenterId
+prop=participantQuestionName
+>templateTextStart<
+        <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
+              searchCategory="Participant"
+              displayName="Select a Set of Participants (MAL-ED)"
+              shortDisplayName="Particip MAL-ED"
+              queryRef="ParticipantId.ParticipantsByCharWizRelVis_maled" 
+              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
+
+
+<!-- TODO: add these back
+        <attributesList 
+            summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741,visit_count"        
+        /> 
+-->
+
+	<dynamicAttributes>
+	     <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations matching the search criteria for this participant"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	     <columnAttribute name="ave_age_visit" displayName="Avg age at observation" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+	</dynamicAttributes>
+          
+
+        <summary>
+            <![CDATA[
+Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "part_event_characteristics",
+              "relatedObservationsGroupName": "relative_events",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "numRelativeEventsParamName": "num_relative_events",
+              "relativeVisitsParamName": "relative_visits_nf_maled"
+            }
+          </value>
+        </propertyList>
+ 
+      </question>
+>templateTextEnd<
+
+[templateStart]
+name=ParticipantsByCaseControlVisits_gems
+anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
+prop=includeProjects
+prop=presenterId
+prop=participantQuestionName
+>templateTextStart<
+      <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
+              searchCategory="Participant"
+              displayName="Select a Set of Participants (GEMS)"
+              shortDisplayName="Particip GEMS"
+              queryRef="ParticipantId.ParticipantsByCaseControl_gems" 
+              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
+
+
+        <attributesList 
+            summary="OBI_0001627,EUPATH_0010056,EUPATH_0010368,EUPATH_0010375" 
+        /> 
+
+
+        <summary>
+            <![CDATA[
+Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+
+<!--
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "part_event_characteristics",
+              "relatedObservationsGroupName": "relative_events",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "numRelativeEventsParamName": "num_relative_events",
+              "relativeVisitsParamName": "relative_visits_nf_maled"
+            }
+          </value>
+        </propertyList>
+-->
+ 
+      </question>
+>templateTextEnd<
+
