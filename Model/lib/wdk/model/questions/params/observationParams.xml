@@ -209,8 +209,8 @@
 
 
 
-       <filterParam name="participants_nf_maled" 
-                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
+       <filterParam name="participants_maled" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
                        metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_maled"
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_maled"
                        countPredictsAnswerCount="true"
@@ -222,38 +222,41 @@
          </help>
        </filterParam>
 
-       <filterParam name="households_nf_maled" 
+<!--
+       <filterParam name="households_maled" 
                       metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_maled"
                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
                       backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_maled"
                       countPredictsAnswerCount="false"
                       prompt="Households"
-                      dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_nf_maled"
+                      dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_maled"
                       trimMetadataTerms="false">
          <help>
               Select observations based on the household characteristics where the participants live. 
          </help>
        </filterParam>
+-->
 
-       <filterParam name="visits_nf_maled" 
+       <filterParam name="visits_maled" 
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd_maled"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="false"
-                    dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_nf_maled">
+                    dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_maled">
       <help>
         Select observations based on their observation characteristics. 
       </help>
     </filterParam>
 
-    <filterParam name="relative_visits_nf_maled" 
+    <filterParam name="relative_visits_maled" 
                     metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
-                    ontologyQueryRef="ClinicalVisitVQ.RelVisitOntology_maled"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     prompt="Related Observations"
-                    trimMetadataTerms="false" >
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.tbl_prefix">
       <help>
         Select related observations based on their characteristics. 
       </help>
@@ -554,8 +557,7 @@ and ios.output_pan_id = m.pan_id
          <![CDATA[
 select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and m.category = 'Participant'
+ where m.category = 'Participant'
  and m.pan_id in ($$geographic_region_maled$$)
           ]]>
     </sql>
@@ -573,14 +575,13 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
         <![CDATA[
 select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and m.category = 'Participant'
+ where m.category = 'Participant'
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="VisitMetaData_maled" isCacheable="true">
-         <paramRef ref="clinicalVisitParams.households_nf_maled" />  
+         <paramRef ref="clinicalVisitParams.participants_maled" />  
          <paramRef ref="participantParams.tbl_prefix" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -589,17 +590,15 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct m.pan_id as internal, source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and m.category = 'Event'
- and m.pan_id in ($$households_nf_maled$$)
+ where m.category = 'Event'
+ and m.pan_id in ($$participants_maled$$)
           ]]>
     </sql>
     </sqlQuery>    
 
     <sqlQuery name="VisitMetaDataBkgd_maled">
-      <paramRef ref="clinicalVisitParams.households_nf_maled" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -608,10 +607,9 @@ select distinct m.pan_id as internal, source_id as ontology_term_name, string_va
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal,  source_id as ontology_term_name, string_value, number_value, date_value
+select distinct m.pan_id as internal,  property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and m.category = 'Event'
+ where m.category = 'Event'
           ]]>
     </sql>
     </sqlQuery>
@@ -633,15 +631,15 @@ select io.part_id as internal, io.event_id as record_id, m.property_source_id as
  and io.output_pan_id = ioe.input_pan_id
  and ioe.output_pan_type_source_id = 'EUPATH_0000738') io
  where m.pan_id = io.hh_id
- and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and lower(m.category) = 'Household'
  and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
         ]]>
       </sql>
     </sqlQuery>
 
+<!--
     <sqlQuery name="HouseholdMetaData_maled" isCacheable="true">
-      <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
+      <paramRef ref="clinicalVisitParams.participants_maled" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -653,10 +651,9 @@ select io.part_id as internal, io.event_id as record_id, m.property_source_id as
 select io.part_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ( select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id
  from ApidbTuning.$$tbl_prefix$$PANIO io
- where io.output_pan_id in ($$participants_nf_maled$$)
+ where io.output_pan_id in ($$participants_maled$$)
  and io.input_pan_type_source_id = 'PCO_0000024') io
  where m.pan_id = io.hh_id
- and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and lower(m.category) = 'Household'
           ]]>
     </sql>    
@@ -665,7 +662,7 @@ select io.part_id as internal,  m.property_source_id as ontology_term_name, m.st
 
     <sqlQuery name="HouseholdMetaDataBkgd_maled">
       <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="clinicalVisitParams.participants_nf_maled" />  
+      <paramRef ref="clinicalVisitParams.participants_maled" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -679,56 +676,16 @@ select io.part_id as internal,  m.property_source_id as ontology_term_name, m.st
  where io.output_pan_type_source_id = 'EUPATH_0000096' 
  and io.input_pan_type_source_id = 'PCO_0000024') io
  where m.pan_id = io.hh_id
- and m.dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
  and lower(m.category) = 'Household'
           ]]>
     </sql>    
 
     </sqlQuery>
+-->
 
-    <sqlQuery name="RelVisitOntology_maled">
-     <column name="ontology_term_name"/>
-     <column name="parent_ontology_term_name"/>
-     <column name="display_name"/>
-     <column name="description"/>
-     <column name="type"/>
-     <column name="units"/>
-     <column name="precision"/>
-     <column name="is_range"/>
-    <sql>
-         <![CDATA[
-select * from (
-with leaf as ( select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from ApidbTuning.$$tbl_prefix$$Ontology o, 
-(select distinct term
- from ApidbTuning.$$tbl_prefix$$MetaData
- where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
- and category = 'Event'
- and source_id != 'EUPATH_0000094') md
- where o.ontology_term_name = md.term),
-first as (
- select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from leaf where parent_ontology_term_name is not null) par
- where o.ontology_term_source_id = par.parent_ontology_term_name),
- second as (
- select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from first where parent_ontology_term_name is not null) gpar
- where o.ontology_term_source_id = gpar.parent_ontology_term_name)
- select * from leaf
- union
- select * from first
- union
- select * from second
- union
- select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
- from ApidbTuning.$$tbl_prefix$$Ontology o, (select distinct parent_ontology_term_name from second where parent_ontology_term_name is not null) ggpar
- where o.ontology_term_source_id = ggpar.parent_ontology_term_name
- ) order by ontology_term_name
-         ]]>
-    </sql>
-   </sqlQuery>
 
    <sqlQuery name="RelVisitMetaData_maled">
+      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -736,11 +693,10 @@ first as (
       <column name="string_value"/>
       <sql>
         <![CDATA[
-                select distinct pan_id as internal,  source_id as ontology_term_name,
+                select distinct pan_id as internal,  property_source_id as ontology_term_name,
                        string_value, number_value, date_value
                 from ApidbTuning.$$tbl_prefix$$MetaData 
-                where dataset_name = 'ISASimple_Gates_MAL-ED_stdm_tp_RSRC' --$$dataset$$
-                and category = 'Event'
+                where category = 'Event'
           ]]>
     </sql>
     </sqlQuery>
