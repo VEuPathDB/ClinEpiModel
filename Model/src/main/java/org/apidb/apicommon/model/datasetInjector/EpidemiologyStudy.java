@@ -121,6 +121,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
           setPropValue("observationSourceIdsForParticipantsObservationsTableQuote", addQuotes(observationSourceIdsForParticipantsObservationsTable));
 
+          if(!householdSourceIdsIncludedInParticipantAttributes.equals("") && householdSourceIdsIncludedInParticipantAttributes != null) {
+              householdSourceIdsIncludedInParticipantAttributes = ", " + householdSourceIdsIncludedInParticipantAttributes;
+              setPropValue("householdSourceIdsIncludedInParticipantAttributes", householdSourceIdsIncludedInParticipantAttributes);
+          }
+
           injectTemplate("participantRecord");
           injectTemplate("participantRecordAttributeQueries");
           injectTemplate("participantRecordTableQueries");
@@ -149,8 +154,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           String hhAndPIncludedInObservationAttributes = householdSourceIdsIncludedInObservationAttributes + "," + participantSourceIdsIncludedInObservationAttributes;
           setPropValue("participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote", addQuotes(hhAndPIncludedInObservationAttributes));
 
-          // always include the participant name here
-          participantSourceIdsIncludedInObservationAttributes = "name as parent_id, " + participantSourceIdsIncludedInObservationAttributes;
+
+          if(!participantSourceIdsIncludedInObservationAttributes.equals("") && participantSourceIdsIncludedInObservationAttributes != null) {
+              participantSourceIdsIncludedInObservationAttributes = ", " + participantSourceIdsIncludedInObservationAttributes;
+              setPropValue("participantSourceIdsIncludedInObservationAttributes", participantSourceIdsIncludedInObservationAttributes);
+          }
 
           injectTemplate("observationRecord");
           injectTemplate("observationRecordAttributeQueries");

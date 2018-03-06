@@ -262,7 +262,7 @@ select count(*) from apidbtuning.${tblPrefix}Participants
                      da.*
                      from apidbtuning.${tblPrefix}PANIO io
                         , apidbtuning.${tblPrefix}Participants pa
-                        , (select pan_id as hh_protocol_app_node_id, name as parent, &&householdSourceIds&& from apidbtuning.${tblPrefix}Households) da
+                        , (select pan_id as hh_protocol_app_node_id, name as parent_id &&householdSourceIds&& from apidbtuning.${tblPrefix}Households) da
                      where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
                      and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
