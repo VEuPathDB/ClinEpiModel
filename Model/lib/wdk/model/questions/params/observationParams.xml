@@ -226,7 +226,7 @@
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
-                    countPredictsAnswerCount="false"
+                    countPredictsAnswerCount="true"
                     prompt="Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_maled">
