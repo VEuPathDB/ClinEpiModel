@@ -103,7 +103,7 @@ prop=observationQuestionName
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         <attributesList 
-            summary="parent_id,num_matching_visits,min_days_between"
+            summary="num_matching_visits,min_days_between"
         /> 
 
         <dynamicAttributes>
@@ -145,6 +145,7 @@ prop=observationQuestionName
           <value>hideAttrDescr</value>
         </propertyList>
 
+
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
@@ -155,7 +156,7 @@ prop=observationQuestionName
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
               "numRelativeEventsParamName": "num_relative_events",
-              "relativeVisitsParamName": "relative_visits_nf_maled"
+              "relativeVisitsParamName": "relative_visits_maled"
             }
           </value>
         </propertyList>

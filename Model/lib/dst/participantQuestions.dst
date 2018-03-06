@@ -115,7 +115,7 @@ prop=participantQuestionName
 
 
         <attributesList 
-            summary="visit_count"        
+            summary="OBI_0001627, PATO_0000047, EUPATH_0010477, visit_count"        
         /> 
 
 	<dynamicAttributes>

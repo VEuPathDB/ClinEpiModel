@@ -210,7 +210,7 @@
 
 
        <filterParam name="participants_maled" 
-                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
                        metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_maled"
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_maled"
                        countPredictsAnswerCount="true"
@@ -222,25 +222,10 @@
          </help>
        </filterParam>
 
-<!--
-       <filterParam name="households_maled" 
-                      metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_maled"
-                      ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
-                      backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_maled"
-                      countPredictsAnswerCount="false"
-                      prompt="Households"
-                      dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_maled"
-                      trimMetadataTerms="false">
-         <help>
-              Select observations based on the household characteristics where the participants live. 
-         </help>
-       </filterParam>
--->
-
        <filterParam name="visits_maled" 
                     metadataQueryRef="ClinicalVisitVQ.VisitMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
-                    backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkgd_maled"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="false"
@@ -550,15 +535,22 @@ and ios.output_pan_id = m.pan_id
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m
+with valid as (
+select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
+from ApidbTuning.$$tbl_prefix$$PANIO io
+where io.input_pan_id in ($$geographic_region_maled$$)
+and io.output_pan_type_source_id = 'EUPATH_0000738'
+) 
+select distinct m.pan_id as internal,  valid.visit_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$MetaData m, valid
  where m.category = 'Participant'
- and m.pan_id in ($$geographic_region_maled$$)
+and m.pan_id = valid.part_id
           ]]>
     </sql>
     </sqlQuery>
@@ -568,14 +560,22 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m
+with valid as (
+select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
+from ApidbTuning.$$tbl_prefix$$PANIO io
+where io.input_pan_type_source_id = 'EUPATH_0000096'
+and io.output_pan_type_source_id = 'EUPATH_0000738'
+) 
+select distinct m.pan_id as internal,  valid.visit_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$MetaData m, valid
  where m.category = 'Participant'
+ and m.pan_id = valid.part_id
           ]]>
     </sql>
     </sqlQuery>
@@ -590,29 +590,24 @@ from ApidbTuning.$$tbl_prefix$$MetaData m
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.category = 'Event'
- and m.pan_id in ($$participants_maled$$)
+with valid as (
+select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id, spec.output_pan_id as spec_id
+from ApidbTuning.$$tbl_prefix$$PANIO io, apidbtuning.$$tbl_prefix$$PANIO spec
+where io.input_pan_id in ($$participants_maled$$)
+and io.output_pan_type_source_id = 'EUPATH_0000738'
+and io.output_pan_id = spec.input_pan_id
+and spec.output_pan_type_source_id = 'OBI_0100051'
+) 
+select distinct valid.visit_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, valid 
+ where m.pan_id = valid.visit_id
+ union
+ select distinct valid.visit_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, valid 
+ where m.pan_id = valid.spec_id
           ]]>
     </sql>
     </sqlQuery>    
-
-    <sqlQuery name="VisitMetaDataBkgd_maled">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select distinct m.pan_id as internal,  property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.category = 'Event'
-          ]]>
-    </sql>
-    </sqlQuery>
 
     <sqlQuery name="RegionMetaData_maled" >
       <paramRef ref="participantParams.tbl_prefix" />  
@@ -624,65 +619,19 @@ select distinct m.pan_id as internal,  property_source_id as ontology_term_name,
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select io.part_id as internal, io.event_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, ( select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id, ioe.output_pan_id as event_id
- from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$PANIO ioe
- where io.input_pan_type_source_id = 'PCO_0000024'
- and io.output_pan_id = ioe.input_pan_id
- and ioe.output_pan_type_source_id = 'EUPATH_0000738') io
- where m.pan_id = io.hh_id
- and lower(m.category) = 'Household'
- and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+with valid as (
+select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
+from ApidbTuning.$$tbl_prefix$$PANIO io 
+where io.input_pan_type_source_id ='EUPATH_0000096'
+and io.output_pan_type_source_id = 'EUPATH_0000738'
+)  
+select m.pan_id as internal,  valid.visit_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, valid
+ where m.property_source_id in 'OBI_0001627'
+ and valid.part_id = m.pan_id
         ]]>
       </sql>
     </sqlQuery>
-
-<!--
-    <sqlQuery name="HouseholdMetaData_maled" isCacheable="true">
-      <paramRef ref="clinicalVisitParams.participants_maled" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select io.part_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, ( select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id
- from ApidbTuning.$$tbl_prefix$$PANIO io
- where io.output_pan_id in ($$participants_maled$$)
- and io.input_pan_type_source_id = 'PCO_0000024') io
- where m.pan_id = io.hh_id
- and lower(m.category) = 'Household'
-          ]]>
-    </sql>    
-
-    </sqlQuery>
-
-    <sqlQuery name="HouseholdMetaDataBkgd_maled">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="clinicalVisitParams.participants_maled" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select io.part_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, ( select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id
- from ApidbTuning.$$tbl_prefix$$PANIO io
- where io.output_pan_type_source_id = 'EUPATH_0000096' 
- and io.input_pan_type_source_id = 'PCO_0000024') io
- where m.pan_id = io.hh_id
- and lower(m.category) = 'Household'
-          ]]>
-    </sql>    
-
-    </sqlQuery>
--->
-
 
    <sqlQuery name="RelVisitMetaData_maled">
       <paramRef ref="participantParams.tbl_prefix" />  
