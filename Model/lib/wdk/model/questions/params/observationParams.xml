@@ -694,7 +694,7 @@ select io.part_id as internal,  m.property_source_id as ontology_term_name, m.st
       <sql>
         <![CDATA[
 with valid as (
-select distinct spec.output_pan_id as visit_id, spec.output_pan_id as spec_id
+select distinct spec.input_pan_id as visit_id, spec.output_pan_id as spec_id
 from  apidbtuning.$$tbl_prefix$$PANIO spec
 where  spec.input_pan_type_source_id = 'EUPATH_0000738'
 and spec.output_pan_type_source_id = 'OBI_0100051'
