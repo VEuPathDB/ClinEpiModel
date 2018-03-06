@@ -202,7 +202,7 @@
 
        <filterParam name="participants_maled" 
                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_maled"
-                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
+                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_maled"
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
@@ -729,7 +729,7 @@ and io.output_pan_id = m.pan_id
     <!--   MAL-ED section ... should be injected  -->
     <!--************************************************************-->
 
-   <sqlQuery name="ParticipantOntology_maled">
+   <sqlQuery name="ParticipantOntology_maled" isCacheable="true">
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
@@ -741,15 +741,14 @@ and io.output_pan_id = m.pan_id
      <column name="is_range"/>
     <sql>
          <![CDATA[
+select * from (
  select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
-     CONNECT BY o.ontology_term_source_id = PRIOR o.parent_ontology_term_source_id
-     START WITH o.ontology_term_source_id IN 
-(select distinct source_id
- from ApidbTuning.$$tbl_prefix$$MetaData
- where category = 'Participant'
- and source_id != 'EFO_0004950')
- order by display_name
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'EUPATH_0000051'
+     )
+     where ontology_term_name != 'EUPATH_0000095'
+     order by display_name
          ]]>
     </sql>
    </sqlQuery>
@@ -825,15 +824,21 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct valid.visit_id as internal, valid.part_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, (
-select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
-from ApidbTuning.$$tbl_prefix$$PANIO io
+with valid as (
+select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id, spec.output_pan_id as spec_id
+from ApidbTuning.$$tbl_prefix$$PANIO io, apidbtuning.$$tbl_prefix$$PANIO spec
 where io.input_pan_id in ($$participants_maled$$)
 and io.output_pan_type_source_id = 'EUPATH_0000738'
-) valid
- where m.category = 'Event'
- and m.pan_id = valid.visit_id
+and io.output_pan_id = spec.input_pan_id
+and spec.output_pan_type_source_id = 'OBI_0100051'
+) 
+select distinct valid.visit_id as internal, valid.part_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, valid 
+ where m.pan_id = valid.visit_id
+ union
+ select distinct valid.visit_id as internal, valid.part_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, valid 
+ where m.pan_id = valid.spec_id
           ]]>
     </sql>
     </sqlQuery>    
@@ -848,15 +853,21 @@ and io.output_pan_type_source_id = 'EUPATH_0000738'
       <column name="string_value"/>
       <sql>
         <![CDATA[
- select distinct valid.visit_id as internal, valid.part_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, (
-select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
-from ApidbTuning.$$tbl_prefix$$PANIO io
+with valid as (
+select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id, spec.output_pan_id as spec_id
+from ApidbTuning.$$tbl_prefix$$PANIO io, apidbtuning.$$tbl_prefix$$PANIO spec
 where io.input_pan_type_source_id ='EUPATH_0000096'
 and io.output_pan_type_source_id = 'EUPATH_0000738'
-) valid
- where m.category = 'Event'
- and m.pan_id = valid.visit_id
+and io.output_pan_id = spec.input_pan_id
+and spec.output_pan_type_source_id = 'OBI_0100051'
+) 
+select distinct valid.visit_id as internal, valid.part_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, valid 
+ where m.pan_id = valid.visit_id
+ union
+ select distinct valid.visit_id as internal, valid.part_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, valid 
+ where m.pan_id = valid.spec_id
           ]]>
     </sql>
     </sqlQuery>
