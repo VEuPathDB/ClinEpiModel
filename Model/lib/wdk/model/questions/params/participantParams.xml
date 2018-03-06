@@ -848,9 +848,15 @@ and io.output_pan_type_source_id = 'EUPATH_0000738'
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m
+ select distinct valid.visit_id as internal, valid.part_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, (
+select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
+from ApidbTuning.$$tbl_prefix$$PANIO io
+where io.input_pan_type_source_id ='EUPATH_0000096'
+and io.output_pan_type_source_id = 'EUPATH_0000738'
+) valid
  where m.category = 'Event'
+ and m.pan_id = valid.visit_id
           ]]>
     </sql>
     </sqlQuery>

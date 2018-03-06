@@ -114,11 +114,9 @@ prop=participantQuestionName
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
 
-<!-- TODO: add these back
         <attributesList 
-            summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741,visit_count"        
+            summary="visit_count"        
         /> 
--->
 
 	<dynamicAttributes>
 	     <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations matching the search criteria for this participant"> 
@@ -161,8 +159,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "numRelativeEventsParamName": "num_relative_events",
-              "relativeVisitsParamName": "relative_visits_nf_maled"
+              "relativeVisitsParamName": "relative_visits_maled"
             }
           </value>
         </propertyList>

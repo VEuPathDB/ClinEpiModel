@@ -155,7 +155,7 @@ and pa.pan_id = mos.part_id(+)
 
      <sqlQuery name="ParticipantsByCharWizRelVis_maled"
           isCacheable="true">
-       <paramRef ref="participantParams.geographic_region_maled" default="ISASimple_Gates_MAL-ED_stdm_tp_RSRC" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.geographic_region_maled" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.participants_maled" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_maled" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
@@ -163,7 +163,7 @@ and pa.pan_id = mos.part_id(+)
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_maled" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/>
+       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="D121f2c2f02" groupRef="metaDataGroups.event_summary_params"/>
        <column name="source_id"/>
        <column name="project_id"/>
