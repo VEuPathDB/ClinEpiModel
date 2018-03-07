@@ -9,12 +9,22 @@ import org.apidb.apicommon.datasetPresenter.ModelReference;
 import org.apidb.apicommon.datasetPresenter.DatasetInjector;
 
 public abstract class EpidemiologyStudy extends DatasetInjector {
-  
-    protected abstract Map<String,String> participantGraphAttributeNames();
 
-    protected abstract Map<String,String[]> participantGraphAttributeScopes();
+    protected abstract Map<String,String[]> householdQuestionTemplateNamesToScopes();
+    protected abstract Map<String,String[]> participantQuestionTemplateNamesToScopes();
+    protected abstract Map<String,String[]> observationQuestionTemplateNamesToScopes();
 
-    protected abstract String participantGraphAttributes();
+    protected abstract String participantGraphAttributesTemplateName();  
+    protected abstract Map<String,String[]> participantGraphAttributesToScopes();
+
+    protected String participantGraphAttributesString() {
+        String participantGraphAttributesTemplateName = participantGraphAttributesTemplateName();
+        if(participantGraphAttributesTemplateName != null && !participantGraphAttributesTemplateName.equals("")) {
+            return(getTemplateInstanceText(participantGraphAttributesTemplateName));
+        }
+        return("");
+    }
+
 
     protected String addQuotes(String s) {
         List<String> split = Arrays.asList(s.split("\\s*,\\s*"));
@@ -54,17 +64,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   @Override
   public void injectTemplates() {
 
-      Map<String,String> participantGraphAttributeNames = participantGraphAttributeNames();
-      //Map<String,String[]> participantGraphAttributeScopes = participantGraphAttributeScopes();
-
-      for (Map.Entry<String, String> entry : participantGraphAttributeNames.entrySet()) {
-        setPropValue(entry.getKey(), entry.getValue());
-        System.out.println("entry = " + entry.getKey() + " " + entry.getValue());
+      for (Map.Entry<String, String[]> entry : participantGraphAttributesToScopes().entrySet()) {
+        setPropValue(entry.getKey(), entry.getKey());
       }
    
-      String participantGraphAttributes = participantGraphAttributes();   
-
-      setPropValue("participantGraphAttributes", participantGraphAttributes);
+      setPropValue("participantGraphAttributes", participantGraphAttributesString());
 
       String presenterId = getPropValue("presenterId");
 
@@ -99,6 +103,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("householdSourceIdParam");
 
           injectTemplate("householdResultParam");
+
+          for(String key : householdQuestionTemplateNamesToScopes().keySet()) {
+              setPropValue("householdQuestionName", key);
+              setPropValue("householdQuestionFull", getTemplateInstanceText(key));
+              injectTemplate("householdsByDataset");
+          }
       }
 
 
@@ -111,6 +121,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
           setPropValue("observationSourceIdsForParticipantsObservationsTableQuote", addQuotes(observationSourceIdsForParticipantsObservationsTable));
 
+          if(!householdSourceIdsIncludedInParticipantAttributes.equals("") && householdSourceIdsIncludedInParticipantAttributes != null) {
+              householdSourceIdsIncludedInParticipantAttributes = ", " + householdSourceIdsIncludedInParticipantAttributes;
+              setPropValue("householdSourceIdsIncludedInParticipantAttributes", householdSourceIdsIncludedInParticipantAttributes);
+          }
+
           injectTemplate("participantRecord");
           injectTemplate("participantRecordAttributeQueries");
           injectTemplate("participantRecordTableQueries");
@@ -121,6 +136,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("participantSourceIdParam");
 
           injectTemplate("participantResultParam");
+
+          for(String key : participantQuestionTemplateNamesToScopes().keySet()) {
+              setPropValue("participantQuestionName", key);
+
+              setPropValue("participantQuestionFull", getTemplateInstanceText(key));
+              injectTemplate("participantsByDataset");
+          }
+
       }
 
       if(hasObservations) {
@@ -131,8 +154,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           String hhAndPIncludedInObservationAttributes = householdSourceIdsIncludedInObservationAttributes + "," + participantSourceIdsIncludedInObservationAttributes;
           setPropValue("participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote", addQuotes(hhAndPIncludedInObservationAttributes));
 
-          // always include the participant name here
-          participantSourceIdsIncludedInObservationAttributes = "name as parent_id, " + participantSourceIdsIncludedInObservationAttributes;
+
+          if(!participantSourceIdsIncludedInObservationAttributes.equals("") && participantSourceIdsIncludedInObservationAttributes != null) {
+              participantSourceIdsIncludedInObservationAttributes = ", " + participantSourceIdsIncludedInObservationAttributes;
+              setPropValue("participantSourceIdsIncludedInObservationAttributes", participantSourceIdsIncludedInObservationAttributes);
+          }
 
           injectTemplate("observationRecord");
           injectTemplate("observationRecordAttributeQueries");
@@ -144,6 +170,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("observationSourceIdParam");
 
           injectTemplate("observationResultParam");
+
+          for(String key : observationQuestionTemplateNamesToScopes().keySet()) {
+              setPropValue("observationQuestionName", key);
+              setPropValue("observationQuestionFull", getTemplateInstanceText(key));
+              injectTemplate("observationsByDataset");
+          }
+
       }
 
       // Household->Participant and Participant->Household
@@ -202,9 +235,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
   @Override
   public void addModelReferences() {
-      Map<String,String> participantGraphAttributeNames = participantGraphAttributeNames();
-      Map<String,String[]> participantGraphAttributeScopes = participantGraphAttributeScopes();
-
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
@@ -222,6 +252,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(householdRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
 
           addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+
+          for (Map.Entry<String, String[]> entry : householdQuestionTemplateNamesToScopes().entrySet()) {
+              String questionFullName = "HouseholdQuestions." + entry.getKey();
+              addWdkReference(householdRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI);
+          }
+          
+
       }
 
       if(hasParticipants) {
@@ -232,11 +269,18 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(participantRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
 
           // Add the Text Attributes
-          for (Map.Entry<String, String> entry : participantGraphAttributeNames.entrySet()) {
-              addWdkReference(participantRecordClass, "attribute", entry.getValue(), participantGraphAttributeScopes.get(entry.getKey()), CATEGORY_IRI);
+          for (Map.Entry<String, String[]> entry : participantGraphAttributesToScopes().entrySet()) {
+              addWdkReference(participantRecordClass, "attribute", entry.getKey(), entry.getValue(), CATEGORY_IRI);
           }
 
           addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+
+
+          for (Map.Entry<String, String[]> entry : participantQuestionTemplateNamesToScopes().entrySet()) {
+              String questionFullName = "ParticipantQuestions." + entry.getKey();
+              addWdkReference(participantRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI);
+          }
+
       }
 
       if(hasObservations) {
@@ -246,6 +290,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
 
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+
+          for (Map.Entry<String, String[]> entry : observationQuestionTemplateNamesToScopes().entrySet()) {
+              String questionFullName = "ClinicalVisitQuestions." + entry.getKey();
+              addWdkReference(observationRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI);
+          }
+
+
       }
 
       if(hasHouseholds && hasParticipants) {

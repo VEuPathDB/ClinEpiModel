@@ -1,7 +1,10 @@
 package org.apidb.apicommon.model.datasetInjector;
 
+import java.util.Map;
 
 public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy {
+
+    protected abstract Map<String,String[]> lightTrapQuestionTemplateNamesToScopes();
 
     @Override
     public void injectTemplates() {
@@ -23,6 +26,12 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         injectTemplate("lightTrapResultParam");
 
         boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
+
+        for(String key : lightTrapQuestionTemplateNamesToScopes().keySet()) {
+            setPropValue("lightTrapQuestionName", key);
+            setPropValue("lightTrapQuestionFull", getTemplateInstanceText(key));
+            injectTemplate("lightTrapsByDataset");
+        }
 
         // Transforms
         if(hasHouseholds) {
@@ -57,6 +66,11 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         addWdkReference(lightTrapRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI);
 
         addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+
+        for (Map.Entry<String, String[]> entry : lightTrapQuestionTemplateNamesToScopes().entrySet()) {
+            String questionFullName = "LighttrapQuestions." + entry.getKey();
+            addWdkReference(lightTrapRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI);
+        }
 
         if(hasHouseholds) {
             String lightTrapSourceIdsForHouseholdsLightTrapTable = getPropValue("lightTrapSourceIdsForHouseholdsLightTrapTable");

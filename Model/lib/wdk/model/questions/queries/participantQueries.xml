@@ -155,17 +155,16 @@ and pa.pan_id = mos.part_id(+)
 
      <sqlQuery name="ParticipantsByCharWizRelVis_maled"
           isCacheable="true">
-       <paramRef ref="participantParams.geographic_region_maled" default="ISASimple_Gates_MAL-ED_stdm_tp_RSRC" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.participants_nf_maled" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.households_nf_maled" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="participantParams.visits_nf_maled" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.geographic_region_maled" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.participants_maled" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_maled" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="clinicalVisitParams.relative_visits_nf_maled" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="ISASimple_Gates_MAL-ED_stdm_tp_RSRC" groupRef="metaDataGroups.event_summary_params"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_maled" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D121f2c2f02" groupRef="metaDataGroups.event_summary_params"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_age_visit"/>
@@ -176,14 +175,14 @@ select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id,
                     count(*) as visit_count, 
    round(avg(EUPATH_0000644),1) -1 as ave_age_visit
 from (select distinct io.input_pan_id,io.output_pan_id,ca.EUPATH_0000644 from ApidbTuning.$$tbl_prefix$$Observations ca, ApidbTuning.$$tbl_prefix$$PANIO io
-      where ca.pan_id in ($$visits_nf_maled$$)
+      where ca.pan_id in ($$visits_maled$$)
       and ca.pan_id = io.output_pan_id
 $$dateOperator_fv$$
  select ioa.input_pan_id,ioa.output_pan_id,seta.EUPATH_0000644
  from ApidbTuning.$$tbl_prefix$$Observations seta, ApidbTuning.$$tbl_prefix$$Observations setb, ApidbTuning.$$tbl_prefix$$PANIO ioa, ApidbTuning.$$tbl_prefix$$PANIO iob
- where seta.pan_id in ($$visits_nf_maled$$)
+ where seta.pan_id in ($$visits_maled$$)
 and $$use_relative_visits$$ = 1
-and setb.pan_id in ($$relative_visits_nf_maled$$)
+and setb.pan_id in ($$relative_visits_maled$$)
 and seta.pan_id = ioa.output_pan_id
 and setb.pan_id = iob.output_pan_id
 and ioa.input_pan_id = iob.input_pan_id
