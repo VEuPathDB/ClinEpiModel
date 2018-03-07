@@ -738,49 +738,40 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData_maled" isCacheable="true">
+   <sqlQuery name="ParticipantMetaData_maled" isCacheable="false">
      <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="participantParams.geographic_region_maled" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct spec.output_pan_id as internal,  m.pan_id as filter_item_id, m.pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$PANIO spec
- where m.category = 'Participant'
- and m.pan_id = spec.input_pan_id
- and Spec.input_pan_id in ($$geographic_region_maled$$)
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMetaData
+where participant_id in ($$geographic_region_maled$$)
           ]]>
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkgd_maled">
+    <sqlQuery name="ParticipantMetaDataBkgd_maled" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct spec.output_pan_id as internal,  m.pan_id as filter_item_id, m.pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$PANIO spec
- where m.category = 'Participant'
- and m.pan_id = spec.input_pan_id
- and Spec.Output_Pan_Type_Source_Id = 'EUPATH_0000738'
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMetaData
           ]]>
     </sql>
     </sqlQuery>
 
     
-    <sqlQuery name="VisitOntology_maled">
+    <sqlQuery name="VisitOntology_maled" isCacheable="true">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
@@ -804,7 +795,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="VisitMetaData_maled" isCacheable="true">
+       <sqlQuery name="VisitMetaData_maled" isCacheable="false">
          <paramRef ref="participantParams.participants_maled" />  
          <paramRef ref="participantParams.tbl_prefix" />  
          <column name="ontology_term_name"/>
@@ -815,25 +806,14 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct m.pan_id as internal, io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$PANIO io
- where m.category = 'Event'
- and m.pan_id in ($$participants_maled$$)
- and m.pan_id = io.output_pan_id
- and io.input_pan_type_source_id = 'EUPATH_0000096'
-UNION ALL
-select distinct spec.input_pan_id as internal,  io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$PANIO spec, apidbtuning.$$tbl_prefix$$PANIO io
- where m.category = 'Specimen used for test'
- and m.pan_id = spec.output_pan_id
- and spec.input_pan_id in ($$participants_maled$$)
- and Io.Output_Pan_Id = spec.input_pan_id
- and io.input_pan_type_source_id = 'EUPATH_0000096'
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMetaData
+where participant_id in ($$participants_maled$$)
           ]]>
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_maled">
+    <sqlQuery name="VisitMetaDataBkgd_maled" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -843,23 +823,13 @@ select distinct spec.input_pan_id as internal,  io.input_pan_id as record_id, m.
       <column name="string_value"/>
       <sql>
         <![CDATA[
- select distinct m.pan_id as internal, io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$PANIO io
- where m.category = 'Event'
- and m.pan_id = io.output_pan_id
- and io.input_pan_type_source_id = 'EUPATH_0000096'
-UNION ALL
-select distinct spec.input_pan_id as internal,  io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, apidbtuning.$$tbl_prefix$$PANIO spec, apidbtuning.$$tbl_prefix$$PANIO io
- where m.category = 'Specimen used for test'
- and m.pan_id = spec.output_pan_id
- and Io.Output_Pan_Id = spec.input_pan_id
- and io.input_pan_type_source_id = 'EUPATH_0000096'
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMetaData
           ]]>
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="RegionOntology_maled">
+   <sqlQuery name="RegionOntology_maled" isCacheable="true">
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
@@ -880,7 +850,7 @@ null as precision from dual
     </sql>
    </sqlQuery>
 
-    <sqlQuery name="RegionMetaData_maled" >
+    <sqlQuery name="RegionMetaData_maled" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -889,83 +859,12 @@ null as precision from dual
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.property_source_id in 'OBI_0001627'
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMetaData
+ where ontology_term_name = 'OBI_0001627'
         ]]>
       </sql>
     </sqlQuery>
-
-<!--
-    <sqlQuery name="HouseholdOntology_maled">
-      <column name="ontology_term_name"/>
-      <column name="parent_ontology_term_name"/>
-      <column name="display_name"/>
-      <column name="description"/>
-      <column name="type"/>
-      <column name="units"/>
-      <column name="precision"/>
-      <column name="is_range"/>
-      <sql>
- select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from ApidbTuning.$$tbl_prefix$$Ontology o
-     CONNECT BY o.ontology_term_source_id = PRIOR o.parent_ontology_term_source_id
-     START WITH o.ontology_term_source_id IN 
-(select distinct source_id
- from ApidbTuning.$$tbl_prefix$$MetaData
- where lower(category) = 'household'
- and source_id != 'EUPATH_0000094')
- order by display_name
-    </sql>
-    </sqlQuery>
-
-    <sqlQuery name="HouseholdMetaData_maled" isCacheable="true">
-      <paramRef ref="participantParams.participants_maled" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
-  from ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO io
-   where pa.pan_id in ($$participants_maled$$)
-       and pa.pan_id = io.output_pan_id)
- select distinct Part.household_id as filter_item_id,  Part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, part
- where lower(m.category) = 'household'
- and part.household_id = m.pan_id
-          ]]>
-    </sql>    
-
-    </sqlQuery>
-
-    <sqlQuery name="HouseholdMetaDataBkgd_maled">
-      <paramRef ref="participantParams.participants_maled" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="filter_item_id"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
-  from ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO io
-   where pa.pan_id = io.output_pan_id)
- select distinct Part.household_id as filter_item_id,  Part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, part
- where lower(m.category) = 'household'
- and part.household_id = m.pan_id
-          ]]>
-    </sql>    
-
-    </sqlQuery>
--->
 
     
     <!--************************************************************-->
