@@ -27,15 +27,13 @@ public class PRISMCohort extends EpidemiologyStudyWithLightTraps {
       map.put("ClinicalVisitsByRelativeVisits_prism", new String[] {"menu", "webservice"});
       return(map);
     }
-    @Override
 
+    @Override
     protected Map<String,String[]> lightTrapQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
       map.put("CollectionsByCharacteristics_prism", new String[] {"menu", "webservice"});
       return(map);
     }
-
-
 
     @Override
     protected String participantGraphAttributesTemplateName() {
@@ -55,12 +53,12 @@ public class PRISMCohort extends EpidemiologyStudyWithLightTraps {
     public void addModelReferences() {
         super.addModelReferences();
 
-        String presenterId = getPropValue("presenterId");
+        //String presenterId = getPropValue("presenterId");
 
-        String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
+        //String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
         String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
         String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
-        String lightTrapRecordClass = makeRecordClassName(LIGHT_TRAP_RECORD_CLASS_PREFIX);
+        //String lightTrapRecordClass = makeRecordClassName(LIGHT_TRAP_RECORD_CLASS_PREFIX);
 
         //        addWdkReference(participantRecordClass, "question", "ParticipantQuestions.ParticipantsByAllData", new String[]{"menu", "webservice"}, CATEGORY_IRI);
         //        addWdkReference(participantRecordClass, "question", "ParticipantQuestions.ParticipantsByRelativeVisits_prism", new String[]{"menu", "webservice"}, CATEGORY_IRI);
