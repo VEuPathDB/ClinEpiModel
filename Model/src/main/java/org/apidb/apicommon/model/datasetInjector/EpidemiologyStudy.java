@@ -121,7 +121,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
           setPropValue("observationSourceIdsForParticipantsObservationsTableQuote", addQuotes(observationSourceIdsForParticipantsObservationsTable));
 
-          if(!householdSourceIdsIncludedInParticipantAttributes.equals("") && householdSourceIdsIncludedInParticipantAttributes != null) {
+          if(householdSourceIdsIncludedInParticipantAttributes != null && !householdSourceIdsIncludedInParticipantAttributes.equals("")) {
               householdSourceIdsIncludedInParticipantAttributes = ", " + householdSourceIdsIncludedInParticipantAttributes;
               setPropValue("householdSourceIdsIncludedInParticipantAttributes", householdSourceIdsIncludedInParticipantAttributes);
           }
@@ -155,7 +155,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote", addQuotes(hhAndPIncludedInObservationAttributes));
 
 
-          if(!participantSourceIdsIncludedInObservationAttributes.equals("") && participantSourceIdsIncludedInObservationAttributes != null) {
+          if(participantSourceIdsIncludedInObservationAttributes != null && !participantSourceIdsIncludedInObservationAttributes.equals("")) {
               participantSourceIdsIncludedInObservationAttributes = ", " + participantSourceIdsIncludedInObservationAttributes;
               setPropValue("participantSourceIdsIncludedInObservationAttributes", participantSourceIdsIncludedInObservationAttributes);
           }
