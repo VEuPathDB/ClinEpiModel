@@ -188,12 +188,12 @@ MALED
                      from apidbtuning.${tblPrefix}PANIO io1
                         , apidbtuning.${tblPrefix}PANIO io2
                         , apidbtuning.${tblPrefix}Observations cva
-                        , (select pan_id as hh_protocol_app_node_id, &&householdSourceIds&& from apidbtuning.${tblPrefix}Households) da
+                        , (select pan_id as hh_protocol_app_node_id &&householdSourceIds&& from apidbtuning.${tblPrefix}Households) da
                         , (select pan_id as p_protocol_app_node_id, name as parent_id &&participantSourceIds&& from apidbtuning.${tblPrefix}Participants) pa
                      where cva.PAN_ID = io1.OUTPUT_PAN_ID
                      and io1.input_pan_id = pa.p_PROTOCOL_APP_NODE_ID
-                     and pa.p_PROTOCOL_APP_NODE_ID = io2.OUTPUT_PAN_ID
-                     and io2.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID
+                     and pa.p_PROTOCOL_APP_NODE_ID = io2.OUTPUT_PAN_ID(+)
+                     and io2.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID(+)
             ]]>
           </sql>  
          </sqlQuery>

@@ -530,6 +530,7 @@ and ios.output_pan_id = m.pan_id
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
 
+
    <sqlQuery name="ParticipantMetaData_maled" isCacheable="false">
      <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
      <paramRef ref="participantParams.tbl_prefix" />  
@@ -542,7 +543,7 @@ and ios.output_pan_id = m.pan_id
       <sql>
          <![CDATA[
 select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsMetaData p
+from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
 where p.participant_id in ($$geographic_region_maled$$)
           ]]>
     </sql>
@@ -560,7 +561,7 @@ where p.participant_id in ($$geographic_region_maled$$)
       <sql>
         <![CDATA[
 select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsMetaData p
+from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
           ]]>
     </sql>
     </sqlQuery>
@@ -576,7 +577,7 @@ from ApidbTuning.$$tbl_prefix$$PartObsMetaData p
          <sql>
            <![CDATA[
 select observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMetaData
+from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in ($$participants_maled$$)
           ]]>
     </sql>
@@ -593,7 +594,7 @@ where participant_id in ($$participants_maled$$)
       <sql>
         <![CDATA[
 select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsMetaData p
+from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
 where p.ontology_term_name = 'OBI_0001627'
         ]]>
       </sql>
@@ -609,7 +610,7 @@ where p.ontology_term_name = 'OBI_0001627'
       <sql>
         <![CDATA[
 select  observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.D121f2c2f02ObservationMetaData
+from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>
     </sqlQuery>

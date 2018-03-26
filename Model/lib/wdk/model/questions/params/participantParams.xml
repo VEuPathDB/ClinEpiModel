@@ -749,7 +749,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <sql>
          <![CDATA[
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMetaData
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
 where participant_id in ($$geographic_region_maled$$)
           ]]>
     </sql>
@@ -765,7 +765,7 @@ where participant_id in ($$geographic_region_maled$$)
       <sql>
          <![CDATA[
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMetaData
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
           ]]>
     </sql>
     </sqlQuery>
@@ -807,7 +807,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <sql>
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMetaData
+from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in ($$participants_maled$$)
           ]]>
     </sql>
@@ -824,7 +824,7 @@ where participant_id in ($$participants_maled$$)
       <sql>
         <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMetaData
+from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>
     </sqlQuery>
@@ -860,7 +860,7 @@ null as precision from dual
       <sql>
         <![CDATA[
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMetaData
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
  where ontology_term_name = 'OBI_0001627'
         ]]>
       </sql>
