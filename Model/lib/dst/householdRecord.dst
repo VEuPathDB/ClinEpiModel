@@ -159,12 +159,12 @@ select count(*) from apidbtuning.${tblPrefix}Households
          <sql>
             <![CDATA[
                      select meta.display_name, meta.name, meta.help, 
-                            decode(meta.type, 'string', 'wordCloud', 'number', 'histogram', null) as plugin_name,
-                            decode(meta.type, 'string', 'Word Cloud', 'number', 'Histogram', null) as plugin_display,
-                            decode(meta.type, 'string', 'Display the terms in the attribute as word clouds', 'number', 'Display a histogram of the values', null) as plugin_description,
-                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.WordCloudAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
-                            decode(meta.type, 'string', '/wdk/jsp/results/wordCloud.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
-                            decode(meta.type, 'string', '[{"name":"min-word-length","value":"1"},{"name":"common-words","value":""},{"name":"exclude-numbers","value":"false"}]', null) as plugin_properties
+                            decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as plugin_name,
+                            decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as plugin_display,
+                            decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values', null) as plugin_description,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
+                            decode(meta.type, 'string', '/wdk/jsp/results/histogram.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
+                            null as plugin_properties
                      from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
                            from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
                            where lower(m.pan_type) = 'household'
