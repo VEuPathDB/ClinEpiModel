@@ -65,12 +65,6 @@ prop=includeProjects
         <property name="page_size">500</property>
       </reporter>
 
-      <!-- Leave this so we can dump samples -->
-      <reporter name="tableTabular" displayName="%%tableReporterDisplayName%%" scopes="results"
-                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
-             <property name="page_size">1000000</property>           <!-- huge page size to force no paging  -->
-      </reporter>
-
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes=""
                 implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
 
