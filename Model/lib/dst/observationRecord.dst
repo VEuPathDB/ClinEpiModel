@@ -163,15 +163,6 @@ select count(*) from apidbtuning.${tblPrefix}Observations
          <column name="source_id"/>
          <column name="project_id"/>
 
-         <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
-
-<!-- 
-
-MALED
-         <sqlParamValue name="participantSourceIds"><![CDATA[]]>name as parent_id</sqlParamValue>
-         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000452]]></sqlParamValue>
--->
-
          <sqlParamValue name="participantSourceIds"><![CDATA[${participantSourceIdsIncludedInObservationAttributes}]]></sqlParamValue>
          <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInObservationAttributes}]]></sqlParamValue>
 
@@ -203,13 +194,6 @@ MALED
           <column name="plugin_view" />
           <column name="plugin_properties" />
 
-         <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
-         <!-- ICEMR
-          <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA['EUPATH_0000054','ENVO_01000744', 'PATO_0000047', 'EUPATH_0000033', 'EUPATH_0000035', 'EUPATH_0000034']]></sqlParamValue>
-
-MALED
-          <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>
--->
           <sqlParamValue name="participantAndHouseholdSourceIds"><![CDATA[${participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote}]]></sqlParamValue>
 
          <sql>
@@ -221,23 +205,20 @@ MALED
                             decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
                             decode(meta.type, 'string', '/wdk/jsp/results/histogram.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             null as plugin_properties
-                     from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
-                           where m.pan_type in ('Visit','Event', 'Event/Observation', 'Observation')
-                           and ot.ontology_term_id = m.PROPERTY_ID
-                           and mt.property_id = m.property_id
-                           union
-                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
-                           where m.pan_type in ('Visit','Event', 'Event/Observation', 'Observation')
-                           and ot.ontology_term_id = m.PROPERTY_ID
-                           and mt.property_id = m.property_id
+                     from (select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
+                           from apidbtuning.${tblPrefix}Ontology o
+                           where  o.ontology_term_source_id in (
+                             select distinct property_source_id
+                             from apidbtuning.${tblPrefix}Metadata 
+                             where category in ('Visit','Event', 'Event/Observation', 'Observation'))
                            union
                            select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
                            union
                            select 'Participant ID' as display_name, 'parent_id' as name, '' as help, '' as type from dual
                            union
-                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.${tblPrefix}PropertyType mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&participantAndHouseholdSourceIds&&)
+                           select distinct ot.display_name as display_name, ot.ontology_term_source_id as name, ot.description as help, ot.type 
+                           from apidbtuning.${tblPrefix}Ontology ot 
+                           where ot.ontology_term_source_id in (&&participantAndHouseholdSourceIds&&)
                            ) meta
             ]]>
          </sql>

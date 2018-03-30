@@ -789,7 +789,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'EUPATH_0000738'
      )
---     where ontology_term_name != 'EFO_0004950'
+     where ontology_term_name != 'EUPATH_0000091'
      order by display_name
          ]]>
     </sql>

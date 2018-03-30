@@ -244,16 +244,6 @@ select count(*) from apidbtuning.${tblPrefix}Participants
          <column name="source_id"/>
          <column name="project_id"/>
 
-         <!-- WARNING:  if you change this you must also change in the MetaQuery BELOW -->
-         <!--
-           ICEMR
-         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000054,ENVO_01000744]]></sqlParamValue>
-
-
-           MALED
-         <sqlParamValue name="householdSourceIds"><![CDATA[EUPATH_0000452]]></sqlParamValue>
-         -->
-
          <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInParticipantAttributes}]]></sqlParamValue>
 
           <sql>
@@ -280,23 +270,8 @@ select count(*) from apidbtuning.${tblPrefix}Participants
           <column name="plugin_view" />
           <column name="plugin_properties" />
 
-         <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
-
-<!--
-MALED
-          <sqlParamValue name="householdSourceIds"><![CDATA['EUPATH_0000452']]></sqlParamValue>
-ICEMR
-          <sqlParamValue name="householdSourceIds"><![CDATA['EUPATH_0000054', 'ENVO_01000744']]></sqlParamValue>
-
-          <sqlParamValue name="excludeParticipantSourceIds"><![CDATA['EFO_0004950']]></sqlParamValue>
- -->
-
           <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInParticipantAttributesQuote}]]></sqlParamValue>
           <sqlParamValue name="excludeParticipantSourceIds"><![CDATA[${participantSourceIdsExcludedFromParticipantAttributesQuote}]]></sqlParamValue>
-
-
-
-
 
          <sql>
             <![CDATA[
@@ -307,20 +282,11 @@ ICEMR
                             decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
                             decode(meta.type, 'string', '/wdk/jsp/results/histogram.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             null as plugin_properties
-                     from (select distinct mo.display_name || ' (' || mo.parent_ontology_term_name || ')' as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt, apidbtuning.${tblPrefix}Ontology mo
-                           where m.pan_type in ('Child','Participant') -- todo add pan_type_source_id to this table
-                           and ot.ontology_term_id = m.PROPERTY_ID
-                           and mt.property_id = m.PROPERTY_id
-                           and mt.property_id = mo.ontology_term_id
-                           and ot.source_id not in (&&excludeParticipantSourceIds&&)
-                           union
-                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
-                           where m.pan_type in ('Child','Participant') -- todo add pan_type_source_id to this table
-                           and ot.ontology_term_id = m.property_ID
-                           and mt.property_id = m.property_id
-                           and ot.source_id not in (&&excludeParticipantSourceIds&&)
+                     from (select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
+                           from apidbtuning.${tblPrefix}Ontology o
+                           where  o.ontology_term_source_id in (select distinct property_source_id from apidbtuning.${tblPrefix}Metadata where category in ('Child','Participant'))
+                           and o.ontology_term_source_id not in (&&excludeParticipantSourceIds&&)
+
                            union
 --                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
 --                           union
