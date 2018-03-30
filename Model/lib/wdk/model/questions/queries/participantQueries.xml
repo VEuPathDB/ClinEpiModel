@@ -173,26 +173,26 @@ and pa.pan_id = mos.part_id(+)
            <![CDATA[
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
                     count(*) as visit_count, 
-   round(avg(EUPATH_0000644),1) -1 as ave_age_visit
-from (select distinct io.input_pan_id,io.output_pan_id,ca.EUPATH_0000644 from ApidbTuning.$$tbl_prefix$$Observations ca, ApidbTuning.$$tbl_prefix$$PANIO io
-      where ca.pan_id in ($$visits_maled$$)
-      and ca.pan_id = io.output_pan_id
-$$dateOperator_fv$$
- select ioa.input_pan_id,ioa.output_pan_id,seta.EUPATH_0000644
- from ApidbTuning.$$tbl_prefix$$Observations seta, ApidbTuning.$$tbl_prefix$$Observations setb, ApidbTuning.$$tbl_prefix$$PANIO ioa, ApidbTuning.$$tbl_prefix$$PANIO iob
- where seta.pan_id in ($$visits_maled$$)
+   round(avg(number_value),1) -1 as ave_age_visit
+from (select distinct participant_id,observation_id,number_value from ApidbTuning.$$tbl_prefix$$ObservationMD
+      where observation_id in ($$visits_maled$$)
+      and ontology_term_name = 'EUPATH_0000644'
+MINUS
+ select distinct seta.participant_id,seta.observation_id,seta.number_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD seta, ApidbTuning.$$tbl_prefix$$ObservationMD setb
+ where seta.observation_id in ($$visits_maled$$)
+ and seta.ontology_term_name = 'EUPATH_0000644'
 and $$use_relative_visits$$ = 1
-and setb.pan_id in ($$relative_visits_maled$$)
-and seta.pan_id = ioa.output_pan_id
-and setb.pan_id = iob.output_pan_id
-and ioa.input_pan_id = iob.input_pan_id
-and seta.pan_id != setb.pan_id
-and setb.EUPATH_0000644 $$date_direction_fv$$ seta.EUPATH_0000644  
-and abs(setb.EUPATH_0000644 - seta.EUPATH_0000644) >= $$days_between.min$$
-and abs(setb.EUPATH_0000644 - seta.EUPATH_0000644) <= $$days_between.max$$
-group by ioa.input_pan_id,ioa.output_pan_id,seta.EUPATH_0000644
+and setb.observation_id in ($$relative_visits_maled$$)
+and setb.ontology_term_name = 'EUPATH_0000644'
+and seta.participant_id = setb.participant_id
+and seta.observation_id != setb.observation_id
+and setb.number_value $$date_direction_fv$$ seta.number_value  
+and abs(setb.number_value - seta.number_value) >= $$days_between.min$$
+and abs(setb.number_value - seta.number_value) <= $$days_between.max$$
+group by seta.participant_id,seta.observation_id,seta.number_value
 ) main, ApidbTuning.$$tbl_prefix$$Participants pa
-where pa.pan_id = main.input_pan_id
+where pa.pan_id = main.participant_id
 group by pa.name 
 having count(*) >= $$visit_count.min$$
 and count(*) <= $$visit_count.max$$
