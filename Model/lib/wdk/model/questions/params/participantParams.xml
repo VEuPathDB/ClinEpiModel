@@ -700,7 +700,7 @@ and ios.input_pan_id = valid.visit_id
         <![CDATA[
  select distinct pan_id as internal,  property_source_id  as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData 
- where category = 'Event/Observation'
+ where category in ('Event/Observation','Observation')
  union all
  select io.input_pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
