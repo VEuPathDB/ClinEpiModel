@@ -165,20 +165,16 @@ select count(*) from apidbtuning.${tblPrefix}Households
                             decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
                             decode(meta.type, 'string', '/wdk/jsp/results/histogram.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
                             null as plugin_properties
-                     from (select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredChars m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
-                           where lower(m.pan_type) = 'household'
-                           and ot.ontology_term_id = m.PROPERTY_ID
-                           and mt.property_id = m.property_id
-                           union
-                           select distinct ot.name as display_name, ot.source_id as name, ot.DEFINITION as help, mt.type
-                           from apidbtuning.${tblPrefix}InferredParams m, sres.ontologyterm ot, apidbtuning.${tblPrefix}PropertyType mt
-                           where lower(m.pan_type) = 'household'
-                           and ot.ontology_term_id = m.property_id
-                           and mt.property_id = m.property_id
-                           union
-                           select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
-                           ) meta
+                     from (
+                     select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type 
+                     from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                     where s.synonym_name = upper('${tblPrefix}HOUSEHOLDS')
+                     and c.owner = 'APIDBTUNING'
+                     and c.table_name = s.table_name
+                     and upper(o.ontology_term_source_id) = c.column_name
+                     union
+                     select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
+                     ) meta
                      
             ]]>
          </sql>

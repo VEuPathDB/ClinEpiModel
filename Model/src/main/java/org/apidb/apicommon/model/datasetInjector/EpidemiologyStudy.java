@@ -159,6 +159,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               participantSourceIdsIncludedInObservationAttributes = ", " + participantSourceIdsIncludedInObservationAttributes;
               setPropValue("participantSourceIdsIncludedInObservationAttributes", participantSourceIdsIncludedInObservationAttributes);
           }
+          if(householdSourceIdsIncludedInObservationAttributes != null && !householdSourceIdsIncludedInObservationAttributes.equals("")) {
+              householdSourceIdsIncludedInObservationAttributes = ", " + householdSourceIdsIncludedInObservationAttributes;
+              setPropValue("householdSourceIdsIncludedInObservationAttributes", householdSourceIdsIncludedInObservationAttributes);
+          }
 
           injectTemplate("observationRecord");
           injectTemplate("observationRecordAttributeQueries");
