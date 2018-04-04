@@ -77,3 +77,60 @@ f                   <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id
  
     </question>
 >templateTextEnd<
+
+
+[templateStart]
+name=HouseholdsByCharacteristics_india
+anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
+prop=includeProjects
+prop=presenterId
+prop=householdQuestionName
+>templateTextStart<
+   <question name="${householdQuestionName}" newBuild="1"
+             includeProjects="${includeProjects}"
+              searchCategory="Household"
+              displayName="Select a Set of Households"
+              shortDisplayName="Household Details"
+              queryRef="HouseholdId.HouseholdsByCharacteristics_prism" 
+              recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
+
+<!--
+        <attributesList 
+            summary="EUPATH_0000054,ENVO_01000744,ave_anoph,part_count,EUPATH_0000019"        
+        /> 
+-->
+
+	<dynamicAttributes>
+            <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
+              <plugin name="histogram" display="Histogram"
+                      description="Display a histogram of the values"
+                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
+                      view="/wdk/jsp/results/histogram.jsp" />
+            </columnAttribute>
+        </dynamicAttributes>
+            
+
+        <summary>
+            <![CDATA[ 
+           Find households based on household and participant details.
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+               
+        <description>
+            <![CDATA[
+             Find households based on details of the household itself and the participants participants who live there. 
+            ]]>
+        </description>
+ 
+    </question>
+>templateTextEnd<
