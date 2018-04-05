@@ -6,6 +6,16 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
 
     protected abstract Map<String,String[]> lightTrapQuestionTemplateNamesToScopes();
 
+
+    protected String extraHouseholdTables() {
+        return getTemplateInstanceText("householdRecordLightTrapTables");
+    }
+
+    protected String extraHouseholdTableQueries() {
+        return getTemplateInstanceText("householdRecordLightTrapTableQueries");
+    }
+
+
     @Override
     public void injectTemplates() {
         super.injectTemplates();

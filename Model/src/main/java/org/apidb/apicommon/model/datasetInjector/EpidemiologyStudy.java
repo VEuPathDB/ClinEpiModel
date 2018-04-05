@@ -26,6 +26,16 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
     }
 
 
+    // Subclasses may want to override this
+    protected String extraHouseholdTables() {
+        return "";
+    }
+    // Subclasses may want to override this
+    protected String extraHouseholdTableQueries() {
+        return "";
+    }
+
+
     protected String addQuotes(String s) {
         List<String> split = Arrays.asList(s.split("\\s*,\\s*"));
         List<String> quoted = new ArrayList<>();
@@ -92,6 +102,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       if(hasHouseholds) {
           String householdSourceIdsForHouseholdMemberTable = getPropValue("householdSourceIdsForHouseholdMemberTable");
           setPropValue("householdSourceIdsForHouseholdMemberTableQuote", addQuotes(householdSourceIdsForHouseholdMemberTable));
+
+          setPropValue("extraHouseholdTables", this.extraHouseholdTables());
+          setPropValue("extraHouseholdTableQueries", this.extraHouseholdTableQueries());
 
           injectTemplate("householdRecord");
           injectTemplate("householdRecordAttributeQueries");

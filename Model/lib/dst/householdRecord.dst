@@ -8,6 +8,7 @@ prop=householdSourceIdsForHouseholdMemberTable
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
+prop=extraHouseholdTables
 >templateTextStart<
     <recordClassSet name="${presenterId}HouseholdRecordClasses" includeProjects="${includeProjects}">
       <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" displayName="Household" iconName="home" includeProjects="${includeProjects}"> 
@@ -93,14 +94,7 @@ prop=includeProjects
           </table>
 
 
-	  <table name="LightTraps"
-                 displayName="Mosquitoe Light Trap Collections"
-                 queryRef="${presenterId}HouseholdTables.LightTraps"
-                 attributeMetaQueryRef="${presenterId}HouseholdTables.LightTrapColumnAttributes">
-            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
-            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
-    </table>
-
+    ${extraHouseholdTables}
 
     </recordClass>
 </recordClassSet>
@@ -201,6 +195,7 @@ prop=includeProjects
 prop=lightTrapSourceIdsForHouseholdsLightTrapTable
 prop=lightTrapSourceIdsForHouseholdsLightTrapTableQuote
 prop=lightTrapSourceIdsToOrderHouseholdsLightTrapTable
+prop=extraHouseholdTableQueries
 >templateTextStart<
     <querySet name="${presenterId}HouseholdTables" queryType="table" includeProjects="${includeProjects}" 
               isCacheable='false'>
@@ -292,6 +287,28 @@ order by source_id
         </sqlQuery>
 
 
+        ${extraHouseholdTableQueries}
+
+
+      </querySet>
+>templateTextEnd<
+
+
+[templateStart] 
+name=householdRecordLightTrapTableQueries
+anchorFile=ClinEpiModel/Model/lib/dst/householdRecord.dst
+prop=datasetName
+prop=householdAttributesList
+prop=householdSourceIdsForHouseholdMemberTable
+prop=householdSourceIdsForHouseholdMemberTableQuote
+prop=tblPrefix
+prop=presenterId
+prop=includeProjects
+prop=lightTrapSourceIdsForHouseholdsLightTrapTable
+prop=lightTrapSourceIdsForHouseholdsLightTrapTableQuote
+prop=lightTrapSourceIdsToOrderHouseholdsLightTrapTable
+>templateTextStart<
+
        <sqlQuery name="LightTraps"  isCacheable='false' attributeMetaQueryRef="${presenterId}HouseholdTables.LightTrapColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
@@ -322,8 +339,20 @@ order by source_id
             ]]>
           </sql>
         </sqlQuery>
+>templateTextEnd<
 
 
-      </querySet>
+[templateStart] 
+name=householdRecordLightTrapTables
+anchorFile=ClinEpiModel/Model/lib/dst/householdRecord.dst
+prop=presenterId
+>templateTextStart<
 
+	  <table name="LightTraps"
+                 displayName="Mosquitoe Light Trap Collections"
+                 queryRef="${presenterId}HouseholdTables.LightTraps"
+                 attributeMetaQueryRef="${presenterId}HouseholdTables.LightTrapColumnAttributes">
+            <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id"  inReportMaker="false" internal="true"/>
+    </table>
 >templateTextEnd<
