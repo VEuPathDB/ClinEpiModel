@@ -166,7 +166,7 @@ prop=observationQuestionName
 
 
 [templateStart]
-name=ClinicalVisitsByRelativeVisits_india
+name=ObservationsByRelativeVisits_india
 anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
