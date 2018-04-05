@@ -164,7 +164,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
           String householdSourceIdsIncludedInObservationAttributes = getPropValue("householdSourceIdsIncludedInObservationAttributes");
           String participantSourceIdsIncludedInObservationAttributes = getPropValue("participantSourceIdsIncludedInObservationAttributes");
-          String hhAndPIncludedInObservationAttributes = householdSourceIdsIncludedInObservationAttributes + "," + participantSourceIdsIncludedInObservationAttributes;
+          String hhAndPIncludedInObservationAttributes = householdSourceIdsIncludedInObservationAttributes + " " + participantSourceIdsIncludedInObservationAttributes;
+          if(participantSourceIdsIncludedInObservationAttributes != null && !participantSourceIdsIncludedInObservationAttributes.equals("") &&
+          householdSourceIdsIncludedInObservationAttributes != null && !householdSourceIdsIncludedInObservationAttributes.equals("")) {
+              hhAndPIncludedInObservationAttributes = householdSourceIdsIncludedInObservationAttributes + "," + participantSourceIdsIncludedInObservationAttributes;
+          }
           setPropValue("participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote", addQuotes(hhAndPIncludedInObservationAttributes));
 
 
