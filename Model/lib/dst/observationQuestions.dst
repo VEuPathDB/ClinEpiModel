@@ -176,7 +176,7 @@ prop=observationQuestionName
               searchCategory="Observation"
               displayName="Select a Set of Observations (MAL-ED)"
               shortDisplayName="Observations"
-              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_maled" 
+              queryRef="ClinicalVisitId.ObservationsByRelativeVisits_india" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         <attributesList 

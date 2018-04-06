@@ -200,6 +200,54 @@ and count(*) <= $$visit_count.max$$
         </sql>
      </sqlQuery>
 
+     <sqlQuery name="ParticipantsByCharWizRelVis_india"
+          isCacheable="true">
+       <paramRef ref="participantParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_india" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_india" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Df6c59e88c1" groupRef="metaDataGroups.event_summary_params"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="ave_age_visit"/>
+       <column name="visit_count"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
+                    count(*) as visit_count, 
+   round(avg(number_value),1) -1 as ave_age_visit
+from (select distinct participant_id,observation_id,number_value from ApidbTuning.$$tbl_prefix$$ObservationMD
+      where observation_id in ($$visits_india$$)
+      and ontology_term_name = 'EUPATH_0000091'
+MINUS
+ select distinct seta.participant_id,seta.observation_id,seta.number_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD seta, ApidbTuning.$$tbl_prefix$$ObservationMD setb
+ where seta.observation_id in ($$visits_india$$)
+ and seta.ontology_term_name = 'EUPATH_0000644'
+and $$use_relative_visits$$ = 1
+and setb.observation_id in ($$relative_visits_india$$)
+and setb.ontology_term_name = 'EUPATH_0000091'
+and seta.participant_id = setb.participant_id
+and seta.observation_id != setb.observation_id
+and setb.number_value $$date_direction_fv$$ seta.number_value  
+and abs(setb.number_value - seta.number_value) >= $$days_between.min$$
+and abs(setb.number_value - seta.number_value) <= $$days_between.max$$
+group by seta.participant_id,seta.observation_id,seta.number_value
+) main, ApidbTuning.$$tbl_prefix$$Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
+having count(*) >= $$visit_count.min$$
+and count(*) <= $$visit_count.max$$
+                ]]>   
+        </sql>
+     </sqlQuery>
+
      <sqlQuery name="ParticipantsByCaseControl_gems"
           isCacheable="true">
        <paramRef ref="participantParams.geographic_region_gems" groupRef="metaDataGroups.geographic_loc"/>

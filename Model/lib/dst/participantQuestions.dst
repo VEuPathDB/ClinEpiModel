@@ -177,8 +177,8 @@ prop=participantQuestionName
         <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
               displayName="Select a Set of Participants (India ICEMR)"
-              shortDisplayName="Particip India"
-              queryRef="ParticipantId.ParticipantsByCharWizRelVis_prism" 
+              shortDisplayName="Partic India"
+              queryRef="ParticipantId.ParticipantsByCharWizRelVis_india" 
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
 <!--

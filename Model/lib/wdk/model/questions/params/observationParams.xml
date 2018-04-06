@@ -247,6 +247,63 @@
       </help>
     </filterParam>
 
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  india ICEMR specific .. should be injected -->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <filterParam name="geographic_region_india" 
+                    metadataQueryRef="ClinicalVisitVQ.RegionMetaData_india"
+                    backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_india"
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_india"
+                    countPredictsAnswerCount="true"
+                    prompt="Participant"
+                    dependedParamRef="participantParams.tbl_prefix"
+                    trimMetadataTerms="false">
+      <help>
+        Select observations based on the participants subcounty where they live. 
+      </help>
+    </filterParam>
+
+
+
+       <filterParam name="participants_india" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_india"
+                       metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_india"
+                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_india"
+                       countPredictsAnswerCount="true"
+                       prompt="Participants"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_india">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_india" 
+                    metadataQueryRef="ClinicalVisitVQ.VisitMetaData_india"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_india"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_india"
+                    countPredictsAnswerCount="true"
+                    prompt="Observations"
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_india">
+      <help>
+        Select observations based on their observation characteristics. 
+      </help>
+    </filterParam>
+
+    <filterParam name="relative_visits_india" 
+                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_india"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_india"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_india"
+                    prompt="Related Observations"
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.tbl_prefix">
+      <help>
+        Select related observations based on their characteristics. 
+      </help>
+    </filterParam>
+
   </paramSet>
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -615,6 +672,96 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     </sql>
     </sqlQuery>
    
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  india ICEMR specific .. should be injected -->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+
+   <sqlQuery name="ParticipantMetaData_india" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.geographic_region_india" />  
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
+where p.participant_id in ($$geographic_region_india$$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_india" isCacheable="false">
+      <paramRef ref="clinicalVisitParams.geographic_region_india" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaData_india" isCacheable="false">
+         <paramRef ref="clinicalVisitParams.participants_india" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_india$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+    <sqlQuery name="RegionMetaData_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
+where p.ontology_term_name = 'OBI_0001627'
+        ]]>
+      </sql>
+    </sqlQuery>
+
+   <sqlQuery name="RelVisitMetaData_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
   </querySet>    
 
 </wdkModel>
