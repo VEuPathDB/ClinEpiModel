@@ -959,13 +959,14 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      <paramRef ref="participantParams.geographic_region_india" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
+select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD
 where household_id in ($$geographic_region_india$$)
           ]]>
     </sql>
@@ -975,13 +976,14 @@ where household_id in ($$geographic_region_india$$)
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
+select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD
           ]]>
     </sql>
     </sqlQuery>
@@ -1114,7 +1116,7 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     <sql>
          <![CDATA[select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where ontology_term_source_id = 'EUPATH_0000452'
+where ontology_term_source_id in ('EUPATH_0000452','EUPATH_0000407')
 union
 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
 null as precision from dual
@@ -1126,14 +1128,15 @@ null as precision from dual
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  household_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
- where ontology_term_name = 'EUPATH_0000452'
+select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD
+where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
         ]]>
       </sql>
     </sqlQuery>
