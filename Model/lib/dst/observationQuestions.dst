@@ -233,7 +233,7 @@ prop=observationQuestionName
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
               "numRelativeEventsParamName": "num_relative_events",
-              "relativeVisitsParamName": "relative_visits_maled"
+              "relativeVisitsParamName": "relative_visits_india"
             }
           </value>
         </propertyList>

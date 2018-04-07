@@ -221,12 +221,12 @@ and count(*) <= $$visit_count.max$$
            <![CDATA[
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
                     count(*) as visit_count, 
-   round(avg(number_value),1) -1 as ave_age_visit
-from (select distinct participant_id,observation_id,number_value from ApidbTuning.$$tbl_prefix$$ObservationMD
+   round(avg(date_value),1) -1 as ave_age_visit
+from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
       where observation_id in ($$visits_india$$)
       and ontology_term_name = 'EUPATH_0000091'
 MINUS
- select distinct seta.participant_id,seta.observation_id,seta.number_value
+ select distinct seta.participant_id,seta.observation_id,seta.date_value
  from ApidbTuning.$$tbl_prefix$$ObservationMD seta, ApidbTuning.$$tbl_prefix$$ObservationMD setb
  where seta.observation_id in ($$visits_india$$)
  and seta.ontology_term_name = 'EUPATH_0000644'
@@ -235,10 +235,10 @@ and setb.observation_id in ($$relative_visits_india$$)
 and setb.ontology_term_name = 'EUPATH_0000091'
 and seta.participant_id = setb.participant_id
 and seta.observation_id != setb.observation_id
-and setb.number_value $$date_direction_fv$$ seta.number_value  
-and abs(setb.number_value - seta.number_value) >= $$days_between.min$$
-and abs(setb.number_value - seta.number_value) <= $$days_between.max$$
-group by seta.participant_id,seta.observation_id,seta.number_value
+and setb.date_value $$date_direction_fv$$ seta.date_value  
+and abs(setb.date_value - seta.date_value) >= $$days_between.min$$
+and abs(setb.date_value - seta.date_value) <= $$days_between.max$$
+group by seta.participant_id,seta.observation_id,seta.date_value
 ) main, ApidbTuning.$$tbl_prefix$$Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 

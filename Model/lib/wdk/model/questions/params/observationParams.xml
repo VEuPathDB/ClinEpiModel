@@ -265,6 +265,20 @@
     </filterParam>
 
 
+    <filterParam name="households_india" 
+                       metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_india"
+                       backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_india"
+                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_india"
+                       countPredictsAnswerCount="true"
+                       filterDataTypeDisplayName="Households"
+                       prompt="Households"
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_india"
+                       trimMetadataTerms="false">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+    </filterParam>
+
 
        <filterParam name="participants_india" 
                        ontologyQueryRef="ParticipantVQ.ParticipantOntology_india"
@@ -273,7 +287,7 @@
                        countPredictsAnswerCount="true"
                        prompt="Participants"
                        trimMetadataTerms="false"
-                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_india">
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_india">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -677,9 +691,43 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
 
+   <sqlQuery name="HouseholdMetaData_india" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="clinicalVisitParams.geographic_region_india" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  household_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
+where household_id in ($$geographic_region_india$$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  household_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
 
    <sqlQuery name="ParticipantMetaData_india" isCacheable="false">
-     <paramRef ref="clinicalVisitParams.geographic_region_india" />  
+     <paramRef ref="clinicalVisitParams.households_india" />  
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -691,13 +739,12 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
          <![CDATA[
 select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
 from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
-where p.participant_id in ($$geographic_region_india$$)
+where p.household_id in ($$households_india$$)
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd_india" isCacheable="false">
-      <paramRef ref="clinicalVisitParams.geographic_region_india" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -740,9 +787,9 @@ where participant_id in ($$participants_india$$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
-where p.ontology_term_name = 'OBI_0001627'
+select  household_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
+where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
         ]]>
       </sql>
     </sqlQuery>

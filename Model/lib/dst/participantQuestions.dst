@@ -229,7 +229,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_maled"
+              "relativeVisitsParamName": "relative_visits_india"
             }
           </value>
         </propertyList>
@@ -283,7 +283,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_india"
+              "relativeVisitsParamName": "relative_visits_gems"
             }
           </value>
         </propertyList>
