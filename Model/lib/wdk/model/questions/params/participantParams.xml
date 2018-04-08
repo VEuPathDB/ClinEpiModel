@@ -231,9 +231,9 @@
     </filterParam>
 
     <filterParam name="households_india" 
+                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_india"
                        metadataQueryRef="ParticipantVQ.HouseholdMetaData_india"
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_india"
-                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_india"
                        countPredictsAnswerCount="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Households"
@@ -245,8 +245,8 @@
     </filterParam>
 
        <filterParam name="participants_india" 
+                      ontologyQueryRef="ParticipantVQ.HouseholdParticipantOntology_india"
                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_india"
-                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_india"
                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_india"
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
@@ -992,6 +992,30 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
     </sql>
    </sqlQuery>
 
+   <sqlQuery name="HouseholdParticipantOntology_india" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+select * from (
+ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('PCO_0000024','EUPATH_0000096')
+     )
+     where ontology_term_name != 'EUPATH_0000094'
+     order by display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
    <sqlQuery name="HouseholdMetaData_india" isCacheable="false">
      <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="participantParams.geographic_region_india" />  
@@ -1055,13 +1079,18 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      <paramRef ref="participantParams.households_india" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, participant_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
+where household_id in ($$households_india$$)
+UNION
+select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD
 where household_id in ($$households_india$$)
           ]]>
     </sql>
@@ -1071,13 +1100,17 @@ where household_id in ($$households_india$$)
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, participant_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
+UNION
+select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD
           ]]>
     </sql>
     </sqlQuery>

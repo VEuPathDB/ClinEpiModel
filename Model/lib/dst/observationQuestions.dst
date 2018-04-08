@@ -180,7 +180,7 @@ prop=observationQuestionName
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         <attributesList 
-            summary="num_matching_visits,min_days_between"
+            summary="EUPATH_0000091,EUPATH_0000113,EUPATH_0000036,num_matching_visits,min_days_between"
         /> 
 
         <dynamicAttributes>
