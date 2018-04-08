@@ -174,7 +174,7 @@ prop=observationQuestionName
 >templateTextStart<
     <question name="${observationQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
-              displayName="Select a Set of Observations (MAL-ED)"
+              displayName="Select a Set of Observations (India ICEMR)"
               shortDisplayName="Observations"
               queryRef="ClinicalVisitId.ObservationsByRelativeVisits_india" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >

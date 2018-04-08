@@ -930,6 +930,44 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD
     <!--   India ICEMR section ... should be injected  -->
     <!--************************************************************-->
 
+   <sqlQuery name="RegionOntology_india" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+from ApidbTuning.$$tbl_prefix$$Ontology o
+where ontology_term_source_id in ('EUPATH_0000452','EUPATH_0000407')
+union
+select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
+null as precision from dual
+         ]]>
+    </sql>
+   </sqlQuery>
+
+    <sqlQuery name="RegionMetaData_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD
+where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
+        ]]>
+      </sql>
+    </sqlQuery>
+
    <sqlQuery name="HouseholdOntology_india" isCacheable="true">
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>
@@ -1103,43 +1141,6 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="RegionOntology_india" isCacheable="true">
-     <paramRef ref="participantParams.tbl_prefix" />  
-     <column name="ontology_term_name"/>
-     <column name="parent_ontology_term_name"/>
-     <column name="display_name"/>
-     <column name="description"/>
-     <column name="type"/>
-     <column name="units"/>
-     <column name="precision"/>
-     <column name="is_range"/>
-    <sql>
-         <![CDATA[select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
-from ApidbTuning.$$tbl_prefix$$Ontology o
-where ontology_term_source_id in ('EUPATH_0000452','EUPATH_0000407')
-union
-select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-null as precision from dual
-         ]]>
-    </sql>
-   </sqlQuery>
-
-    <sqlQuery name="RegionMetaData_india" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HousePartIdMD
-where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
-        ]]>
-      </sql>
-    </sqlQuery>
 
     <!--************************************************************-->
     <!--   GEMS section ... -->

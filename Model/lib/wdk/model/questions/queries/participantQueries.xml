@@ -215,13 +215,10 @@ and count(*) <= $$visit_count.max$$
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="Df6c59e88c1" groupRef="metaDataGroups.event_summary_params"/>
        <column name="source_id"/>
        <column name="project_id"/>
-       <column name="ave_age_visit"/>
        <column name="visit_count"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
-                    count(*) as visit_count, 
-   round(avg(date_value),1) -1 as ave_age_visit
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count 
 from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
       where observation_id in ($$visits_india$$)
       and ontology_term_name = 'EUPATH_0000091'

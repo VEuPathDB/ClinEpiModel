@@ -44,6 +44,29 @@ group by da.pan_id,da.name
         </sql>
      </sqlQuery>
 
+    <sqlQuery name="HouseholdsByCharacteristics_india" isCacheable="true">
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Df6c59e88c1" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="ave_anoph"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da
+where io.output_pan_id in ($$participants_india$$)
+and da.pan_id = io.input_pan_id
+group by da.pan_id,da.name
+) dwpct
+                ]]>   
+        </sql>
+     </sqlQuery>
+
 
 
 

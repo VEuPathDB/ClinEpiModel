@@ -193,14 +193,6 @@ prop=participantQuestionName
                       implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
                       view="/wdk/jsp/results/histogram.jsp" />
             </columnAttribute>
-<!--
-	     <columnAttribute name="ave_age_visit" displayName="Avg age at observation" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
--->
 	</dynamicAttributes>
           
 

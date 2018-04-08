@@ -17,7 +17,7 @@ prop=householdQuestionName
    <question name="${householdQuestionName}" newBuild="1"
              includeProjects="${includeProjects}"
               searchCategory="Household"
-              displayName="Select a Set of Households"
+              displayName="Select a Set of Households (PRISM ICEMR)"
               shortDisplayName="Household Details"
               queryRef="HouseholdId.HouseholdsByCharacteristics_prism" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
@@ -89,9 +89,9 @@ prop=householdQuestionName
    <question name="${householdQuestionName}" newBuild="1"
              includeProjects="${includeProjects}"
               searchCategory="Household"
-              displayName="Select a Set of Households"
+              displayName="Select a Set of Households (India ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_prism" 
+              queryRef="HouseholdId.HouseholdsByCharacteristics_india" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
 <!--

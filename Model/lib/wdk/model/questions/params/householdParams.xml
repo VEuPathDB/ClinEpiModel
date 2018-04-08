@@ -65,6 +65,53 @@
          </help>
        </filterParam>
 
+    <!--************************************************************-->
+    <!--   india ICEMR section ... should be injected  -->
+    <!--************************************************************-->
+
+       <filterParam name="geographic_region_india" 
+                       metadataQueryRef="HouseholdVQ.RegionMetaData_india"
+                       backgroundQueryRef="HouseholdVQ.RegionMetaData_india"
+                       ontologyQueryRef="ParticipantVQ.RegionOntology_india"
+                       countPredictsAnswerCount="true"
+                       filterDataTypeDisplayName="Households"
+                       prompt="Geographic region"
+                       dependedParamRef="participantParams.tbl_prefix"
+                       trimMetadataTerms="false">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+    </filterParam>
+
+    <filterParam name="households_india" 
+                       metadataQueryRef="HouseholdVQ.HouseholdMetaData_india"
+                       backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_india"
+                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_india"
+                       countPredictsAnswerCount="true"
+                       filterDataTypeDisplayName="Households"
+                       prompt="Households"
+                       dependedParamRef="participantParams.tbl_prefix,householdParams.geographic_region_india"
+                       trimMetadataTerms="false">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+    </filterParam>
+
+       <filterParam name="participants_india" 
+                      metadataQueryRef="HouseholdVQ.ParticipantMetaData_india"
+                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_india"
+                      backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_india"
+                      countPredictsAnswerCount="true"
+                      filterDataTypeDisplayName="Participants"
+                      prompt="Personal characteristics"
+                      trimMetadataTerms="false"
+                      dependedParamRef="participantParams.tbl_prefix,householdParams.households_india">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+
 
     <!-- TEMPLATE_ANCHOR householdSourceIdParam -->
 
@@ -211,6 +258,92 @@ from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
  where io.output_pan_type_source_id = 'EUPATH_0000096'
  and io.input_pan_type_source_id = 'PCO_0000024'
  and m.pan_id = io.output_pan_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <!--************************************************************-->
+    <!--   india ICEMR section ... should be injected  -->
+    <!--************************************************************-->
+
+    <sqlQuery name="RegionMetaData_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  household_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD
+where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
+        ]]>
+      </sql>
+    </sqlQuery>
+
+   <sqlQuery name="HouseholdMetaData_india" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="householdParams.geographic_region_india" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  household_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD
+where household_id in ($$geographic_region_india$$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  household_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_india" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="householdParams.households_india" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  household_id as record_id, participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
+where household_id in ($$households_india$$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  household_id as record_id, participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
           ]]>
     </sql>
     </sqlQuery>
