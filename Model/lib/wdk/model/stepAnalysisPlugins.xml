@@ -79,10 +79,11 @@
       </shortDescription>
       <description/>
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
-      <property name="attributesToExtract">primary_key, project_id</property>
+      <property name="attributesToExtract">primary_key,project_id</property>
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
+      <property name="dumpModelProps">true</property>
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
       <property name="datasetName">OVERRIDE_FROM_RECORD</property>
@@ -106,6 +107,7 @@
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
+      <property name="dumpModelProps">true</property>
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
       <property name="datasetName">OVERRIDE_FROM_RECORD</property>
@@ -132,6 +134,7 @@
       <property name="addHeader">true</property>
       <property name="iframeWidthPx">1200</property>
       <property name="iframeLengthPx">800</property>
+      <property name="dumpModelProps">true</property>
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
       <property name="datasetName">OVERRIDE_FROM_RECORD</property>
