@@ -3,22 +3,41 @@
 <xmlAnswer>
 
   <!--  GEMS Study -->
+
+<!-- crisl -->
   <record>
     <attribute name="study">GEMS</attribute>
     <attribute name="user_id">108976930</attribute>
   </record>
+<!-- cristina -->
+  <record>
+    <attribute name="study">GEMS</attribute>
+    <attribute name="user_id">376</attribute>
+  </record>
+<!-- danica -->
+  <record>
+    <attribute name="study">GEMS</attribute>
+    <attribute name="user_id">220902410</attribute>
+  </record>
   
   <!--  MAL-ED Study -->
+
+<!-- crisl -->
+  <record> 
+    <attribute name="study">MAL-ED</attribute>
+    <attribute name="user_id">108976930</attribute>
+  </record> 
+<!-- cristina -->
   <record> 
     <attribute name="study">MAL-ED</attribute>
     <attribute name="user_id">376</attribute>
   </record>
-  
-  <record> 
+<!-- danica -->
+   <record> 
     <attribute name="study">MAL-ED</attribute>
-    <attribute name="user_id">108976930</attribute>
+    <attribute name="user_id">220902410</attribute>
   </record>
-  
+
   <!-- ICEMR  -->
 
 </xmlAnswer>
