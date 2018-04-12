@@ -356,10 +356,16 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"participantSourceIdsExcludedFromParticipantAttributes", ""},
                                  {"observationSourceIdsForParticipantsObservationsTable", ""},
                                  {"observationSourceIdsToOrderParticipantsObservationsTable", ""},
+                                 //attributes to be added to the record for the studies.jason replacement
+                                 {"studyCategories", ""},
+                                 {"projectAvailability", ""},
+                                 {"studyAccess", ""},
+                                 {"policyUrl", ""},
+                                 {"cardHeadline", ""},
+                                 {"cardPoints", ""}
       };
 
     return declaration;
   }
-
 
 }
