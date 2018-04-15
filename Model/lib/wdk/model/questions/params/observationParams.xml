@@ -789,7 +789,7 @@ where participant_id in ($$participants_india$$)
         <![CDATA[
 select  household_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
-where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
+where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
         ]]>
       </sql>
     </sqlQuery>

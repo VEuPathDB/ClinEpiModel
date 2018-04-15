@@ -218,12 +218,12 @@
 
        <filterParam name="geographic_region_india" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData_india"
-                       backgroundQueryRef="ParticipantVQ.RegionMetaData_india"
+                       backgroundQueryRef="ParticipantVQ.RegionMetaDataBkgd_india"
                        ontologyQueryRef="ParticipantVQ.RegionOntology_india"
                        countPredictsAnswerCount="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
-                       dependedParamRef="participantParams.tbl_prefix"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.study_type"
                        trimMetadataTerms="false">
          <help>
            Select participants based on their geographic region. 
@@ -245,7 +245,7 @@
     </filterParam>
 
        <filterParam name="participants_india" 
-                      ontologyQueryRef="ParticipantVQ.HouseholdParticipantOntology_india"
+                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_india"
                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_india"
                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_india"
                       countPredictsAnswerCount="true"
@@ -382,6 +382,16 @@
                dependedParamRef="participantParams.use_rel_case_control"
                queryRef="ParticipantVQ.KeepRemove">
       <help>Choose what to do as you compare cases and controls.  Do you want to keep or remove participants with cases and controls that match your selected criteria. </help>
+    </flatVocabParam>
+
+        <flatVocabParam name="study_type"
+               prompt="Choose the study type"
+               multiPick="false"
+               quote="true"
+               visible="true"
+               dependedParamRef="participantParams.tbl_prefix"
+               queryRef="ParticipantVQ.StudyType">
+      <help>This study has multiple study types.  Choose which study type you want to search.</help>
     </flatVocabParam>
 
        <filterParam name="relative_event_gems" 
@@ -952,6 +962,7 @@ null as precision from dual
 
     <sqlQuery name="RegionMetaData_india" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
+      <paramRef ref="participantParams.study_type" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -960,9 +971,30 @@ null as precision from dual
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
+select  distinct h.household_id as internal, h.participant_id as record_id, h.ontology_term_name, initcap(h.string_value) as string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD h, apidbtuning.$$tbl_prefix$$ParticipantMD p
+where h.ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
+and p.participant_id = h.participant_id
+and P.Ontology_Term_Name = 'OBI_0500000'
+and ('any' = $$study_type$$ 
+     or p.string_value = $$study_type$$ )
+        ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="RegionMetaDataBkgd_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  household_id as internal, participant_id as record_id, ontology_term_name, initcap(string_value) as string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HousePartIdMD
-where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
+where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
         ]]>
       </sql>
     </sqlQuery>
@@ -1090,10 +1122,10 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
 select  participant_id as internal, participant_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
 where household_id in ($$households_india$$)
-UNION
+/* UNION
 select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HousePartIdMD
-where household_id in ($$households_india$$)
+where household_id in ($$households_india$$) */
           ]]>
     </sql>
     </sqlQuery>
@@ -1110,9 +1142,9 @@ where household_id in ($$households_india$$)
          <![CDATA[
 select  participant_id as internal, participant_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
-UNION
+/* UNION
 select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HousePartIdMD
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD */
           ]]>
     </sql>
     </sqlQuery>
@@ -1381,6 +1413,25 @@ order by display_name
             </sql>
         </sqlQuery>
 
+     <sqlQuery name="StudyType">
+          <paramRef ref="participantParams.tbl_prefix" />  
+          <column name="display" />
+          <column name="internal" />
+          <column name="term" />
+          <sql>
+            <![CDATA[
+            ]]>
+            SELECT * from (
+            SELECT 'Any' as display, 'any' as term, 'any' as internal from dual
+            UNION
+            select distinct initcap(string_value) as display, string_value as term, string_value as internal
+--            from apidbtuning.$$tbl_prefix$$ParticipantMD
+            from apidbtuning.Df6c59e88c1ParticipantMD
+            where ontology_term_name = 'OBI_0500000'  )
+            ORDER by term
+            </sql>
+        </sqlQuery>
+
     <sqlQuery name="RelativeEventMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <paramRef ref="participantParams.case_control" />  
@@ -1546,6 +1597,14 @@ You can further restrict the participants returned in your search by setting a r
             <description>
                 <![CDATA[
                          Choose whether to query just cases, just controls or both. 
+                ]]>
+            </description>
+        </group>
+
+        <group name="choose_study_type" displayName="Choose Study Type" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         Thus study contains multiple study types. Choose which study type to include in this search.
                 ]]>
             </description>
         </group>

@@ -202,6 +202,7 @@ and count(*) <= $$visit_count.max$$
 
      <sqlQuery name="ParticipantsByCharWizRelVis_india"
           isCacheable="true">
+       <paramRef ref="participantParams.study_type" groupRef="metaDataGroups.choose_study_type"/>
        <paramRef ref="participantParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
@@ -211,14 +212,12 @@ and count(*) <= $$visit_count.max$$
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_india" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Df6c59e88c1" groupRef="metaDataGroups.event_summary_params"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Df6c59e88c1" groupRef="metaDataGroups.choose_study_type"/>
        <column name="source_id"/>
        <column name="project_id"/>
-       <column name="visit_count"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count 
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
 from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
       where observation_id in ($$visits_india$$)
       and ontology_term_name = 'EUPATH_0000091'
@@ -239,8 +238,6 @@ group by seta.participant_id,seta.observation_id,seta.date_value
 ) main, ApidbTuning.$$tbl_prefix$$Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
-having count(*) >= $$visit_count.min$$
-and count(*) <= $$visit_count.max$$
                 ]]>   
         </sql>
      </sqlQuery>
