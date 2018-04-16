@@ -2,6 +2,9 @@
 
 <xmlAnswer>
 
+
+
+
   <!--  GEMS Study -->
 
 <!-- crisl -->
@@ -20,24 +23,49 @@
     <attribute name="user_id">220902410</attribute>
   </record>
   
+
+
   <!--  MAL-ED Study -->
 
 <!-- crisl -->
   <record> 
-    <attribute name="study">MAL-ED</attribute>
+    <attribute name="study">DS_121f2c2f02</attribute>
     <attribute name="user_id">108976930</attribute>
   </record> 
 <!-- cristina -->
   <record> 
-    <attribute name="study">MAL-ED</attribute>
+    <attribute name="study">DS_121f2c2f02</attribute>
     <attribute name="user_id">376</attribute>
   </record>
 <!-- danica -->
    <record> 
-    <attribute name="study">MAL-ED</attribute>
+    <attribute name="study">DS_121f2c2f02</attribute>
     <attribute name="user_id">220902410</attribute>
   </record>
 
+
+
+
   <!-- ICEMR  -->
+
+  <!--  India Study -->
+
+<!-- crisl -->
+  <record> 
+    <attribute name="study">DS_f6c59e88c1</attribute>
+    <attribute name="user_id">108976930</attribute>
+  </record> 
+<!-- cristina -->
+  <record> 
+    <attribute name="study">DS_f6c59e88c1</attribute>
+    <attribute name="user_id">376</attribute>
+  </record>
+<!-- danica -->
+   <record> 
+    <attribute name="study">DS_f6c59e88c1</attribute>
+    <attribute name="user_id">220902410</attribute>
+  </record>
+
+
 
 </xmlAnswer>
