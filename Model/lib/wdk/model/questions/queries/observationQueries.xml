@@ -54,7 +54,7 @@ from vis, relvis rv
 where $$use_relative_visits$$ = 1
 and vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
+and vis.EUPATH_0000091 $$date_direction_fv$$ rv.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 )
@@ -67,7 +67,7 @@ select vis.pan_id,vis.name, vis.input_pan_id,rv.EUPATH_0000091
 from vis, relvis rv
 where vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and rv.EUPATH_0000091 $$date_direction_fv$$ vis.EUPATH_0000091
+and vis.EUPATH_0000091 $$date_direction_fv$$ rv.EUPATH_0000091
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
 and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 ) inter, visits
@@ -117,7 +117,7 @@ from vis, relvis rv
 where $$use_relative_visits$$ = 1
 and vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and rv.EUPATH_0000644 $$date_direction_fv$$ vis.EUPATH_0000644
+and vis.EUPATH_0000644 $$date_direction_fv$$ rv.EUPATH_0000644
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) >= $$days_between.min$$
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
 group by vis.pan_id, vis.input_pan_id,vis.EUPATH_0000644
@@ -132,7 +132,7 @@ select vis.pan_id, vis.input_pan_id,rv.EUPATH_0000644
 from vis, relvis rv
 where vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and rv.EUPATH_0000644 $$date_direction_fv$$ vis.EUPATH_0000644
+and vis.EUPATH_0000644 $$date_direction_fv$$ rv.EUPATH_0000644
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) >= $$days_between.min$$
 and abs(rv.EUPATH_0000644 - vis.EUPATH_0000644) <= $$days_between.max$$
 ) inter, visits, ApidbTuning.$$tbl_prefix$$Observations o
@@ -146,6 +146,7 @@ group by name
 
      <sqlQuery name="ObservationsByRelativeVisits_india"
           isCacheable="true">
+       <paramRef ref="participantParams.study_type" groupRef="metaDataGroups.choose_study_type"/>
        <paramRef ref="clinicalVisitParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
@@ -184,7 +185,7 @@ from vis, relvis rv
 where $$use_relative_visits$$ = 1
 and vis.participant_id = rv.participant_id
 and vis.pan_id != rv.pan_id
-and rv.visit_date $$date_direction_fv$$ vis.visit_date
+and vis.visit_date $$date_direction_fv$$ rv.visit_date
 and abs(rv.visit_date - vis.visit_date) >= $$days_between.min$$
 and abs(rv.visit_date - vis.visit_date) <= $$days_between.max$$
 group by vis.pan_id, vis.participant_id,vis.visit_date
@@ -199,7 +200,7 @@ select vis.pan_id, vis.participant_id,rv.visit_date
 from vis, relvis rv
 where vis.participant_id = rv.participant_id
 and vis.pan_id != rv.pan_id
-and rv.visit_date $$date_direction_fv$$ vis.visit_date
+and vis.visit_date $$date_direction_fv$$ rv.visit_date
 and abs(rv.visit_date - vis.visit_date) >= $$days_between.min$$
 and abs(rv.visit_date - vis.visit_date) <= $$days_between.max$$
 ) inter, visits, ApidbTuning.$$tbl_prefix$$Observations o

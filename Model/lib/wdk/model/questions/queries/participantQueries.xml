@@ -115,17 +115,17 @@ where io.output_pan_id in ($$visits_prism$$)
 and Io.Input_Pan_Type_Source_Id = 'EUPATH_0000096'
 $$dateOperator_fv$$
 select distinct ioa.input_pan_id, ioa.output_pan_id
-from ApidbTuning.$$tbl_prefix$$Panio ioa, ApidbTuning.$$tbl_prefix$$Panio iob, ApidbTuning.$$tbl_prefix$$Observations seta, ApidbTuning.$$tbl_prefix$$Observations setb
-where seta.pan_id in ($$visits_prism$$)
+from ApidbTuning.$$tbl_prefix$$Panio ioa, ApidbTuning.$$tbl_prefix$$Panio iob, ApidbTuning.$$tbl_prefix$$Observations vis, ApidbTuning.$$tbl_prefix$$Observations rv
+where vis.pan_id in ($$visits_prism$$)
 and $$use_relative_visits$$ = 1
-and setb.pan_id in ($$relative_visits_prism$$)
-and seta.pan_id = ioa.output_pan_id
-and setb.pan_id = iob.output_pan_id
+and rv.pan_id in ($$relative_visits_prism$$)
+and vis.pan_id = ioa.output_pan_id
+and rv.pan_id = iob.output_pan_id
 and ioa.input_pan_id = iob.input_pan_id
-and seta.pan_id != setb.pan_id
-and seta.EUPATH_0000091 $$date_direction_fv$$ setb.EUPATH_0000091  
-and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) >= $$days_between.min$$
-and abs(setb.EUPATH_0000091 - seta.EUPATH_0000091) <= $$days_between.max$$
+and vis.pan_id != rv.pan_id
+and vis.EUPATH_0000091 $$date_direction_fv$$ rv.EUPATH_0000091  
+and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) >= $$days_between.min$$
+and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 )
 group by input_pan_id) visits
 where pa.pan_id in ($$households_prism$$)
@@ -177,20 +177,20 @@ select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id,
 from (select distinct participant_id,observation_id,number_value from ApidbTuning.$$tbl_prefix$$ObservationMD
       where observation_id in ($$visits_maled$$)
       and ontology_term_name = 'EUPATH_0000644'
-MINUS
- select distinct seta.participant_id,seta.observation_id,seta.number_value
- from ApidbTuning.$$tbl_prefix$$ObservationMD seta, ApidbTuning.$$tbl_prefix$$ObservationMD setb
- where seta.observation_id in ($$visits_maled$$)
- and seta.ontology_term_name = 'EUPATH_0000644'
+$$dateOperator_fv$$
+ select distinct vis.participant_id,vis.observation_id,vis.number_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
+ where vis.observation_id in ($$visits_maled$$)
+ and vis.ontology_term_name = 'EUPATH_0000644'
 and $$use_relative_visits$$ = 1
-and setb.observation_id in ($$relative_visits_maled$$)
-and setb.ontology_term_name = 'EUPATH_0000644'
-and seta.participant_id = setb.participant_id
-and seta.observation_id != setb.observation_id
-and setb.number_value $$date_direction_fv$$ seta.number_value  
-and abs(setb.number_value - seta.number_value) >= $$days_between.min$$
-and abs(setb.number_value - seta.number_value) <= $$days_between.max$$
-group by seta.participant_id,seta.observation_id,seta.number_value
+and rv.observation_id in ($$relative_visits_maled$$)
+and rv.ontology_term_name = 'EUPATH_0000644'
+and vis.participant_id = rv.participant_id
+and vis.observation_id != rv.observation_id
+and vis.number_value $$date_direction_fv$$ rv.number_value  
+and abs(rv.number_value - vis.number_value) >= $$days_between.min$$
+and abs(rv.number_value - vis.number_value) <= $$days_between.max$$
+group by vis.participant_id,vis.observation_id,vis.number_value
 ) main, ApidbTuning.$$tbl_prefix$$Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
@@ -221,20 +221,20 @@ select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
 from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
       where observation_id in ($$visits_india$$)
       and ontology_term_name = 'EUPATH_0000091'
-MINUS
- select distinct seta.participant_id,seta.observation_id,seta.date_value
- from ApidbTuning.$$tbl_prefix$$ObservationMD seta, ApidbTuning.$$tbl_prefix$$ObservationMD setb
- where seta.observation_id in ($$visits_india$$)
- and seta.ontology_term_name = 'EUPATH_0000644'
+$$dateOperator_fv$$
+ select distinct vis.participant_id,vis.observation_id,vis.date_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
+ where vis.observation_id in ($$visits_india$$)
+ and vis.ontology_term_name = 'EUPATH_0000091'
 and $$use_relative_visits$$ = 1
-and setb.observation_id in ($$relative_visits_india$$)
-and setb.ontology_term_name = 'EUPATH_0000091'
-and seta.participant_id = setb.participant_id
-and seta.observation_id != setb.observation_id
-and setb.date_value $$date_direction_fv$$ seta.date_value  
-and abs(setb.date_value - seta.date_value) >= $$days_between.min$$
-and abs(setb.date_value - seta.date_value) <= $$days_between.max$$
-group by seta.participant_id,seta.observation_id,seta.date_value
+and rv.observation_id in ($$relative_visits_india$$)
+and rv.ontology_term_name = 'EUPATH_0000091'
+and vis.participant_id = rv.participant_id
+and vis.observation_id != rv.observation_id
+and vis.date_value $$date_direction_fv$$ rv.date_value  
+and abs(rv.date_value - vis.date_value) >= $$days_between.min$$
+and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
+group by vis.participant_id,vis.observation_id,vis.date_value
 ) main, ApidbTuning.$$tbl_prefix$$Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
@@ -263,11 +263,11 @@ from (
 select distinct name, EUPATH_0010049, EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants
       where pan_id in ($$event_gems$$) -- (select pan_id from ApidbTuning.$$tbl_prefix$$Participants)
 $$keep_remove$$
-select distinct seta.name, seta.EUPATH_0010049, seta.EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants seta, ApidbTuning.$$tbl_prefix$$Participants setb
+select distinct vis.name, vis.EUPATH_0010049, vis.EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants vis, ApidbTuning.$$tbl_prefix$$Participants rv
       where $$use_rel_case_control$$ = 1
-      and setb.pan_id in ($$relative_event_gems$$)
-      and seta.pan_id in ($$event_gems$$)
-      and seta.EUPATH_0010049 = setb.EUPATH_0010049)
+      and rv.pan_id in ($$relative_event_gems$$)
+      and vis.pan_id in ($$event_gems$$)
+      and vis.EUPATH_0010049 = rv.EUPATH_0010049)
 )
 select name as source_id, '@PROJECT_ID@' as project_id from core
 where 'selected' = $$return_case_control$$
@@ -307,11 +307,11 @@ from (
 select distinct name, EUPATH_0010049, EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants
       where pan_id in ($$all_data_gems$$) -- (select pan_id from ApidbTuning.$$tbl_prefix$$Participants)
 $$dateOperator_fv$$
-select distinct seta.name, seta.EUPATH_0010049, seta.EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants seta, ApidbTuning.$$tbl_prefix$$Participants setb
+select distinct vis.name, vis.EUPATH_0010049, vis.EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants vis, ApidbTuning.$$tbl_prefix$$Participants rv
       where $$use_relative_visits$$ = 1
-      and setb.pan_id in ($$relative_event_gems$$)
-      and seta.pan_id in ($$all_data_gems$$)
-      and seta.EUPATH_0010049 = setb.EUPATH_0010049)
+      and rv.pan_id in ($$relative_event_gems$$)
+      and vis.pan_id in ($$all_data_gems$$)
+      and vis.EUPATH_0010049 = rv.EUPATH_0010049)
 )
 select name as source_id, '@PROJECT_ID@' as project_id from core
 where 'selected' = $$return_case_control$$

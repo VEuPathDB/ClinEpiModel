@@ -253,14 +253,14 @@
 
     <filterParam name="geographic_region_india" 
                     metadataQueryRef="ClinicalVisitVQ.RegionMetaData_india"
-                    backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_india"
+                    backgroundQueryRef="ClinicalVisitVQ.RegionMetaDataBkgd_india"
                     ontologyQueryRef="ParticipantVQ.RegionOntology_india"
                     countPredictsAnswerCount="true"
                     prompt="Participant"
-                    dependedParamRef="participantParams.tbl_prefix"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.study_type"
                     trimMetadataTerms="false">
       <help>
-        Select observations based on the participants subcounty where they live. 
+        Select observations based on geographic region where the participants live. 
       </help>
     </filterParam>
 
@@ -778,6 +778,28 @@ where participant_id in ($$participants_india$$)
     </sqlQuery>    
 
     <sqlQuery name="RegionMetaData_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <paramRef ref="participantParams.study_type" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  distinct h.household_id as internal, h.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseObsIdMD h, apidbtuning.$$tbl_prefix$$ParticipantMD p
+where h.ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
+and p.participant_id = h.participant_id
+and P.Ontology_Term_Name = 'OBI_0500000'
+and ('any' = $$study_type$$ 
+     or p.string_value = $$study_type$$ )
+        ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="RegionMetaDataBkgd_india" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>

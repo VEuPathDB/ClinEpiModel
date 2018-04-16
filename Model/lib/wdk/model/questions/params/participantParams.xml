@@ -237,7 +237,7 @@
                        countPredictsAnswerCount="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Households"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_india"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_india,participantParams.study_type"
                        trimMetadataTerms="false">
          <help>
            Select participants based on their geographic region. 
@@ -1053,6 +1053,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
    <sqlQuery name="HouseholdMetaData_india" isCacheable="false">
      <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="participantParams.geographic_region_india" />  
+      <paramRef ref="participantParams.study_type" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -1061,9 +1062,13 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HousePartIdMD
-where household_id in ($$geographic_region_india$$)
+select  h.household_id as internal, h.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD h, apidbtuning.$$tbl_prefix$$ParticipantMD p
+where h.household_id in ($$geographic_region_india$$)
+and p.participant_id = h.participant_id
+and P.Ontology_Term_Name = 'OBI_0500000'
+and ('any' = $$study_type$$ 
+     or p.string_value = $$study_type$$ )
           ]]>
     </sql>
     </sqlQuery>
