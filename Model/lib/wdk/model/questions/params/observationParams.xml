@@ -697,29 +697,31 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
-where household_id in ($$geographic_region_india$$)
+select  h.household_id as filter_item_id, h.participant_id as internal, h.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseObsIdMD h
+where h.participant_id in ($$geographic_region_india$$)
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="HouseholdMetaDataBkgd_india" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
+      <column name="ontology_term_name"/> 
       <column name="internal"/>
       <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
+select  household_id as filter_item_id, participant_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
           ]]>
     </sql>
@@ -739,7 +741,7 @@ from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
          <![CDATA[
 select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
 from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
-where p.household_id in ($$households_india$$)
+where p.participant_id in ($$households_india$$)
           ]]>
     </sql>
     </sqlQuery>
@@ -783,12 +785,13 @@ where participant_id in ($$participants_india$$)
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  distinct h.household_id as internal, h.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+select  distinct h.household_id as filter_item_id, h.participant_id as internal, h.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.$$tbl_prefix$$HouseObsIdMD h, apidbtuning.$$tbl_prefix$$ParticipantMD p
 where h.ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
 and p.participant_id = h.participant_id
@@ -804,12 +807,13 @@ and ('any' = $$study_type$$
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  household_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
+select  household_id as filter_item_id, participant_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
 where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
         ]]>

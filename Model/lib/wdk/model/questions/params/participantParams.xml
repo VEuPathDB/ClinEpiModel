@@ -237,7 +237,7 @@
                        countPredictsAnswerCount="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Households"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_india,participantParams.study_type"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_india"
                        trimMetadataTerms="false">
          <help>
            Select participants based on their geographic region. 
@@ -965,13 +965,13 @@ null as precision from dual
       <paramRef ref="participantParams.study_type" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  distinct h.household_id as internal, h.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+select  distinct h.household_id as filter_item_id, p.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.$$tbl_prefix$$HousePartIdMD h, apidbtuning.$$tbl_prefix$$ParticipantMD p
 where h.ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
 and p.participant_id = h.participant_id
@@ -986,13 +986,13 @@ and ('any' = $$study_type$$
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
+select  household_id as filter_item_id, participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HousePartIdMD
 where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
         ]]>
@@ -1053,22 +1053,17 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
    <sqlQuery name="HouseholdMetaData_india" isCacheable="false">
      <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="participantParams.geographic_region_india" />  
-      <paramRef ref="participantParams.study_type" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  h.household_id as internal, h.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.$$tbl_prefix$$HousePartIdMD h, apidbtuning.$$tbl_prefix$$ParticipantMD p
-where h.household_id in ($$geographic_region_india$$)
-and p.participant_id = h.participant_id
-and P.Ontology_Term_Name = 'OBI_0500000'
-and ('any' = $$study_type$$ 
-     or p.string_value = $$study_type$$ )
+select  h.household_id as filter_item_id, h.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD h
+where h.participant_id in ($$geographic_region_india$$)
           ]]>
     </sql>
     </sqlQuery>
@@ -1077,13 +1072,13 @@ and ('any' = $$study_type$$
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as internal, participant_id as record_id, ontology_term_name, string_value, number_value, date_value
+select  household_id as filter_item_id, participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HousePartIdMD
           ]]>
     </sql>
@@ -1118,19 +1113,14 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      <paramRef ref="participantParams.households_india" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, participant_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
-where household_id in ($$households_india$$)
-/* UNION
-select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HousePartIdMD
-where household_id in ($$households_india$$) */
+where participant_id in ($$households_india$$)
           ]]>
     </sql>
     </sqlQuery>
@@ -1139,17 +1129,13 @@ where household_id in ($$households_india$$) */
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, participant_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
-/* UNION
-select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HousePartIdMD */
           ]]>
     </sql>
     </sqlQuery>
@@ -1605,11 +1591,11 @@ You can further restrict the participants returned in your search by setting a r
                 ]]>
             </description>
         </group>
-
-        <group name="choose_study_type" displayName="Choose Study Type" displayType="ShowHide">
+ 
+        <group name="choose_study_type" displayName="Study Type" displayType="ShowHide">
             <description>
                 <![CDATA[
-                         Thus study contains multiple study types. Choose which study type to include in this search.
+                         This study contains multiple study types. Choose which study type to include in this search.
                 ]]>
             </description>
         </group>
