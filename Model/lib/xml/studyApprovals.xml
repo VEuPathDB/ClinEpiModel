@@ -22,8 +22,16 @@
     <attribute name="study">GEMS</attribute>
     <attribute name="user_id">220902410</attribute>
   </record>
-  
-
+<!-- brianna lindsabr@upenn.edu -->
+  <record>
+    <attribute name="study">GEMS</attribute>
+    <attribute name="user_id">276765373</attribute>
+  </record>
+<!-- brianna brlindsay@gmail.com -->
+  <record>
+    <attribute name="study">GEMS</attribute>
+    <attribute name="user_id">219825440</attribute>
+  </record>
 
   <!--  MAL-ED Study -->
 
@@ -41,6 +49,16 @@
    <record> 
     <attribute name="study">DS_121f2c2f02</attribute>
     <attribute name="user_id">220902410</attribute>
+  </record>
+<!-- brianna lindsabr@upenn.edu -->
+  <record>
+    <attribute name="study">DS_121f2c2f02</attribute>
+    <attribute name="user_id">276765373</attribute>
+  </record>
+<!-- brianna brlindsay@gmail.com -->
+  <record>
+    <attribute name="study">DS_121f2c2f02</attribute>
+    <attribute name="user_id">219825440</attribute>
   </record>
 
 
@@ -64,6 +82,16 @@
    <record> 
     <attribute name="study">DS_f6c59e88c1</attribute>
     <attribute name="user_id">220902410</attribute>
+  </record>
+<!-- brianna lindsabr@upenn.edu -->
+  <record>
+    <attribute name="study">DS_f6c59e88c1</attribute>
+    <attribute name="user_id">276765373</attribute>
+  </record>
+<!-- brianna brlindsay@gmail.com -->
+  <record>
+    <attribute name="study">DS_f6c59e88c1</attribute>
+    <attribute name="user_id">219825440</attribute>
   </record>
 
 
