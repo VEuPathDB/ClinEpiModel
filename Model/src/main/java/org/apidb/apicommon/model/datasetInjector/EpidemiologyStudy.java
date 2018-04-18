@@ -35,17 +35,22 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         return "";
     }
 
-
     protected String addQuotes(String s) {
+        List<String> quoted = splitStringAndAddQuotesAsList(s);
+        String result = String.join(",", quoted);
+
+        return result;
+    }
+
+    protected List<String> splitStringAndAddQuotesAsList(String s) {
         List<String> split = Arrays.asList(s.split("\\s*,\\s*"));
         List<String> quoted = new ArrayList<>();
 
         for (String str : split) {
             quoted.add("'" + str + "'");
         }
-        String result = String.join(",", quoted);
 
-        return result;
+        return quoted;
     }
 
     protected void injectAttributeMetaQuery(String recordClassName, String targetName) {
@@ -62,13 +67,26 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         return(presenterId + prefix + "RecordClasses." + presenterId + prefix + "RecordClass");
     }
 
+
+    protected String propertySourceIdSubquery(String s) {
+        List<String> quoted = splitStringAndAddQuotesAsList(s);
+
+        List<String> selectStatements = new ArrayList<>(); 
+        
+        for(int i = 0; i < quoted.size(); i++) { 
+            String q = quoted.get(i);
+            String stmt = "select " + q + " as property_source_id,  " + i + " as order_num from dual";
+            selectStatements.add(stmt); 
+        } 
+
+        return "(" + String.join("\nUNION\n", selectStatements) + ")";
+    }
+
+
     public static final String CATEGORY_IRI = "http://edamontology.org/topic_3305";
     public static final String OBSERVATION_RECORD_CLASS_PREFIX = "Observation";
     public static final String PARTICIPANT_RECORD_CLASS_PREFIX = "Participant";
     public static final String HOUSEHOLD_RECORD_CLASS_PREFIX = "Household";
-
-
-    
 
 
   @Override
@@ -101,7 +119,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       if(hasHouseholds) {
           String householdSourceIdsForHouseholdMemberTable = getPropValue("householdSourceIdsForHouseholdMemberTable");
-          setPropValue("householdSourceIdsForHouseholdMemberTableQuote", addQuotes(householdSourceIdsForHouseholdMemberTable));
+          setPropValue("householdSourceIdsForHouseholdMemberTableSubquery", propertySourceIdSubquery(householdSourceIdsForHouseholdMemberTable));
 
           setPropValue("extraHouseholdTables", this.extraHouseholdTables());
           setPropValue("extraHouseholdTableQueries", this.extraHouseholdTableQueries());
@@ -132,7 +150,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
           setPropValue("householdSourceIdsIncludedInParticipantAttributesQuote", addQuotes(householdSourceIdsIncludedInParticipantAttributes));
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
-          setPropValue("observationSourceIdsForParticipantsObservationsTableQuote", addQuotes(observationSourceIdsForParticipantsObservationsTable));
+          setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
+
 
           if(householdSourceIdsIncludedInParticipantAttributes != null && !householdSourceIdsIncludedInParticipantAttributes.equals("")) {
               householdSourceIdsIncludedInParticipantAttributes = ", " + householdSourceIdsIncludedInParticipantAttributes;

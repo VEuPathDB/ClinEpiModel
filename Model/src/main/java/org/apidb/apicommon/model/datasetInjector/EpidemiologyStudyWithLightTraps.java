@@ -84,7 +84,7 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
 
         if(hasHouseholds) {
             String lightTrapSourceIdsForHouseholdsLightTrapTable = getPropValue("lightTrapSourceIdsForHouseholdsLightTrapTable");
-            setPropValue("lightTrapSourceIdsForHouseholdsLightTrapTableQuote", addQuotes(lightTrapSourceIdsForHouseholdsLightTrapTable));
+            setPropValue("lightTrapSourceIdsForHouseholdsLightTrapTableSubquery", propertySourceIdSubquery(lightTrapSourceIdsForHouseholdsLightTrapTable));
 
             addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsByHouseholdId", new String[]{"webservice"}, CATEGORY_IRI); 
             addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByLightTrapId", new String[]{"webservice"}, CATEGORY_IRI); 

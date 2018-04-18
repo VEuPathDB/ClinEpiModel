@@ -188,12 +188,12 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/records/householdRecord.xml
 prop=datasetName
 prop=householdAttributesList
 prop=householdSourceIdsForHouseholdMemberTable
-prop=householdSourceIdsForHouseholdMemberTableQuote
+prop=householdSourceIdsForHouseholdMemberTableSubquery
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
 prop=lightTrapSourceIdsForHouseholdsLightTrapTable
-prop=lightTrapSourceIdsForHouseholdsLightTrapTableQuote
+prop=lightTrapSourceIdsForHouseholdsLightTrapTableSubquery
 prop=lightTrapSourceIdsToOrderHouseholdsLightTrapTable
 prop=extraHouseholdTableQueries
 >templateTextStart<
@@ -205,17 +205,13 @@ prop=extraHouseholdTableQueries
           <column name="name" />
           <column name="display_name" />
 
-<!--
-          <sqlParamValue name="householdMemberColumns"><![CDATA['EUPATH_0000033','EUPATH_0000034','EUPATH_0000035' ]]></sqlParamValue>
-
-
-          <sqlParamValue name="householdMemberColumns"><![CDATA['PATO_0000047', 'EUPATH_0000741', 'EUPATH_0000657', 'EUPATH_0000660', 'EUPATH_0000744', 'EUPATH_0000742' ]]></sqlParamValue>
--->
-          <sqlParamValue name="householdMemberColumns"><![CDATA[ ${householdSourceIdsForHouseholdMemberTableQuote} ]]></sqlParamValue>
-
           <sql>
             <![CDATA[
-                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyType where property_source_id in (&&householdMemberColumns&&)
+                     select pt.property_source_id as name
+                          , pt.property as display_name 
+                     from apidbtuning.${tblPrefix}PropertyType pt, ${householdSourceIdsForHouseholdMemberTableSubquery} ids
+                     where pt.property_source_id = ids.property_source_id
+                     order by ids.order_num
             ]]>
           </sql>
         </sqlQuery>
@@ -300,12 +296,12 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdRecord.dst
 prop=datasetName
 prop=householdAttributesList
 prop=householdSourceIdsForHouseholdMemberTable
-prop=householdSourceIdsForHouseholdMemberTableQuote
+prop=householdSourceIdsForHouseholdMemberTableSubquery
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
 prop=lightTrapSourceIdsForHouseholdsLightTrapTable
-prop=lightTrapSourceIdsForHouseholdsLightTrapTableQuote
+prop=lightTrapSourceIdsForHouseholdsLightTrapTableSubquery
 prop=lightTrapSourceIdsToOrderHouseholdsLightTrapTable
 >templateTextStart<
 
@@ -328,14 +324,13 @@ prop=lightTrapSourceIdsToOrderHouseholdsLightTrapTable
       <sqlQuery name="LightTrapColumnAttributes"  isCacheable='false'>
           <column name="name" />
           <column name="display_name" />
-
-
-          <sqlParamValue name="lightTrapSourceIds"><![CDATA[${lightTrapSourceIdsForHouseholdsLightTrapTableQuote}]]></sqlParamValue>
-
-
           <sql>
             <![CDATA[
-                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyType where property_source_id in (&&lightTrapSourceIds&&)
+                     select pt.property_source_id as name
+                          , property as display_name 
+                     from apidbtuning.${tblPrefix}PropertyType pt, ${lightTrapSourceIdsForHouseholdsLightTrapTableSubquery} ids
+                     where pt.property_source_id = ids.property_source_id
+                     order by ids.order_num
             ]]>
           </sql>
         </sqlQuery>

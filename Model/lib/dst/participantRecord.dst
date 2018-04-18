@@ -317,7 +317,7 @@ prop=participantGraphAttributeNames
 prop=householdSourceIdsIncludedInParticipantAttributes
 prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=observationSourceIdsForParticipantsObservationsTable
-prop=observationSourceIdsForParticipantsObservationsTableQuote
+prop=observationSourceIdsForParticipantsObservationsTableSubquery
 prop=observationSourceIdsToOrderParticipantsObservationsTable
 prop=tblPrefix
 prop=presenterId
@@ -365,17 +365,13 @@ WHERE o.dataset_name = '&&datasetName&&'
           <column name="name" />
           <column name="display_name" />
 
-
-          <sqlParamValue name="eventColumns"><![CDATA[${observationSourceIdsForParticipantsObservationsTableQuote}]]></sqlParamValue>
-<!-- MALED
-          <sqlParamValue name="eventColumns"><![CDATA['EUPATH_0000644','BFO_0000015']]></sqlParamValue>
-
-ICEMR
-          <sqlParamValue name="eventColumns"><![CDATA['EUPATH_0000091','EUPATH_0000113','EUPATH_0000311','EUPATH_0000338','EUPATH_0000100','EUPATH_0000110','EUPATH_0000092','EUPATH_0000040']]></sqlParamValue>
--->
           <sql>
             <![CDATA[
-                     select property_source_id as name, property as display_name from apidbtuning.${tblPrefix}PropertyType where property_source_id in (&&eventColumns&&)
+                     select pt.property_source_id as name
+                          , pt.property as display_name
+                     from apidbtuning.${tblPrefix}PropertyType pt, ${observationSourceIdsForParticipantsObservationsTableSubquery} ids
+                     where pt.property_source_id = ids.property_source_id
+                     order by ids.order_num
             ]]>
           </sql>
         </sqlQuery>
