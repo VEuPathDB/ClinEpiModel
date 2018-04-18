@@ -24,7 +24,7 @@ prop=observationQuestionName
 
 
         <attributesList 
-            summary="EUPATH_0000091,num_matching_visits,min_days_between"
+            summary="EUPATH_0000311,EUPATH_0000091,EUPATH_0000113,EUPATH_0000338,num_matching_visits,min_days_between"
         /> 
 
         <dynamicAttributes>
