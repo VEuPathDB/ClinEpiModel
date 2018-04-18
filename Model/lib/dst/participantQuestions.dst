@@ -23,7 +23,7 @@ prop=participantQuestionName
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
         <attributesList 
             summary="EUPATH_0000054,EUPATH_0000120,visits_per_year_obs,time_of_obs,ave_anoph,malaria_cat_compact"        
-            sorting="visits_per_year_obs desc"
+            sorting="time_of_obs desc,visits_per_year_obs desc"
         /> 
 
   <dynamicAttributes>
