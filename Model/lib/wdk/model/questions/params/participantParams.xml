@@ -1493,7 +1493,7 @@ You can restrict visits returned based on participants by selecting characterist
         <group name="part_household_characteristics" displayName="Households" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
-        <group name="geographic_loc" displayName="Geographic Region" displayType="ShowHide">
+        <group name="geographic_loc" displayName="Geographic region" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
         <group name="visit_visit_characteristics" displayName="Visits" displayType="ShowHide">
@@ -1592,7 +1592,7 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
  
-        <group name="choose_study_type" displayName="Study Type" displayType="ShowHide">
+        <group name="choose_study_type" displayName="Study type" displayType="ShowHide">
             <description>
                 <![CDATA[
                          This study contains multiple study types. Choose which study type to include in this search.
