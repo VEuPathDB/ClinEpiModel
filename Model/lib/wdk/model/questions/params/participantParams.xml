@@ -390,6 +390,7 @@
                quote="true"
                visible="true"
                dependedParamRef="participantParams.tbl_prefix"
+               default="any"
                queryRef="ParticipantVQ.StudyType">
       <help>This study has multiple study types.  Choose which study type you want to search.</help>
     </flatVocabParam>
