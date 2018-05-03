@@ -182,7 +182,7 @@ prop=participantQuestionName
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         <attributesList 
-            summary="EUPATH_0000407, PATO_0000047, EUPATH_0000120"        
+            summary="EUPATH_0000407, PATO_0000047, EUPATH_0000120, malaria_cat_compact"        
         /> 
 
 	<dynamicAttributes>
