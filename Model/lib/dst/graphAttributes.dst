@@ -1,4 +1,28 @@
 [templateStart]
+name=IndiaICEMRGraphAttributes
+anchorFile=ClinEpiModel/Model/lib/dst/graphAttributes.dst
+prop=presenterId
+prop=malaria_cat_compact
+prop=malaria_cat_svg
+>templateTextStart<
+ <textAttribute name="${malaria_cat_compact}" displayName="Malaria status timeline"  truncateTo="100000">
+                    <text>
+                      <![CDATA[
+                        <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000036&h=40&w=800&thumb=1&datasetId=${presenterId}"/>
+                      ]]>
+                    </text>
+                  </textAttribute>
+
+<textAttribute name="${malaria_cat_svg}" displayName="Malaria timeline"  truncateTo="100000">
+                    <text>
+                      <![CDATA[
+                        <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000036&h=100&w=1100&datasetId=${presenterId}" type="image/svg+xml" style="height:100px; width:1100px;"/>
+                      ]]>
+                    </text>
+                  </textAttribute>
+>templateTextEnd<
+
+[templateStart]
 name=PRISMCaseControlGraphAttributes
 anchorFile=ClinEpiModel/Model/lib/dst/graphAttributes.dst
 prop=presenterId
