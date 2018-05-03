@@ -30,13 +30,17 @@ public class India extends EpidemiologyStudy {
 
     @Override
     protected String participantGraphAttributesTemplateName() {
-      return("");
+      return("IndiaICEMRGraphAttributes");
     }
 
 
     @Override
     protected Map<String,String[]> participantGraphAttributesToScopes() {
-      return(new HashMap<String,String[]>());
+      Map<String,String[]> scopeMap = new HashMap<String,String[]>();
+      scopeMap.put("malaria_cat_compact", new String[] {"results"});
+      scopeMap.put("malaria_cat_svg", new String[] {"record"});
+
+      return(scopeMap);
     }
 
 
