@@ -912,7 +912,7 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
      <column name="is_range"/>
     <sql>
          <![CDATA[select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
-from ApidbTuning.D121f2c2f02Ontology o
+from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'OBI_0001627'
 union
 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
