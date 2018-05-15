@@ -734,26 +734,6 @@ and m.observation_id in ($$visits_visitage_metadata_prism$$)
 and obs.pan_id = m.observation_id
 and obs.EUPATH_0000091 >= $$visit_date.min$$ 
 and obs.EUPATH_0000091 <= $$visit_date.max$$
-/*
-with valid as (
-select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
-from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Observations obs
-where io.input_pan_id in ($$households_prism$$)
-and io.output_pan_id in ($$visits_visitage_metadata_prism$$)
-and obs.pan_id = io.output_pan_id
-and obs.EUPATH_0000091 >= $$visit_date.min$$ 
-and obs.EUPATH_0000091 <= $$visit_date.max$$ 
-)
-select distinct valid.visit_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, valid
- where m.pan_id = valid.visit_id
-  union all
- select valid.visit_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m, valid, ApidbTuning.$$tbl_prefix$$PANIO ios
-where m.property_source_id = 'OBI_0100051'
-and ios.output_pan_id = m.pan_id
-and ios.input_pan_id = valid.visit_id
-*/
           ]]>
     </sql>
     </sqlQuery>    
@@ -769,16 +749,6 @@ and ios.input_pan_id = valid.visit_id
         <![CDATA[
 select distinct m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD m
-/*
- select distinct pan_id as internal,  property_source_id  as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData 
- where category in ('Event/Observation','Observation')
- union all
- select io.input_pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
-where m.property_source_id = 'OBI_0100051'
-and io.output_pan_id = m.pan_id
-*/
           ]]>
     </sql>
     </sqlQuery>
