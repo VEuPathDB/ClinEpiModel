@@ -3,6 +3,11 @@
 <xmlAnswer>
 
 
+  <!-- to get user_id run the following with users email from any of our eupathdb database instances:
+       select * from useraccounts.accounts@acctdbs.profile where email = 'brunkb@upenn.edu';
+       or even more simply ... on elm run the following putting in your username and password:
+       sqlplus username/password@toxo-inc @/home/brunkb/user_comments/get_user_id.sql 'lindsabr@upenn.edu'
+  -->
 
 
   <!--  GEMS Study -->
@@ -92,6 +97,11 @@
   <record>
     <attribute name="study">DS_f6c59e88c1</attribute>
     <attribute name="user_id">219825440</attribute>
+  </record>
+<!-- Brian brunkb@upenn.edu -->
+  <record>
+    <attribute name="study">DS_f6c59e88c1</attribute>
+    <attribute name="user_id">48</attribute>
   </record>
 
 
