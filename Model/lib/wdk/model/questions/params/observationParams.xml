@@ -415,9 +415,18 @@ select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select household_id as filter_item_id,  observation_id as internal, ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
- where ontology_term_name = 'EUPATH_0000054'
+with idMap as (
+select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id, iov.output_pan_id as obs_id
+                 from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$PANIO iov
+                 where io.input_pan_type_source_id = 'PCO_0000024'
+                 and io.output_pan_type_source_id = 'EUPATH_0000096'
+                 and io.output_pan_id = iov.input_pan_id
+                 and iov.output_pan_type_source_id = 'EUPATH_0000738'
+)
+select m.pan_id as filter_item_id,  idMap.obs_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m, idMap
+ where m.pan_id = idMap.hh_id
+ and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
         ]]>
       </sql>
     </sqlQuery>
@@ -433,10 +442,10 @@ select household_id as filter_item_id,  observation_id as internal, ontology_ter
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select observation_id as internal, ontology_term_name, string_value, number_value, date_value
- from  ApidbTuning.$$tbl_prefix$$ObservationMD
-  where observation_id in ($$geographic_region_prism$$)
-  and ontology_term_name = 'EUPATH_0000113'
+  select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from  ApidbTuning.$$tbl_prefix$$metadata m
+  where m.pan_id in ($$geographic_region_prism$$)
+  and m.property_source_id = 'EUPATH_0000113'
          ]]>   
       </sql>
    </sqlQuery>
@@ -453,7 +462,7 @@ select observation_id as internal, ontology_term_name, string_value, number_valu
       <column name="string_value"/>
       <sql>
          <![CDATA[
-with part as ( 
+  with part as ( 
 select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, iov.output_pan_id as obs_id
                  from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$PANIO iov
                  where io.input_pan_type_source_id = 'PCO_0000024'
@@ -527,16 +536,20 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
       <column name="string_value"/>
       <sql>
          <![CDATA[
-                select distinct  m.participant_id as filter_item_id, m.observation_id as internal, m.ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as filter_item_id, iov.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from ApidbTuning.$$tbl_prefix$$Observations 
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
-   ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PartObsIdMD m
+   ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Observations obs
    where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
-       and m.observation_id in ($$visits_visitage_metadata_prism$$)
-       and pa.pan_id = m.participant_id
+       and pa.pan_id = iov.input_pan_id
+       and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
+       and iov.output_pan_id = obs.pan_id
+       and obs.EUPATH_0000091 >= $$visit_date.min$$ 
+       and obs.EUPATH_0000091 <= $$visit_date.max$$ 
+       and pa.pan_id = m.pan_id       
           ]]>
     </sql>
     </sqlQuery>
@@ -551,8 +564,11 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
       <column name="string_value"/>
       <sql>
          <![CDATA[
-  select distinct m.participant_id as filter_item_id, m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD m
+select distinct m.pan_id as filter_item_id, iov.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+  from  ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m
+  where iov.output_pan_type_source_id = 'EUPATH_0000738'
+  and iov.input_pan_type_source_id = 'EUPATH_0000096'
+  and iov.input_pan_id = m.pan_id
           ]]>
     </sql>
     </sqlQuery>
@@ -569,13 +585,16 @@ from ApidbTuning.$$tbl_prefix$$PartObsIdMD m
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select distinct m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD m, ApidbTuning.$$tbl_prefix$$Observations obs
-where m.observation_id in ($$households_prism$$)
-and m.observation_id in ($$visits_visitage_metadata_prism$$)
-and obs.pan_id = m.observation_id
-and obs.EUPATH_0000091 >= $$visit_date.min$$ 
-and obs.EUPATH_0000091 <= $$visit_date.max$$
+select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$MetaData m
+ where m.pan_id in ($$households_prism$$)
+  union all
+ select ios.input_pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO ios
+where m.category = 'Specimen type' 
+and m.property_source_id = 'OBI_0100051'
+and ios.input_pan_id in ($$households_prism$$)
+and ios.output_pan_id = m.pan_id
           ]]>
     </sql>
     </sqlQuery>    

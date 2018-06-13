@@ -73,7 +73,7 @@ and abs(rv.EUPATH_0000091 - vis.EUPATH_0000091) <= $$days_between.max$$
 ) inter, visits
 where visits.pan_id = inter.pan_id(+)
 )
-group by name
+group by name 
                 ]]>   
         </sql>
      </sqlQuery>

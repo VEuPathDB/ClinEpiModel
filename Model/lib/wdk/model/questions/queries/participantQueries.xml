@@ -148,7 +148,7 @@ and round(core.visit_count / ((abs(least(pa.EUPATH_0000152, $$visit_date.max$$, 
 greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365),1) >= $$visits_per_year.min$$
 and round(core.visit_count / ((abs(least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
 greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365),1) <= $$visits_per_year.max$$
-and pa.pan_id = mos.part_id(+)
+and pa.pan_id = mos.part_id(+) 
                 ]]>   
         </sql>
      </sqlQuery>
