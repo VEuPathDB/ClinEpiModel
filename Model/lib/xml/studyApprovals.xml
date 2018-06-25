@@ -12,15 +12,10 @@
 
   <!--  GEMS Study -->
 
-<!-- crisl -->
+<!-- eupathdb -->
   <record>
     <attribute name="study">GEMS</attribute>
-    <attribute name="user_id">108976930</attribute>
-  </record>
-<!-- cristina -->
-  <record>
-    <attribute name="study">GEMS</attribute>
-    <attribute name="user_id">376</attribute>
+    <attribute name="user_id">1926010</attribute>
   </record>
 <!-- danica -->
   <record>
@@ -40,15 +35,10 @@
 
   <!--  MAL-ED Study -->
 
-<!-- crisl -->
+<!-- eupathdb -->
   <record> 
     <attribute name="study">DS_121f2c2f02</attribute>
-    <attribute name="user_id">108976930</attribute>
-  </record> 
-<!-- cristina -->
-  <record> 
-    <attribute name="study">DS_121f2c2f02</attribute>
-    <attribute name="user_id">376</attribute>
+    <attribute name="user_id">1926010</attribute>
   </record>
 <!-- danica -->
    <record> 
@@ -67,21 +57,14 @@
   </record>
 
 
-
-
   <!-- ICEMR  -->
 
   <!--  India Study -->
 
-<!-- crisl -->
+<!-- eupathdb -->
   <record> 
     <attribute name="study">DS_f6c59e88c1</attribute>
-    <attribute name="user_id">108976930</attribute>
-  </record> 
-<!-- cristina -->
-  <record> 
-    <attribute name="study">DS_f6c59e88c1</attribute>
-    <attribute name="user_id">376</attribute>
+    <attribute name="user_id">1926010</attribute>
   </record>
 <!-- danica -->
    <record> 
