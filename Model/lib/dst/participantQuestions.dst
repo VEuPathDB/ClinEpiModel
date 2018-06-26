@@ -237,8 +237,8 @@ prop=participantQuestionName
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
 
+<!--            summary="OBI_0001627,EUPATH_0010056,EUPATH_0010368,EUPATH_0010375"  -->
         <attributesList 
-            summary="OBI_0001627,EUPATH_0010056,EUPATH_0010368,EUPATH_0010375" 
         /> 
 
 
