@@ -280,32 +280,100 @@
        <filterParam name="geographic_region_gems" 
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
                        metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
-                       filterDataTypeDisplayName="Participants"
+                       backgroundQueryRef="ParticipantVQ.GeographicRegionMetaDataBkg_gems"
+                       filterDataTypeDisplayName="Households"
                        prompt="Study Site"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.tbl_prefix">
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
          <help>
-           Select participants based on their personal and household
-           characteristics.
+           Select participants based on their study site.
          </help>
        </filterParam>
-       
-       <filterParam name="participant_dwelling_gems" 
-                       metadataQueryRef="ParticipantVQ.ParticipantDwellingMetaData_gems"
-                       ontologyQueryRef="ParticipantVQ.ParticipantDwellingOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
+
+       <filterParam name="household_gems" 
+                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_gems"
+                       metadataQueryRef="ParticipantVQ.HouseholdMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control,participantParams.geographic_region_gems">
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_gems">
          <help>
-           Select participants based on study site. 
+           Select participants based on household characteristics. 
+         </help>
+       </filterParam>
+       
+       <filterParam name="participant_gems" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_gems"
+                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_gems"
+                       filterDataTypeDisplayName="Participants"
+                       prompt="Participant"
+                       trimMetadataTerms="false"
+                       countPredictsAnswerCount="true"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.household_gems">
+         <help>
+           Select participants based on their personal characteristics. 
          </help>
        </filterParam>
 
+       <filterParam name="event_enrollment_gems" 
+                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
+                       metadataQueryRef="ParticipantVQ.EventEnrollMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
+                       filterDataTypeDisplayName="Participants"
+                       prompt="Enrollment Observations"
+                       trimMetadataTerms="false"
+                       countPredictsAnswerCount="false"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.participant_gems,participantParams.case_control">
+         <help>
+           Select participants based on variables associated with their enrollment or followup events. 
+         </help>
+       </filterParam>       
+
+       <filterParam name="event_followup_gems" 
+                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
+                       metadataQueryRef="ParticipantVQ.EventFollowupMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.EventFollowupMetaDataBkg_gems"
+                       filterDataTypeDisplayName="Participants"
+                       prompt="Enrollment Observations"
+                       trimMetadataTerms="false"
+                       countPredictsAnswerCount="false"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.participant_gems,participantParams.case_control">
+         <help>
+           Select participants based on variables associated with their enrollment or followup events. 
+         </help>
+       </filterParam>       
+
+      <filterParam name="relative_casecontrol_enrollment_gems" 
+                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
+                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolEnrollMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
+                       filterDataTypeDisplayName="Participants"
+                       prompt="Related Case or Control"
+                       trimMetadataTerms="false"
+                       countPredictsAnswerCount="false"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control,participantParams.participant_gems">
+         <help>
+           Modify participants selected based on information about their related case or control. 
+         </help>
+       </filterParam>    
+
+      <filterParam name="relative_casecontrol_followup_gems" 
+                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
+                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolFollowupMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.EventFollowupMetaDataBkg_gems"
+                       filterDataTypeDisplayName="Participants"
+                       prompt="Related Case or Control"
+                       trimMetadataTerms="false"
+                       countPredictsAnswerCount="false"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control,participantParams.participant_gems">
+         <help>
+           Modify participants selected based on information about their related case or control. 
+         </help>
+       </filterParam>    
        <enumParam name="case_control"
                   prompt="Cases or Controls"
                   multiPick="false"
@@ -328,33 +396,7 @@
          </enumList>
        </enumParam>
 
-       <filterParam name="all_data_gems" 
-                       metadataQueryRef="ParticipantVQ.AllDataMetaData_gems"
-                       ontologyQueryRef="ParticipantVQ.AllDataOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
-                       filterDataTypeDisplayName="Participants"
-                       prompt="Participant"
-                       trimMetadataTerms="false"
-                       countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
-         <help>
-           Select participants based on variables associated with their enrollment or followup events. 
-         </help>
-       </filterParam>
 
-       <filterParam name="event_gems" 
-                       metadataQueryRef="ParticipantVQ.EventMetaData_gems"
-                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
-                       filterDataTypeDisplayName="Participants"
-                       prompt="Observations"
-                       trimMetadataTerms="false"
-                       countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.participant_dwelling_gems">
-         <help>
-           Select participants based on variables associated with their enrollment or followup events. 
-         </help>
-       </filterParam>       
 
        <enumParam name="use_rel_case_control"
                 prompt="Compare Cases / Controls"
@@ -395,20 +437,7 @@
       <help>This study has multiple study types.  Choose which study type you want to search.</help>
     </flatVocabParam>
 
-       <filterParam name="relative_event_gems" 
-                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       metadataQueryRef="ParticipantVQ.RelativeEventMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.AllParticipantNoDependencies_gems"
-                       filterDataTypeDisplayName="Participants"
-                       prompt="Related Case or Control"
-                       trimMetadataTerms="false"
-                       countPredictsAnswerCount="false"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
-         <help>
-           Modify participants selected based on information about their related case or control. 
-         </help>
-       </filterParam>    
-
+ 
        <enumParam name="return_case_control"
                   prompt="Which participants to return"
                   multiPick="false"
@@ -1234,9 +1263,9 @@ from apidbtuning.$$tbl_prefix$$Ontology o
           ]]>
       </sql>
     </sqlQuery>
-
     <sqlQuery name="GeographicRegionMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
+      <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1244,15 +1273,17 @@ from apidbtuning.$$tbl_prefix$$Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m
-where m.category = 'Child'
-and m.property_source_id = 'OBI_0001627'
+select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD m
+where m.ontology_term_name = 'OBI_0001627'
+and m.participant_id in (select pan_id
+       from ApidbTuning.$$tbl_prefix$$Participants
+       where lower(EUPATH_0010375) in ($$case_control$$))
           ]]>
     </sql>    
     </sqlQuery>
     
-    <sqlQuery name="AllParticipantNoDependencies_gems" isCacheable="false">
+    <sqlQuery name="GeographicRegionMetaDataBkg_gems" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1261,14 +1292,69 @@ and m.property_source_id = 'OBI_0001627'
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m 
-where category = 'Child'
+select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD m
+where m.ontology_term_name = 'OBI_0001627'
           ]]>
     </sql>    
     </sqlQuery>
+    
+    <sqlQuery name="HouseholdOntology_gems">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.is_range,o.precision,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000343','EUPATH_0000144','EUPATH_0000023') THEN 'multiFilter' ELSE o.type END as type
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id = 'PCO_0000024'
+     order by display_name
+) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
+      </sql>
+    </sqlQuery>
 
-    <sqlQuery name="ParticipantDwellingOntology_gems">
+    <sqlQuery name="HouseholdMetaData_gems" isCacheable="false">
+      <paramRef ref="participantParams.geographic_region_gems" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD m
+where m.participant_id in ($$geographic_region_gems$$)
+         ]]>
+      </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkg_gems" isCacheable="false">
+      <paramRef ref="participantParams.geographic_region_gems" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+                  select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+                  from ApidbTuning.$$tbl_prefix$$HousePartIdMD m
+         ]]>
+      </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantOntology_gems">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
@@ -1283,16 +1369,15 @@ select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
+     START WITH o.ontology_term_source_id = 'EUPATH_0000096'
      order by display_name
 ) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantDwellingMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.geographic_region_gems" />  
+    <sqlQuery name="ParticipantMetaData_gems" isCacheable="false">
+      <paramRef ref="participantParams.household_gems" />  
       <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1300,41 +1385,15 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-  select m.pan_id as internal,  m.property_source_id as ontology_term_name,
-                  m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.pan_id in ($$geographic_region_gems$$)
-   and m.pan_id
-       in (select pan_id
-       from ApidbTuning.$$tbl_prefix$$Participants
-       where EUPATH_0010375 in ($$case_control$$)
-           )
+select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD m
+where m.participant_id in ($$household_gems$$)
          ]]>
-    </sql>    
+      </sql>    
     </sqlQuery>
 
-    <sqlQuery name="AllDataOntology_gems">
+    <sqlQuery name="ParticipantMetaDataBkg_gems" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="parent_ontology_term_name"/>
-      <column name="display_name"/>
-      <column name="description"/>
-      <column name="type"/>
-      <column name="units"/>
-      <column name="precision"/>
-      <column name="is_range"/>
-      <sql>
-select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from ApidbTuning.$$tbl_prefix$$Ontology o
-order by display_name
-) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
-      </sql>
-    </sqlQuery>
-
-    <sqlQuery name="AllDataMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1342,15 +1401,10 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.pan_id
-       in (select pan_id
-       from ApidbTuning.$$tbl_prefix$$Participants
-       where EUPATH_0010375 in ($$case_control$$)
-           )
-          ]]>
-    </sql>    
+select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD m
+         ]]>
+      </sql>    
     </sqlQuery>
 
     <sqlQuery name="EventOntology_gems">
@@ -1365,7 +1419,8 @@ order by display_name
       <column name="is_range"/>
       <sql>
 select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.is_range,o.precision,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0010398','EUPATH_0010389','EUPATH_0010392','EUPATH_0010378','EUPATH_0010391','EUPATH_0010390','EUPATH_0010102','EUPATH_0010400','EUPATH_0010401','EUPATH_0010381') THEN 'multiFilter' ELSE o.type END as type
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000738'
@@ -1374,8 +1429,9 @@ order by display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="EventMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.participant_dwelling_gems" />  
+    <sqlQuery name="EventEnrollMetaData_gems" isCacheable="false">
+      <paramRef ref="participantParams.participant_gems" />  
+      <paramRef ref="participantParams.case_control" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1384,9 +1440,159 @@ order by display_name
       <column name="string_value"/>
       <sql>
          <![CDATA[
- select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.pan_id in ($$participant_dwelling_gems$$)
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participant_gems$$)
+INTERSECT
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in (select pan_id
+       from ApidbTuning.$$tbl_prefix$$Participants
+       where lower(EUPATH_0010375) in ($$case_control$$) )
+/*
+INTERSECT
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where observation_id in (select distinct observation_id
+       from ApidbTuning.$$tbl_prefix$$ObservationMD
+       where ontology_term_name = 'BFO_0000015'
+       and string_value = 'Enrollment' ) */
+          ]]>
+    </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="EventEnrollMetaDataBkg_gems" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+/*
+where observation_id in (select distinct observation_id
+       from ApidbTuning.$$tbl_prefix$$ObservationMD
+       where ontology_term_name = 'BFO_0000015'
+       and string_value = 'Enrollment' ) */
+          ]]>
+    </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="EventFollowupMetaData_gems" isCacheable="false">
+      <paramRef ref="participantParams.participant_gems" />  
+      <paramRef ref="participantParams.case_control" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participant_gems$$)
+INTERSECT
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in (select pan_id
+       from ApidbTuning.$$tbl_prefix$$Participants
+       where lower(EUPATH_0010375) in ($$case_control$$) )
+/*
+INTERSECT
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where observation_id in (select distinct observation_id
+       from ApidbTuning.$$tbl_prefix$$ObservationMD
+       where ontology_term_name = 'BFO_0000015'
+       and string_value = '60 day follow-up' ) */
+          ]]>
+    </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="EventFollowupMetaDataBkg_gems" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+/*
+where observation_id in (select distinct observation_id
+       from ApidbTuning.$$tbl_prefix$$ObservationMD
+       where ontology_term_name = 'BFO_0000015'
+       and string_value = '60 day follow-up' ) */
+          ]]>
+    </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="RelativeCasecontrolEnrollMetaData_gems" isCacheable="false">
+      <paramRef ref="participantParams.participant_gems" />  
+      <paramRef ref="participantParams.case_control" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participant_gems$$)
+INTERSECT
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in (select pan_id
+       from ApidbTuning.$$tbl_prefix$$Participants
+       where lower(EUPATH_0010375) in ($$case_control$$) )
+/*
+INTERSECT
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where observation_id in (select distinct observation_id
+       from ApidbTuning.$$tbl_prefix$$ObservationMD
+       where ontology_term_name = 'BFO_0000015'
+       and string_value = 'Enrollment' ) */
+          ]]>
+    </sql>    
+    </sqlQuery>
+
+    <sqlQuery name="RelativeCasecontrolFollowupMetaData_gems" isCacheable="false">
+      <paramRef ref="participantParams.participant_gems" />  
+      <paramRef ref="participantParams.case_control" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participant_gems$$)
+INTERSECT
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in (select pan_id
+       from ApidbTuning.$$tbl_prefix$$Participants
+       where lower(EUPATH_0010375) in ($$case_control$$) )
+/*
+INTERSECT
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where observation_id in (select distinct observation_id
+       from ApidbTuning.$$tbl_prefix$$ObservationMD
+       where ontology_term_name = 'BFO_0000015'
+       and string_value = '60 day follow-up' ) */
           ]]>
     </sql>    
     </sqlQuery>
@@ -1426,27 +1632,6 @@ order by display_name
             ORDER by term
             </sql>
         </sqlQuery>
-
-    <sqlQuery name="RelativeEventMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="participantParams.case_control" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
- select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m 
- where m.pan_id
-       in (select pan_id
-       from ApidbTuning.$$tbl_prefix$$Participants
-       where EUPATH_0010375 not in ($$case_control$$)
-           )
-          ]]>
-    </sql>    
-    </sqlQuery>
 
   </querySet>    
 
@@ -1572,7 +1757,7 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="relative_case_control" displayName="Related Case/Control" displayType="ShowHide">
+        <group name="relative_case_or_control" displayName="Related Case/Control" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can restrict the participants you have previously selected by removing (or keeping) participants based on differences or similarities between matched cases and controls. 
