@@ -264,13 +264,14 @@ with core as (
 select distinct name, EUPATH_0010049, EUPATH_0010375
 from (
 select distinct name, EUPATH_0010049, EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants
-      where pan_id in ($$event_enrollment_gems$$ INTERSECT $$event_followup_gems$$) -- (select pan_id from ApidbTuning.$$tbl_prefix$$Participants)
+      where pan_id in ($$event_enrollment_gems$$ INTERSECT $$event_followup_gems$$) 
 $$keep_remove$$
 select distinct vis.name, vis.EUPATH_0010049, vis.EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants vis, ApidbTuning.$$tbl_prefix$$Participants rv
       where $$use_rel_case_control$$ = 1
-      and rv.pan_id in ($$event_enrollment_gems$$ INTERSECT $$event_followup_gems$$)
-      and vis.pan_id in ($$relative_casecontrol_enrollment_gems$$ INTERSECT $$relative_casecontrol_followup_gems$$)
-      and vis.EUPATH_0010049 = rv.EUPATH_0010049)
+      and vis.pan_id in ($$event_enrollment_gems$$ INTERSECT $$event_followup_gems$$)
+      and rv.pan_id in ($$relative_casecontrol_enrollment_gems$$ INTERSECT $$relative_casecontrol_followup_gems$$)
+      and vis.EUPATH_0010049 = rv.EUPATH_0010049
+      and vis.name != rv.name )
 )
 select name as source_id, '@PROJECT_ID@' as project_id from core
 where 'selected' = $$return_case_control$$

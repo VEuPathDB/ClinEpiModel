@@ -184,7 +184,7 @@
            Select participants based on their geographic region. 
          </help>
     </filterParam>
-
+ 
        <filterParam name="participants_maled" 
                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_maled"
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
@@ -323,7 +323,7 @@
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        metadataQueryRef="ParticipantVQ.EventEnrollMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Participants"
+                       filterDataTypeDisplayName="Observations"
                        prompt="Enrollment Observations"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="false"
@@ -335,9 +335,9 @@
 
        <filterParam name="event_followup_gems" 
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       metadataQueryRef="ParticipantVQ.EventFollowupMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.EventFollowupMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Participants"
+                       metadataQueryRef="ParticipantVQ.EventEnrollMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
+                       filterDataTypeDisplayName="Observations"
                        prompt="Enrollment Observations"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="false"
@@ -351,11 +351,11 @@
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
                        metadataQueryRef="ParticipantVQ.RelativeCasecontrolEnrollMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Participants"
+                       filterDataTypeDisplayName="Observations"
                        prompt="Related Case or Control"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="false"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control,participantParams.participant_gems">
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
          <help>
            Modify participants selected based on information about their related case or control. 
          </help>
@@ -363,13 +363,13 @@
 
       <filterParam name="relative_casecontrol_followup_gems" 
                        ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolFollowupMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.EventFollowupMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Participants"
+                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolEnrollMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
+                       filterDataTypeDisplayName="Observations"
                        prompt="Related Case or Control"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="false"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control,participantParams.participant_gems">
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
          <help>
            Modify participants selected based on information about their related case or control. 
          </help>
@@ -1420,10 +1420,10 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD m
       <sql>
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.is_range,o.precision,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0010398','EUPATH_0010389','EUPATH_0010392','EUPATH_0010378','EUPATH_0010391','EUPATH_0010390','EUPATH_0010102','EUPATH_0010400','EUPATH_0010401','EUPATH_0010381') THEN 'multiFilter' ELSE o.type END as type
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0010102','EUPATH_0010398','EUPATH_0010401','EUPATH_0010400','EUPATH_0010381','EUPATH_0010392','NCBITaxon_2','NCBITaxon_2759','NCBITaxon_10239','EUPATH_0010389','EUPATH_0010378','EUPATH_0010391','EUPATH_0010390') THEN 'multiFilter' ELSE o.type END as type
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id = 'EUPATH_0000738'
+     START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')
 order by display_name
 ) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
       </sql>
@@ -1443,20 +1443,10 @@ order by display_name
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in ($$participant_gems$$)
-INTERSECT
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in (select pan_id
-       from ApidbTuning.$$tbl_prefix$$Participants
-       where lower(EUPATH_0010375) in ($$case_control$$) )
 /*
-INTERSECT
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where observation_id in (select distinct observation_id
-       from ApidbTuning.$$tbl_prefix$$ObservationMD
-       where ontology_term_name = 'BFO_0000015'
-       and string_value = 'Enrollment' ) */
+and observation_id in (select observation_id
+       from ApidbTuning.$$tbl_prefix$$Observations
+       where BFO_0000015 = 'Enrollment' ) */
           ]]>
     </sql>    
     </sqlQuery>
@@ -1473,42 +1463,32 @@ where observation_id in (select distinct observation_id
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
 /*
-where observation_id in (select distinct observation_id
-       from ApidbTuning.$$tbl_prefix$$ObservationMD
-       where ontology_term_name = 'BFO_0000015'
-       and string_value = 'Enrollment' ) */
+where observation_id in (select observation_id
+       from ApidbTuning.$$tbl_prefix$$Observations
+       where BFO_0000015 = 'Enrollment' ) */
           ]]>
     </sql>    
     </sqlQuery>
 
+<!--
     <sqlQuery name="EventFollowupMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.participant_gems" />  
       <paramRef ref="participantParams.case_control" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in ($$participant_gems$$)
-INTERSECT
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in (select pan_id
-       from ApidbTuning.$$tbl_prefix$$Participants
-       where lower(EUPATH_0010375) in ($$case_control$$) )
-/*
-INTERSECT
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where observation_id in (select distinct observation_id
-       from ApidbTuning.$$tbl_prefix$$ObservationMD
-       where ontology_term_name = 'BFO_0000015'
-       and string_value = '60 day follow-up' ) */
+and observation_id in (select observation_id
+       from ApidbTuning.$$tbl_prefix$$Observations
+       where BFO_0000015 = '60 day follow-up' )
           ]]>
     </sql>    
     </sqlQuery>
@@ -1517,24 +1497,23 @@ where observation_id in (select distinct observation_id
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
-/*
-where observation_id in (select distinct observation_id
-       from ApidbTuning.$$tbl_prefix$$ObservationMD
-       where ontology_term_name = 'BFO_0000015'
-       and string_value = '60 day follow-up' ) */
+where observation_id in (select observation_id
+       from ApidbTuning.$$tbl_prefix$$Observations
+       where BFO_0000015 = '60 day follow-up' )
           ]]>
     </sql>    
     </sqlQuery>
+-->
 
     <sqlQuery name="RelativeCasecontrolEnrollMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.participant_gems" />  
       <paramRef ref="participantParams.case_control" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
@@ -1546,56 +1525,42 @@ where observation_id in (select distinct observation_id
          <![CDATA[
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in ($$participant_gems$$)
-INTERSECT
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in (select pan_id
        from ApidbTuning.$$tbl_prefix$$Participants
-       where lower(EUPATH_0010375) in ($$case_control$$) )
+       where lower(EUPATH_0010375) not in ($$case_control$$) )
 /*
-INTERSECT
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where observation_id in (select distinct observation_id
-       from ApidbTuning.$$tbl_prefix$$ObservationMD
-       where ontology_term_name = 'BFO_0000015'
-       and string_value = 'Enrollment' ) */
+and observation_id in (select observation_id
+       from ApidbTuning.$$tbl_prefix$$Observations
+       where BFO_0000015 = 'Enrollment' ) */
           ]]>
     </sql>    
     </sqlQuery>
 
+<!--
     <sqlQuery name="RelativeCasecontrolFollowupMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.participant_gems" />  
       <paramRef ref="participantParams.case_control" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in ($$participant_gems$$)
-INTERSECT
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in (select pan_id
        from ApidbTuning.$$tbl_prefix$$Participants
-       where lower(EUPATH_0010375) in ($$case_control$$) )
-/*
-INTERSECT
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where observation_id in (select distinct observation_id
-       from ApidbTuning.$$tbl_prefix$$ObservationMD
-       where ontology_term_name = 'BFO_0000015'
-       and string_value = '60 day follow-up' ) */
+       where lower(EUPATH_0010375) not in ($$case_control$$) )
+/* 
+and observation_id in (select observation_id
+       from ApidbTuning.$$tbl_prefix$$Observations
+       where BFO_0000015 = '60 day follow-up' ) */
           ]]>
     </sql>    
     </sqlQuery>
+-->
 
      <sqlQuery name="KeepRemove">
           <paramRef ref="participantParams.use_rel_case_control" />  
