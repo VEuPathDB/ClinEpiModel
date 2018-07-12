@@ -319,38 +319,24 @@
          </help>
        </filterParam>
 
-       <filterParam name="event_enrollment_gems" 
-                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       metadataQueryRef="ParticipantVQ.EventEnrollMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
+       <filterParam name="event_gems" 
+                       ontologyQueryRef="ParticipantVQ.ObservationOntology_gems"
+                       metadataQueryRef="ParticipantVQ.ObservationMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_gems"
                        filterDataTypeDisplayName="Observations"
-                       prompt="Enrollment Observations"
+                       prompt="Observations"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="false"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.participant_gems,participantParams.case_control">
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.participant_gems">
          <help>
            Select participants based on variables associated with their enrollment or followup events. 
          </help>
        </filterParam>       
 
-       <filterParam name="event_followup_gems" 
-                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       metadataQueryRef="ParticipantVQ.EventEnrollMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Observations"
-                       prompt="Enrollment Observations"
-                       trimMetadataTerms="false"
-                       countPredictsAnswerCount="false"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.participant_gems,participantParams.case_control">
-         <help>
-           Select participants based on variables associated with their enrollment or followup events. 
-         </help>
-       </filterParam>       
-
-      <filterParam name="relative_casecontrol_enrollment_gems" 
-                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolEnrollMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
+      <filterParam name="relative_event_gems" 
+                       ontologyQueryRef="ParticipantVQ.ObservationOntology_gems"
+                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolObservationMetaData_gems"
+                       backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_gems"
                        filterDataTypeDisplayName="Observations"
                        prompt="Related Case or Control"
                        trimMetadataTerms="false"
@@ -361,19 +347,6 @@
          </help>
        </filterParam>    
 
-      <filterParam name="relative_casecontrol_followup_gems" 
-                       ontologyQueryRef="ParticipantVQ.EventOntology_gems"
-                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolEnrollMetaData_gems"
-                       backgroundQueryRef="ParticipantVQ.EventEnrollMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Observations"
-                       prompt="Related Case or Control"
-                       trimMetadataTerms="false"
-                       countPredictsAnswerCount="false"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
-         <help>
-           Modify participants selected based on information about their related case or control. 
-         </help>
-       </filterParam>    
        <enumParam name="case_control"
                   prompt="Cases or Controls"
                   multiPick="false"
@@ -1407,7 +1380,7 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD m
       </sql>    
     </sqlQuery>
 
-    <sqlQuery name="EventOntology_gems">
+    <sqlQuery name="ObservationOntology_gems">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
@@ -1429,51 +1402,8 @@ order by display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="EventEnrollMetaData_gems" isCacheable="false">
+    <sqlQuery name="ObservationMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.participant_gems" />  
-      <paramRef ref="participantParams.case_control" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in ($$participant_gems$$)
-/*
-and observation_id in (select observation_id
-       from ApidbTuning.$$tbl_prefix$$Observations
-       where BFO_0000015 = 'Enrollment' ) */
-          ]]>
-    </sql>    
-    </sqlQuery>
-
-    <sqlQuery name="EventEnrollMetaDataBkg_gems" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-/*
-where observation_id in (select observation_id
-       from ApidbTuning.$$tbl_prefix$$Observations
-       where BFO_0000015 = 'Enrollment' ) */
-          ]]>
-    </sql>    
-    </sqlQuery>
-
-<!--
-    <sqlQuery name="EventFollowupMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.participant_gems" />  
-      <paramRef ref="participantParams.case_control" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1486,14 +1416,11 @@ where observation_id in (select observation_id
 select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in ($$participant_gems$$)
-and observation_id in (select observation_id
-       from ApidbTuning.$$tbl_prefix$$Observations
-       where BFO_0000015 = '60 day follow-up' )
           ]]>
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="EventFollowupMetaDataBkg_gems" isCacheable="false">
+    <sqlQuery name="ObservationMetaDataBkg_gems" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -1505,39 +1432,11 @@ and observation_id in (select observation_id
          <![CDATA[
 select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
-where observation_id in (select observation_id
-       from ApidbTuning.$$tbl_prefix$$Observations
-       where BFO_0000015 = '60 day follow-up' )
-          ]]>
-    </sql>    
-    </sqlQuery>
--->
-
-    <sqlQuery name="RelativeCasecontrolEnrollMetaData_gems" isCacheable="false">
-      <paramRef ref="participantParams.case_control" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in (select pan_id
-       from ApidbTuning.$$tbl_prefix$$Participants
-       where lower(EUPATH_0010375) not in ($$case_control$$) )
-/*
-and observation_id in (select observation_id
-       from ApidbTuning.$$tbl_prefix$$Observations
-       where BFO_0000015 = 'Enrollment' ) */
           ]]>
     </sql>    
     </sqlQuery>
 
-<!--
-    <sqlQuery name="RelativeCasecontrolFollowupMetaData_gems" isCacheable="false">
+    <sqlQuery name="RelativeCasecontrolObservationMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.case_control" />  
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
@@ -1553,14 +1452,9 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in (select pan_id
        from ApidbTuning.$$tbl_prefix$$Participants
        where lower(EUPATH_0010375) not in ($$case_control$$) )
-/* 
-and observation_id in (select observation_id
-       from ApidbTuning.$$tbl_prefix$$Observations
-       where BFO_0000015 = '60 day follow-up' ) */
           ]]>
     </sql>    
     </sqlQuery>
--->
 
      <sqlQuery name="KeepRemove">
           <paramRef ref="participantParams.use_rel_case_control" />  
@@ -1722,7 +1616,7 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="relative_case_or_control" displayName="Related Case/Control" displayType="ShowHide">
+        <group name="relative_case_control" displayName="Related Case/Control" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can restrict the participants you have previously selected by removing (or keeping) participants based on differences or similarities between matched cases and controls. 
