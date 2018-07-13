@@ -281,7 +281,7 @@
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
                        metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.GeographicRegionMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Households"
+                       filterDataTypeDisplayName="Participants"
                        prompt="Study Site"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="true"
