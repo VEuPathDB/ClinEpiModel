@@ -12,29 +12,30 @@
 
   <!--  GEMS Study -->
 <record>
-    <attribute name="study">GEMS</attribute>
+    <attribute name="study">DS_841a9f5259</attribute>
     <attribute name="user_id">376</attribute>
   </record>
 <!-- eupathdb -->
   <record>
-    <attribute name="study">GEMS</attribute>
+    <attribute name="study">DS_841a9f5259</attribute>
     <attribute name="user_id">1926010</attribute>
   </record>
 <!-- danica -->
   <record>
-    <attribute name="study">GEMS</attribute>
+    <attribute name="study">DS_841a9f5259</attribute>
     <attribute name="user_id">220902410</attribute>
   </record>
 <!-- brianna lindsabr@upenn.edu -->
   <record>
-    <attribute name="study">GEMS</attribute>
+    <attribute name="study">DS_841a9f5259</attribute>
     <attribute name="user_id">276765373</attribute>
   </record>
 <!-- brianna brlindsay@gmail.com -->
   <record>
-    <attribute name="study">GEMS</attribute>
+    <attribute name="study">DS_841a9f5259</attribute>
     <attribute name="user_id">219825440</attribute>
   </record>
+
 
   <!--  MAL-ED Study -->
 
