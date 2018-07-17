@@ -11,9 +11,16 @@
 
 
   <!--  GEMS Study -->
+
+<!-- cristina -->
 <record>
     <attribute name="study">DS_841a9f5259</attribute>
     <attribute name="user_id">376</attribute>
+  </record>
+<!-- brian -->
+<record>
+    <attribute name="study">DS_841a9f5259</attribute>
+    <attribute name="user_id">48</attribute>
   </record>
 <!-- eupathdb -->
   <record>
@@ -59,7 +66,11 @@
     <attribute name="study">DS_121f2c2f02</attribute>
     <attribute name="user_id">219825440</attribute>
   </record>
-
+<!-- brian -->
+  <record>
+    <attribute name="study">DS_121f2c2f02</attribute>
+    <attribute name="user_id">48</attribute>
+  </record>
 
   <!-- ICEMR  -->
 
