@@ -12,6 +12,11 @@
 
   <!--  GEMS Study -->
 
+<!-- danielle -->
+<record>
+    <attribute name="study">DS_841a9f5259</attribute>
+    <attribute name="user_id">220685760</attribute>
+  </record>
 <!-- cristina -->
 <record>
     <attribute name="study">DS_841a9f5259</attribute>
@@ -46,6 +51,11 @@
 
   <!--  MAL-ED Study -->
 
+<!-- danielle -->
+<record>
+    <attribute name="study">DS_121f2c2f02</attribute>
+    <attribute name="user_id">220685760</attribute>
+  </record>
 <!-- eupathdb -->
   <record> 
     <attribute name="study">DS_121f2c2f02</attribute>
@@ -76,6 +86,11 @@
 
   <!--  India Study -->
 
+<!-- danielle -->
+<record>
+    <attribute name="study">DS_f6c59e88c1</attribute>
+    <attribute name="user_id">220685760</attribute>
+  </record>
 <!-- eupathdb -->
   <record> 
     <attribute name="study">DS_f6c59e88c1</attribute>
