@@ -4,11 +4,8 @@
   <import file="tuningManager.xml"/>
 
   <tuningTable name="Profile">
-    <internalDependency name="GeneAttributes"/>
-    <internalDependency name="CompoundAttributes"/>
-    <internalDependency name="PANResults"/>
-    <externalDependency name="apidb.OntologyTermResult"/>
     <externalDependency name="apidb.Datasource"/>
+    <externalDependency name="apidb.WHOStandards"/>
     <externalDependency name="results.NaFeatureExpression"/>
     <externalDependency name="results.NaFeatureDiffResult"/>
     <externalDependency name="results.CompoundMassSpec"/>
