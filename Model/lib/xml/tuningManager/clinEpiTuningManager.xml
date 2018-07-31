@@ -45,7 +45,7 @@
         , res.profile_type
         , sl.study_id
         , res.id
-        , RTRIM(XMLAGG(XMLELEMENT(e, NVL(TO_CHAR(ROUND(res.value, 2)), 'NA')  ,',').EXTRACT('//text()') 
+        , RTRIM(XMLAGG(XMLELEMENT(e, NVL(TO_CHAR(ROUND(res.value, 2)), 'NA') , CHR(9)).EXTRACT('//text()') 
            ORDER BY pan.node_order_num).GetClobVal(),',' ) AS profile_as_string
         , max(res.value) AS max_value
         , min(value) as min_value
