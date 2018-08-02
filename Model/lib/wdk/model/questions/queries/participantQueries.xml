@@ -164,7 +164,7 @@ and pa.pan_id = mos.part_id(+)
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_maled" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D121f2c2f02" groupRef="metaDataGroups.event_summary_params"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D3dbf92dc05" groupRef="metaDataGroups.event_summary_params"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_age_visit"/>
