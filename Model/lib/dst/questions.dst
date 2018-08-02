@@ -250,17 +250,17 @@ prop=includeProjects
         /> 
 	<dynamicAttributes>
 	     <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
+       </columnAttribute>
 	     <columnAttribute name="participants" displayName="Participants Transformed" help="list of participant ids from transformed result set associated with this household " align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
+       </columnAttribute>
 	</dynamicAttributes>
 
              <summary>
@@ -396,11 +396,11 @@ prop=includeProjects
 
 	<dynamicAttributes>
 	     <columnAttribute name="household" displayName="Household Transformed" help="Household Participant is associated with" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
+       </columnAttribute>
 	</dynamicAttributes>
 
              <summary>
@@ -439,11 +439,11 @@ prop=includeProjects
 
 	<dynamicAttributes>
 	     <columnAttribute name="num_of_visits" displayName="Observations Transformed" help="Observations associated with the participant from the previous step" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
+       </columnAttribute>
 	</dynamicAttributes>
 
              <summary>
@@ -550,10 +550,10 @@ prop=includeProjects
 
       <dynamicAttributes>
 	<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants clinical observations are associated with" align="center">
-	  <plugin name="histogram" display="Histogram"
-		  description="Display a histogram of the values"
-		  implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-		  view="/wdk/jsp/results/histogram.jsp" />
+      <reporter name="histogram" displayName="Histogram" scopes=""
+        implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+        <description>Display the histogram of the values of this attribute</description>
+      </reporter>
 	  </columnAttribute>
 	</dynamicAttributes>
       
@@ -696,16 +696,16 @@ prop=includeProjects
 
 	<dynamicAttributes>
 	     <columnAttribute name="lt_count" displayName="# Collections" help="number of light trap collections from transformed result set associated with this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
             </columnAttribute>
 	     <columnAttribute name="ave_anoph" displayName="Average Anopheles" help="Average of the anopheles collected from the transformed collections for this household" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
             </columnAttribute>
 	</dynamicAttributes>
 
@@ -778,17 +778,17 @@ prop=includeProjects
        <!-- <dynamicAttributes>
              <columnAttribute name="participant_count" displayName="# Matched Participants" help="number of participants from transformed result set associated with th\
 is household" align="center">
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
             </columnAttribute>
              <columnAttribute name="collections" displayName="Collection Transformed" help="list of light trap ids from transformed result set associated with this\
  household " align="center">
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
             </columnAttribute> 
         </dynamicAttributes> -->
 
