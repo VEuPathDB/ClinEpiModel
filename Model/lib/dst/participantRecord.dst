@@ -282,12 +282,11 @@ select count(*) from apidbtuning.${tblPrefix}Participants
           <column name="name" />
           <column name="display_name" />
           <column name="help" />
-          <column name="plugin_name" />
-          <column name="plugin_display" />
-          <column name="plugin_description" />
-          <column name="plugin_implementation" />
-          <column name="plugin_view" />
-          <column name="plugin_properties" />
+          <column name="reporter_name" />
+          <column name="reporter_display" />
+          <column name="reporter_description" />
+          <column name="reporter_implementation" />
+          <column name="reporter_properties" />
 
           <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInParticipantAttributesQuote}]]></sqlParamValue>
           <sqlParamValue name="excludeParticipantSourceIds"><![CDATA[${participantSourceIdsExcludedFromParticipantAttributesQuote}]]></sqlParamValue>
@@ -295,12 +294,11 @@ select count(*) from apidbtuning.${tblPrefix}Participants
          <sql>
             <![CDATA[
                      select meta.display_name, meta.name, meta.help, 
-                            decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as plugin_name,
-                            decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as plugin_display,
-                            decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values', null) as plugin_description,
-                            decode(meta.type, 'string', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', 'number', 'org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin', null) as plugin_implementation,
-                            decode(meta.type, 'string', '/wdk/jsp/results/histogram.jsp', 'number', '/wdk/jsp/results/histogram.jsp', null) as plugin_view,
-                            null as plugin_properties
+                            decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
+                            decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
+                            decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values', null) as reporter_description,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.report.HistogramAttributeReporter', 'number', 'org.gusdb.wdk.model.report.HistogramAttributeReporter', null) as reporter_implementation,
+                            null as reporter_properties
                      from ( 
                      select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
                      from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o

@@ -28,17 +28,17 @@ prop=householdQuestionName
 
 	<dynamicAttributes>
 	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this household over the time frame specified" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
-            <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
-            </columnAttribute>
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
+       </columnAttribute>
+       <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
+         <reporter name="histogram" displayName="Histogram" scopes=""
+           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           <description>Display the histogram of the values of this attribute</description>
+         </reporter>
+       </columnAttribute>
 <!--
             <columnAttribute internal="true" inReportMaker="false" name="start_date"/>
             <columnAttribute internal="true" inReportMaker="false" name="end_date"/>
@@ -100,10 +100,10 @@ prop=householdQuestionName
 
 	<dynamicAttributes>
             <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
-              <plugin name="histogram" display="Histogram"
-                      description="Display a histogram of the values"
-                      implementation="org.gusdb.wdk.model.record.attribute.plugin.HistogramAttributePlugin"
-                      view="/wdk/jsp/results/histogram.jsp" />
+              <reporter name="histogram" displayName="Histogram" scopes=""
+                implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+                <description>Display the histogram of the values of this attribute</description>
+              </reporter>
             </columnAttribute>
         </dynamicAttributes>
             
