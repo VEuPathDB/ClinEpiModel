@@ -7,8 +7,9 @@ prop=recordClassName
 prop=targetType
 prop=targetName
 prop=scopes
+prop=modelRefOrderNumber
 >templateTextStart<
-${uniqueName}	${categoryIri}		${recordClassName}	${targetType}	${targetName}						${scopes}	
+${uniqueName}	${categoryIri}		${recordClassName}	${targetType}	${targetName}					${modelRefOrderNumber}	${scopes}	
 >templateTextEnd<
 
 [templateStart] 

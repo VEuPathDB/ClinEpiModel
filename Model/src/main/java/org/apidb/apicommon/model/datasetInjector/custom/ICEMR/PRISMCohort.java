@@ -66,8 +66,8 @@ public class PRISMCohort extends EpidemiologyStudyWithLightTraps {
         //                addWdkReference(householdRecordClass, "question", "HouseholdQuestions.HouseholdsByCharacteristics_prism", new String[]{"menu", "webservice"}, CATEGORY_IRI);
         //        addWdkReference(observationRecordClass, "question", "ClinicalVisitQuestions.ClinicalVisitsByRelativeVisits_prism", new String[]{"menu", "webservice"}, CATEGORY_IRI);
 
-        addWdkReference(participantRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI);
-        addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI);
+        addWdkReference(participantRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
+        addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
 
     }
 

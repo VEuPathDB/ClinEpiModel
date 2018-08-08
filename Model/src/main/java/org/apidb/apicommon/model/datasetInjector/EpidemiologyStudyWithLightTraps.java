@@ -74,24 +74,24 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         //String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
         String lightTrapRecordClass = makeRecordClassName(LIGHT_TRAP_RECORD_CLASS_PREFIX);
 
-        addWdkReference(lightTrapRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
-        addWdkReference(lightTrapRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI);
+        addWdkReference(lightTrapRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
+        addWdkReference(lightTrapRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
 
-        addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+        addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
         for (Map.Entry<String, String[]> entry : lightTrapQuestionTemplateNamesToScopes().entrySet()) {
             String questionFullName = "LighttrapQuestions." + entry.getKey();
-            addWdkReference(lightTrapRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI);
+            addWdkReference(lightTrapRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
         }
 
         if(hasHouseholds) {
             String lightTrapSourceIdsForHouseholdsLightTrapTable = getPropValue("lightTrapSourceIdsForHouseholdsLightTrapTable");
             setPropValue("lightTrapSourceIdsForHouseholdsLightTrapTableSubquery", propertySourceIdSubquery(lightTrapSourceIdsForHouseholdsLightTrapTable));
 
-            addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsByHouseholdId", new String[]{"webservice"}, CATEGORY_IRI); 
-            addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByLightTrapId", new String[]{"webservice"}, CATEGORY_IRI); 
+            addWdkReference(lightTrapRecordClass, "question", "LighttrapQuestions." + presenterId + "CollectionsByHouseholdId", new String[]{"webservice"}, CATEGORY_IRI, 0); 
+            addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByLightTrapId", new String[]{"webservice"}, CATEGORY_IRI, 0); 
 
-            addWdkReference(householdRecordClass, "table", "LightTraps", new String[]{"record"}, CATEGORY_IRI);
+            addWdkReference(householdRecordClass, "table", "LightTraps", new String[]{"record"}, CATEGORY_IRI, 0);
         }
 
     }
