@@ -245,7 +245,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           String recordClassName = modelReference.getRecordClassName();
           String targetType = modelReference.getTargetType().equals("question") ? "search" : modelReference.getTargetType();
           String[] scopes = modelReference.getScopes();
+          int orderNumber = modelReference.getOrderNumber();
 
+          setPropValue("modelRefOrderNumber", Integer.toString(orderNumber));
           setPropValue("targetType", targetType);
           setPropValue("targetName", targetName);
           setPropValue("recordClassName", recordClassName);
@@ -286,68 +288,71 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
 
       if(hasHouseholds) {
-          addWdkReference(householdRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI);
-          addWdkReference(householdRecordClass, "table", "HouseholdMembers", new String[]{"record"}, CATEGORY_IRI);
+          addWdkReference(householdRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
+          addWdkReference(householdRecordClass, "table", "HouseholdMembers", new String[]{"record"}, CATEGORY_IRI, 0);
 
-          addWdkReference(householdRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
+          addWdkReference(householdRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 
-          addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+          addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
           for (Map.Entry<String, String[]> entry : householdQuestionTemplateNamesToScopes().entrySet()) {
               String questionFullName = "HouseholdQuestions." + entry.getKey();
-              addWdkReference(householdRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI);
+              addWdkReference(householdRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
           
 
       }
 
       if(hasParticipants) {
-          addWdkReference(participantRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI);
-          addWdkReference(participantRecordClass, "table", "Observations", new String[]{"record"}, CATEGORY_IRI);
-          addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI);
+          addWdkReference(participantRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
+          addWdkReference(participantRecordClass, "table", "Observations", new String[]{"record"}, CATEGORY_IRI, 0);
+          addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI, 0);
           // TODO Samples table of participant record page
 
-          addWdkReference(participantRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
+          addWdkReference(participantRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 
           // Add the Text Attributes
+
+          int attributeCount = 1;
           for (Map.Entry<String, String[]> entry : participantGraphAttributesToScopes().entrySet()) {
-              addWdkReference(participantRecordClass, "attribute", entry.getKey(), entry.getValue(), CATEGORY_IRI);
+              addWdkReference(participantRecordClass, "attribute", entry.getKey(), entry.getValue(), CATEGORY_IRI, attributeCount);
+              attributeCount++;
           }
 
-          addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+          addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
 
           for (Map.Entry<String, String[]> entry : participantQuestionTemplateNamesToScopes().entrySet()) {
               String questionFullName = "ParticipantQuestions." + entry.getKey();
-              addWdkReference(participantRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI);
+              addWdkReference(participantRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
       }
 
       if(hasObservations) {
-          addWdkReference(observationRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI);
+          addWdkReference(observationRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
           // TODO Samples table of observation record page
 
-          addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI);
+          addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 
-          addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI); 
+          addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
           for (Map.Entry<String, String[]> entry : observationQuestionTemplateNamesToScopes().entrySet()) {
               String questionFullName = "ClinicalVisitQuestions." + entry.getKey();
-              addWdkReference(observationRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI);
+              addWdkReference(observationRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
 
       }
 
       if(hasHouseholds && hasParticipants) {
-          addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByHouseholds", new String[]{"webservice"}, CATEGORY_IRI); 
-          addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByParticipants", new String[]{"webservice"}, CATEGORY_IRI); 
+          addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByHouseholds", new String[]{"webservice"}, CATEGORY_IRI, 0); 
+          addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByParticipants", new String[]{"webservice"}, CATEGORY_IRI, 0); 
       }
 
       if(hasParticipants && hasObservations) {
-          addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByObservations", new String[]{"webservice"}, CATEGORY_IRI); 
-          addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationsByParticipants", new String[]{"webservice"}, CATEGORY_IRI); 
+          addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByObservations", new String[]{"webservice"}, CATEGORY_IRI, 0); 
+          addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationsByParticipants", new String[]{"webservice"}, CATEGORY_IRI, 0); 
       }
   }
 
