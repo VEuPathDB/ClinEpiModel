@@ -588,11 +588,14 @@ select distinct m.pan_id as internal,  m.property_source_id as ontology_term_nam
    from ApidbTuning.$$tbl_prefix$$Observations 
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
-   ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m
-   where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
+   ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Observations obs
+   where /* least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
-       and pa.pan_id = iov.input_pan_id
+       and */ pa.pan_id = iov.input_pan_id
        and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
+       and iov.output_pan_id = obs.pan_id
+       and obs.EUPATH_0000091 >= $$visit_date.min$$ 
+       and obs.EUPATH_0000091 <= $$visit_date.max$$ 
        and pa.pan_id = m.pan_id       
           ]]>
     </sql>
