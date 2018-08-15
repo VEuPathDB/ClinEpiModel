@@ -95,7 +95,7 @@ prop=householdQuestionName
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
-            summary="EUPATH_0000407,EUPATH_0000452,EUPATH_0000002,EUPATH_0000435,EUPATH_0000019,part_count"
+            summary="EUPATH_0000407,EUPATH_0000002,EUPATH_0000435,EUPATH_0000019,part_count"
         /> 
 
 	<dynamicAttributes>
