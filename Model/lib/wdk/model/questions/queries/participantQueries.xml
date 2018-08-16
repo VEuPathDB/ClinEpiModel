@@ -241,6 +241,26 @@ group by pa.name
         </sql>
      </sqlQuery>
 
+     <sqlQuery name="ParticipantsXSectional_india"
+          isCacheable="true">
+       <paramRef ref="participantParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_india" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Da5c969d5fa" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_india$$)
+and pa.pan_id = obs.participant_id
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+
      <sqlQuery name="ParticipantsByCaseControl_gems"
           isCacheable="true">
        <paramRef ref="participantParams.case_control" groupRef="metaDataGroups.choose_case_control"/> 

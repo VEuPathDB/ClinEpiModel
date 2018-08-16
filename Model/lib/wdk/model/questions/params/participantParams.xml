@@ -958,12 +958,15 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD
      <column name="precision"/>
      <column name="is_range"/>
     <sql>
-         <![CDATA[select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+      <![CDATA[
+select * from (
+select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where ontology_term_source_id in ('EUPATH_0000407','EUPATH_0000444')
+where o.ontology_term_source_id in ('EUPATH_0000407','EUPATH_0000444')
 union
 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-null as precision from dual
+null as precision, 0 as display_order from dual)
+order by display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -1018,38 +1021,14 @@ select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
 CASE WHEN o.ontology_term_source_id in ('EUPATH_0000343','EUPATH_0000731','EUPATH_0000001','EUPATH_0000003','EUPATH_0000440','EUPATH_0000451') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range,o.precision
+o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'PCO_0000024'
      )
      where ontology_term_name != 'EUPATH_0000094'
-     order by display_name
-         ]]>
-    </sql>
-   </sqlQuery>
-
-   <sqlQuery name="HouseholdParticipantOntology_india" isCacheable="true">
-     <paramRef ref="participantParams.tbl_prefix" />  
-     <column name="ontology_term_name"/>
-     <column name="parent_ontology_term_name"/>
-     <column name="display_name"/>
-     <column name="description"/>
-     <column name="type"/>
-     <column name="units"/>
-     <column name="precision"/>
-     <column name="is_range"/>
-    <sql>
-         <![CDATA[
-select * from (
- select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from ApidbTuning.$$tbl_prefix$$Ontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('PCO_0000024','EUPATH_0000096')
-     )
-     where ontology_term_name != 'EUPATH_0000094'
-     order by display_name
-         ]]>
+     order by display_order
+     ]]>
     </sql>
    </sqlQuery>
 
@@ -1101,13 +1080,13 @@ from ApidbTuning.$$tbl_prefix$$HousePartIdMD
          <![CDATA[
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units, o.type, o.is_range, o.precision
+nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units, o.type, o.is_range, o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'EUPATH_0000096'
      )
-     where ontology_term_name != 'EUPATH_0000095'
-     order by display_name
+     where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094')
+     order by display_order
          ]]>
     </sql>
    </sqlQuery>
