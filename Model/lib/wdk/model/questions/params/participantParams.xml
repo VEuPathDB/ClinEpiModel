@@ -458,12 +458,9 @@
      <column name="is_range"/>
     <sql>
       <![CDATA[
-select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'EUPATH_0000054'
-union
-select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-null as precision from dual 
          ]]>
     </sql>
    </sqlQuery>
@@ -499,12 +496,9 @@ select m.pan_id as filter_item_id,  io.output_pan_id as internal, m.property_sou
          <column name="is_range"/>
          <sql>
            <![CDATA[
-                       select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+                       select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'EUPATH_0000113'
-union
-                 select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-                 null as precision from dual
     ]]>   
         </sql>
       </sqlQuery>
@@ -635,7 +629,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id in ('PCO_0000024','ENVO_01000744')
      and ontology_term_source_id != 'EUPATH_0000094'
  union
- select 'average anopheles' as ontology_term_name, null as parent_ontology_term_name, 'Average Female Anopheles Collected' as display_name, 'Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
+ select 'average anopheles' as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, 'Average Female Anopheles Collected' as display_name, 'Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
  null as precision from dual)
  order by display_name
     </sql>
@@ -916,12 +910,9 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
      <column name="precision"/>
      <column name="is_range"/>
     <sql>
-         <![CDATA[select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+         <![CDATA[select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'OBI_0001627'
-union
-select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-null as precision from dual
          ]]>
     </sql>
    </sqlQuery>
@@ -959,14 +950,9 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD
      <column name="is_range"/>
     <sql>
       <![CDATA[
-select * from (
-select o.ontology_term_source_id as ontology_term_name, 'dummy' as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
+select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where o.ontology_term_source_id in ('EUPATH_0000407','EUPATH_0000444')
-union
-select 'dummy' as ontology_term_name, null as parent_ontology_term_name, 'Household' as display_name, null as description, null as units, 'string' as type, 0 as is_range,
-null as precision, 0 as display_order from dual)
-order by display_order
          ]]>
     </sql>
    </sqlQuery>
