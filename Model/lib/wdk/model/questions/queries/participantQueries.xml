@@ -202,7 +202,6 @@ and count(*) <= $$visit_count.max$$
 
      <sqlQuery name="ParticipantsByCharWizRelVis_india"
           isCacheable="true">
-       <paramRef ref="participantParams.study_type" groupRef="metaDataGroups.choose_study_type"/>
        <paramRef ref="participantParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
@@ -212,7 +211,7 @@ and count(*) <= $$visit_count.max$$
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_india" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Df6c59e88c1" groupRef="metaDataGroups.choose_study_type"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D05ea525fd3" groupRef="metaDataGroups.relative_events"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
@@ -237,6 +236,26 @@ and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
 group by vis.participant_id,vis.observation_id,vis.date_value
 ) main, ApidbTuning.$$tbl_prefix$$Participants pa
 where pa.pan_id = main.participant_id
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+
+     <sqlQuery name="ParticipantsXSectional_india"
+          isCacheable="true">
+       <paramRef ref="participantParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_india" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Da5c969d5fa" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_india$$)
+and pa.pan_id = obs.participant_id
 group by pa.name 
                 ]]>   
         </sql>

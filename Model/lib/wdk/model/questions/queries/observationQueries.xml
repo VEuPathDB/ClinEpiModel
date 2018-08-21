@@ -146,7 +146,6 @@ group by name
 
      <sqlQuery name="ObservationsByRelativeVisits_india"
           isCacheable="true">
-       <paramRef ref="participantParams.study_type" groupRef="metaDataGroups.choose_study_type"/>
        <paramRef ref="clinicalVisitParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
@@ -157,7 +156,7 @@ group by name
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_india" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Df6c59e88c1" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D05ea525fd3" groupRef="metaDataGroups.relative_events"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -209,6 +208,26 @@ and visits.pan_id = inter.pan_id(+)
 )
 group by name
                 ]]>   
+        </sql>
+     </sqlQuery>
+
+     <sqlQuery name="ObservationsXSectional_india"
+          isCacheable="true">
+       <paramRef ref="clinicalVisitParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="clinicalVisitParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_india" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Da5c969d5fa" groupRef="metaDataGroups.event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="min_days_between"/>
+       <column name="num_matching_visits"/> 
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$Observations 
+where pan_id in ($$visits_india$$)
+           ]]>   
         </sql>
      </sqlQuery>
 
