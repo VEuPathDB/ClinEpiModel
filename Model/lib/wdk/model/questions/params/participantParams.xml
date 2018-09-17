@@ -184,6 +184,20 @@
            Select participants based on their geographic region. 
          </help>
     </filterParam>
+
+    <filterParam name="households_maled" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_maled"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_maled"
+                    filterDataTypeDisplayName="Households"
+                    countPredictsAnswerCount="true"
+                    prompt="Households"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_maled"
+                    trimMetadataTerms="false">
+      <help>
+        Select participants based on the characteristics of the household where they live. 
+      </help>
+    </filterParam>
  
        <filterParam name="participants_maled" 
                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_maled"
@@ -193,7 +207,7 @@
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
                       trimMetadataTerms="false"
-                      dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_maled">
+                      dependedParamRef="participantParams.tbl_prefix,participantParams.households_maled">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -217,9 +231,9 @@
     <!--************************************************************-->
 
        <filterParam name="geographic_region_india" 
+                       ontologyQueryRef="ParticipantVQ.RegionOntology_india"
                        metadataQueryRef="ParticipantVQ.RegionMetaData_india"
                        backgroundQueryRef="ParticipantVQ.RegionMetaDataBkgd_india"
-                       ontologyQueryRef="ParticipantVQ.RegionOntology_india"
                        countPredictsAnswerCount="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
@@ -782,6 +796,64 @@ and io.output_pan_id = m.pan_id
     <!--   MAL-ED section ... should be injected  -->
     <!--************************************************************-->
 
+   <sqlQuery name="HouseholdOntology_maled" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+select * from (
+ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('PCO_0000024')
+     )
+     where ontology_term_name != 'EUPATH_0000095'
+     order by display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+   <sqlQuery name="HouseholdMetaData_maled" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="participantParams.geographic_region_maled" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="filter_item_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+                select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+                from ApidbTuning.$$tbl_prefix$$HousePartIdMD
+                where participant_id in ($$geographic_region_maled$$)
+       ]]>
+     </sql>
+   </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_maled" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
    <sqlQuery name="ParticipantOntology_maled" isCacheable="true">
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>
@@ -798,7 +870,7 @@ select * from (
  select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000096','PCO_0000024')
+     START WITH o.ontology_term_source_id = 'EUPATH_0000096'
      )
      where ontology_term_name != 'EUPATH_0000095'
      order by display_name
@@ -808,7 +880,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
 
    <sqlQuery name="ParticipantMetaData_maled" isCacheable="false">
      <paramRef ref="participantParams.tbl_prefix" />  
-     <paramRef ref="participantParams.geographic_region_maled" />  
+     <paramRef ref="participantParams.households_maled" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -818,7 +890,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <![CDATA[
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
-where participant_id in ($$geographic_region_maled$$)
+where participant_id in ($$households_maled$$)
           ]]>
     </sql>
     </sqlQuery>
@@ -921,13 +993,14 @@ where ontology_term_source_id = 'OBI_0001627'
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD
+select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HousePartIdMD
  where ontology_term_name = 'OBI_0001627'
         ]]>
       </sql>
