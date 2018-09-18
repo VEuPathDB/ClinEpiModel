@@ -808,14 +808,20 @@ and io.output_pan_id = m.pan_id
      <column name="is_range"/>
     <sql>
          <![CDATA[
-select * from (
- select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select * from (
+ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, 
+ nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision,o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('PCO_0000024')
+union
+ select distinct o.ontology_term_source_id as ontology_term_name, 'PCO_0000024' as parent_ontology_term_name, 
+ nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision,o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+where ontology_term_source_id = 'EUPATH_0000644'
      )
-     where ontology_term_name != 'EUPATH_0000095'
-     order by display_name
+     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627')
+     order by display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -831,9 +837,9 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      <column name="string_value"/>
      <sql>
        <![CDATA[
-                select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+                select  participant_id as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
                 from ApidbTuning.$$tbl_prefix$$HousePartIdMD
-                where participant_id in ($$geographic_region_maled$$)
+                where household_id in ($$geographic_region_maled$$)
        ]]>
      </sql>
    </sqlQuery>
@@ -848,7 +854,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HousePartIdMD
           ]]>
     </sql>
@@ -867,13 +873,13 @@ from ApidbTuning.$$tbl_prefix$$HousePartIdMD
     <sql>
          <![CDATA[
 select * from (
- select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision,o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000096'
      )
      where ontology_term_name != 'EUPATH_0000095'
-     order by display_name
+     order by display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -926,13 +932,13 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
 CASE WHEN o.ontology_term_source_id in ('NCBITaxon_2','NCBITaxon_2759','NCBITaxon_10239') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range,o.precision
+o.is_range,o.precision,o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')
      )
      where ontology_term_name != 'EUPATH_0000091'
-     order by display_name
+     order by display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -993,14 +999,13 @@ where ontology_term_source_id = 'OBI_0001627'
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
-      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  participant_id as internal, household_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HousePartIdMD
+select  household_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD
  where ontology_term_name = 'OBI_0001627'
         ]]>
       </sql>
