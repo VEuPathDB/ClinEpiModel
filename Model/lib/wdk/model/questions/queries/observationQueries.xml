@@ -81,6 +81,7 @@ group by name
      <sqlQuery name="ClinicalVisitsByRelativeVisits_maled"
           isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_maled" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="clinicalVisitParams.households_maled" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.participants_maled" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_maled" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>

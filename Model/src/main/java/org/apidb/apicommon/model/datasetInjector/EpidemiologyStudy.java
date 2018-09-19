@@ -388,7 +388,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"policyUrl", ""},
                                  {"cardHeadline", ""},
                                  {"cardPoints", ""},
-                                 {"cardQuestions", ""}
+                                 {"cardQuestions", ""},
+                                 {"cardQuestions", ""},
+                                 {"requestProtectionLevel", ""},
+                                 {"requestAccessFields", ""},
+                                 {"requestEmail", ""},
+                                 {"requestEmailBody", ""},
+                                 {"requestNeedsApproval", ""}
       };
 
     return declaration;
