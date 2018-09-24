@@ -247,6 +247,56 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
         </sql>
      </sqlQuery>
 
+     <sqlQuery name="ParticipantsXSectional_sasia"
+          isCacheable="true">
+       <paramRef ref="participantParams.participants_sasia" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_sasia" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_sasia" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D13c737a528" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+with io as (
+select distinct input_pan_id as participant_id, output_pan_id as observation_id
+from ApidbTuning.$$tbl_prefix$$PANIO 
+where input_pan_type_source_id = 'EUPATH_0000096' 
+and output_pan_type_source_id = 'EUPATH_0000738'
+)
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
+                    count(*) as visit_count, 
+   round(avg(number_value),1) -1 as ave_age_visit
+from (select distinct io.participant_id,io.observation_id,nvl(o.EUPATH_0023016,0) as number_value from ApidbTuning.$$tbl_prefix$$Observations o, io
+      where o.pan_id in ($$visits_sasia$$)
+      and io.observation_id = o.pan_id
+$$dateOperator_fv$$
+ select distinct visio.participant_id,visio.observation_id,nvl(vis.EUPATH_0023016,0)
+ from ApidbTuning.$$tbl_prefix$$Observations vis, io visio, ApidbTuning.$$tbl_prefix$$Observations rv, io rvio
+ where vis.pan_id in ($$visits_sasia$$)
+      and visio.observation_id = vis.pan_id
+and $$use_relative_visits$$ = 1
+and rv.pan_id in ($$relative_visits_sasia$$)
+and rvio.observation_id = rv.pan_id
+and visio.participant_id = rvio.participant_id
+and visio.observation_id != rvio.observation_id
+and nvl(vis.EUPATH_0023016,0) $$date_direction_fv$$ nvl(rv.EUPATH_0023016,0)  
+and abs(nvl(rv.EUPATH_0023016,0) - nvl(vis.EUPATH_0023016,0)) >= $$days_between.min$$
+and abs(nvl(rv.EUPATH_0023016,0) - nvl(vis.EUPATH_0023016,0)) <= $$days_between.max$$
+group by visio.participant_id,visio.observation_id,nvl(vis.EUPATH_0023016,0)
+) main, ApidbTuning.$$tbl_prefix$$Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
+having count(*) >= $$visit_count.min$$
+and count(*) <= $$visit_count.max$$
+                ]]>   
+        </sql>
+     </sqlQuery>
+
 <!-- transform(s) -->
 
       <!-- TEMPLATE_ANCHOR participantsByHouseholdsQuery -->                   
