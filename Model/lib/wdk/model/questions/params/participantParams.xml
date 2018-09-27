@@ -987,6 +987,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
+--from brunkb.testObservationMD
 where participant_id in ($$participants_maled$$)
           ]]>
     </sql>
@@ -1004,6 +1005,7 @@ where participant_id in ($$participants_maled$$)
         <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
+--from brunkb.testObservationMD
           ]]>
     </sql>
     </sqlQuery>
@@ -1471,7 +1473,7 @@ CASE WHEN o.ontology_term_source_id in ('EUPATH_0000343','EUPATH_0000144','EUPAT
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'PCO_0000024'
-) where ontology_term_name not in ('OBI_0001627','EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
+) where ontology_term_name not in ('GAZ_00000448','OBI_0001627','EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
 order by display_order
       </sql>
     </sqlQuery>
