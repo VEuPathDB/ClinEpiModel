@@ -178,7 +178,7 @@ select distinct m.pan_id as internal,  m.property_source_id as ontology_term_nam
       <sql>
          <![CDATA[
 with mos as (
- select da.pan_id as internal, 'average anopheles' as ontology_term_name, null as string_value, 
+ select da.pan_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id in ($$geographic_region_prism$$)
@@ -213,7 +213,7 @@ select distinct m.pan_id as internal, property_source_id as ontology_term_name, 
  from ApidbTuning.$$tbl_prefix$$MetaData m
  where m.category = 'Household'
  union
- select da.pan_id as internal,  'average anopheles' as ontology_term_name, null as string_value, 
+ select da.pan_id as internal,  'average_anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id

@@ -503,7 +503,7 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
  union
- select part.household_id as filter_item_id, part.obs_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.household_id as filter_item_id, part.obs_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -539,7 +539,7 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
  union
- select part.household_id as filter_item_id, part.obs_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ select part.household_id as filter_item_id, part.obs_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -615,16 +615,9 @@ select distinct m.pan_id as filter_item_id, m.pan_id as record_id, iov.output_pa
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.pan_id in ($$households_prism$$)
-  union all
- select ios.input_pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO ios
-where m.category = 'Specimen type' 
-and m.property_source_id = 'OBI_0100051'
-and ios.input_pan_id in ($$households_prism$$)
-and ios.output_pan_id = m.pan_id
+select m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD m
+ where m.observation_id in ($$households_prism$$)
           ]]>
     </sql>
     </sqlQuery>    

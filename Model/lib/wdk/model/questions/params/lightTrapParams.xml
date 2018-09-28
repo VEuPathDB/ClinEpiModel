@@ -108,7 +108,7 @@ select m.pan_id as internal,  io.output_pan_id as record_id, m.property_source_i
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
  where m.property_source_id = 'EUPATH_0000054'
  and m.pan_id = io.input_pan_id
- and io.output_pan_type_source_id = 'EUPATH_0000055'
+ and io.output_pan_type_source_id = 'EUPATH_0000327'
         ]]>
       </sql>
     </sqlQuery>
@@ -126,7 +126,7 @@ select m.pan_id as internal,  io.output_pan_id as record_id, m.property_source_i
       <sql>
          <![CDATA[
 with mos as (
- select da.pan_id, 'average anopheles' as ontology_term_name, null as string_value, 
+ select da.pan_id, 'average_anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id in ($$geographic_region_prism$$)
@@ -166,7 +166,7 @@ select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.prop
       <sql>
          <![CDATA[
 with mos as (
- select da.pan_id, 'average anopheles' as ontology_term_name, null as string_value, 
+ select da.pan_id, 'average_anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -177,12 +177,12 @@ select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.prop
  from ApidbTuning.$$tbl_prefix$$MetaData m, mos, ApidbTuning.$$tbl_prefix$$PANIO io
  where m.pan_id = mos.pan_id
  and m.pan_id = io.input_pan_id
- and io.output_pan_type_source_id = 'EUPATH_0000055'
+ and io.output_pan_type_source_id = 'EUPATH_0000327'
  union 
  select mos.pan_id as filter_item_id, io.output_pan_id as internal, mos.ontology_term_name, mos.string_value,mos.number_value, mos.date_value 
  from mos, ApidbTuning.$$tbl_prefix$$PANIO io
  where mos.pan_id = io.input_pan_id
- and io.output_pan_type_source_id = 'EUPATH_0000055'
+ and io.output_pan_type_source_id = 'EUPATH_0000327'
           ]]>
     </sql>
     </sqlQuery>   
@@ -221,8 +221,8 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
 select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$LightTraps lta
  where lta.pan_id in ($$households_prism$$)
- and lta.OBI_0001619 >= $$date_range.min$$
- and lta.OBI_0001619 <= $$date_range.max$$ 
+ and lta.EUPATH_0020003 >= $$date_range.min$$
+ and lta.EUPATH_0020003 <= $$date_range.max$$ 
  and m.pan_id = lta.pan_id 
         ]]>
       </sql>
@@ -239,7 +239,7 @@ select distinct m.pan_id as internal, property_source_id as ontology_term_name, 
         <![CDATA[
 select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.category = 'CDC light trap assay'
+ where m.category = 'Entomological measurements'
         ]]>
       </sql>
     </sqlQuery>
