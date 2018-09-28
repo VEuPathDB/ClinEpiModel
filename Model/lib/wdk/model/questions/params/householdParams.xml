@@ -184,8 +184,8 @@ with mos as (
   where da.pan_id in ($$geographic_region_prism$$)
   and da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
-  and la.OBI_0001619 >= $$date_range.min$$
-  and la.OBI_0001619 <= $$date_range.max$$ 
+  and EUPATH_0020003 >= $$date_range.min$$
+  and EUPATH_0020003 <= $$date_range.max$$ 
   group by da.pan_id
   )
 select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value

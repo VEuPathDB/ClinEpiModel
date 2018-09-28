@@ -508,8 +508,8 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
-  and la.OBI_0001619 >= $$visit_date.min$$ 
-  and la.OBI_0001619 <= $$visit_date.max$$ 
+  and EUPATH_0020003 >= $$visit_date.min$$ 
+  and EUPATH_0020003 <= $$visit_date.max$$ 
   group by da.pan_id) mos, part
   where part.household_id = mos.pan_id(+)
           ]]>

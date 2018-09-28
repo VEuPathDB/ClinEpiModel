@@ -705,8 +705,8 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
-  and la.OBI_0001619 >= $$visit_date.min$$ 
-  and la.OBI_0001619 <= $$visit_date.max$$ 
+  and la.EUPATH_0020003 >= $$visit_date.min$$ 
+  and la.EUPATH_0020003 <= $$visit_date.max$$ 
   group by da.pan_id) mos, part
   where part.household_id = mos.pan_id(+)
           ]]>
@@ -760,7 +760,7 @@ select * from (
  select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id =  'EUPATH_0000328'
+     START WITH o.ontology_term_source_id =  'EUPATH_0000738'
      )
      where ontology_term_name != 'EFO_0004950'
      order by display_name
@@ -789,15 +789,17 @@ and obs.pan_id = io.output_pan_id
 and obs.EUPATH_0000091 >= $$visit_date.min$$ 
 and obs.EUPATH_0000091 <= $$visit_date.max$$ 
 )
-select distinct valid.visit_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, valid
- where m.pan_id = valid.visit_id
+select distinct m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD m, valid
+ where m.observation_id = valid.visit_id
+/*
   union all
  select valid.visit_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$MetaData m, valid, ApidbTuning.$$tbl_prefix$$PANIO ios
 where m.property_source_id = 'OBI_0100051'
 and ios.output_pan_id = m.pan_id
 and ios.input_pan_id = valid.visit_id
+*/
           ]]>
     </sql>
     </sqlQuery>    
@@ -811,14 +813,8 @@ and ios.input_pan_id = valid.visit_id
       <column name="string_value"/>
       <sql>
         <![CDATA[
- select distinct pan_id as internal,  property_source_id  as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData 
- where category in ('Event/Observation','Observation')
- union all
- select io.input_pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
-where m.property_source_id = 'OBI_0100051'
-and io.output_pan_id = m.pan_id
+select  observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>
     </sqlQuery>
@@ -987,7 +983,6 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
---from brunkb.testObservationMD
 where participant_id in ($$participants_maled$$)
           ]]>
     </sql>
@@ -1005,7 +1000,6 @@ where participant_id in ($$participants_maled$$)
         <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
---from brunkb.testObservationMD
           ]]>
     </sql>
     </sqlQuery>
