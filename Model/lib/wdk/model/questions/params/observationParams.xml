@@ -636,9 +636,10 @@ select m.observation_id as internal,  m.ontology_term_name, m.string_value, m.nu
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select p.household_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$HouseObsIdMD p
+select p.household_id as internal, ho.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD p, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
 where p.ontology_term_name = 'OBI_0001627'
+and ho.household_id = p.household_id
         ]]>
       </sql>
     </sqlQuery>
@@ -655,9 +656,10 @@ where p.ontology_term_name = 'OBI_0001627'
      <column name="string_value"/>
      <sql>
        <![CDATA[
-                select  participant_id as internal, household_observation_id as filter_item_id, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
-                from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
-                where household_id in ($$geographic_region_maled$$)
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
+                where h.household_id in ($$geographic_region_maled$$)
+                and ho.household_id = h.household_id
        ]]>
      </sql>
    </sqlQuery>
@@ -673,8 +675,9 @@ where p.ontology_term_name = 'OBI_0001627'
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, household_observation_id as filter_item_id, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
+                where ho.household_id = h.household_id
           ]]>
     </sql>
     </sqlQuery>
@@ -690,9 +693,10 @@ from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
-where p.participant_id in ($$households_maled$$)
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+where p.household_id in ($$households_maled$$)
+and hp.participant_id = p.participant_id
           ]]>
     </sql>
     </sqlQuery>
@@ -707,8 +711,9 @@ where p.participant_id in ($$households_maled$$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+where hp.participant_id = p.participant_id
           ]]>
     </sql>
     </sqlQuery>
