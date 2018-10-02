@@ -117,7 +117,7 @@
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
                     countPredictsAnswerCount="true"
                     prompt="Participants"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.visits_visitage_metadata_prism,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region_prism">
       <help>
         Select participants based on their characteristics. 
@@ -133,7 +133,7 @@
                     countPredictsAnswerCount="true"
                     prompt="Households"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visit_date,participantParams.participants_prism"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="true">
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
@@ -145,7 +145,7 @@
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.visits_visitage_metadata_prism,participantParams.households_prism,clinicalVisitParams.visit_date">
       <help>
         Select participants based on their visit characteristics. 
@@ -158,7 +158,7 @@
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix">
       <help>
         Select participants based on their visit characteristics. 
@@ -674,10 +674,10 @@ o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('PCO_0000024','ENVO_01000744')
-     and ontology_term_source_id != 'EUPATH_0000094'
  union
  select 'average_anopheles' as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, 'Average Female Anopheles Collected' as display_name, 'Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
  null as precision from dual)
+ where ontology_term_name not in ('EUPATH_0000094')
  order by display_name
     </sql>
     </sqlQuery>
