@@ -580,9 +580,9 @@ where ontology_term_source_id = 'EUPATH_0000113'
       <column name="string_value"/>
       <sql>
         <![CDATA[
-  select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m
-where m.property_source_id = 'EUPATH_0000113'
+  select distinct m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD m
+where m.ontology_term_name = 'EUPATH_0000113'
           ]]>   
       </sql>
    </sqlQuery>
