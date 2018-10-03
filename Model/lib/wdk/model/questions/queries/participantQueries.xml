@@ -77,8 +77,8 @@ and pa.pan_id = visits.input_pan_id(+)) core, ApidbTuning.$$tbl_prefix$$Particip
   and Iol.Input_Pan_Type_Source_Id = 'PCO_0000024'
   and iop.input_pan_id = iol.input_pan_id
   and Iop.Output_Pan_Type_Source_Id = 'EUPATH_0000096'
-  and la.OBI_0001619 >= $$visit_date.min$$ 
-  and la.OBI_0001619 <= $$visit_date.max$$ 
+  and EUPATH_0020003 >= $$visit_date.min$$ 
+  and EUPATH_0020003 <= $$visit_date.max$$ 
   group by iop.output_pan_id) mos
 where pa.pan_id = core.pan_id
 and round(core.visit_count / ((abs(least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
