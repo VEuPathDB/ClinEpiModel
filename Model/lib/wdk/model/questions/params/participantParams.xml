@@ -1471,12 +1471,14 @@ order by display_order
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select hp.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+                  select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
+                  m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
 where hp.participant_id in ($$geographic_region_gems$$)
 and m.household_id = hp.household_id 
@@ -1489,12 +1491,14 @@ and m.household_id = hp.household_id
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select hp.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
+                  m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
 where m.household_id = hp.household_id 
          ]]>
