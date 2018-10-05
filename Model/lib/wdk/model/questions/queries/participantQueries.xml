@@ -316,12 +316,12 @@ and count(*) <= $$visit_count.max$$
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
 from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
       where observation_id in ($$visits_amazperu$$)
-      and ontology_term_name = 'EUPATH_0000091'
+      and ontology_term_name = 'EUPATH_0004991'
 $$dateOperator_fv$$
  select distinct vis.participant_id,vis.observation_id,vis.date_value
  from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
  where vis.observation_id in ($$visits_amazperu$$)
- and vis.ontology_term_name = 'EUPATH_0000091'
+ and vis.ontology_term_name = 'EUPATH_0004991'
 and $$use_relative_visits$$ = 1
 and rv.observation_id in ($$relative_visits_amazperu$$)
 and rv.ontology_term_name = 'EUPATH_0000091'

@@ -255,14 +255,14 @@ with vis as (
 select distinct md.participant_id as participant_id,md.observation_id as pan_id,md.date_value as visit_date
 from ApidbTuning.$$tbl_prefix$$ObservationMD md
 where md.observation_id in ($$visits_amazperu$$)
-and md.ontology_term_name = 'EUPATH_0000091'
+and md.ontology_term_name = 'EUPATH_0004991'
 ),
 relvis as (
 select distinct md.participant_id as participant_id,md.observation_id as pan_id,md.date_value as visit_date
 from ApidbTuning.$$tbl_prefix$$ObservationMD md
 where $$use_relative_visits$$ = 1
 and md.observation_id in ($$relative_visits_amazperu$$)
-and md.ontology_term_name = 'EUPATH_0000091'
+and md.ontology_term_name = 'EUPATH_0004991'
 ),
 visits as (
 select * from vis

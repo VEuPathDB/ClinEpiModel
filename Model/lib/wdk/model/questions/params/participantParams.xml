@@ -1455,7 +1455,7 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
       <![CDATA[
 select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where o.ontology_term_source_id in ('EUPATH_0021094')
+where o.ontology_term_source_id in ('EUPATH_0022001','EUPATH_0021094')
          ]]>
     </sql>
    </sqlQuery>
