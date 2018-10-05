@@ -347,6 +347,78 @@
       </help>
     </filterParam>
 
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  Amazonia Peru ICEMR specific .. should be injected -->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <filterParam name="geographic_region_amazperu" 
+                    metadataQueryRef="ClinicalVisitVQ.RegionMetaData_amazperu"
+                    backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_amazperu"
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_amazperu"
+                    countPredictsAnswerCount="true"
+                    prompt="Participant"
+                    dependedParamRef="participantParams.tbl_prefix"
+                    trimMetadataTerms="false">
+      <help>
+        Select observations based on geographic region where the participants live. 
+      </help>
+    </filterParam>
+
+
+    <filterParam name="households_amazperu" 
+                       metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_amazperu"
+                       backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_amazperu"
+                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_amazperu"
+                       countPredictsAnswerCount="true"
+                       filterDataTypeDisplayName="Households"
+                       prompt="Households"
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_amazperu"
+                       trimMetadataTerms="false">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+    </filterParam>
+
+
+       <filterParam name="participants_amazperu" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_amazperu"
+                       metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_amazperu"
+                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_amazperu"
+                       countPredictsAnswerCount="true"
+                       prompt="Participants"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_amazperu">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_amazperu" 
+                    metadataQueryRef="ClinicalVisitVQ.VisitMetaData_amazperu"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_amazperu"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_amazperu"
+                    countPredictsAnswerCount="true"
+                    prompt="Observations"
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_amazperu">
+      <help>
+        Select observations based on their observation characteristics. 
+      </help>
+    </filterParam>
+
+    <filterParam name="relative_visits_amazperu" 
+                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_amazperu"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_amazperu"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_amazperu"
+                    prompt="Related Observations"
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.tbl_prefix">
+      <help>
+        Select related observations based on their characteristics. 
+      </help>
+    </filterParam>
+
   </paramSet>
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -882,6 +954,140 @@ and hp.participant_id = po.participant_id
     </sqlQuery>
 
    <sqlQuery name="RelVisitMetaData_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  Amazonia peru ICEMR specific .. should be injected -->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+   <sqlQuery name="HouseholdMetaData_amazperu" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="clinicalVisitParams.geographic_region_amazperu" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where hp.participant_id in ($$geographic_region_amazperu$$)
+and hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_amazperu" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/> 
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+
+   <sqlQuery name="ParticipantMetaData_amazperu" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.households_amazperu" />  
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select p.participant_id as internal, po.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where p.participant_id in ($$households_amazperu$$)
+and po.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_amazperu" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select p.participant_id as internal, po.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where po.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaData_amazperu" isCacheable="false">
+         <paramRef ref="clinicalVisitParams.participants_amazperu" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_amazperu$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+    <sqlQuery name="RegionMetaData_amazperu" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  distinct h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where h.ontology_term_name in ('EUPATH_0021094')
+and hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
+        ]]>
+      </sql>
+    </sqlQuery>
+
+   <sqlQuery name="RelVisitMetaData_amazperu" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
