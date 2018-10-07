@@ -232,6 +232,72 @@ where pan_id in ($$visits_india$$)
         </sql>
      </sqlQuery>
 
+     <sqlQuery name="ObservationsByRelativeVisits_amazperu"
+          isCacheable="true">
+       <paramRef ref="clinicalVisitParams.geographic_region_amazperu" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="clinicalVisitParams.households_amazperu" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_amazperu" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_amazperu" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_amazperu" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D897fe55e6f" groupRef="metaDataGroups.relative_events"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="min_days_between"/>
+       <column name="num_matching_visits"/> 
+       <sql>
+           <![CDATA[
+with vis as (
+select distinct md.participant_id as participant_id,md.observation_id as pan_id,md.date_value as visit_date
+from ApidbTuning.$$tbl_prefix$$ObservationMD md
+where md.observation_id in ($$visits_amazperu$$)
+and md.ontology_term_name = 'EUPATH_0004991'
+),
+relvis as (
+select distinct md.participant_id as participant_id,md.observation_id as pan_id,md.date_value as visit_date
+from ApidbTuning.$$tbl_prefix$$ObservationMD md
+where $$use_relative_visits$$ = 1
+and md.observation_id in ($$relative_visits_amazperu$$)
+and md.ontology_term_name = 'EUPATH_0004991'
+),
+visits as (
+select * from vis
+$$dateOperator_fv$$
+select vis.participant_id, vis.pan_id,vis.visit_date
+from vis, relvis rv
+where $$use_relative_visits$$ = 1
+and vis.participant_id = rv.participant_id
+and vis.pan_id != rv.pan_id
+and vis.visit_date $$date_direction_fv$$ rv.visit_date
+and abs(rv.visit_date - vis.visit_date) >= $$days_between.min$$
+and abs(rv.visit_date - vis.visit_date) <= $$days_between.max$$
+group by vis.pan_id, vis.participant_id,vis.visit_date
+having count(*) >= $$num_relative_events.min$$ and count(*) <= $$num_relative_events.max$$
+)
+select name as source_id,'@PROJECT_ID@' as project_id
+, CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
+from (
+select visits.pan_id,o.name,visits.participant_id as parent_id,visits.visit_date, abs(inter.visit_date - visits.visit_date) as days_between
+from (
+select vis.pan_id, vis.participant_id,rv.visit_date
+from vis, relvis rv
+where vis.participant_id = rv.participant_id
+and vis.pan_id != rv.pan_id
+and vis.visit_date $$date_direction_fv$$ rv.visit_date
+and abs(rv.visit_date - vis.visit_date) >= $$days_between.min$$
+and abs(rv.visit_date - vis.visit_date) <= $$days_between.max$$
+) inter, visits, ApidbTuning.$$tbl_prefix$$Observations o
+where visits.pan_id = o.pan_id
+and visits.pan_id = inter.pan_id(+)
+)
+group by name
+                ]]>   
+        </sql>
+     </sqlQuery>
 
      <!-- Transform -->
      
