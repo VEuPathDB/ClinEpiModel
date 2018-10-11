@@ -40,12 +40,12 @@ prop=extraHouseholdTables
 
 
       <reporter name="attributesTabular" displayName="%%attributesReporterDisplayName%%" scopes="results"
-                implementation="org.gusdb.wdk.model.report.AttributesTabularReporter">
+                implementation="org.gusdb.wdk.model.report.reporter.AttributesTabularReporter">
         <property name="page_size">500</property>
       </reporter>
 
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes=""
-                implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
+                implementation="org.gusdb.wdk.model.report.reporter.FullRecordReporter" />
 
       <!-- =================================================================== -->
       <!--  Text Attributes  ++++++++-->
@@ -155,7 +155,7 @@ select count(*) from apidbtuning.${tblPrefix}Households
                             decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                             decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
                             decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values', null) as reporter_description,
-                            decode(meta.type, 'string', 'org.gusdb.wdk.model.report.HistogramAttributeReporter', 'number', 'org.gusdb.wdk.model.report.HistogramAttributeReporter', null) as reporter_implementation,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
                             null as reporter_properties
                      from (
                      select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type 
