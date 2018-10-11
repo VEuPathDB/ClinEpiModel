@@ -12,17 +12,27 @@
                  xmlDataURL="studyApprovals.xml">
     </xmlQuestion>
 
- <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
   <!-- News -->
   <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-  
+
     <xmlQuestion name="News"
-                  displayName="@PROJECT_ID@ News"
+                  displayName="ClinEpiDB News"
                   recordClassRef="XmlRecordClasses.NewsRecord"
-                  xmlDataURL="@PROJECT_ID@/news.xml">
+                  xmlDataURL="ClinEpiDB/news.xml">
     </xmlQuestion>
 
-    
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- TUTORIALS -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+        <xmlQuestion name="Tutorials" 
+                 displayName="Tutorials" 
+                 recordClassRef="XmlRecordClasses.TutorialsRecord" 
+                 xmlDataURL="tutorials.xml"> 
+       </xmlQuestion>
+
+
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!-- WdkVerbiage -->
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->

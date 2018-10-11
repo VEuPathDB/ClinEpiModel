@@ -16,7 +16,7 @@ prop=malaria_cat_svg
 <textAttribute name="${malaria_cat_svg}" displayName="Malaria timeline"  truncateTo="100000">
                     <text>
                       <![CDATA[
-                        <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000036&h=100&w=1100&datasetId=${presenterId}" type="image/svg+xml" style="height:100px; width:1100px;"/>
+                        <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000036&h=200&w=1100&datasetId=${presenterId}" type="image/svg+xml" style="height:200px; width:1100px;"/>
                       ]]>
                     </text>
                   </textAttribute>
@@ -51,6 +51,11 @@ name=MALEDGraphAttributes
 anchorFile=ClinEpiModel/Model/lib/dst/graphAttributes.dst
 prop=presenterId
 prop=demo_plot_allThree_compact
+prop=demo_plot_weightheight_compact
+prop=demo_plot_weightage_compact
+prop=demo_plot_heightage_compact
+prop=demo_plot_xlength_compact
+prop=demo_plot_weight_compact
 prop=demo_plot_weightheight
 prop=demo_plot_weightage
 prop=demo_plot_heightage
@@ -66,6 +71,16 @@ prop=demo_plot_weight
               </text>
             </textAttribute>
 
+
+<textAttribute name="${demo_plot_heightage_compact}" displayName="Height For Age Z-Score"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&eventStart=EUPATH_0000644&eventDur=EUPATH_0010238&sampleInfo=EUPATH_0010829,EUPATH_0010825,EUPATH_0010821,EUPATH_0010607,EUPATH_0010599,EUPATH_0010603,EUPATH_0010611,EUPATH_0010623,EUPATH_0010643,EUPATH_0010651,EUPATH_0010695,EUPATH_0010703,EUPATH_0010715,EUPATH_0010655,EUPATH_0010699,EUPATH_0010707,EUPATH_0010711,EUPATH_0010754,EUPATH_0010726,EUPATH_0010730,EUPATH_0010734,EUPATH_0010738,EUPATH_0010767,EUPATH_0010793,EUPATH_0010809,EUPATH_0010797,EUPATH_0010801,EUPATH_0010805,EUPATH_0010615&h=250&w=450&thumb=1" type="image/svg+xml" style="height:250px; width:450px;"/>
+]]>
+              </text>
+            </textAttribute>
+
+
             <textAttribute name="${demo_plot_weightheight}" displayName="Weight for Height Z-score">
               <text>
               <![CDATA[
@@ -74,10 +89,26 @@ prop=demo_plot_weight
               </text>
             </textAttribute>
 
+<textAttribute name="${demo_plot_weightheight_compact}" displayName="Weight for Height Z-Score"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&eventStart=EUPATH_0000644&eventDur=EUPATH_0010238&sampleInfo=EUPATH_0010829,EUPATH_0010825,EUPATH_0010821,EUPATH_0010607,EUPATH_0010599,EUPATH_0010603,EUPATH_0010611,EUPATH_0010623,EUPATH_0010643,EUPATH_0010651,EUPATH_0010695,EUPATH_0010703,EUPATH_0010715,EUPATH_0010655,EUPATH_0010699,EUPATH_0010707,EUPATH_0010711,EUPATH_0010754,EUPATH_0010726,EUPATH_0010730,EUPATH_0010734,EUPATH_0010738,EUPATH_0010767,EUPATH_0010793,EUPATH_0010809,EUPATH_0010797,EUPATH_0010801,EUPATH_0010805,EUPATH_0010615&h=250&w=450&thumb=1" type="image/svg+xml" style="height:250px; width:450px;"/>
+]]>
+              </text>
+            </textAttribute>
+
             <textAttribute name="${demo_plot_weightage}" displayName="Weight for Age Z-score">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0010238&sampleInfo=EUPATH_0010829,EUPATH_0010825,EUPATH_0010821,EUPATH_0010607,EUPATH_0010599,EUPATH_0010603,EUPATH_0010611,EUPATH_0010623,EUPATH_0010643,EUPATH_0010651,EUPATH_0010695,EUPATH_0010703,EUPATH_0010715,EUPATH_0010655,EUPATH_0010699,EUPATH_0010707,EUPATH_0010711,EUPATH_0010754,EUPATH_0010726,EUPATH_0010730,EUPATH_0010734,EUPATH_0010738,EUPATH_0010767,EUPATH_0010793,EUPATH_0010809,EUPATH_0010797,EUPATH_0010801,EUPATH_0010805,EUPATH_0010615&w=800&h=350" type="image/svg+xml" style="height:350px; width:800px;"/>
+]]>
+              </text>
+            </textAttribute>
+
+<textAttribute name="${demo_plot_weightage_compact}" displayName="Weight for Age Z-Score"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0010238&sampleInfo=EUPATH_0010829,EUPATH_0010825,EUPATH_0010821,EUPATH_0010607,EUPATH_0010599,EUPATH_0010603,EUPATH_0010611,EUPATH_0010623,EUPATH_0010643,EUPATH_0010651,EUPATH_0010695,EUPATH_0010703,EUPATH_0010715,EUPATH_0010655,EUPATH_0010699,EUPATH_0010707,EUPATH_0010711,EUPATH_0010754,EUPATH_0010726,EUPATH_0010730,EUPATH_0010734,EUPATH_0010738,EUPATH_0010767,EUPATH_0010793,EUPATH_0010809,EUPATH_0010797,EUPATH_0010801,EUPATH_0010805,EUPATH_0010615&h=250&w=450&thumb=1" type="image/svg+xml" style="height:250px; width:450px;"/>
 ]]>
               </text>
             </textAttribute>
@@ -97,6 +128,7 @@ prop=demo_plot_weight
 ]]>
               </text>
             </textAttribute>
+
 <textAttribute name="${demo_plot_xlength}" displayName="Length Over Time">
               <text>
               <![CDATA[
@@ -105,10 +137,26 @@ prop=demo_plot_weight
               </text>
             </textAttribute>
 
+<textAttribute name="${demo_plot_xlength_compact}" displayName="Length Over Time"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000719&eventStart=EUPATH_0000644&eventDur=EUPATH_0010238&sampleInfo=EUPATH_0010829,EUPATH_0010825,EUPATH_0010821,EUPATH_0010607,EUPATH_0010599,EUPATH_0010603,EUPATH_0010611,EUPATH_0010623,EUPATH_0010643,EUPATH_0010651,EUPATH_0010695,EUPATH_0010703,EUPATH_0010715,EUPATH_0010655,EUPATH_0010699,EUPATH_0010707,EUPATH_0010711,EUPATH_0010754,EUPATH_0010726,EUPATH_0010730,EUPATH_0010734,EUPATH_0010738,EUPATH_0010767,EUPATH_0010793,EUPATH_0010809,EUPATH_0010797,EUPATH_0010801,EUPATH_0010805,EUPATH_0010615&h=250&w=450&thumb=1" type="image/svg+xml" style="height:250px; width:450px;"/>
+]]>
+              </text>
+            </textAttribute>
+
             <textAttribute name="${demo_plot_weight}" displayName="Weight Over Time">
               <text>
               <![CDATA[
                   <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000732&eventStart=EUPATH_0000644&eventDur=EUPATH_0010238&sampleInfo=EUPATH_0010829,EUPATH_0010825,EUPATH_0010821,EUPATH_0010607,EUPATH_0010599,EUPATH_0010603,EUPATH_0010611,EUPATH_0010623,EUPATH_0010643,EUPATH_0010651,EUPATH_0010695,EUPATH_0010703,EUPATH_0010715,EUPATH_0010655,EUPATH_0010699,EUPATH_0010707,EUPATH_0010711,EUPATH_0010754,EUPATH_0010726,EUPATH_0010730,EUPATH_0010734,EUPATH_0010738,EUPATH_0010767,EUPATH_0010793,EUPATH_0010809,EUPATH_0010797,EUPATH_0010801,EUPATH_0010805,EUPATH_0010615&w=800&h=350" type=""image/svg+xml" style="height:350px; width:800px;"/>
+]]>
+              </text>
+            </textAttribute>
+
+<textAttribute name="${demo_plot_weight_compact}" displayName="Weight Over Time"  truncateTo="100000">
+              <text>
+              <![CDATA[
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000732&eventStart=EUPATH_0000644&eventDur=EUPATH_0010238&sampleInfo=EUPATH_0010829,EUPATH_0010825,EUPATH_0010821,EUPATH_0010607,EUPATH_0010599,EUPATH_0010603,EUPATH_0010611,EUPATH_0010623,EUPATH_0010643,EUPATH_0010651,EUPATH_0010695,EUPATH_0010703,EUPATH_0010715,EUPATH_0010655,EUPATH_0010699,EUPATH_0010707,EUPATH_0010711,EUPATH_0010754,EUPATH_0010726,EUPATH_0010730,EUPATH_0010734,EUPATH_0010738,EUPATH_0010767,EUPATH_0010793,EUPATH_0010809,EUPATH_0010797,EUPATH_0010801,EUPATH_0010805,EUPATH_0010615&h=250&w=450&thumb=1" type="image/svg+xml" style="height:250px; width:450px;"/>
 ]]>
               </text>
             </textAttribute>

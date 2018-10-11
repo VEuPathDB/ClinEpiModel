@@ -12,69 +12,6 @@
 
     <!-- TEMPLATE_ANCHOR participantSourceIdQuery -->
      
-     <!-- not used ..... no relative visits but leave in case decide to use at some point .... -->
-     
-     <sqlQuery name="ParticipantsByCharWiz" isCacheable="true" includeProjects="NotUsed">
-       <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="participantParams.visits_visitage_metadata_prism" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="participantParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="participantParams.visits_prism" groupRef="metaDataGroups.part_visit_characteristics"/>
-       <paramRef ref="participantParams.parasite_density" groupRef="metaDataGroups.summary_params"/>
-       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.summary_params"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.summary_params"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-       <column name="ave_anoph"/>
-       <column name="avg_hemo"/>
-       <column name="avg_weight"/>
-       <column name="ave_para_density"/>
-       <column name="ave_age_visit"/>
-       <column name="visit_count"/>
-       <column name="visits_per_year_obs"/>
-       <column name="time_of_obs"/>
-         <sql>
-           <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
- round(count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1) / 365),1) as visits_per_year_obs,
-                    round((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1) / 365,1) as time_of_obs, 
-                    count(*) as visit_count, mos.ave_anoph, 
-   round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) as ave_para_density,
-   round(avg(ca.EUPATH_0000113),1) as ave_age_visit,
-   round(avg(ca.EUPATH_0000047),1) as avg_hemo,
-   round(avg(ca.IAO_0000414),1) as avg_weight
-from ApidbTuning.$$tbl_prefix$$Observations ca, ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO io,
-   (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
-   from ApidbTuning.$$tbl_prefix$$Observations 
-   where pan_id in (SELECT distinct md.internal FROM ($$visits_visitage_metadata_nf$$) md)
-   ) age,
-   (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
-  from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
-  where da.pan_id = io.input_pan_id
-  and la.pan_id = io.output_pan_id
-  and la.OBI_0001619 >= $$visit_date.min$$ 
-  and la.OBI_0001619 <= $$visit_date.max$$ 
-  group by da.pan_id) mos, ApidbTuning.$$tbl_prefix$$PANIO iom
-where ca.pan_id in ($$visits_nf$$)
-and ca.pan_id = io.output_pan_id
-and pa.pan_id = io.input_pan_id
-and iom.output_pan_id = pa.pan_id
-and iom.input_pan_id = mos.pan_id(+)
-group by pa.name, pa.EUPATH_0000152, pa.EFO_0004950, pa.EUPATH_0000151,age.max_age,age.min_age,mos.ave_anoph 
-having count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1) / 365) >= $$visits_per_year.min$$
- and count(*) / ((least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1) / 365) <= $$visits_per_year.max$$
- and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) >= $$parasite_density.min$$
- and round(exp(avg(case when ca.EUPATH_0000092 > 0.0 then ln(ca.EUPATH_0000092) else ln(0.00000000000001) end)),1) <= $$parasite_density.max$$
-                ]]>   
-        </sql>
-     </sqlQuery>
-
      <sqlQuery name="ParticipantsByCharWizRelVis_prism" isCacheable="true">
        <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
@@ -140,8 +77,8 @@ and pa.pan_id = visits.input_pan_id(+)) core, ApidbTuning.$$tbl_prefix$$Particip
   and Iol.Input_Pan_Type_Source_Id = 'PCO_0000024'
   and iop.input_pan_id = iol.input_pan_id
   and Iop.Output_Pan_Type_Source_Id = 'EUPATH_0000096'
-  and la.OBI_0001619 >= $$visit_date.min$$ 
-  and la.OBI_0001619 <= $$visit_date.max$$ 
+  and EUPATH_0020003 >= $$visit_date.min$$ 
+  and EUPATH_0020003 <= $$visit_date.max$$ 
   group by iop.output_pan_id) mos
 where pa.pan_id = core.pan_id
 and round(core.visit_count / ((abs(least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) -
@@ -156,6 +93,7 @@ and pa.pan_id = mos.part_id(+)
      <sqlQuery name="ParticipantsByCharWizRelVis_maled"
           isCacheable="true">
        <paramRef ref="participantParams.geographic_region_maled" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_maled" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_maled" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_maled" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
@@ -164,7 +102,7 @@ and pa.pan_id = mos.part_id(+)
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_maled" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D121f2c2f02" groupRef="metaDataGroups.event_summary_params"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D3dbf92dc05" groupRef="metaDataGroups.event_summary_params"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_age_visit"/>
@@ -202,7 +140,6 @@ and count(*) <= $$visit_count.max$$
 
      <sqlQuery name="ParticipantsByCharWizRelVis_india"
           isCacheable="true">
-       <paramRef ref="participantParams.study_type" groupRef="metaDataGroups.choose_study_type"/>
        <paramRef ref="participantParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
@@ -212,7 +149,7 @@ and count(*) <= $$visit_count.max$$
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.relative_visits_india" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Df6c59e88c1" groupRef="metaDataGroups.choose_study_type"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D05ea525fd3" groupRef="metaDataGroups.relative_events"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
@@ -237,6 +174,26 @@ and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
 group by vis.participant_id,vis.observation_id,vis.date_value
 ) main, ApidbTuning.$$tbl_prefix$$Participants pa
 where pa.pan_id = main.participant_id
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+
+     <sqlQuery name="ParticipantsXSectional_india"
+          isCacheable="true">
+       <paramRef ref="participantParams.geographic_region_india" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_india" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Da5c969d5fa" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_india$$)
+and pa.pan_id = obs.participant_id
 group by pa.name 
                 ]]>   
         </sql>
@@ -286,6 +243,97 @@ where 'matching' = $$return_case_control$$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
 and core.EUPATH_0010375 != pa.EUPATH_0010375
 */
+                ]]>   
+        </sql>
+     </sqlQuery>
+
+     <sqlQuery name="ParticipantsXSectional_sasia"
+          isCacheable="true">
+       <paramRef ref="participantParams.participants_sasia" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_sasia" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_sasia" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D13c737a528" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+with io as (
+select distinct input_pan_id as participant_id, output_pan_id as observation_id
+from ApidbTuning.$$tbl_prefix$$PANIO 
+where input_pan_type_source_id = 'EUPATH_0000096' 
+and output_pan_type_source_id = 'EUPATH_0000738'
+)
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
+                    count(*) as visit_count, 
+   round(avg(number_value),1) -1 as ave_age_visit
+from (select distinct io.participant_id,io.observation_id,nvl(o.EUPATH_0023016,0) as number_value from ApidbTuning.$$tbl_prefix$$Observations o, io
+      where o.pan_id in ($$visits_sasia$$)
+      and io.observation_id = o.pan_id
+$$dateOperator_fv$$
+ select distinct visio.participant_id,visio.observation_id,nvl(vis.EUPATH_0023016,0)
+ from ApidbTuning.$$tbl_prefix$$Observations vis, io visio, ApidbTuning.$$tbl_prefix$$Observations rv, io rvio
+ where vis.pan_id in ($$visits_sasia$$)
+      and visio.observation_id = vis.pan_id
+and $$use_relative_visits$$ = 1
+and rv.pan_id in ($$relative_visits_sasia$$)
+and rvio.observation_id = rv.pan_id
+and visio.participant_id = rvio.participant_id
+and visio.observation_id != rvio.observation_id
+and nvl(vis.EUPATH_0023016,0) $$date_direction_fv$$ nvl(rv.EUPATH_0023016,0)  
+and abs(nvl(rv.EUPATH_0023016,0) - nvl(vis.EUPATH_0023016,0)) >= $$days_between.min$$
+and abs(nvl(rv.EUPATH_0023016,0) - nvl(vis.EUPATH_0023016,0)) <= $$days_between.max$$
+group by visio.participant_id,visio.observation_id,nvl(vis.EUPATH_0023016,0)
+) main, ApidbTuning.$$tbl_prefix$$Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
+having count(*) >= $$visit_count.min$$
+and count(*) <= $$visit_count.max$$
+                ]]>   
+        </sql>
+     </sqlQuery>
+
+     <sqlQuery name="ParticipantsByRelativeVisits_amazperu"
+          isCacheable="true">
+       <paramRef ref="participantParams.geographic_region_amazperu" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_amazperu" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_amazperu" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_amazperu" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_amazperu" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D897fe55e6f" groupRef="metaDataGroups.relative_events"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
+      where observation_id in ($$visits_amazperu$$)
+      and ontology_term_name = 'EUPATH_0004991'
+$$dateOperator_fv$$
+ select distinct vis.participant_id,vis.observation_id,vis.date_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
+ where vis.observation_id in ($$visits_amazperu$$)
+ and vis.ontology_term_name = 'EUPATH_0004991'
+and $$use_relative_visits$$ = 1
+and rv.observation_id in ($$relative_visits_amazperu$$)
+and rv.ontology_term_name = 'EUPATH_0000091'
+and vis.participant_id = rv.participant_id
+and vis.observation_id != rv.observation_id
+and vis.date_value $$date_direction_fv$$ rv.date_value  
+and abs(rv.date_value - vis.date_value) >= $$days_between.min$$
+and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
+group by vis.participant_id,vis.observation_id,vis.date_value
+) main, ApidbTuning.$$tbl_prefix$$Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
                 ]]>   
         </sql>
      </sqlQuery>

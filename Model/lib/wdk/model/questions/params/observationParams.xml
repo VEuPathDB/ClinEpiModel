@@ -94,7 +94,7 @@
        <dateRangeParam name="visit_date"
                        prompt="Choose start and end dates "
                        minDate="2011-07-01"
-                       maxDate="2016-07-31">
+                       maxDate="2017-07-31">
          <help>"select the earliest and latest dates to include for identifying observations and computing mosquito counts."</help>
 
        </dateRangeParam>
@@ -207,7 +207,19 @@
       </help>
     </filterParam>
 
-
+    <filterParam name="households_maled" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
+                    metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_maled"
+                    backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_maled"
+                    filterDataTypeDisplayName="Households"
+                    countPredictsAnswerCount="true"
+                    prompt="Households"
+                    dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_maled"
+                    trimMetadataTerms="false">
+      <help>
+        Select observations based on the characteristics of the household where the participants live. 
+      </help>
+    </filterParam>
 
        <filterParam name="participants_maled" 
                        ontologyQueryRef="ParticipantVQ.ParticipantOntology_maled"
@@ -216,7 +228,7 @@
                        countPredictsAnswerCount="true"
                        prompt="Participants"
                        trimMetadataTerms="false"
-                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_maled">
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_maled">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -239,6 +251,23 @@
                     metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
+                    countPredictsAnswerCount="false"
+                    prompt="Related Observations"
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.tbl_prefix">
+      <help>
+        Select related observations based on their characteristics. 
+      </help>
+    </filterParam>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  SouthAsia ICEMR specific .. should be injected -->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    
+    <filterParam name="relative_visits_sasia" 
+                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_sasia"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_sasia"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_sasia"
                     prompt="Related Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix">
@@ -253,11 +282,11 @@
 
     <filterParam name="geographic_region_india" 
                     metadataQueryRef="ClinicalVisitVQ.RegionMetaData_india"
-                    backgroundQueryRef="ClinicalVisitVQ.RegionMetaDataBkgd_india"
+                    backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_india"
                     ontologyQueryRef="ParticipantVQ.RegionOntology_india"
                     countPredictsAnswerCount="true"
                     prompt="Participant"
-                    dependedParamRef="participantParams.tbl_prefix,participantParams.study_type"
+                    dependedParamRef="participantParams.tbl_prefix"
                     trimMetadataTerms="false">
       <help>
         Select observations based on geographic region where the participants live. 
@@ -310,6 +339,78 @@
                     metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_india"
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_india"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_india"
+                    prompt="Related Observations"
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.tbl_prefix">
+      <help>
+        Select related observations based on their characteristics. 
+      </help>
+    </filterParam>
+
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  Amazonia Peru ICEMR specific .. should be injected -->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <filterParam name="geographic_region_amazperu" 
+                    metadataQueryRef="ClinicalVisitVQ.RegionMetaData_amazperu"
+                    backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_amazperu"
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_amazperu"
+                    countPredictsAnswerCount="true"
+                    prompt="Participant"
+                    dependedParamRef="participantParams.tbl_prefix"
+                    trimMetadataTerms="false">
+      <help>
+        Select observations based on geographic region where the participants live. 
+      </help>
+    </filterParam>
+
+
+    <filterParam name="households_amazperu" 
+                       metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_amazperu"
+                       backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_amazperu"
+                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_amazperu"
+                       countPredictsAnswerCount="true"
+                       filterDataTypeDisplayName="Households"
+                       prompt="Households"
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_amazperu"
+                       trimMetadataTerms="false">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+    </filterParam>
+
+
+       <filterParam name="participants_amazperu" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_amazperu"
+                       metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_amazperu"
+                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_amazperu"
+                       countPredictsAnswerCount="true"
+                       prompt="Participants"
+                       trimMetadataTerms="false"
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_amazperu">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_amazperu" 
+                    metadataQueryRef="ClinicalVisitVQ.VisitMetaData_amazperu"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_amazperu"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_amazperu"
+                    countPredictsAnswerCount="true"
+                    prompt="Observations"
+                    trimMetadataTerms="false"
+                    dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_amazperu">
+      <help>
+        Select observations based on their observation characteristics. 
+      </help>
+    </filterParam>
+
+    <filterParam name="relative_visits_amazperu" 
+                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_amazperu"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_amazperu"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_amazperu"
                     prompt="Related Observations"
                     trimMetadataTerms="false"
                     dependedParamRef="participantParams.tbl_prefix">
@@ -415,18 +516,10 @@ select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal
       <column name="string_value"/>
       <sql>
         <![CDATA[
-with idMap as (
-select distinct io.input_pan_id as hh_id, io.output_pan_id as part_id, iov.output_pan_id as obs_id
-                 from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$PANIO iov
-                 where io.input_pan_type_source_id = 'PCO_0000024'
-                 and io.output_pan_type_source_id = 'EUPATH_0000096'
-                 and io.output_pan_id = iov.input_pan_id
-                 and iov.output_pan_type_source_id = 'EUPATH_0000738'
-)
-select m.pan_id as filter_item_id,  idMap.obs_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, idMap
- where m.pan_id = idMap.hh_id
- and m.property_source_id in ('EUPATH_0000054','OBI_0001627','EUPATH_0000452')
+select distinct p.household_id as filter_item_id, ho.observation_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD p, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
+where p.ontology_term_name = 'EUPATH_0000054'
+and ho.household_id = p.household_id
         ]]>
       </sql>
     </sqlQuery>
@@ -442,10 +535,10 @@ select m.pan_id as filter_item_id,  idMap.obs_id as internal, m.property_source_
       <column name="string_value"/>
       <sql>
         <![CDATA[
-  select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from  ApidbTuning.$$tbl_prefix$$metadata m
-  where m.pan_id in ($$geographic_region_prism$$)
-  and m.property_source_id = 'EUPATH_0000113'
+  select distinct m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+ from  ApidbTuning.$$tbl_prefix$$ObservationMD m
+  where m.observation_id in ($$geographic_region_prism$$)
+  and m.ontology_term_name = 'EUPATH_0000113'
          ]]>   
       </sql>
    </sqlQuery>
@@ -474,14 +567,14 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
  select distinct m.pan_id as filter_item_id, part.obs_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
- union
- select part.household_id as filter_item_id, part.obs_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ union all
+ select part.household_id as filter_item_id, part.obs_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
-  and la.OBI_0001619 >= $$visit_date.min$$ 
-  and la.OBI_0001619 <= $$visit_date.max$$ 
+  and EUPATH_0020003 >= $$visit_date.min$$ 
+  and EUPATH_0020003 <= $$visit_date.max$$ 
   group by da.pan_id) mos, part
   where part.household_id = mos.pan_id(+)
           ]]>
@@ -510,8 +603,8 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
  select distinct m.pan_id as filter_item_id, part.obs_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.$$tbl_prefix$$MetaData m, part
  where part.household_id = m.pan_id
- union
- select part.household_id as filter_item_id, part.obs_id as internal, 'average anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ union all
+ select part.household_id as filter_item_id, part.obs_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
  from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
@@ -536,17 +629,17 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as filter_item_id, iov.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.pan_id as filter_item_id, iov.observation_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from ApidbTuning.$$tbl_prefix$$Observations 
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
-   ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Observations obs
+   ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PartObsIO iov, ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Observations obs
    where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
-       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
-       and pa.pan_id = iov.input_pan_id
-       and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
-       and iov.output_pan_id = obs.pan_id
+       greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= $$duration_observation$$ 
+       and  pa.pan_id = iov.participant_id
+       and iov.observation_id in ($$visits_visitage_metadata_prism$$)
+       and iov.observation_id = obs.pan_id
        and obs.EUPATH_0000091 >= $$visit_date.min$$ 
        and obs.EUPATH_0000091 <= $$visit_date.max$$ 
        and pa.pan_id = m.pan_id       
@@ -564,11 +657,9 @@ select distinct m.pan_id as filter_item_id, iov.output_pan_id as internal, m.pro
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as filter_item_id, iov.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-  from  ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m
-  where iov.output_pan_type_source_id = 'EUPATH_0000738'
-  and iov.input_pan_type_source_id = 'EUPATH_0000096'
-  and iov.input_pan_id = m.pan_id
+select distinct m.pan_id as filter_item_id, iov.observation_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+  from  ApidbTuning.$$tbl_prefix$$PartObsIO iov, ApidbTuning.$$tbl_prefix$$MetaData m
+  where iov.participant_id = m.pan_id
           ]]>
     </sql>
     </sqlQuery>
@@ -585,16 +676,9 @@ select distinct m.pan_id as filter_item_id, iov.output_pan_id as internal, m.pro
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.pan_id in ($$households_prism$$)
-  union all
- select ios.input_pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO ios
-where m.category = 'Specimen type' 
-and m.property_source_id = 'OBI_0100051'
-and ios.input_pan_id in ($$households_prism$$)
-and ios.output_pan_id = m.pan_id
+select m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD m
+ where m.observation_id in ($$households_prism$$)
           ]]>
     </sql>
     </sqlQuery>    
@@ -602,60 +686,6 @@ and ios.output_pan_id = m.pan_id
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!--  MAL-ED specific .. should be injected -->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-
-
-
-   <sqlQuery name="ParticipantMetaData_maled" isCacheable="false">
-     <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
-     <paramRef ref="participantParams.tbl_prefix" />  
-     <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
-where p.participant_id in ($$geographic_region_maled$$)
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    <sqlQuery name="ParticipantMetaDataBkgd_maled" isCacheable="false">
-      <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    <sqlQuery name="VisitMetaData_maled" isCacheable="false">
-         <paramRef ref="clinicalVisitParams.participants_maled" />  
-         <paramRef ref="participantParams.tbl_prefix" />  
-         <column name="ontology_term_name"/>
-         <column name="internal"/>
-         <column name="number_value"/>
-         <column name="date_value"/>
-         <column name="string_value"/>
-         <sql>
-           <![CDATA[
-select observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in ($$participants_maled$$)
-          ]]>
-    </sql>
-    </sqlQuery>    
 
     <sqlQuery name="RegionMetaData_maled" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
@@ -667,14 +697,129 @@ where participant_id in ($$participants_maled$$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
+select p.household_id as internal, ho.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD p, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
 where p.ontology_term_name = 'OBI_0001627'
+and ho.household_id = p.household_id
         ]]>
       </sql>
     </sqlQuery>
 
+   <sqlQuery name="HouseholdMetaData_maled" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="clinicalVisitParams.geographic_region_maled" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="filter_item_id"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
+                where h.household_id in ($$geographic_region_maled$$)
+                and ho.household_id = h.household_id
+       ]]>
+     </sql>
+   </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_maled" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
+                where ho.household_id = h.household_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_maled" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.households_maled" />  
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+where p.household_id in ($$households_maled$$)
+and hp.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_maled" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+where hp.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaData_maled" isCacheable="false">
+         <paramRef ref="clinicalVisitParams.participants_maled" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="filter_item_id"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_maled$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+
+
    <sqlQuery name="RelVisitMetaData_maled" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  SouthAsia ICEMR specific .. should be injected -->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+   
+   <sqlQuery name="RelVisitMetaData_sasia" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -706,9 +851,11 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  h.household_id as filter_item_id, h.participant_id as internal, h.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.$$tbl_prefix$$HouseObsIdMD h
-where h.participant_id in ($$geographic_region_india$$)
+select  h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where hp.participant_id in ($$geographic_region_india$$)
+and hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
           ]]>
     </sql>
     </sqlQuery>
@@ -724,8 +871,10 @@ where h.participant_id in ($$geographic_region_india$$)
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as filter_item_id, participant_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
+select  h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
           ]]>
     </sql>
     </sqlQuery>
@@ -742,9 +891,10 @@ from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
+select p.participant_id as internal, po.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO po
 where p.participant_id in ($$households_india$$)
+and po.participant_id = p.participant_id
           ]]>
     </sql>
     </sqlQuery>
@@ -759,8 +909,9 @@ where p.participant_id in ($$households_india$$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select p.participant_id as internal, p.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$PartObsIdMD p
+select p.participant_id as internal, po.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where po.participant_id = p.participant_id
           ]]>
     </sql>
     </sqlQuery>
@@ -784,7 +935,6 @@ where participant_id in ($$participants_india$$)
 
     <sqlQuery name="RegionMetaData_india" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="participantParams.study_type" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -794,18 +944,130 @@ where participant_id in ($$participants_india$$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  distinct h.household_id as filter_item_id, h.participant_id as internal, h.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.$$tbl_prefix$$HouseObsIdMD h, apidbtuning.$$tbl_prefix$$ParticipantMD p
-where h.ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
-and p.participant_id = h.participant_id
-and P.Ontology_Term_Name = 'OBI_0500000'
-and ('any' = $$study_type$$ 
-     or p.string_value = $$study_type$$ )
+select  distinct h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where h.ontology_term_name in ('EUPATH_0000407','EUPATH_0000444')
+and hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
         ]]>
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="RegionMetaDataBkgd_india" isCacheable="false">
+   <sqlQuery name="RelVisitMetaData_india" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  Amazonia peru ICEMR specific .. should be injected -->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+   <sqlQuery name="HouseholdMetaData_amazperu" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="clinicalVisitParams.geographic_region_amazperu" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where hp.participant_id in ($$geographic_region_amazperu$$)
+and hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_amazperu" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/> 
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+
+   <sqlQuery name="ParticipantMetaData_amazperu" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.households_amazperu" />  
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select p.participant_id as internal, po.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where p.participant_id in ($$households_amazperu$$)
+and po.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_amazperu" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select p.participant_id as internal, po.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where po.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaData_amazperu" isCacheable="false">
+         <paramRef ref="clinicalVisitParams.participants_amazperu" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_amazperu$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+    <sqlQuery name="RegionMetaData_amazperu" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -816,14 +1078,17 @@ and ('any' = $$study_type$$
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  household_id as filter_item_id, participant_id as internal, observation_id as record_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseObsIdMD
-where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407','EUPATH_0000444')
+select  distinct h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
+where h.ontology_term_name = 'EUPATH_0022001'
+-- where h.ontology_term_name in ('EUPATH_0022001','EUPATH_0021094')
+and hp.household_id = h.household_id
+and hp.participant_id = po.participant_id
         ]]>
       </sql>
     </sqlQuery>
 
-   <sqlQuery name="RelVisitMetaData_india" isCacheable="false">
+   <sqlQuery name="RelVisitMetaData_amazperu" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
