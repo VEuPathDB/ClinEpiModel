@@ -403,7 +403,7 @@ prop=participantQuestionName
 
 
         <attributesList 
-            summary="EUPATH_0010375,EUPATH_0010368,PATO_0000047,OBI_0001627"
+            summary="EUPATH_0010375,PATO_0000047,OBI_0001627"
         /> 
 
         <summary>
