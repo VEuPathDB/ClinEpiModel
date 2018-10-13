@@ -29,13 +29,13 @@ prop=householdQuestionName
 	<dynamicAttributes>
 	     <columnAttribute name="ave_anoph" displayName="Avg Anopheles" help="Average number of anopheles mosquitos collected in this household over the time frame specified" align="center"> 
          <reporter name="histogram" displayName="Histogram" scopes=""
-           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           implementation="org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter">
            <description>Display the histogram of the values of this attribute</description>
          </reporter>
        </columnAttribute>
        <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
          <reporter name="histogram" displayName="Histogram" scopes=""
-           implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+           implementation="org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter">
            <description>Display the histogram of the values of this attribute</description>
          </reporter>
        </columnAttribute>
@@ -101,7 +101,7 @@ prop=householdQuestionName
 	<dynamicAttributes>
             <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
               <reporter name="histogram" displayName="Histogram" scopes=""
-                implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+                implementation="org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter">
                 <description>Display the histogram of the values of this attribute</description>
               </reporter>
             </columnAttribute>
@@ -155,7 +155,7 @@ prop=householdQuestionName
 	<dynamicAttributes>
             <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
               <reporter name="histogram" displayName="Histogram" scopes=""
-                implementation="org.gusdb.wdk.model.report.HistogramAttributeReporter">
+                implementation="org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter">
                 <description>Display the histogram of the values of this attribute</description>
               </reporter>
             </columnAttribute>
