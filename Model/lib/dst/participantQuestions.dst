@@ -286,8 +286,8 @@ prop=participantQuestionName
 >templateTextStart<
         <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
-              displayName="Select a Set of Participants (South Asia ICEMR Cross Sectional)"
-              shortDisplayName="Partic India CS"
+              displayName="Select a Set of Participants (South Asia ICEMR Surveillance)"
+              shortDisplayName="Partic S.Asia"
               queryRef="ParticipantId.ParticipantsXSectional_sasia" 
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
