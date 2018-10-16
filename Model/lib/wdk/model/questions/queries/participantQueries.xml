@@ -372,7 +372,7 @@ $$dateOperator_fv$$
  and vis.ontology_term_name = 'EUPATH_0004991'
 and $$use_relative_visits$$ = 1
 and rv.observation_id in ($$relative_visits_amazperu$$)
-and rv.ontology_term_name = 'EUPATH_0000091'
+and rv.ontology_term_name = 'EUPATH_0004991'
 and vis.participant_id = rv.participant_id
 and vis.observation_id != rv.observation_id
 and vis.date_value $$date_direction_fv$$ rv.date_value  
