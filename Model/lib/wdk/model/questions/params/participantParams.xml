@@ -1147,10 +1147,9 @@ select  distinct participant_id as internal, ontology_term_name, string_value, n
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
 where participant_id not in ('29082466','29082990')
 UNION
-select  distinct hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where h.household_id = hp.household_id
-and hp.participant_id not in ('29082466','29082990')
+select  distinct household_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD 
+where household_id not in ('29082466','29082990')
           ]]>
     </sql>
     </sqlQuery>
