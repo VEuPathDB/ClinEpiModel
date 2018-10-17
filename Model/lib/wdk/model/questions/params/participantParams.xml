@@ -909,8 +909,8 @@ union
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'EUPATH_0000644'
      )
-     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627')
-     order by display_order
+     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627','GAZ_00000448')
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -970,7 +970,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id = 'EUPATH_0000096'
      )
      where ontology_term_name != 'EUPATH_0000095'
-     order by display_order
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -1028,8 +1028,8 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')
      )
-     where ontology_term_name != 'EUPATH_0000091'
-     order by display_order
+     where ontology_term_name not in ('EUPATH_0000091','OBI_0001616','EUPATH_0010859','EUPATH_0010860','EUPATH_0010861','EUPATH_0010857')
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
