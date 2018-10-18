@@ -247,6 +247,54 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
         </sql>
      </sqlQuery>
 
+     <sqlQuery name="ParticipantsByCaseControl_gems1a"
+          isCacheable="true">
+       <paramRef ref="participantParams.case_control" groupRef="metaDataGroups.choose_case_control"/> 
+       <paramRef ref="participantParams.geographic_region_gems" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.household_gems" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participant_gems" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.event_gems" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.use_rel_case_control" groupRef="metaDataGroups.relative_case_control"/>
+       <paramRef ref="participantParams.keep_remove" groupRef="metaDataGroups.relative_case_control"/>
+       <paramRef ref="participantParams.relative_event_gems" groupRef="metaDataGroups.relative_case_control"/>
+       <paramRef ref="participantParams.return_case_control" groupRef="metaDataGroups.results_options"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D2a6ace17a1" groupRef="metaDataGroups.relative_case_control"/> 
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+with core as (
+select distinct name, EUPATH_0010049, EUPATH_0010375
+from (
+select distinct name, EUPATH_0010049, EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants
+      where pan_id in ($$event_gems$$) 
+$$keep_remove$$
+select distinct vis.name, vis.EUPATH_0010049, vis.EUPATH_0010375 from ApidbTuning.$$tbl_prefix$$Participants vis, ApidbTuning.$$tbl_prefix$$Participants rv
+      where $$use_rel_case_control$$ = 1
+      and vis.pan_id in ($$event_gems$$)
+      and rv.pan_id in ($$relative_event_gems$$)
+      and vis.EUPATH_0010049 = rv.EUPATH_0010049
+      and vis.name != rv.name )
+)
+select name as source_id, '@PROJECT_ID@' as project_id from core
+where 'selected' = $$return_case_control$$
+UNION
+select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
+from core, ApidbTuning.$$tbl_prefix$$Participants pa
+where 'caseid' = $$return_case_control$$
+and core.EUPATH_0010049 = pa.EUPATH_0010049
+/*
+UNION
+select distinct pa.name as source_id, '@PROJECT_ID@' as project_id 
+from core, ApidbTuning.$$tbl_prefix$$Participants pa
+where 'matching' = $$return_case_control$$
+and core.EUPATH_0010049 = pa.EUPATH_0010049
+and core.EUPATH_0010375 != pa.EUPATH_0010375
+*/
+                ]]>   
+        </sql>
+     </sqlQuery>
+
      <sqlQuery name="ParticipantsXSectional_sasia"
           isCacheable="true">
        <paramRef ref="participantParams.participants_sasia" groupRef="metaDataGroups.part_characteristics"/>
@@ -324,7 +372,7 @@ $$dateOperator_fv$$
  and vis.ontology_term_name = 'EUPATH_0004991'
 and $$use_relative_visits$$ = 1
 and rv.observation_id in ($$relative_visits_amazperu$$)
-and rv.ontology_term_name = 'EUPATH_0000091'
+and rv.ontology_term_name = 'EUPATH_0004991'
 and vis.participant_id = rv.participant_id
 and vis.observation_id != rv.observation_id
 and vis.date_value $$date_direction_fv$$ rv.date_value  

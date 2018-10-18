@@ -98,12 +98,12 @@ BEGIN MALED
 
 
       <reporter name="attributesTabular" displayName="Tab delimited (Excel) - choose Participant columns to make a custom table" scopes="results"
-                implementation="org.gusdb.wdk.model.report.AttributesTabularReporter">
+                implementation="org.gusdb.wdk.model.report.reporter.AttributesTabularReporter">
         <property name="page_size">500</property>
       </reporter>
 
           <reporter name="tableTabular" displayName="Tab delimited (Excel) - Observations and Samples" scopes="results"
-                implementation="org.gusdb.wdk.model.report.TableTabularReporter">
+                implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
               <!-- huge page size to force no paging  -->
               <property name="page_size">1000000</property>
           </reporter>
@@ -111,7 +111,7 @@ BEGIN MALED
 
 
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes=""
-                implementation="org.gusdb.wdk.model.report.FullRecordReporter" />
+                implementation="org.gusdb.wdk.model.report.reporter.FullRecordReporter" />
 
 
       <!-- =================================================================== -->
@@ -297,7 +297,7 @@ select count(*) from apidbtuning.${tblPrefix}Participants
                             decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                             decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
                             decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values', null) as reporter_description,
-                            decode(meta.type, 'string', 'org.gusdb.wdk.model.report.HistogramAttributeReporter', 'number', 'org.gusdb.wdk.model.report.HistogramAttributeReporter', null) as reporter_implementation,
+                            decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
                             null as reporter_properties
                      from ( 
                      select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type

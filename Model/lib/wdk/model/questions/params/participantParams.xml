@@ -688,9 +688,9 @@ select distinct m.pan_id as internal,  m.property_source_id as ontology_term_nam
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
    ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Observations obs
-   where /* least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
+   where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
-       and */ pa.pan_id = iov.input_pan_id
+       and pa.pan_id = iov.input_pan_id
        and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
        and iov.output_pan_id = obs.pan_id
        and obs.EUPATH_0000091 >= $$visit_date.min$$ 
@@ -909,8 +909,8 @@ union
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'EUPATH_0000644'
      )
-     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627')
-     order by display_order
+     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627','GAZ_00000448')
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -970,7 +970,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id = 'EUPATH_0000096'
      )
      where ontology_term_name != 'EUPATH_0000095'
-     order by display_order
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -1028,8 +1028,8 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')
      )
-     where ontology_term_name != 'EUPATH_0000091'
-     order by display_order
+     where ontology_term_name not in ('EUPATH_0000091','OBI_0001616','EUPATH_0010859','EUPATH_0010860','EUPATH_0010861','EUPATH_0010857')
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -1145,9 +1145,11 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <![CDATA[
 select  distinct participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
+where participant_id not in ('29082466','29082990')
 UNION
 select  distinct household_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
+from ApidbTuning.$$tbl_prefix$$HouseholdMD 
+where household_id not in ('29082466','29082990')
           ]]>
     </sql>
     </sqlQuery>
@@ -1166,7 +1168,7 @@ from ApidbTuning.$$tbl_prefix$$HouseholdMD
          <![CDATA[
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
-CASE WHEN o.ontology_term_source_id in ('NCBITaxon_2','NCBITaxon_2759','NCBITaxon_10239') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+CASE WHEN o.ontology_term_source_id in ('NCBITaxon_10239') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range,o.precision,o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
@@ -1455,8 +1457,8 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
       <![CDATA[
 select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where o.ontology_term_source_id = 'EUPATH_0022001'
---where o.ontology_term_source_id in ('EUPATH_0022001','EUPATH_0021094')
+where o.ontology_term_source_id in ('EUPATH_0022001','EUPATH_0021094')
+order by o.display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -1473,8 +1475,7 @@ where o.ontology_term_source_id = 'EUPATH_0022001'
         <![CDATA[
 select  distinct h.household_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where h.ontology_term_name = 'EUPATH_0022001'
---where h.ontology_term_name in ('EUPATH_0022001','EUPATH_0021094')
+where h.ontology_term_name in ('EUPATH_0022001','EUPATH_0021094')
 and h.household_id = hp.household_id 
         ]]>
       </sql>
@@ -1502,7 +1503,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id =  'PCO_0000024'
      )
      where ontology_term_name != 'EUPATH_0000094'
-     order by display_order
+     order by display_order,display_name
      ]]>
     </sql>
    </sqlQuery>
@@ -1563,7 +1564,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id =  'EUPATH_0000096'
      )
      where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094')
-     order by display_order
+     order by display_order, display_name
          ]]>
     </sql>
    </sqlQuery>
@@ -1617,12 +1618,12 @@ select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
 CASE WHEN o.ontology_term_source_id in ('') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range,o.precision
+o.is_range,o.precision,o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id =  'EUPATH_0000738'
+     START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')
      )
-     order by display_name
+     order by display_order,display_name
          ]]>
     </sql>
    </sqlQuery>
