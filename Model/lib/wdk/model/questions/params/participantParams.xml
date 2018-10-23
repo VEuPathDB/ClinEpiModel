@@ -688,9 +688,9 @@ select distinct m.pan_id as internal,  m.property_source_id as ontology_term_nam
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
    ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Observations obs
-   where /* least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
+   where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
-       and */ pa.pan_id = iov.input_pan_id
+       and pa.pan_id = iov.input_pan_id
        and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
        and iov.output_pan_id = obs.pan_id
        and obs.EUPATH_0000091 >= $$visit_date.min$$ 
@@ -909,8 +909,8 @@ union
 from ApidbTuning.$$tbl_prefix$$Ontology o
 where ontology_term_source_id = 'EUPATH_0000644'
      )
-     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627')
-     order by display_order
+     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627','GAZ_00000448')
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -970,7 +970,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id = 'EUPATH_0000096'
      )
      where ontology_term_name != 'EUPATH_0000095'
-     order by display_order
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -1028,8 +1028,8 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')
      )
-     where ontology_term_name != 'EUPATH_0000091'
-     order by display_order
+     where ontology_term_name not in ('EUPATH_0000091','OBI_0001616','EUPATH_0010859','EUPATH_0010860','EUPATH_0010861','EUPATH_0010857')
+     order by display_name --display_order
          ]]>
     </sql>
    </sqlQuery>
@@ -1147,10 +1147,9 @@ select  distinct participant_id as internal, ontology_term_name, string_value, n
 from ApidbTuning.$$tbl_prefix$$ParticipantMD
 where participant_id not in ('29082466','29082990')
 UNION
-select  distinct hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where h.household_id = hp.household_id
-and hp.participant_id not in ('29082466','29082990')
+select  distinct household_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD 
+where household_id not in ('29082466','29082990')
           ]]>
     </sql>
     </sqlQuery>
