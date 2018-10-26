@@ -114,6 +114,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+      boolean hasSamples = getPropValueAsBoolean("hasSamples");
+
+      setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
       // TODO: how to handle optional tables??  probably just do these in a subclass?
 
@@ -157,6 +160,20 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               householdSourceIdsIncludedInParticipantAttributes = ", " + householdSourceIdsIncludedInParticipantAttributes;
               setPropValue("householdSourceIdsIncludedInParticipantAttributes", householdSourceIdsIncludedInParticipantAttributes);
           }
+
+          setPropValue("participantRecordSamplesTable", "");
+          setPropValue("participantRecordSamplesMetaTableQuery", "");
+          setPropValue("participantRecordSamplesTableQuery", "");
+
+          if(hasSamples) {
+              String sampleSourceIdsForParticipantsSamplesTable  = getPropValue("sampleSourceIdsForParticipantsSamplesTable");
+              setPropValue("sampleSourceIdsForParticipantsSamplesTableSubquery", propertySourceIdSubquery(sampleSourceIdsForParticipantsSamplesTable));
+
+          setPropValue("participantRecordSamplesTable", getTemplateInstanceText("participantRecordSamplesTable"));
+          setPropValue("participantRecordSamplesMetaTableQuery", getTemplateInstanceText("participantRecordSamplesMetaTableQuery"));
+          setPropValue("participantRecordSamplesTableQuery", getTemplateInstanceText("participantRecordSamplesTableQuery"));
+          }
+
 
           injectTemplate("participantRecord");
           injectTemplate("participantRecordAttributeQueries");
@@ -280,6 +297,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+      boolean hasSamples = getPropValueAsBoolean("hasSamples");
 
       String presenterId = getPropValue("presenterId");
       
@@ -326,6 +344,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               String questionFullName = "ParticipantQuestions." + entry.getKey();
               addWdkReference(participantRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
+
+          if(hasSamples) {
+              addWdkReference(participantRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
+          }
+
 
       }
 
