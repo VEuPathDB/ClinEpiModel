@@ -9,6 +9,7 @@ prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
+prop=observationRecordSamplesTable
 >templateTextStart<
 
     <recordClassSet name="${presenterId}ObservationRecordClasses" includeProjects="${includeProjects}">
@@ -109,22 +110,29 @@ prop=includeProjects
             <columnAttribute name="unique_id" displayName="unique_id"/>
             <columnAttribute name="is_leaf" displayName="is_leaf"/>
             <propertyList name="tableIsTree"><value>true</value></propertyList>
-
         </table>
 
-
-        <table name="Samples"
-               displayName="Samples Collected During Observation"
-               queryRef="${presenterId}ObservationTables.Samples">
-            <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
-            <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
-            <columnAttribute name="sample_id" displayName="Sample ID"/>
-            <columnAttribute name="OBI_0100051" displayName="Specimen type"/>
-        </table>
-
+	${observationRecordSamplesTable}
 
     </recordClass>
     </recordClassSet>
+>templateTextEnd<
+
+
+
+[templateStart]
+name=observationRecordSamplesTable
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
+prop=presenterId
+>templateTextStart<
+	<table name="Samples"
+            displayName="Samples Collected During Observation"
+            queryRef="\${presenterId}ObservationTables.Samples">
+            <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
+            <columnAttribute name="sample_id" displayName="Sample ID"/>
+	     <columnAttribute name="OBI_0100051" displayName="Specimen type"/> 
+        </table>
 >templateTextEnd<
 
 
@@ -139,6 +147,7 @@ prop=participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
+
 >templateTextStart<
     <querySet name="${presenterId}ObservationAttributes" queryType="attribute" doNotTest="true" includeProjects="${includeProjects}"  
               isCacheable='false'>
@@ -241,6 +250,8 @@ prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
+prop=observationRecordSamplesTableQuery
+
 >templateTextStart<
     <querySet name="${presenterId}ObservationTables" queryType="table"  includeProjects="${includeProjects}"
               isCacheable='false'>
@@ -280,30 +291,41 @@ WHERE o.dataset_name = '&&datasetName&&'
        </sqlQuery>
 
 
-      <sqlQuery name="Samples"  isCacheable='false'>
+       ${observationRecordSamplesTableQuery}
+
+    </querySet>
+
+>templateTextEnd<
+
+
+[templateStart]
+name=observationRecordSamplesTableQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
+prop=sampleSourceIdsForParticipantsSamplesTable
+prop=sampleSourceIdsToOrderParticipantsSamplesTable
+prop=tblPrefix
+
+>templateTextStart<
+	<sqlQuery name="Samples"  isCacheable='false'>
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="sample_id"/>
 
-            <!-- TODO: should be dynamic -->
-            <column name="OBI_0100051"/>
+            <sqlParamValue name="sampleSourceIds"><![CDATA[\${sampleSourceIdsForParticipantsSamplesTable}]]></sqlParamValue>
+            <sqlParamValue name="orderBy"><![CDATA[\${sampleSourceIdsToOrderParticipantsSamplesTable}]]></sqlParamValue>
 
-            <sqlParamValue name="sampleSourceIds"><![CDATA[OBI_0100051]]></sqlParamValue>
-            <sqlParamValue name="orderBy"><![CDATA[OBI_0100051]]></sqlParamValue>
             <sql>
 
                  <![CDATA[
 select cv.name as source_id,
-        '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, sa.name as sample_id
-              from apidbtuning.${tblPrefix}Observations cv
-              , apidbtuning.${tblPrefix}samples sa
-              , apidbtuning.${tblPrefix}PANIO io
+        '@PROJECT_ID@' as project_id, sa.&&sampleSourceIds&&, sa.name as sample_id
+              from apidbtuning.\${tblPrefix}Observations cv
+              , apidbtuning.\${tblPrefix}samples sa
+              , apidbtuning.\${tblPrefix}PANIO io
               where sa.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = cv.PAN_ID
               order by &&orderBy&&
                   ]]>
             </sql>
         </sqlQuery>
-      </querySet>
-
 >templateTextEnd<
