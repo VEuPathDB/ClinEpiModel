@@ -238,7 +238,7 @@ prop=presenterId
 
 >templateTextStart<
         <table name="Micros"
-               displayName="Stool Microbiology Test Collected From Participant"
+               displayName="Stool Microbiology Test"
                queryRef="\${presenterId}ParticipantTables.Micros">
 	       <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
                <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
