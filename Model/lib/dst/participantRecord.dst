@@ -16,13 +16,15 @@ prop=includeProjects
 prop=!hasObservationRecord
 prop=hasObservationRecord
 prop=participantRecordSamplesTable
-prop=participantRecordMicrosTable 
+prop=participantRecordMicrosTable
+prop=datasetShortDisplayName
+ 
 >templateTextStart<
     <recordClassSet name="${presenterId}ParticipantRecordClasses" includeProjects="${includeProjects}">
 
       <recordClass name="${presenterId}ParticipantRecordClass" 
                    urlName="${presenterId}_participant" 
-                   displayName="Participant"
+                   displayName="${datasetShortDisplayName} Participant"
                    iconName="male"
                    allRecordsQueryRef="${presenterId}ParticipantAttributes.AllParticipants"
                    includeProjects="${includeProjects}"> 
@@ -541,10 +543,6 @@ prop=presenterId
             <column name="obsName"/>
             <column name="sample_id"/>
 
-            <!-- TODO: make these dynamic
-            <column name="EUPATH_0000091"/>
-            <column name="OBI_0100051"/>
- -->
 
          <sqlParamValue name="sampleSourceIds"><![CDATA[\${sampleSourceIdsForParticipantsSamplesTable}]]></sqlParamValue>
          <sqlParamValue name="orderBy"><![CDATA[\${sampleSourceIdsToOrderParticipantsSamplesTable}]]></sqlParamValue>

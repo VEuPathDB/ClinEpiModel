@@ -10,11 +10,13 @@ prop=tblPrefix
 prop=presenterId
 prop=includeProjects
 prop=observationRecordSamplesTable
+prop=datasetShortDisplayName
+
 >templateTextStart<
 
     <recordClassSet name="${presenterId}ObservationRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="Observation" iconName="stethoscope" includeProjects="${includeProjects}"> 
+      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="${datasetShortDisplayName} Observation" iconName="stethoscope" includeProjects="${includeProjects}"> 
 
 
             <!-- primary key definition -->
@@ -124,14 +126,15 @@ prop=observationRecordSamplesTable
 name=observationRecordSamplesTable
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=presenterId
+
 >templateTextStart<
 	<table name="Samples"
             displayName="Samples Collected During Observation"
-            queryRef="\${presenterId}ObservationTables.Samples">
+	    queryRef="\${presenterId}ObservationTables.Samples"
+	    attributeMetaQueryRef="\${presenterId}ObservationTables.SamplesColumnAttributes">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="sample_id" displayName="Sample ID"/>
-	     <columnAttribute name="OBI_0100051" displayName="Specimen type"/> 
         </table>
 >templateTextEnd<
 
@@ -250,6 +253,7 @@ prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
+prop=observationRecordSamplesMetaTableQuery
 prop=observationRecordSamplesTableQuery
 
 >templateTextStart<
@@ -290,6 +294,7 @@ WHERE o.dataset_name = '&&datasetName&&'
             </sql>
        </sqlQuery>
 
+       ${observationRecordSamplesMetaTableQuery}
 
        ${observationRecordSamplesTableQuery}
 
@@ -298,15 +303,20 @@ WHERE o.dataset_name = '&&datasetName&&'
 >templateTextEnd<
 
 
+
 [templateStart]
 name=observationRecordSamplesTableQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=sampleSourceIdsForParticipantsSamplesTable
 prop=sampleSourceIdsToOrderParticipantsSamplesTable
+
 prop=tblPrefix
+prop=presenterId
 
 >templateTextStart<
-	<sqlQuery name="Samples"  isCacheable='false'>
+ <sqlQuery name="Samples"  isCacheable='false'  
+ 	   attributeMetaQueryRef="\${presenterId}ObservationTables.SamplesColumnAttributes">
+
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="sample_id"/>
@@ -318,14 +328,45 @@ prop=tblPrefix
 
                  <![CDATA[
 select cv.name as source_id,
-        '@PROJECT_ID@' as project_id, sa.&&sampleSourceIds&&, sa.name as sample_id
+        '@PROJECT_ID@' as project_id, sa.&&sampleSourceIds&&, sa.name as sample_id   
               from apidbtuning.\${tblPrefix}Observations cv
               , apidbtuning.\${tblPrefix}samples sa
               , apidbtuning.\${tblPrefix}PANIO io
               where sa.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = cv.PAN_ID
               order by &&orderBy&&
+		
                   ]]>
             </sql>
         </sqlQuery>
 >templateTextEnd<
+
+
+
+
+
+
+[templateStart]
+name=observationRecordSamplesMetaTableQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
+prop=sampleSourceIdsForParticipantsSamplesTableSubquery
+prop=tblPrefix
+
+>templateTextStart<
+      <sqlQuery name="SamplesColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+                     select pt.property_source_id as name
+                          , pt.property as display_name
+                     from apidbtuning.\${tblPrefix}PropertyType pt, \${sampleSourceIdsForParticipantsSamplesTableSubquery} ids
+                     where pt.property_source_id = ids.property_source_id
+                     order by ids.order_num
+            ]]>
+          </sql>
+        </sqlQuery>
+>templateTextEnd<
+
+
