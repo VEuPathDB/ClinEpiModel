@@ -110,6 +110,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       String tblPrefix = "D" + getPropValue("datasetDigest");
       setPropValue("tblPrefix", tblPrefix);
+      
+
 
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
@@ -127,6 +129,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
           setPropValue("extraHouseholdTables", this.extraHouseholdTables());
           setPropValue("extraHouseholdTableQueries", this.extraHouseholdTableQueries());
+
+
 
           injectTemplate("householdRecord");
           injectTemplate("householdRecordAttributeQueries");
@@ -161,7 +165,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               householdSourceIdsIncludedInParticipantAttributes = ", " + householdSourceIdsIncludedInParticipantAttributes;
               setPropValue("householdSourceIdsIncludedInParticipantAttributes", householdSourceIdsIncludedInParticipantAttributes);
           }
-
+ 
           setPropValue("participantRecordSamplesTable", "");
           setPropValue("participantRecordSamplesMetaTableQuery", "");
           setPropValue("participantRecordSamplesTableQuery", "");
@@ -236,15 +240,24 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               setPropValue("householdSourceIdsIncludedInObservationAttributes", householdSourceIdsIncludedInObservationAttributes);
           }
 
-	  setPropValue("observationRecordSamplesTable", "");
+
+	  
+          setPropValue("observationRecordSamplesTable", "");
+          setPropValue("observationRecordSamplesMetaTableQuery", "");
           setPropValue("observationRecordSamplesTableQuery", "");
+ 
+          if(hasSamples) {
+           
+	      String sampleSourceIdsForParticipantsSamplesTable  = getPropValue("sampleSourceIdsForParticipantsSamplesTable");
+              //System.err.println("sampleSourceIdsForParticipantsSamplesTable="+sampleSourceIdsForParticipantsSamplesTable);
 
-	  if(hasSamples) {
-              String sampleSourceIdsForParticipantsSamplesTable  = getPropValue("sampleSourceIdsForParticipantsSamplesTable");
+	      setPropValue("sampleSourceIdsForParticipantsSamplesTableSubquery", propertySourceIdSubquery(sampleSourceIdsForParticipantsSamplesTable));
 
-              setPropValue("observationRecordSamplesTable", getTemplateInstanceText("observationRecordSamplesTable"));
-              setPropValue("observationRecordSamplesTableQuery", getTemplateInstanceText("observationRecordSamplesTableQuery"));
+	      setPropValue("observationRecordSamplesTable", getTemplateInstanceText("observationRecordSamplesTable"));
+	      setPropValue("observationRecordSamplesMetaTableQuery", getTemplateInstanceText("observationRecordSamplesMetaTableQuery"));
+	      setPropValue("observationRecordSamplesTableQuery", getTemplateInstanceText("observationRecordSamplesTableQuery"));
           }
+	  
 
 
           injectTemplate("observationRecord");
