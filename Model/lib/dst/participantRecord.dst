@@ -16,12 +16,15 @@ prop=includeProjects
 prop=!hasObservationRecord
 prop=hasObservationRecord
 prop=participantRecordSamplesTable
+prop=participantRecordMicrosTable
+prop=datasetShortDisplayName
+ 
 >templateTextStart<
     <recordClassSet name="${presenterId}ParticipantRecordClasses" includeProjects="${includeProjects}">
 
       <recordClass name="${presenterId}ParticipantRecordClass" 
                    urlName="${presenterId}_participant" 
-                   displayName="Participant"
+                   displayName="${datasetShortDisplayName} Participant"
                    iconName="male"
                    allRecordsQueryRef="${presenterId}ParticipantAttributes.AllParticipants"
                    includeProjects="${includeProjects}"> 
@@ -158,6 +161,8 @@ BEGIN MALED
             <propertyList name="tableIsTree"><value>true</value></propertyList>
         </table>
 
+
+	
          <table name="Observations"
                  displayName="Observations"
                  queryRef="${presenterId}ParticipantTables.Observations"
@@ -188,10 +193,8 @@ BEGIN MALED
             <columnAttribute name="name" internal="true" inReportMaker="false"/>
           </table>
 
-
      ${participantRecordSamplesTable}
-
-
+     ${participantRecordMicrosTable}
 
     </recordClass>
     </recordClassSet>
@@ -225,6 +228,27 @@ prop=!hasObservationRecord
             </linkAttribute>
 
             <columnAttribute name="sample_id" displayName="Sample ID"/>
+
+        </table>
+>templateTextEnd<
+
+
+[templateStart] 
+name=participantRecordMicrosTable
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
+prop=presenterId
+
+>templateTextStart<
+        <table name="Micros"
+               displayName="Stool Microbiology Test"
+               queryRef="\${presenterId}ParticipantTables.Micros">
+	       <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
+               <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
+	       <columnAttribute name="sample_id" displayName="Sample ID"/>
+	       <columnAttribute name="observation_type" displayName="Observation Type"/>
+	       <columnAttribute name="property" displayName="Stool Microbiology Test"/>
+	       <columnAttribute name="string_value" displayName="Result"/>
+	       <columnAttribute name="property_source_id" inReportMaker="false" internal="true"/>
 
         </table>
 >templateTextEnd<
@@ -361,6 +385,8 @@ prop=presenterId
 prop=includeProjects
 prop=participantRecordSamplesTableQuery
 prop=participantRecordSamplesMetaTableQuery
+prop=participantRecordMicrosTableQuery
+
 >templateTextStart<
     <querySet name="${presenterId}ParticipantTables" queryType="table" includeProjects="${includeProjects}" 
               isCacheable='false'>
@@ -494,6 +520,9 @@ select pa.name as source_id,
 
        ${participantRecordSamplesTableQuery}
 
+
+       ${participantRecordMicrosTableQuery}
+
   </querySet>
 
 >templateTextEnd<
@@ -514,10 +543,6 @@ prop=presenterId
             <column name="obsName"/>
             <column name="sample_id"/>
 
-            <!-- TODO: make these dynamic
-            <column name="EUPATH_0000091"/>
-            <column name="OBI_0100051"/>
- -->
 
          <sqlParamValue name="sampleSourceIds"><![CDATA[\${sampleSourceIdsForParticipantsSamplesTable}]]></sqlParamValue>
          <sqlParamValue name="orderBy"><![CDATA[\${sampleSourceIdsToOrderParticipantsSamplesTable}]]></sqlParamValue>
@@ -563,3 +588,48 @@ prop=tblPrefix
           </sql>
         </sqlQuery>
 >templateTextEnd<
+
+
+
+
+
+[templateStart] 
+name=participantRecordMicrosTableQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
+prop=tblPrefix
+prop=presenterId
+prop=microSourceIdsForParticipantsMicrosQuote
+
+>templateTextStart<
+      <sqlQuery name="Micros"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="sample_id"/>
+	    <column name="observation_type"/>
+            <column name="property"/>
+            <column name="string_value"/>
+	    <column name="property_source_id"/>
+
+	    
+	   <sqlParamValue name="microSourceIds"><![CDATA[\${microSourceIdsForParticipantsMicrosQuote}]]></sqlParamValue>
+
+            <sql>
+                 <![CDATA[
+
+with microtest as(
+    SELECT ONTOLOGY_TERM_NAME,ONTOLOGY_TERM_SOURCE_ID, CONNECT_BY_ISLEAF  as "isleaf"                                    
+               FROM  APIDBTUNING.D841a9f5259ONTOLOGY                                                                                              WHERE CONNECT_BY_ISLEAF=1                                                                                                           start with ONTOLOGY_TERM_SOURCE_ID in (&&microSourceIds&&)                                                                         connect by prior ONTOLOGY_TERM_SOURCE_ID=PARENT_ONTOLOGY_TERM_SOURCE_ID  
+)
+SELECT pa.name as source_id, me.pan_name as sample_id, ob.BFO_0000015 as observation_type, me.property, me.string_value, me.property_source_id,'@PROJECT_ID@' as project_id                                                                                                
+FROM ( SELECT pan_id, name,BFO_0000015 FROM apidbtuning.\${tblPrefix}Observations) ob                                           , apidbtuning.\${tblPrefix}Participants pa                                                                                         , apidbtuning.\${tblPrefix}PANIO io                                                                                                , apidbtuning.\${tblPrefix}metadata me                                                                                             , apidbtuning.\${tblPrefix}PANIO io2
+, microtest
+ WHERE ob.PAN_ID = io.OUTPUT_PAN_ID                                                                                                   AND io.INPUT_PAN_ID = pa.PAN_ID                                                                                                    AND me.pan_id = io2.output_pan_id                                                                                                  AND io2.INPUT_PAN_ID = ob.PAN_ID 
+              AND me.property_source_id=microtest.ONTOLOGY_TERM_SOURCE_ID
+                  ]]>
+            </sql>
+        </sqlQuery>    
+>templateTextEnd<
+
+
+
+
