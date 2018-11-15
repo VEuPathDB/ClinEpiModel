@@ -18,7 +18,7 @@
 
   <modelName displayName="ClinEpiDB" version="%%releaseVersion%%" releaseDate="%%releaseDate%%" buildNumber="%%buildNumber%%" />
 
-  <exampleStratsAuthor name="ClinEpiDB Example"/>
+  <exampleStratsAuthor name="EuPathDB Example"/>
 
   <declaredMacro name="WEBAPP_BASE_URL"          usedBy="model"/>
   <declaredMacro name="LEGACY_WEBAPP_BASE_URL"   usedBy="model"/>
