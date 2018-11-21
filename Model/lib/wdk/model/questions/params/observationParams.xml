@@ -285,7 +285,8 @@
                     backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_india"
                     ontologyQueryRef="ParticipantVQ.RegionOntology_india"
                     countPredictsAnswerCount="true"
-                    prompt="Participant"
+                    filterDataTypeDisplayName="Households"
+                    prompt="Geographic Region"
                     dependedParamRef="participantParams.tbl_prefix"
                     trimMetadataTerms="false">
       <help>
@@ -299,7 +300,7 @@
                        backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_india"
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_india"
                        countPredictsAnswerCount="true"
-                       filterDataTypeDisplayName="Households"
+                       filterDataTypeDisplayName="Observations"
                        prompt="Households"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_india"
                        trimMetadataTerms="false">
@@ -851,9 +852,9 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+select  h.household_observation_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
-where hp.participant_id in ($$geographic_region_india$$)
+where hp.household_id in ($$geographic_region_india$$)
 and hp.household_id = h.household_id
 and hp.participant_id = po.participant_id
           ]]>
@@ -871,7 +872,7 @@ and hp.participant_id = po.participant_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+select  h.household_observation_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
 where hp.household_id = h.household_id
 and hp.participant_id = po.participant_id
@@ -938,13 +939,12 @@ where participant_id in ($$participants_india$$)
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
-      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  distinct h.household_id as filter_item_id, hp.participant_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+select  distinct h.household_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
 where h.ontology_term_name in ('EUPATH_0000407','EUPATH_0000444')
 and hp.household_id = h.household_id
