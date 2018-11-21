@@ -400,8 +400,8 @@
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_gems"
                        metadataQueryRef="ParticipantVQ.HouseholdMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Participants"
-                       prompt="Participant"
+                       filterDataTypeDisplayName="Observations"
+                       prompt="Household"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_gems">
@@ -1698,12 +1698,13 @@ from apidbtuning.$$tbl_prefix$$Ontology o
       <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select hp.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+select m.household_id as internal, hp.participant_id as record_id,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
 where m.ontology_term_name = 'OBI_0001627'
 and m.household_id = hp.household_id 
@@ -1718,12 +1719,13 @@ and hp.participant_id in (select pan_id
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select hp.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+select m.household_id as internal, hp.participant_id as record_id,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
 where m.ontology_term_name = 'OBI_0001627'
 and m.household_id = hp.household_id  
@@ -1767,7 +1769,7 @@ order by display_order
                   select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
                   m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where hp.participant_id in ($$geographic_region_gems$$)
+where hp.household_id in ($$geographic_region_gems$$)
 and m.household_id = hp.household_id 
          ]]>
       </sql>    
@@ -1808,7 +1810,7 @@ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontolo
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000096'
-) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
+) where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
 order by display_order
       </sql>
     </sqlQuery>
