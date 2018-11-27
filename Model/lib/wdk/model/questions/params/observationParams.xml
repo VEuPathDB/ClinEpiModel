@@ -946,7 +946,9 @@ where participant_id in ($$participants_india$$)
         <![CDATA[
 select  distinct h.household_id as internal, po.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp, ApidbTuning.$$tbl_prefix$$PartObsIO po
-where h.ontology_term_name in ('EUPATH_0000407','EUPATH_0000444')
+where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and hp.household_id = h.household_id
 and hp.participant_id = po.participant_id
         ]]>

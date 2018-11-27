@@ -1235,9 +1235,12 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
      <column name="is_range"/>
     <sql>
       <![CDATA[
+select * from (
 select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where o.ontology_term_source_id in ('EUPATH_0000407','EUPATH_0000444')
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448' )
+     where ontology_term_name not in ('GAZ_00000448')
          ]]>
     </sql>
    </sqlQuery>
@@ -1254,7 +1257,9 @@ where o.ontology_term_source_id in ('EUPATH_0000407','EUPATH_0000444')
         <![CDATA[
 select  distinct h.household_id as internal, hp.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where h.ontology_term_name in ('EUPATH_0000407','EUPATH_0000444')
+where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and h.household_id = hp.household_id 
         ]]>
       </sql>
@@ -1282,6 +1287,9 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      START WITH o.ontology_term_source_id =  'PCO_0000024'
      )
      where ontology_term_name != 'EUPATH_0000094'
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
      order by display_order
      ]]>
     </sql>

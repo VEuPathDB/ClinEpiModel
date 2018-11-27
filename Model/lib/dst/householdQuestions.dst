@@ -145,7 +145,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (India ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_india" 
+              queryRef="HouseholdId.HouseholdsByCharacteristicsCS_india" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
