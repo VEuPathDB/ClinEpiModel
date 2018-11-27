@@ -287,12 +287,13 @@ where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
      <paramRef ref="householdParams.geographic_region_india" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as internal, ontology_term_name, string_value, number_value, date_value
+select  distinct household_id as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD
 where household_id in ($$geographic_region_india$$)
           ]]>
@@ -303,12 +304,13 @@ where household_id in ($$geographic_region_india$$)
       <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as internal, ontology_term_name, string_value, number_value, date_value
+select  distinct household_id as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD
           ]]>
     </sql>
