@@ -277,7 +277,9 @@ from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
         <![CDATA[
 select  household_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD
-where ontology_term_name in ('EUPATH_0000452','EUPATH_0000407')
+where ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
         ]]>
       </sql>
     </sqlQuery>
