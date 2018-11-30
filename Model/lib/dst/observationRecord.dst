@@ -16,7 +16,7 @@ prop=datasetShortDisplayName
 
     <recordClassSet name="${presenterId}ObservationRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="${datasetShortDisplayName} Observation" iconName="stethoscope" includeProjects="${includeProjects}"> 
+      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="${datasetShortDisplayName} Observation" iconName="fa fa-stethoscope" includeProjects="${includeProjects}"> 
 
 
             <!-- primary key definition -->
