@@ -1280,7 +1280,7 @@ and h.household_id = hp.household_id
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0000001','EUPATH_0000003','EUPATH_0000343','EUPATH_0000344','EUPATH_0000413','EUPATH_0000423','EUPATH_0000425','EUPATH_0000430','EUPATH_0000431','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438','EUPATH_0000439','EUPATH_0000440','EUPATH_0000441','EUPATH_0000451','EUPATH_0021002','EUPATH_0021093','OBI_0000655') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000001','EUPATH_0000003','EUPATH_0000343','EUPATH_0000441','EUPATH_0021093') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
@@ -1290,7 +1290,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
-     order by display_order
+     order by display_order, display_name
      ]]>
     </sql>
    </sqlQuery>
@@ -1345,13 +1345,15 @@ where h.household_id = hp.household_id
          <![CDATA[
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units, o.type, o.is_range, o.precision, o.display_order
+nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000425','EUPATH_0000430','EUPATH_0000431','EUPATH_0000440','EUPATH_0000451') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range, o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'EUPATH_0000096'
      )
      where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094')
-     order by display_order
+     order by display_order, display_name
          ]]>
     </sql>
    </sqlQuery>
@@ -1404,13 +1406,13 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0000001','EUPATH_0000003','EUPATH_0000343','EUPATH_0000344','EUPATH_0000413','EUPATH_0000423','EUPATH_0000425','EUPATH_0000430','EUPATH_0000431','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438','EUPATH_0000439','EUPATH_0000440','EUPATH_0000441','EUPATH_0000451','EUPATH_0021002','EUPATH_0021093','OBI_0000655') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range,o.precision
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000344','EUPATH_0000413','EUPATH_0000439','EUPATH_0021002','EUPATH_0000423','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438','OBI_0000655') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'EUPATH_0000738'
      )
-     order by display_name
+     order by display_order, display_name
          ]]>
     </sql>
    </sqlQuery>
@@ -1754,12 +1756,12 @@ and m.household_id = hp.household_id
       <sql>
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.is_range,o.precision,
-CASE WHEN o.ontology_term_source_id in ('ENVO_00003064','EUPATH_0000023','EUPATH_0000144','EUPATH_0000321','EUPATH_0000343','EUPATH_0010011','EUPATH_0010040','EUPATH_0010351','EUPATH_0010357','EUPATH_0010378','EUPATH_0010379','EUPATH_0010380','EUPATH_0010381','EUPATH_0010383','EUPATH_0010389','EUPATH_0010390','EUPATH_0010391','EUPATH_0010393','EUPATH_0010394','EUPATH_0010395','EUPATH_0010398','EUPATH_0010399','EUPATH_0010400','EUPATH_0010401','EUPATH_0010425','NCBITaxon_10239','NCBITaxon_2','NCBITaxon_2759') AND o.type is null THEN 'multiFilter' ELSE o.type END as type, o.display_order
+CASE WHEN o.ontology_term_source_id in ('ENVO_00003064','EUPATH_0000023','EUPATH_0000144','EUPATH_0000343','EUPATH_0010381','EUPATH_0010398','EUPATH_0010399','EUPATH_0010400','EUPATH_0010401') AND o.type is null THEN 'multiFilter' ELSE o.type END as type, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'PCO_0000024'
 ) where ontology_term_name not in ('GAZ_00000448','OBI_0001627','EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
-order by display_order
+order by display_order, display_name
       </sql>
     </sqlQuery>
 
@@ -1814,12 +1816,14 @@ where m.household_id = hp.household_id
       <column name="is_range"/>
       <sql>
 select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision,o.display_order
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0010425') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision,o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'EUPATH_0000096'
 ) where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
-order by display_order
+order by display_order, display_name
       </sql>
     </sqlQuery>
 
@@ -1868,12 +1872,12 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD m
       <sql>
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.is_range,o.precision,
-CASE WHEN o.ontology_term_source_id in ('ENVO_00003064','EUPATH_0000023','EUPATH_0000144','EUPATH_0000321','EUPATH_0000343','EUPATH_0010011','EUPATH_0010040','EUPATH_0010351','EUPATH_0010357','EUPATH_0010378','EUPATH_0010379','EUPATH_0010380','EUPATH_0010381','EUPATH_0010383','EUPATH_0010389','EUPATH_0010390','EUPATH_0010391','EUPATH_0010393','EUPATH_0010394','EUPATH_0010395','EUPATH_0010398','EUPATH_0010399','EUPATH_0010400','EUPATH_0010401','EUPATH_0010425','NCBITaxon_10239','NCBITaxon_2','NCBITaxon_2759') AND o.type is null THEN 'multiFilter' ELSE o.type END as type, o.display_order
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000321','EUPATH_0010011','EUPATH_0010351','EUPATH_0010357','EUPATH_0010378','EUPATH_0010379','EUPATH_0010380','EUPATH_0010383','EUPATH_0010389','EUPATH_0010390','EUPATH_0010391','EUPATH_0010393','EUPATH_0010394','EUPATH_0010395','EUPATH_0010040','NCBITaxon_10239','NCBITaxon_2','NCBITaxon_2759') AND o.type is null THEN 'multiFilter' ELSE o.type END as type, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')
-) where ontology_term_name not in ('EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
-order by display_order
+) where ontology_term_name not in ('OBI_0001616','EUPATH_0000094','EUPATH_0010049','EUPATH_0010048','EUPATH_0010373','EUPATH_0000725','EUPATH_0010226')
+order by display_order, display_name
       </sql>
     </sqlQuery>
 
