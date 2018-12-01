@@ -31,7 +31,7 @@
                     backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_prism"
                     prompt="Households"
                     countPredictsAnswerCount="true"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix,householdParams.geographic_region_prism,householdParams.date_range">
       <help>
         Select participants based on their characteristics. 

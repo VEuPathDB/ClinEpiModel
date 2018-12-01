@@ -70,7 +70,7 @@
                        prompt="Households"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visit_date,clinicalVisitParams.participants_prism"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
               Select observations based on the household characteristics where the participant lives. 
          </help>

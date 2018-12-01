@@ -37,7 +37,7 @@
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_prism"
                     prompt="Households"
                     countPredictsAnswerCount="true"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix,lightTrapParams.geographic_region_prism,householdParams.date_range">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
