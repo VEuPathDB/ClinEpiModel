@@ -16,6 +16,24 @@
       </enumList>
     </enumParam>
 
+    <enumParam name="householdOrObservation"
+               prompt="Return one or all results per Household"
+               multiPick="false"
+               quote="false"
+               visible="true">
+      <help>Return just the initial household observation per household (normally the enrollment household observation) or all household observations per household.</help>
+      <enumList>
+        <enumValue default="true">
+          <term>One</term>
+          <internal>household_id</internal>
+        </enumValue>
+        <enumValue>
+          <term>All</term>
+          <internal>household_observation_id</internal>
+        </enumValue>
+      </enumList>
+    </enumParam>
+
        <dateRangeParam name="date_range"
                        prompt="Choose start and end dates "
                        minDate="2011-08-01"
@@ -90,7 +108,7 @@
                        countPredictsAnswerCount="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Households"
-                       dependedParamRef="participantParams.tbl_prefix,householdParams.geographic_region_india"
+                       dependedParamRef="participantParams.tbl_prefix,householdParams.geographic_region_india,householdParams.householdOrObservation"
                        trimMetadataTerms="false">
          <help>
            Select participants based on their geographic region. 
@@ -105,7 +123,7 @@
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
                       trimMetadataTerms="false"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.households_india">
+                      dependedParamRef="participantParams.tbl_prefix,householdParams.households_india,householdParams.householdOrObservation">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -287,6 +305,7 @@ where ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$t
    <sqlQuery name="HouseholdMetaData_india" isCacheable="false">
      <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="householdParams.geographic_region_india" />  
+     <paramRef ref="householdParams.householdOrObservation" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -295,7 +314,7 @@ where ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$t
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct household_id as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  distinct $$householdOrObservation$$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD
 where household_id in ($$geographic_region_india$$)
           ]]>
@@ -304,6 +323,7 @@ where household_id in ($$geographic_region_india$$)
 
     <sqlQuery name="HouseholdMetaDataBkgd_india" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
+      <paramRef ref="householdParams.householdOrObservation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -312,7 +332,7 @@ where household_id in ($$geographic_region_india$$)
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct household_id as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  distinct $$householdOrObservation$$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$HouseholdMD
           ]]>
     </sql>
@@ -321,6 +341,7 @@ from ApidbTuning.$$tbl_prefix$$HouseholdMD
    <sqlQuery name="ParticipantMetaData_india" isCacheable="false">
      <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="householdParams.households_india" />  
+     <paramRef ref="householdParams.householdOrObservation" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -329,15 +350,17 @@ from ApidbTuning.$$tbl_prefix$$HouseholdMD
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as record_id, participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD
-where household_id in ($$households_india$$)
+select h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
+where h.$$householdOrObservation$$ in ($$households_india$$)
+and h.household_id = p.household_id
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd_india" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
+      <paramRef ref="householdParams.householdOrObservation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -346,8 +369,9 @@ where household_id in ($$households_india$$)
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  household_id as record_id, participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD
+select h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
+where h.household_id = p.household_id
           ]]>
     </sql>
     </sqlQuery>
