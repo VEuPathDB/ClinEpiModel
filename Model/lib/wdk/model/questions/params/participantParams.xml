@@ -77,6 +77,22 @@
 
     <!-- TEMPLATE_ANCHOR participantResultParam -->
 
+<!--
+    <filterParam name="participant_record_page" 
+                 ontologyQueryRef="ParticipantVQ.RecordPageOntology"
+                 metadataQueryRef="ParticipantVQ.RecordPageMetaData"
+                 backgroundQueryRef="ParticipantVQ.RecordPageMetaData"
+                 filterDataTypeDisplayName="Participants"
+                 prompt="Participants"
+                 countPredictsAnswerCount="true"
+                 trimMetadataTerms="false"
+                 dependedParamRef="participantParams.tbl_prefix">
+      <help>
+        Select participants based on their geographic region. 
+      </help>
+    </filterParam>
+-->
+
 
     <!--************************************************************-->
     <!--   PRISM section ... should be injected  -->
@@ -819,7 +835,9 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
       <sql>
         <![CDATA[
 select * from (
- select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0021002') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('EUPATH_0000738','EUPATH_0000609')
