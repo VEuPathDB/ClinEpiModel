@@ -50,6 +50,7 @@ group by da.pan_id,da.name
        <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.observations_india" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_anoph"/>
@@ -61,7 +62,7 @@ from (
 select da.pan_id,da.name,count(*) as part_count
 from ApidbTuning.$$tbl_prefix$$HousePartIO io, ApidbTuning.$$tbl_prefix$$Households da, 
 (select distinct household_id, household_observation_id from ApidbTuning.$$tbl_prefix$$HouseholdMD) h
-where io.participant_id in ($$participants_india$$)
+where io.participant_id in ($$observations_india$$)
 and io.household_id = h.household_id
 and h.$$householdOrObservation$$ in ($$households_india$$)
 and da.pan_id = h.$$householdOrObservation$$ 
@@ -77,6 +78,7 @@ group by da.pan_id,da.name
        <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.households_india" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.participants_india" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.observations_india" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="ave_anoph"/>
@@ -88,7 +90,7 @@ from (
 select da.pan_id,da.name,count(*) as part_count
 from ApidbTuning.$$tbl_prefix$$HousePartIO io, ApidbTuning.$$tbl_prefix$$Households da, 
 (select distinct household_id, household_observation_id from ApidbTuning.$$tbl_prefix$$HouseholdMD) h
-where io.participant_id in ($$participants_india$$)
+where io.participant_id in ($$observations_india$$)
 and io.household_id = h.household_id
 and h.$$householdOrObservation$$ in ($$households_india$$)
 and da.pan_id = h.$$householdOrObservation$$ 

@@ -54,7 +54,7 @@
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_prism"
                        prompt="Participants"
                        countPredictsAnswerCount="false"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visits_visitage_metadata_prism,clinicalVisitParams.visit_date,participantParams.duration_observation">
          <help>
               Select participants based on their characteristics. 
@@ -83,7 +83,7 @@
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     prompt="Observations"
                     countPredictsAnswerCount="false"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.visits_visitage_metadata_prism,clinicalVisitParams.visit_date,participantParams.duration_observation,clinicalVisitParams.households_prism,clinicalVisitParams.geographic_region_prism,clinicalVisitParams.participants_prism">
       <help>
         Select observations based on their observation characteristics. 

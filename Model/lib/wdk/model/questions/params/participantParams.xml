@@ -106,7 +106,7 @@
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
                        countPredictsAnswerCount="true"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix">
          <help>
            Select participants based on their geographic region. 
@@ -121,7 +121,7 @@
                     prompt="Age at visit"
                     filterDataTypeDisplayName="Participants"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_prism"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="true">
       <help>
         Select reference samples. 
       </help>
