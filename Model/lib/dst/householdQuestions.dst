@@ -95,7 +95,7 @@ prop=householdQuestionName
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
-            summary="EUPATH_0000407,EUPATH_0000002,EUPATH_0000435,EUPATH_0000019,part_count"
+            summary="EUPATH_0000407,ENVO_01000744,EUPATH_0000435,EUPATH_0000019,part_count"
         /> 
 
 	<dynamicAttributes>
@@ -145,11 +145,11 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (India ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_india" 
+              queryRef="HouseholdId.HouseholdsByCharacteristicsCS_india" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
-            summary="EUPATH_0000407,EUPATH_0000002,EUPATH_0000435,EUPATH_0000019,part_count"
+            summary="EUPATH_0000407,ENVO_01000744,EUPATH_0000435,EUPATH_0000019,part_count"
         /> 
 
 	<dynamicAttributes>

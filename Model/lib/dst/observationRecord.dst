@@ -10,13 +10,12 @@ prop=tblPrefix
 prop=presenterId
 prop=includeProjects
 prop=observationRecordSamplesTable
-prop=datasetShortDisplayName
 
 >templateTextStart<
 
     <recordClassSet name="${presenterId}ObservationRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="${datasetShortDisplayName} Observation" iconName="stethoscope" includeProjects="${includeProjects}"> 
+      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="Observation" iconName="fa fa-stethoscope" includeProjects="${includeProjects}"> 
 
 
             <!-- primary key definition -->

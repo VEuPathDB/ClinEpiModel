@@ -9,11 +9,10 @@ prop=tblPrefix
 prop=presenterId
 prop=includeProjects
 prop=extraHouseholdTables
-prop=datasetShortDisplayName
 
 >templateTextStart<
     <recordClassSet name="${presenterId}HouseholdRecordClasses" includeProjects="${includeProjects}">
-      <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" displayName="${datasetShortDisplayName} Household" iconName="home" includeProjects="${includeProjects}"> 
+      <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" displayName="Household" iconName="fa fa-home" includeProjects="${includeProjects}"> 
 
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="${presenterId}HouseholdAttributes.HouseholdAlias">

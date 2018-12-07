@@ -7,12 +7,11 @@ prop=lightTrapAttributesList
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
-prop=datasetShortDisplayName
 
 >templateTextStart<
     <recordClassSet name="${presenterId}LightTrapRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" displayName="${datasetShortDisplayName} Light Trap Collection" iconName="bug" > 
+      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" displayName="Light Trap Collection" iconName="fa fa-bug" > 
 
 
             <!-- primary key definition -->

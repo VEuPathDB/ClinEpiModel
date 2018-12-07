@@ -17,15 +17,14 @@ prop=!hasObservationRecord
 prop=hasObservationRecord
 prop=participantRecordSamplesTable
 prop=participantRecordMicrosTable
-prop=datasetShortDisplayName
  
 >templateTextStart<
     <recordClassSet name="${presenterId}ParticipantRecordClasses" includeProjects="${includeProjects}">
 
       <recordClass name="${presenterId}ParticipantRecordClass" 
                    urlName="${presenterId}_participant" 
-                   displayName="${datasetShortDisplayName} Participant"
-                   iconName="male"
+                   displayName="Participant"
+                   iconName="fa fa-male"
                    allRecordsQueryRef="${presenterId}ParticipantAttributes.AllParticipants"
                    includeProjects="${includeProjects}"> 
 
