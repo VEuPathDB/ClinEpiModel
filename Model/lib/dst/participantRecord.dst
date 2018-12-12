@@ -107,12 +107,6 @@ BEGIN MALED
         <property name="page_size">500</property>
       </reporter>
 
-          <reporter name="tableTabular" displayName="Tab delimited (Excel) - Observations and Samples" scopes="results"
-                implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
-              <!-- huge page size to force no paging  -->
-              <property name="page_size">1000000</property>
-          </reporter>
-
 
 
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes=""
