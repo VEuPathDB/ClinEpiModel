@@ -27,7 +27,7 @@
                     prompt="Geographic Region"
                     dependedParamRef="participantParams.tbl_prefix"
                     countPredictsAnswerCount="true"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="true">
       <help>
         Select observations based on the subcounty where the participant lives. 
       </help>
@@ -42,7 +42,7 @@
                        prompt="Age at observation"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_prism"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
               Select the age of the participants at the time of their clinical observations.
          </help>
@@ -201,7 +201,7 @@
                     countPredictsAnswerCount="true"
                     prompt="Participant"
                     dependedParamRef="participantParams.tbl_prefix"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="true">
       <help>
         Select observations based on the participants subcounty where they live. 
       </help>
@@ -215,7 +215,7 @@
                     countPredictsAnswerCount="true"
                     prompt="Households"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_maled"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="true">
       <help>
         Select observations based on the characteristics of the household where the participants live. 
       </help>
@@ -227,7 +227,7 @@
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_maled"
                        countPredictsAnswerCount="true"
                        prompt="Participants"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_maled">
          <help>
               Select participants based on their characteristics. 
@@ -240,7 +240,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     countPredictsAnswerCount="true"
                     prompt="Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_maled">
       <help>
         Select observations based on their observation characteristics. 
@@ -253,7 +253,7 @@
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     countPredictsAnswerCount="false"
                     prompt="Related Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix">
       <help>
         Select related observations based on their characteristics. 
@@ -269,7 +269,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_sasia"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_sasia"
                     prompt="Related Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix">
       <help>
         Select related observations based on their characteristics. 
@@ -288,7 +288,7 @@
                     filterDataTypeDisplayName="Households"
                     prompt="Geographic Region"
                     dependedParamRef="participantParams.tbl_prefix"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="true">
       <help>
         Select observations based on geographic region where the participants live. 
       </help>
@@ -303,7 +303,7 @@
                        filterDataTypeDisplayName="Observations"
                        prompt="Households"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_india"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -316,7 +316,7 @@
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_india"
                        countPredictsAnswerCount="true"
                        prompt="Participants"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_india">
          <help>
               Select participants based on their characteristics. 
@@ -329,7 +329,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_india"
                     countPredictsAnswerCount="true"
                     prompt="Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_india">
       <help>
         Select observations based on their observation characteristics. 
@@ -341,7 +341,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_india"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_india"
                     prompt="Related Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix">
       <help>
         Select related observations based on their characteristics. 
@@ -360,7 +360,7 @@
                     countPredictsAnswerCount="true"
                     prompt="Participant"
                     dependedParamRef="participantParams.tbl_prefix"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="true">
       <help>
         Select observations based on geographic region where the participants live. 
       </help>
@@ -375,7 +375,7 @@
                        filterDataTypeDisplayName="Households"
                        prompt="Households"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.geographic_region_amazperu"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -388,7 +388,7 @@
                        backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_amazperu"
                        countPredictsAnswerCount="true"
                        prompt="Participants"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_amazperu">
          <help>
               Select participants based on their characteristics. 
@@ -401,7 +401,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_amazperu"
                     countPredictsAnswerCount="true"
                     prompt="Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_amazperu">
       <help>
         Select observations based on their observation characteristics. 
@@ -413,7 +413,7 @@
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_amazperu"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_amazperu"
                     prompt="Related Observations"
-                    trimMetadataTerms="false"
+                    trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix">
       <help>
         Select related observations based on their characteristics. 

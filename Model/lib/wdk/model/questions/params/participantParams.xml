@@ -85,7 +85,7 @@
                  filterDataTypeDisplayName="Participants"
                  prompt="Participants"
                  countPredictsAnswerCount="true"
-                 trimMetadataTerms="false"
+                 trimMetadataTerms="true"
                  dependedParamRef="participantParams.tbl_prefix">
       <help>
         Select participants based on their geographic region. 
@@ -195,7 +195,7 @@
                        filterDataTypeDisplayName="Participants"
                        prompt="Geographic region"
                        dependedParamRef="participantParams.tbl_prefix"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -209,7 +209,7 @@
                     countPredictsAnswerCount="true"
                     prompt="Households"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_maled"
-                    trimMetadataTerms="false">
+                    trimMetadataTerms="true">
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
@@ -222,7 +222,7 @@
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="false"
+                      trimMetadataTerms="true"
                       dependedParamRef="participantParams.tbl_prefix,participantParams.households_maled">
          <help>
               Select participants based on their characteristics. 
@@ -235,7 +235,7 @@
                        backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
                        countPredictsAnswerCount="false"
                        prompt="Observations"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.participants_maled">
          <help>
            Select participants based on their visit characteristics. 
@@ -254,7 +254,7 @@
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
                        dependedParamRef="participantParams.tbl_prefix"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -268,7 +268,7 @@
                        filterDataTypeDisplayName="Observations"
                        prompt="Households"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_india"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -281,7 +281,7 @@
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="false"
+                      trimMetadataTerms="true"
                       dependedParamRef="participantParams.tbl_prefix,participantParams.households_india">
          <help>
               Select participants based on their characteristics. 
@@ -294,7 +294,7 @@
                        backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_india"
                        countPredictsAnswerCount="false"
                        prompt="Observations"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.participants_india">
          <help>
            Select participants based on their visit characteristics. 
@@ -313,7 +313,7 @@
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
                        dependedParamRef="participantParams.tbl_prefix"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -327,7 +327,7 @@
                        filterDataTypeDisplayName="Households"
                        prompt="Households"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_amazperu"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -340,7 +340,7 @@
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="false"
+                      trimMetadataTerms="true"
                       dependedParamRef="participantParams.tbl_prefix,participantParams.households_amazperu">
          <help>
               Select participants based on their characteristics. 
@@ -353,7 +353,7 @@
                        backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_amazperu"
                        countPredictsAnswerCount="false"
                        prompt="Observations"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.participants_amazperu">
          <help>
            Select participants based on their visit characteristics. 
@@ -372,7 +372,7 @@
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="false"
+                      trimMetadataTerms="true"
                       dependedParamRef="participantParams.tbl_prefix">
          <help>
               Select participants based on their characteristics. 
@@ -385,7 +385,7 @@
                        backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_sasia"
                        countPredictsAnswerCount="true"
                        prompt="Observations"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.participants_sasia">
          <help>
            Select participants based on their visit characteristics. 
@@ -404,7 +404,7 @@
                        backgroundQueryRef="ParticipantVQ.GeographicRegionMetaDataBkg_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Study Site"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
          <help>
@@ -418,7 +418,7 @@
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_gems"
                        filterDataTypeDisplayName="Observations"
                        prompt="Household"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_gems">
          <help>
@@ -432,7 +432,7 @@
                        backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.household_gems">
          <help>
@@ -446,7 +446,7 @@
                        backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_gems"
                        filterDataTypeDisplayName="Observations"
                        prompt="Observations"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.participant_gems">
          <help>
@@ -460,7 +460,7 @@
                        backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_gems"
                        filterDataTypeDisplayName="Observations"
                        prompt="Related Case or Control"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="true"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
          <help>
