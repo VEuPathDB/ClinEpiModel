@@ -95,7 +95,7 @@
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
                        dependedParamRef="participantParams.tbl_prefix"
-                       trimMetadataTerms="false">
+                       trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
