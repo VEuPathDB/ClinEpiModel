@@ -53,7 +53,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         return quoted;
     }
 
-    protected void injectAttributeMetaQuery(String recordClassName, String targetName) {
+    protected void injectAttributeMetaQuery(String recordClassName, String targetName){
+
         setPropValue("categoryIri", CATEGORY_IRI);
         setPropValue("recordClassName", recordClassName);
         setPropValue("targetName", targetName);
@@ -334,8 +335,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdAttributes.HouseholdAttributesMeta");
       injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdTables.LightTrapColumnAttributes");
       injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.ParticipantAttributesMeta");
-      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantTables.ObservationsColumnAttributes ");
+      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantTables.ObservationsColumnAttributes");
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ObservationAttributesMeta");
+
   }
 
   @Override
@@ -359,6 +361,23 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(householdRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 
           addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
+
+
+	  if(hasParticipants){
+              addWdkReference(householdRecordClass, "table", "ParticipantsDownload", new String[]{"download"}, CATEGORY_IRI, 0);
+          }
+
+
+          if(hasObservations){
+              addWdkReference(householdRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+          }
+
+
+          if(hasSamples) {
+              addWdkReference(householdRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
+          }
+
+
 
           for (Map.Entry<String, String[]> entry : householdQuestionTemplateNamesToScopes().entrySet()) {
               String questionFullName = "HouseholdQuestions." + entry.getKey();
@@ -393,8 +412,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               addWdkReference(participantRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
+	  if(hasObservations){
+              addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+          }
+
+
           if(hasSamples) {
               addWdkReference(participantRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
+	      addWdkReference(participantRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
           }
 	  
 	  if(hasMicros) {
@@ -419,6 +444,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  if(hasSamples) {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
+	      addWdkReference(observationRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
           }
       }
 

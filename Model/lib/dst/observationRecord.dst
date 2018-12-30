@@ -67,6 +67,16 @@ prop=observationRecordSamplesTable
         <property name="page_size">500</property>
       </reporter>
 
+
+
+       <reporter name="tableTabular" displayName="Tab delimited (Excel) - Samples" scopes="results"
+                implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
+              <!-- huge page size to force no paging  -->
+              <property name="page_size">1000000</property>
+       </reporter>
+
+
+
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes=""
                 implementation="org.gusdb.wdk.model.report.reporter.FullRecordReporter" />
 
@@ -112,6 +122,18 @@ prop=observationRecordSamplesTable
             <columnAttribute name="is_leaf" displayName="is_leaf"/>
             <propertyList name="tableIsTree"><value>true</value></propertyList>
         </table>
+
+
+ <table name="SamplesDownload"
+                 displayName="Samples"
+                 queryRef="${presenterId}ObservationTables.SamplesDownload"
+                 attributeMetaQueryRef="${presenterId}ObservationTables.SamplesDownloadColumnAttributes">
+            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+          </table>
+
+
+
 
 	${observationRecordSamplesTable}
 
@@ -296,6 +318,46 @@ WHERE o.dataset_name = '&&datasetName&&'
        ${observationRecordSamplesMetaTableQuery}
 
        ${observationRecordSamplesTableQuery}
+
+
+<sqlQuery name="SamplesDownloadColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}SAMPLES')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+
+ <sqlQuery name="SamplesDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ObservationTables.SamplesDownloadColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <sql>
+            <![CDATA[
+
+select cv.name as source_id,
+        '@PROJECT_ID@' as project_id,
+                   sp.*
+              from apidbtuning.${tblPrefix}Observations cv
+               ,apidbtuning.${tblPrefix}Samples sp
+              , apidbtuning.${tblPrefix}PANIO io
+              where sp.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = cv.PAN_ID
+
+            ]]>
+            </sql>
+        </sqlQuery>
+
+
 
     </querySet>
 
