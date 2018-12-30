@@ -1,5 +1,15 @@
 			recordClassName	targetType	name	displayName	shortDisplayName	description	geneOrTranscript	displayOrder	scope	scope	scope
 			eupath/eupath.owl#recordClassName	eupath/eupath.owl#targetType	eupath/eupath.owl#name	EUPATH_0000052	eupath/eupath.owl#shortDisplayName	eupath/eupath.owl#description	eupath/eupath.owl#geneOrTranscript	EUPATH_0000274	eupath/eupath.owl#scope	eupath/eupath.owl#scope	eupath/eupath.owl#scope
+
+
+HouseholdNode		http://edamontology.org/topic_3305				Household
+ParticipantNode		http://edamontology.org/topic_3305				Participant
+
+
+
+
+
+
 ## TEMPLATE_ANCHOR clinEpiCategory 
 
 ## TEMPLATE_ANCHOR clinEpiAttributeMetaQuery

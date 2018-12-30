@@ -55,7 +55,7 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         }
         
         String presenterId = getPropValue("presenterId");
-        injectAttributeMetaQuery(makeRecordClassName("LightTrap"), presenterId + "LightTrapAttributes.LightTrapAttributesMeta");
+        injectAttributeMetaQuery(makeRecordClassName("LightTrap"), presenterId + "LightTrapAttributes.LightTrapAttributesMeta",null);
     }
 
 

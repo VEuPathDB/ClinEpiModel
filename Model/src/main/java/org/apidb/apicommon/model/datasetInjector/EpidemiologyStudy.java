@@ -53,9 +53,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         return quoted;
     }
 
-    protected void injectAttributeMetaQuery(String recordClassName, String targetName){
+    protected void injectAttributeMetaQuery(String recordClassName, String targetName, String category){
 
-        setPropValue("categoryIri", CATEGORY_IRI);
+	if(category == null || category.equals("")){
+            category = CATEGORY_IRI;
+	}
+
+        setPropValue("categoryIri", category);
         setPropValue("recordClassName", recordClassName);
         setPropValue("targetName", targetName);
         injectTemplate("clinEpiAttributeMetaQuery");
@@ -331,12 +335,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
 
       // Add meta attribute queries to categories / individuals
-      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdTables.HouseholdMembersColumnAttributes");
-      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdAttributes.HouseholdAttributesMeta");
-      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdTables.LightTrapColumnAttributes");
-      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.ParticipantAttributesMeta");
-      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantTables.ObservationsColumnAttributes");
-      injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ObservationAttributesMeta");
+      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdTables.HouseholdMembersColumnAttributes",null);
+      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdAttributes.HouseholdAttributesMeta",null);
+      injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdTables.LightTrapColumnAttributes",null);
+      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.ParticipantAttributesMeta","ParticipantNode");
+      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantTables.ObservationsColumnAttributes",null);
+      injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ObservationAttributesMeta",null);
+      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.HouseholdAttributesMeta","HouseholdNode");
 
   }
 
