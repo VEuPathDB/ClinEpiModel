@@ -2,8 +2,11 @@
 			eupath/eupath.owl#recordClassName	eupath/eupath.owl#targetType	eupath/eupath.owl#name	EUPATH_0000052	eupath/eupath.owl#shortDisplayName	eupath/eupath.owl#description	eupath/eupath.owl#geneOrTranscript	EUPATH_0000274	eupath/eupath.owl#scope	eupath/eupath.owl#scope	eupath/eupath.owl#scope
 
 
-HouseholdNode		http://edamontology.org/topic_3305				Household
-ParticipantNode		http://edamontology.org/topic_3305				Participant
+HouseholdNode	http://edamontology.org/topic_3305					Household
+ParticipantNode	http://edamontology.org/topic_3305					Participant
+ObservationNode	http://edamontology.org/topic_3305					Observation
+SampleNode	http://edamontology.org/topic_3305					Sample
+LightTrapNode	http://edamontology.org/topic_3305					LightTrap
 
 
 
