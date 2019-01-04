@@ -108,6 +108,11 @@ BEGIN MALED
       </reporter>
 
 
+      <reporter name="tableTabular" displayName="Tab delimited (Excel) - Observations and Samples" scopes="results"
+                implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
+              <!-- huge page size to force no paging  -->
+              <property name="page_size">1000000</property>
+          </reporter>
 
       <reporter name="fullRecord" displayName="%%fullReporterDisplayName%%" scopes=""
                 implementation="org.gusdb.wdk.model.report.reporter.FullRecordReporter" />
@@ -141,6 +146,9 @@ BEGIN MALED
 
 
          <attributeQueryRef ref="${presenterId}ParticipantAttributes.ParticipantAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ParticipantAttributesMeta"/>
+
+         <attributeQueryRef ref="${presenterId}ParticipantAttributes.HouseholdAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.HouseholdAttributesMeta"/>
+
 
         <table name="Characteristics"
                displayName="Participant Characteristics"
@@ -185,6 +193,18 @@ BEGIN MALED
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="name" internal="true" inReportMaker="false"/>
           </table>
+
+	  
+
+	  
+           <table name="SamplesDownload"
+                 displayName="Samples"
+                 queryRef="${presenterId}ParticipantTables.SamplesDownload"
+                 attributeMetaQueryRef="${presenterId}ParticipantTables.SamplesDownloadColumnAttributes">
+            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+          </table>
+
 
      ${participantRecordSamplesTable}
      ${participantRecordMicrosTable}
@@ -293,26 +313,20 @@ select count(*) from apidbtuning.${tblPrefix}Participants
        </sqlQuery>
 
 
-       <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ParticipantAttributesMeta">
+     <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ParticipantAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
 
-         <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInParticipantAttributes}]]></sqlParamValue>
-
           <sql>
             <![CDATA[
-                     select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
-                     da.*
-                     from apidbtuning.${tblPrefix}PANIO io
-                        , apidbtuning.${tblPrefix}Participants pa
-                        , (select pan_id as hh_protocol_app_node_id, name as household_id&&householdSourceIds&& from apidbtuning.${tblPrefix}Households) da
-                     where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
-                     and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
+            select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*
+                     from apidbtuning.${tblPrefix}Participants pa
             ]]>
-          </sql>  
+          </sql>
         </sqlQuery>
 
-       <sqlQuery name="ParticipantAttributesMeta" isCacheable="false">
+
+<sqlQuery name="ParticipantAttributesMeta" isCacheable="false">
           <column name="name" />
           <column name="display_name" />
           <column name="help" />
@@ -322,35 +336,84 @@ select count(*) from apidbtuning.${tblPrefix}Participants
           <column name="reporter_implementation" />
           <column name="reporter_properties" />
 
-          <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInParticipantAttributesQuote}]]></sqlParamValue>
-          <sqlParamValue name="excludeParticipantSourceIds"><![CDATA[${participantSourceIdsExcludedFromParticipantAttributesQuote}]]></sqlParamValue>
-
-         <sql>
+           <sql>
             <![CDATA[
-                     select meta.display_name, meta.name, meta.help, 
-                            decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
-                            decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
-                            decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values', null) as reporter_description,
-                            decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
+            select meta.display_name, meta.name, meta.help,
+                   decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
+                   decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
+                   decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
+                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
                             null as reporter_properties
-                     from ( 
-                     select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
-                     from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+             from (
+                   select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
+                   from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
                      where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
                      and c.owner = 'APIDBTUNING'
                      and c.table_name = s.table_name
                      and upper(o.ontology_term_source_id) = c.column_name
-                     and o.ontology_term_source_id not in (&&excludeParticipantSourceIds&&)
-                           union
-                           select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
-                           union
-                     select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
-                           from ApidbTuning.${tblPrefix}Ontology o
-                           where o.ontology_term_source_id in (&&householdSourceIds&&)
-                           ) meta
-            ]]>
-          </sql>
+
+                    union
+
+                   select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
+                   from ApidbTuning.${tblPrefix}Ontology o
+                           where o.ontology_term_source_id in (
+                                 select distinct o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+
+                                )) meta
+  ]]>
+
+                </sql>
          </sqlQuery>
+
+
+
+<sqlQuery name="HouseholdAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.HouseholdAttributesMeta">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="household_id"/>
+          <sql>
+            <![CDATA[
+
+        select hh.name as household_id, pa.name as source_id, '@PROJECT_ID@' as project_id, hh.*
+        from apidbtuning.${tblPrefix}Households hh,
+             APIDBTUNING.${tblPrefix}PARTICIPANTS pa,
+             apidbtuning.${tblPrefix}PANIO io
+
+    where  pa.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = hh.PAN_ID
+
+            ]]>
+            </sql>
+
+        </sqlQuery>
+
+
+
+<sqlQuery name="HouseholdAttributesMeta" isCacheable="false">
+           <column name="name" />
+           <column name="display_name" />
+
+           <sql>
+            <![CDATA[
+       select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Households')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+            union
+                           select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
+
+            ]]>
+              </sql>
+
+           </sqlQuery>
+
 
 
       </querySet>   
@@ -456,23 +519,90 @@ WHERE o.dataset_name = '&&datasetName&&'
         </sqlQuery>
 
 
-      <sqlQuery name="ObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsDownloadColumnAttributes">
+
+ <sqlQuery name="ObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsDownloadColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="name"/>
             <sql>
             <![CDATA[
-select pa.name as source_id,
-        '@PROJECT_ID@' as project_id, 
-                   cv.*
-              from apidbtuning.${tblPrefix}Observations cv
+select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.*
+        from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}Participants pa
               , apidbtuning.${tblPrefix}PANIO io
               where cv.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = pa.PAN_ID
+              
+union 
+
+select t1.source_id, t1.project_id, t2.* from 
+       (select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.pan_id
+        from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}Participants pa
+              , apidbtuning.${tblPrefix}PANIO io
+              where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID) t1,
+
+         (select cv.* from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}PANIO io
+              where io.INPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738' and io.OUTPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738'
+              and cv.PAN_ID=io.OUTPUT_PAN_ID) t2,  
+
+              apidbtuning.${tblPrefix}PANIO t3
+              
+              where t2.pan_id = t3.output_pan_id
+              and t3.input_pan_id = t1.pan_id
+
+            ]]>
+
+            </sql>
+        </sqlQuery>
+
+
+
+<sqlQuery name="SamplesDownloadColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}SAMPLES')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+ <sqlQuery name="SamplesDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.SamplesDownloadColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="observation_source_id"/>
+            <sql>
+            <![CDATA[
+
+select pa.name as source_id,
+        '@PROJECT_ID@' as project_id, cv.name as observation_source_id,
+                   sp.*
+              from apidbtuning.${tblPrefix}Participants pa
+              ,apidbtuning.${tblPrefix}Observations cv
+               ,apidbtuning.${tblPrefix}Samples sp
+              , apidbtuning.${tblPrefix}PANIO io
+              ,apidbtuning.${tblPrefix}PANIO io2
+              where sp.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = cv.PAN_ID
+              and cv.PAN_ID = io2.OUTPUT_PAN_ID
+              and io2.INPUT_PAN_ID = pa.PAN_ID
+
             ]]>
             </sql>
         </sqlQuery>
+
+
+
 
 
       <sqlQuery name="Observations"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
