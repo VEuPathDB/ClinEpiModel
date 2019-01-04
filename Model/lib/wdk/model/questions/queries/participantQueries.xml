@@ -247,6 +247,26 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
         </sql>
      </sqlQuery>
 
+<!--
+     <sqlQuery name="ParticipantsSurveillanceFever_india"
+          isCacheable="true">
+       <paramRef ref="participantParams.participants_indiaFS" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_indiaFS" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Da5c969d5fa" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$PartObsIO obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_indiaFS$$)
+and pa.pan_id = obs.participant_id
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+-->
+
      <sqlQuery name="ParticipantsByCaseControl_gems1a"
           isCacheable="true">
        <paramRef ref="participantParams.case_control" groupRef="metaDataGroups.choose_case_control"/> 

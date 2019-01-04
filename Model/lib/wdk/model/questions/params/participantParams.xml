@@ -1064,7 +1064,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as record_id, observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in ($$participants_maled$$)
           ]]>
@@ -1082,7 +1082,7 @@ where participant_id in ($$participants_maled$$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as record_id, observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>
@@ -1428,7 +1428,7 @@ CASE WHEN o.ontology_term_source_id in ('EUPATH_0000344','EUPATH_0000413','EUPAT
 o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id =  'EUPATH_0000738'
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738','EUPATH_0000609')
      )
      order by display_order, display_name
          ]]>
