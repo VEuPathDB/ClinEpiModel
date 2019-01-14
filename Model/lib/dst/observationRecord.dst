@@ -135,6 +135,7 @@ prop=observationRecordSamplesTable
                  attributeMetaQueryRef="${presenterId}ObservationTables.SamplesDownloadColumnAttributes">
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+	    <columnAttribute name="Sample_Id"/>
           </table>
 
 
@@ -431,11 +432,12 @@ WHERE o.dataset_name = '&&datasetName&&'
  <sqlQuery name="SamplesDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ObservationTables.SamplesDownloadColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
+	    <column name="Sample_Id"/>
             <sql>
             <![CDATA[
 
 select cv.name as source_id,
-        '@PROJECT_ID@' as project_id,
+        '@PROJECT_ID@' as project_id, sp.name as Sample_Id,
                    sp.*
               from apidbtuning.${tblPrefix}Observations cv
                ,apidbtuning.${tblPrefix}Samples sp

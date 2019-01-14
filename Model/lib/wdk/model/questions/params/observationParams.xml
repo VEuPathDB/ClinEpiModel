@@ -791,7 +791,7 @@ where hp.participant_id = p.participant_id
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in ($$participants_maled$$)
           ]]>
@@ -810,7 +810,7 @@ where participant_id in ($$participants_maled$$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>

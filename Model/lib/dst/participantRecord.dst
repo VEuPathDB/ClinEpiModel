@@ -192,6 +192,7 @@ BEGIN MALED
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="name" internal="true" inReportMaker="false"/>
+	    <columnAttribute name="Observation_Id"/>
           </table>
 
 	  
@@ -203,6 +204,8 @@ BEGIN MALED
                  attributeMetaQueryRef="${presenterId}ParticipantTables.SamplesDownloadColumnAttributes">
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+	    <columnAttribute name="Observation_Id"/>
+            <columnAttribute name="Sample_Id"/>
           </table>
 
 
@@ -519,21 +522,43 @@ WHERE o.dataset_name = '&&datasetName&&'
         </sqlQuery>
 
 
-      <sqlQuery name="ObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsDownloadColumnAttributes">
+
+ <sqlQuery name="ObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsDownloadColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="name"/>
+	    <column name="Observation_Id"/>
             <sql>
             <![CDATA[
-select pa.name as source_id,
-        '@PROJECT_ID@' as project_id, 
-                   cv.*
-              from apidbtuning.${tblPrefix}Observations cv
+select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, cv.*
+        from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}Participants pa
               , apidbtuning.${tblPrefix}PANIO io
               where cv.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = pa.PAN_ID
+              
+union 
+
+select t1.source_id, t1.project_id, t1.Observation_Id, t2.* from 
+       (select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, cv.pan_id
+        from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}Participants pa
+              , apidbtuning.${tblPrefix}PANIO io
+              where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID) t1,
+
+         (select cv.* from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}PANIO io
+              where io.INPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738' and io.OUTPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738'
+              and cv.PAN_ID=io.OUTPUT_PAN_ID) t2,  
+
+              apidbtuning.${tblPrefix}PANIO t3
+              
+              where t2.pan_id = t3.output_pan_id
+              and t3.input_pan_id = t1.pan_id
+
             ]]>
+
             </sql>
         </sqlQuery>
 
@@ -560,11 +585,13 @@ select pa.name as source_id,
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="observation_source_id"/>
+	    <column name="Observation_Id"/>
+            <column name="Sample_Id"/>
             <sql>
             <![CDATA[
 
 select pa.name as source_id,
-        '@PROJECT_ID@' as project_id, cv.name as observation_source_id,
+        '@PROJECT_ID@' as project_id, cv.name as observation_source_id, cv.name as Observation_Id, sp.name as Sample_Id,
                    sp.*
               from apidbtuning.${tblPrefix}Participants pa
               ,apidbtuning.${tblPrefix}Observations cv
