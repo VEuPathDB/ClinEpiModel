@@ -302,6 +302,37 @@
        </filterParam>
 
     <!--************************************************************-->
+    <!--   India Fever Study ICEMR section ... should be injected  -->
+    <!--************************************************************-->
+
+       <filterParam name="participants_indiaFS" 
+                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_indiaFS"
+                      metadataQueryRef="ParticipantVQ.ParticipantMetaData_indiaFS"
+                      backgroundQueryRef="ParticipantVQ.ParticipantMetaData_indiaFS"
+                      countPredictsAnswerCount="true"
+                      filterDataTypeDisplayName="Participants"
+                      prompt="Personal characteristics"
+                      trimMetadataTerms="true"
+                      dependedParamRef="participantParams.tbl_prefix">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_indiaFS" 
+                       metadataQueryRef="ParticipantVQ.VisitMetaData_indiaFS"
+                       ontologyQueryRef="ParticipantVQ.VisitOntology_indiaFS"
+                       backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_indiaFS"
+                       countPredictsAnswerCount="false"
+                       prompt="Observations"
+                       trimMetadataTerms="true"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.participants_indiaFS">
+         <help>
+           Select participants based on their visit characteristics. 
+         </help>
+       </filterParam>
+
+    <!--************************************************************-->
     <!--   Amazonia peru ICEMR section ... should be injected  -->
     <!--************************************************************-->
 
@@ -1468,6 +1499,113 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>
     </sqlQuery>
+
+    <!--************************************************************-->
+    <!--   india fever study ICEMR section ... should be injected  -->
+    <!--************************************************************-->
+
+   <sqlQuery name="ParticipantOntology_indiaFS" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000425','EUPATH_0000430','EUPATH_0000431','EUPATH_0000440','EUPATH_0000451') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range, o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'EUPATH_0000096'
+     )
+     where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094')
+     order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_indiaFS" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
+          ]]>
+    </sql>
+    </sqlQuery>
+    
+    <sqlQuery name="VisitOntology_indiaFS" isCacheable="true">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000344','EUPATH_0000413','EUPATH_0000439','EUPATH_0021002','EUPATH_0000423','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438','OBI_0000655') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738','EUPATH_0000609')
+     )
+     order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+       <sqlQuery name="VisitMetaData_indiaFS" isCacheable="false">
+         <paramRef ref="participantParams.participants_indiaFS" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="record_id"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_indiaFS$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+    <sqlQuery name="VisitMetaDataBkgd_indiaFS" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
 
     <!--************************************************************-->
     <!--   Amazonia peru ICEMR section ... should be injected  -->
