@@ -94,7 +94,7 @@
        <dateRangeParam name="visit_date"
                        prompt="Choose start and end dates "
                        minDate="2011-07-01"
-                       maxDate="2017-07-31">
+                       maxDate="2020-07-31">
          <help>"select the earliest and latest dates to include for identifying observations and computing mosquito counts."</help>
 
        </dateRangeParam>
@@ -570,7 +570,7 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
  where part.household_id = m.pan_id
  union all
  select part.household_id as filter_item_id, part.obs_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+ from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
@@ -606,7 +606,7 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
  where part.household_id = m.pan_id
  union all
  select part.household_id as filter_item_id, part.obs_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+ from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id

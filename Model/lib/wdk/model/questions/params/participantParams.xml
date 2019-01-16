@@ -810,7 +810,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  where part.household_id = m.pan_id
  union all
  select distinct part.household_id as filter_item_id, part.part_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+ from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
@@ -842,7 +842,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  where part.household_id = m.pan_id
  union all
  select distinct part.household_id as filter_item_id, part.part_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select io.input_pan_id as pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+ from (select io.input_pan_id as pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where io.input_pan_type_source_id = 'PCO_0000024'
   and io.output_pan_type_source_id = 'EUPATH_0000327'
@@ -1561,7 +1561,7 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0000344','EUPATH_0000413','EUPATH_0000439','EUPATH_0021002','EUPATH_0000423','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438','OBI_0000655') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0021129', 'EUPATH_0021128','EUPATH_0000344','EUPATH_0000413','EUPATH_0000439','EUPATH_0021002','EUPATH_0000423','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438','OBI_0000655') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id

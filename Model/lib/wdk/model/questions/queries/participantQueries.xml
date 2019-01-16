@@ -14,7 +14,7 @@
      
      <sqlQuery name="ParticipantsByCharWizRelVis_prism" isCacheable="true">
        <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="clinicalVisitParams.visit_date" minDate="2011-07-01" maxDate="2017-07-31" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="participantParams.visits_visitage_metadata_prism" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
@@ -71,7 +71,7 @@ and pa.pan_id = visits.input_pan_id(+)) core, ApidbTuning.$$tbl_prefix$$Particip
    from ApidbTuning.$$tbl_prefix$$Observations 
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
-(select iop.output_pan_id as part_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
+(select iop.output_pan_id as part_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
   from ApidbTuning.$$tbl_prefix$$Panio iol, ApidbTuning.$$tbl_prefix$$LightTraps la, ApidbTuning.$$tbl_prefix$$Panio iop
   where iol.output_pan_id = la.pan_id
   and Iol.Input_Pan_Type_Source_Id = 'PCO_0000024'
@@ -91,8 +91,7 @@ and pa.pan_id = mos.part_id(+)
      </sqlQuery>
 
      <sqlQuery name="ParticipantsByCharWizRelVis_prism2" isCacheable="true">
-       <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.visit_date" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="clinicalVisitParams.visit_date" minDate="2017-09-01" maxDate="2019-12-31" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="participantParams.visits_visitage_metadata_prism" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
@@ -105,6 +104,7 @@ and pa.pan_id = mos.part_id(+)
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.relative_visits_prism" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="D51b40fe2e2" groupRef="metaDataGroups.relative_visits"/>
+       <paramRef ref="participantParams.geographic_region_prism" visible="false" groupRef="metaDataGroups.relative_visits"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="visit_count"/>
@@ -149,7 +149,7 @@ and pa.pan_id = visits.input_pan_id(+)) core, ApidbTuning.$$tbl_prefix$$Particip
    from ApidbTuning.$$tbl_prefix$$Observations 
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
-(select iop.output_pan_id as part_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
+(select iop.output_pan_id as part_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
   from ApidbTuning.$$tbl_prefix$$Panio iol, ApidbTuning.$$tbl_prefix$$LightTraps la, ApidbTuning.$$tbl_prefix$$Panio iop
   where iol.output_pan_id = la.pan_id
   and Iol.Input_Pan_Type_Source_Id = 'PCO_0000024'
