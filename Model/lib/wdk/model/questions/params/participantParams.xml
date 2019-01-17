@@ -95,8 +95,7 @@
 
 
     <!--************************************************************-->
-    <!--   PRISM section ... should be injected  -->
-    <!--   TODO: DELETE THIS AND COPY OVER FROM BRANCH ... ADD PRISM SUFFIX -->
+    <!--   PRISM and PRISM2 section ... should be injected  -->
     <!--************************************************************-->
 
        <filterParam name="geographic_region_prism" 
@@ -425,7 +424,7 @@
 
     
     <!--************************************************************-->
-    <!--   GEMS section ... -->
+    <!--   GEMS1 and GEMS1a section ... -->
     <!--************************************************************-->
 
 
@@ -437,7 +436,7 @@
                        prompt="Study Site"
                        trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control">
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control,participantParams.study_arm">
          <help>
            Select participants based on their study site.
          </help>
@@ -499,67 +498,6 @@
          </help>
        </filterParam>    
 
-    <!--************************************************************-->
-    <!--   GEMS1a section ... -->
-    <!--************************************************************-->
-
-
-       <filterParam name="geographic_region_gems1a" 
-                       ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
-                       metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_gems1a"
-                       backgroundQueryRef="ParticipantVQ.GeographicRegionMetaDataBkg_gems1a"
-                       filterDataTypeDisplayName="Participants"
-                       prompt="Study Site"
-                       trimMetadataTerms="true"
-                       countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.case_control,participantParams.study_arm">
-         <help>
-           Select participants based on their study site.
-         </help>
-       </filterParam>
-
-       <filterParam name="household_gems1a" 
-                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_gems"
-                       metadataQueryRef="ParticipantVQ.HouseholdMetaData_gems1a"
-                       backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_gems1a"
-                       filterDataTypeDisplayName="Observations"
-                       prompt="Household"
-                       trimMetadataTerms="true"
-                       countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_gems1a">
-         <help>
-           Select participants based on household characteristics. 
-         </help>
-       </filterParam>
-       
-       <filterParam name="participant_gems1a" 
-                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_gems"
-                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_gems1a"
-                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_gems1a"
-                       filterDataTypeDisplayName="Participants"
-                       prompt="Participant"
-                       trimMetadataTerms="true"
-                       countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.household_gems1a">
-         <help>
-           Select participants based on their personal characteristics. 
-         </help>
-       </filterParam>
-
-       <filterParam name="event_gems1a" 
-                       ontologyQueryRef="ParticipantVQ.ObservationOntology_gems"
-                       metadataQueryRef="ParticipantVQ.ObservationMetaData_gems1a"
-                       backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_gems1a"
-                       filterDataTypeDisplayName="Observations"
-                       prompt="Observations"
-                       trimMetadataTerms="true"
-                       countPredictsAnswerCount="false"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.participant_gems1a">
-         <help>
-           Select participants based on variables associated with their enrollment or followup events. 
-         </help>
-       </filterParam>       
-
        <enumParam name="case_control"
                   prompt="Cases or Controls"
                   multiPick="false"
@@ -591,7 +529,7 @@
          <enumList>
            <enumValue default="true">
              <term>Both Study Arms</term>
-             <internal>'msd','lsd'</internal>
+             <internal>'Both'</internal>
            </enumValue>
            <enumValue>
              <term>Moderate-to-severe diarrhea</term>
@@ -676,7 +614,7 @@
  <querySet name="ParticipantVQ" queryType="vocab" isCacheable="true">
 
     <!--************************************************************-->
-    <!--   PRISM section ... should be injected  -->
+    <!--   PRISM and PRISM2 section ... should be injected  -->
     <!--************************************************************-->
 
    <sqlQuery name="RegionOntology_prism" isCacheable="true">
@@ -1913,7 +1851,7 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
 
 
     <!--************************************************************-->
-    <!--   GEMS1 section ... -->
+    <!--   GEMS1 and GEMS1a section ... -->
     <!--************************************************************-->
 
     <sqlQuery name="GeographicRegionOntology_gems">
@@ -1943,6 +1881,7 @@ from apidbtuning.$$tbl_prefix$$Ontology o
     <sqlQuery name="GeographicRegionMetaData_gems" isCacheable="false">
       <paramRef ref="participantParams.tbl_prefix" />  
       <paramRef ref="participantParams.case_control" />  
+      <paramRef ref="participantParams.study_arm" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -1958,6 +1897,11 @@ and m.household_id = hp.household_id
 and hp.participant_id in (select pan_id
        from ApidbTuning.$$tbl_prefix$$Participants
        where lower(EUPATH_0010375) in ($$case_control$$))
+and ('Both' = $$study_arm$$
+       or hp.participant_id in (select participant_id
+       from ApidbTuning.$$tbl_prefix$$ParticipantMD
+       where ontology_term_name = 'EUPATH_0015457'
+       and lower(string_value) in ($$study_arm$$)))
           ]]>
     </sql>    
     </sqlQuery>
@@ -2168,157 +2112,6 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in (select pan_id
        from ApidbTuning.$$tbl_prefix$$Participants
        where lower(EUPATH_0010375) not in ($$case_control$$) )
-          ]]>
-    </sql>    
-    </sqlQuery>
-
-    <!--************************************************************-->
-    <!--   GEMS1a section ... -->
-    <!--************************************************************-->
-
-    <sqlQuery name="GeographicRegionMetaData_gems1a" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="participantParams.case_control" />  
-      <paramRef ref="participantParams.study_arm" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select m.household_id as internal, hp.participant_id as record_id,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where m.ontology_term_name = 'OBI_0001627'
-and m.household_id = hp.household_id 
-and hp.participant_id in (select pan_id
-       from ApidbTuning.$$tbl_prefix$$Participants
-       where lower(EUPATH_0010375) in ($$case_control$$)
-       and lower(EUPATH_0015457) in ($$study_arm$$)) 
-          ]]>
-    </sql>    
-    </sqlQuery>
-    
-    <sqlQuery name="GeographicRegionMetaDataBkg_gems1a" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select m.household_id as internal, hp.participant_id as record_id,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where m.ontology_term_name = 'OBI_0001627'
-and m.household_id = hp.household_id  
-          ]]>
-    </sql>    
-    </sqlQuery>
-    
-    <sqlQuery name="HouseholdMetaData_gems1a" isCacheable="false">
-      <paramRef ref="participantParams.geographic_region_gems1a" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-                  select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
-                  m.ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where hp.household_id in ($$geographic_region_gems1a$$)
-and m.household_id = hp.household_id 
-         ]]>
-      </sql>    
-    </sqlQuery>
-
-    <sqlQuery name="HouseholdMetaDataBkg_gems1a" isCacheable="false">
-      <paramRef ref="participantParams.geographic_region_gems1a" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
-                  m.ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO hp
-where m.household_id = hp.household_id 
-         ]]>
-      </sql>    
-    </sqlQuery>
-
-    <sqlQuery name="ParticipantMetaData_gems1a" isCacheable="false">
-      <paramRef ref="participantParams.household_gems1a" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD m
-where m.participant_id in ($$household_gems1a$$)
-         ]]>
-      </sql>    
-    </sqlQuery>
-
-    <sqlQuery name="ParticipantMetaDataBkg_gems1a" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD m
-         ]]>
-      </sql>    
-    </sqlQuery>
-
-    <sqlQuery name="ObservationMetaData_gems1a" isCacheable="false">
-      <paramRef ref="participantParams.participant_gems1a" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in ($$participant_gems1a$$)
-          ]]>
-    </sql>    
-    </sqlQuery>
-
-    <sqlQuery name="ObservationMetaDataBkg_gems1a" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>    
     </sqlQuery>
