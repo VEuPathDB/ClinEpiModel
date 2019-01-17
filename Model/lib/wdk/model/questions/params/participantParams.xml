@@ -463,7 +463,7 @@
                        backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_gems"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="false"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.tbl_prefix,participantParams.household_gems">
          <help>
