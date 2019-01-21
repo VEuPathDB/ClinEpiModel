@@ -261,22 +261,6 @@
     </filterParam>
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-    <!--  SouthAsia ICEMR specific .. should be injected -->  
-    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-    
-    <filterParam name="relative_visits_sasia" 
-                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_sasia"
-                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_sasia"
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_sasia"
-                    prompt="Related Observations"
-                    trimMetadataTerms="true"
-                    dependedParamRef="participantParams.tbl_prefix">
-      <help>
-        Select related observations based on their characteristics. 
-      </help>
-    </filterParam>
-
-    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!--  india ICEMR specific .. should be injected -->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
@@ -816,25 +800,6 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     </sql>
     </sqlQuery>
 
-    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-    <!--  SouthAsia ICEMR specific .. should be injected -->  
-    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-   
-   <sqlQuery name="RelVisitMetaData_sasia" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select  observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-          ]]>
-    </sql>
-    </sqlQuery>
-   
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!--  india ICEMR specific .. should be injected -->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->

@@ -402,9 +402,10 @@ and core.EUPATH_0010375 != pa.EUPATH_0010375
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="clinicalVisitParams.relative_visits_sasia" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.relative_visits_sasia" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.relative_treatment_sasia" groupRef="metaDataGroups.relative_treatment"/> 
        <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D13c737a528" groupRef="metaDataGroups.event_summary_params"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D13c737a528" groupRef="metaDataGroups.relative_treatment"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
@@ -427,7 +428,7 @@ $$dateOperator_fv$$
 where vis.pan_id in ($$treatment_sasia$$)
       and visio.observation_id = vis.pan_id
 and $$use_relative_visits$$ = 1
-and rv.pan_id in ($$relative_visits_sasia$$)
+and rv.pan_id in ($$relative_treatment_sasia$$)
 and rvio.observation_id = rv.pan_id
 and visio.participant_id = rvio.participant_id
 and visio.observation_id != rvio.observation_id

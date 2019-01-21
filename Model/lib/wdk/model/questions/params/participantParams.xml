@@ -494,6 +494,31 @@
          </help>
        </filterParam>
 
+    <filterParam name="relative_visits_sasia" 
+                    metadataQueryRef="ParticipantVQ.RelVisitMetaData_sasia"
+                    backgroundQueryRef="ParticipantVQ.RelVisitMetaData_sasia"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_sasia"
+                    prompt="Related Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix">
+      <help>
+        Select related observations based on their characteristics. 
+      </help>
+    </filterParam>
+
+       <filterParam name="relative_treatment_sasia" 
+                       ontologyQueryRef="ParticipantVQ.TreatmentOntology_sasia"
+                       metadataQueryRef="ParticipantVQ.RelativeTreatmentMetaData_sasia"
+                       backgroundQueryRef="ParticipantVQ.TreatmentMetaDataBkgd_sasia"
+                       countPredictsAnswerCount="false"
+                       prompt="Observations"
+                       trimMetadataTerms="true"
+                       dependedParamRef="participantParams.tbl_prefix,participantParams.relative_visits_sasia">
+         <help>
+           Select participants based on their visit characteristics. 
+         </help>
+       </filterParam>
+
     
     <!--************************************************************-->
     <!--   GEMS1 and GEMS1a section ... -->
@@ -1549,7 +1574,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      where ontology_term_name != 'EUPATH_0000091'
      and ontology_term_name not in (select distinct ontology_term_name
 from ApidbTuning.$$tbl_prefix$$ObservationMD
-where sample_id in (select distinct sub_observation_id from ApidbTuning.$$tbl_prefix$$ObsObsIO))
+where sub_observation_id in (select distinct sub_observation_id from ApidbTuning.$$tbl_prefix$$ObsObsIO))
      order by display_order
          ]]>
     </sql>
@@ -1649,6 +1674,41 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>
     </sqlQuery>
+
+   <sqlQuery name="RelVisitMetaData_sasia" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where sub_observation_id not in (select distinct sub_observation_id from ApidbTuning.$$tbl_prefix$$ObsObsIO)
+          ]]>
+    </sql>
+    </sqlQuery>
+   
+       <sqlQuery name="RelativeTreatmentMetaData_sasia" isCacheable="false">
+         <paramRef ref="participantParams.relative_visits_sasia" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="record_id"/>
+         <column name="filter_item_id"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select  participant_id as record_id, observation_id as internal, sub_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where observation_id in ($$relative_visits_sasia$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
 
     
     <!--************************************************************-->
@@ -2680,10 +2740,18 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="treatment" displayName="Malaria Treatment" displayType="ShowHide">
+        <group name="treatment" displayName="Treatment" displayType="ShowHide">
             <description>
                 <![CDATA[
                          Limit this search based on treatment.
+                ]]>
+            </description>
+        </group>
+
+        <group name="relative_treatment" displayName="Related Treatment" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         Limit the related observations based on treatment.
                 ]]>
             </description>
         </group>
