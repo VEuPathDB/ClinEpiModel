@@ -17,7 +17,7 @@
     <sqlQuery name="HouseholdsByCharacteristics_prism" isCacheable="true">
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="householdParams.date_range" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="householdParams.date_range" minDate="2011-07-01" maxDate="2017-07-31" groupRef="metaDataGroups.household_daterange"/>
        <paramRef ref="householdParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
        <column name="source_id"/>
@@ -28,6 +28,36 @@
            <![CDATA[
 select dwpct.name as source_id, '@PROJECT_ID@' as project_id, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da
+where io.output_pan_id in ($$participants_prism$$)
+and da.pan_id = io.input_pan_id
+group by da.pan_id,da.name
+) dwpct, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
+  where  dwpct.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  and EUPATH_0020003 >= $$date_range.min$$
+  and EUPATH_0020003 <= $$date_range.max$$ 
+  group by dwpct.name,dwpct.part_count
+                ]]>   
+        </sql>
+     </sqlQuery>
+
+    <sqlQuery name="HouseholdsByCharacteristics_prism2" isCacheable="true">
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D51b40fe2e2" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="householdParams.geographic_region_prism" visible="false" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="householdParams.date_range"  minDate="2017-09-01" maxDate="2019-12-31" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="householdParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="ave_anoph"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
 from ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$Households da
