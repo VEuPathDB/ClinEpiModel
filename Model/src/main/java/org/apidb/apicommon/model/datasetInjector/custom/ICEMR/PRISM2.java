@@ -10,13 +10,12 @@ public class PRISM2 extends EpidemiologyStudyWithLightTraps {
     @Override
     protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
-      // map.put("HouseholdsByCharacteristics_prism", new String[] {"menu", "webservice"});
+      map.put("HouseholdsByCharacteristics_prism2", new String[] {"menu", "webservice"});
       return(map);
     }
     @Override
     protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
-      //      map.put("ParticipantsByAllData", new String[] {"menu", "webservice"});
       map.put("ParticipantsByRelativeVisits_prism2", new String[] {"menu", "webservice"});
 
       return(map);
@@ -24,14 +23,14 @@ public class PRISM2 extends EpidemiologyStudyWithLightTraps {
     @Override
     protected Map<String,String[]> observationQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
-      // map.put("ClinicalVisitsByRelativeVisits_prism", new String[] {"menu", "webservice"});
+      map.put("ClinicalVisitsByRelativeVisits_prism2", new String[] {"menu", "webservice"});
       return(map);
     }
 
     @Override
     protected Map<String,String[]> lightTrapQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
-      // map.put("CollectionsByCharacteristics_prism", new String[] {"menu", "webservice"});
+      map.put("CollectionsByCharacteristics_prism2", new String[] {"menu", "webservice"});
       return(map);
     }
 

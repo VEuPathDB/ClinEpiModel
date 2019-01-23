@@ -94,7 +94,7 @@
        <dateRangeParam name="visit_date"
                        prompt="Choose start and end dates "
                        minDate="2011-07-01"
-                       maxDate="2017-07-31">
+                       maxDate="2020-07-31">
          <help>"select the earliest and latest dates to include for identifying observations and computing mosquito counts."</help>
 
        </dateRangeParam>
@@ -252,22 +252,6 @@
                     backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_maled"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_maled"
                     countPredictsAnswerCount="false"
-                    prompt="Related Observations"
-                    trimMetadataTerms="true"
-                    dependedParamRef="participantParams.tbl_prefix">
-      <help>
-        Select related observations based on their characteristics. 
-      </help>
-    </filterParam>
-
-    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-    <!--  SouthAsia ICEMR specific .. should be injected -->  
-    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-    
-    <filterParam name="relative_visits_sasia" 
-                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_sasia"
-                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_sasia"
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_sasia"
                     prompt="Related Observations"
                     trimMetadataTerms="true"
                     dependedParamRef="participantParams.tbl_prefix">
@@ -570,7 +554,7 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
  where part.household_id = m.pan_id
  union all
  select part.household_id as filter_item_id, part.obs_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+ from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
@@ -606,7 +590,7 @@ select distinct io.input_pan_id as household_id, io.output_pan_id as part_id, io
  where part.household_id = m.pan_id
  union all
  select part.household_id as filter_item_id, part.obs_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
- from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+ from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
   from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
@@ -816,25 +800,6 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     </sql>
     </sqlQuery>
 
-    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-    <!--  SouthAsia ICEMR specific .. should be injected -->  
-    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-   
-   <sqlQuery name="RelVisitMetaData_sasia" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select  observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-          ]]>
-    </sql>
-    </sqlQuery>
-   
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!--  india ICEMR specific .. should be injected -->  
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
