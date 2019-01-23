@@ -94,61 +94,73 @@
 -->
 
     <!--************************************************************-->
-    <!--   Template-->
+     <!-- Template for particiapnts query, copy and replace template with study suffix -->
     <!--************************************************************-->
 
        <filterParam name="geographic_region_template" 
-                       ontologyQueryRef="ParticipantVQ.RegionOntology_template"
-                       metadataQueryRef="ParticipantVQ.RegionMetaData_template"
-                       backgroundQueryRef="ParticipantVQ.RegionMetaData_template"
-                       countPredictsAnswerCount="true"
-                       filterDataTypeDisplayName="Households"
-                       prompt="Geographic region"
-                       dependedParamRef="participantParams.tbl_prefix"
-                       trimMetadataTerms="true">
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_template"
+                    metadataQueryRef="ParticipantVQ.RegionMetaData_template"
+                    backgroundQueryRef="ParticipantVQ.RegionMetaData_template"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Households"
+                    prompt="Geographic region"
+                    dependedParamRef="participantParams.tbl_prefix"
+                    trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
-    </filterParam>
-
-    <filterParam name="households_template" 
-                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_template"
-                       metadataQueryRef="ParticipantVQ.HouseholdMetaData_template"
-                       backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_template"
-                       countPredictsAnswerCount="true"
-                       filterDataTypeDisplayName="Observations"
-                       prompt="Households"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_template"
-                       trimMetadataTerms="true">
+       </filterParam>
+       
+       <filterParam name="households_template" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_template"
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_template"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_template"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Observations"
+                    prompt="Households"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_template"
+                    trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
-    </filterParam>
+       </filterParam>
 
        <filterParam name="participants_template" 
-                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_template"
-                      metadataQueryRef="ParticipantVQ.ParticipantMetaData_template"
-                      backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_template"
-                      countPredictsAnswerCount="true"
-                      filterDataTypeDisplayName="Participants"
-                      prompt="Personal characteristics"
-                      trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,participantParams.households_template">
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_template"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_template"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_template"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Participants"
+                    prompt="Personal characteristics"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.households_template">
          <help>
               Select participants based on their characteristics. 
          </help>
        </filterParam>
 
        <filterParam name="visits_template" 
-                       metadataQueryRef="ParticipantVQ.VisitMetaData_template"
-                       ontologyQueryRef="ParticipantVQ.VisitOntology_template"
-                       backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_template"
-                       countPredictsAnswerCount="false"
-                       prompt="Observations"
-                       trimMetadataTerms="true"
-                       dependedParamRef="participantParams.tbl_prefix,participantParams.participants_template">
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_template"
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_template"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_template"
+                    countPredictsAnswerCount="false"
+                    prompt="Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.participants_template">
          <help>
            Select participants based on their visit characteristics. 
+         </help>
+       </filterParam>
+ 
+       <filterParam name="relative_visits_template" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_template"
+                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_template"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_template"
+                    prompt="Related Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix">
+         <help>
+           Select related observations based on their characteristics. 
          </help>
        </filterParam>
 
@@ -711,7 +723,7 @@
  <querySet name="ParticipantVQ" queryType="vocab" isCacheable="true">
 
     <!--************************************************************-->
-    <!--   Template  -->
+    <!-- Template for particiapnts query, copy and replace template with study suffix -->
     <!--************************************************************-->
 
    <sqlQuery name="RegionOntology_template" isCacheable="true">
@@ -771,7 +783,7 @@ and h.household_id = hp.household_id
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0000001','EUPATH_0000003','EUPATH_0000343','EUPATH_0000441','EUPATH_0021093') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+CASE WHEN o.ontology_term_source_id in ('multifilter_ontology_source_id') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
@@ -837,13 +849,13 @@ where h.household_id = hp.household_id
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0000425','EUPATH_0000430','EUPATH_0000431','EUPATH_0000440','EUPATH_0000451') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+CASE WHEN o.ontology_term_source_id in ('multifilter_ontology_source_id') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range, o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'EUPATH_0000096'
      )
-     where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094')
+     where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094')  -- source_ids to remove
      order by display_order, display_name
          ]]>
     </sql>
@@ -897,7 +909,7 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0000344','EUPATH_0000413','EUPATH_0000439','EUPATH_0021002','EUPATH_0000423','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438','OBI_0000655') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+CASE WHEN o.ontology_term_source_id in ('multifilter_ontology_source_id') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
