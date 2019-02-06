@@ -1222,7 +1222,7 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select  participant_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
 where participant_id in ($$participants_scorecx$$)
           ]]>
@@ -1239,7 +1239,7 @@ where participant_id in ($$participants_scorecx$$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  participant_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.$$tbl_prefix$$ObservationMD
           ]]>
     </sql>
