@@ -164,6 +164,65 @@
          </help>
        </filterParam>
 
+    <!--************************************************************-->
+     <!-- SCORE CX -->
+    <!--************************************************************-->
+
+       <filterParam name="geographic_region_scorecx" 
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_scorecx"
+                    metadataQueryRef="ParticipantVQ.RegionMetaData_scorecx"
+                    backgroundQueryRef="ParticipantVQ.RegionMetaData_scorecx"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Households"
+                    prompt="Geographic region"
+                    dependedParamRef="participantParams.tbl_prefix"
+                    trimMetadataTerms="true">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+       </filterParam>
+       
+       <filterParam name="households_scorecx" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_scorecx"
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_scorecx"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_scorecx"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Observations"
+                    prompt="Households"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_scorecx"
+                    trimMetadataTerms="true">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+       </filterParam>
+
+       <filterParam name="participants_scorecx" 
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_scorecx"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_scorecx"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_scorecx"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Participants"
+                    prompt="Personal characteristics"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.households_scorecx">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_scorecx" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_scorecx"
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_scorecx"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_scorecx"
+                    countPredictsAnswerCount="false"
+                    prompt="Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.participants_scorecx">
+         <help>
+           Select participants based on their visit characteristics. 
+         </help>
+       </filterParam>
+ 
 
     <!--************************************************************-->
     <!--   PRISM and PRISM2 section ... should be injected  -->
@@ -955,6 +1014,238 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     </sqlQuery>
 
     <!--************************************************************-->
+    <!-- SCORE CX -->
+    <!--************************************************************-->
+
+   <sqlQuery name="RegionOntology_scorecx" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+      <![CDATA[
+select * from (
+select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448' )
+     where ontology_term_name not in ('GAZ_00000448')
+         ]]>
+    </sql>
+   </sqlQuery>
+
+    <sqlQuery name="RegionMetaData_scorecx" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  distinct h.household_id as internal, hp.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
+where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+and h.household_id = hp.household_id 
+        ]]>
+      </sql>
+    </sqlQuery>
+
+   <sqlQuery name="HouseholdOntology_scorecx" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('multifilter_ontology_source_id') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'PCO_0000024'
+     )
+     where ontology_term_name != 'EUPATH_0000094'
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     order by display_order, display_name
+     ]]>
+    </sql>
+   </sqlQuery>
+
+   <sqlQuery name="HouseholdMetaData_scorecx" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="participantParams.geographic_region_scorecx" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
+where hp.household_id in ($$geographic_region_scorecx$$)
+and h.household_id = hp.household_id 
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_scorecx" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
+where h.household_id = hp.household_id 
+          ]]>
+    </sql>
+    </sqlQuery>
+
+   <sqlQuery name="ParticipantOntology_scorecx" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('multifilter_ontology_source_id') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range, o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'EUPATH_0000096'
+     )
+     where ontology_term_name not in ('EUPATH_0000095','EUPATH_0000094')  -- source_ids to remove
+     order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_scorecx" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="participantParams.households_scorecx" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
+where participant_id in ($$households_scorecx$$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_scorecx" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    
+    <sqlQuery name="VisitOntology_scorecx" isCacheable="true">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('multifilter_ontology_source_id') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738','EUPATH_0000609')
+     )
+     order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+       <sqlQuery name="VisitMetaData_scorecx" isCacheable="false">
+         <paramRef ref="participantParams.participants_scorecx" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="filter_item_id"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_scorecx$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+    <sqlQuery name="VisitMetaDataBkgd_scorecx" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  participant_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <!--************************************************************-->
     <!--   PRISM and PRISM2 section ... should be injected  -->
     <!--************************************************************-->
 
@@ -1316,7 +1607,7 @@ union
  select distinct o.ontology_term_source_id as ontology_term_name, 'PCO_0000024' as parent_ontology_term_name, 
  nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision,o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where ontology_term_source_id = 'EUPATH_0000644'
+where ontology_term_source_id = 'EUPATH_0000579'
      )
      where ontology_term_name not in ('EUPATH_0000095','OBI_0001627','GAZ_00000448')
      order by display_name --display_order

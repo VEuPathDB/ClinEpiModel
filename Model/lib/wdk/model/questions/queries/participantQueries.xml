@@ -57,6 +57,25 @@ group by pa.name
         </sql>
      </sqlQuery>
 
+     <sqlQuery name="Participants_scorecx"
+          isCacheable="true">
+       <paramRef ref="participantParams.geographic_region_scorecx" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_scorecx" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_scorecx" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_scorecx" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="Dd6a1141fbf" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$Participants pa
+where pa.pan_id in ($$visits_scorecx$$)
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+
      <sqlQuery name="ParticipantsByCharWizRelVis_prism" isCacheable="true">
        <paramRef ref="participantParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" minDate="2011-07-01" maxDate="2017-07-31" groupRef="metaDataGroups.daterange"/>
@@ -237,15 +256,15 @@ select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id,
    round(avg(number_value),1) -1 as ave_age_visit
 from (select distinct participant_id,observation_id,number_value from ApidbTuning.$$tbl_prefix$$ObservationMD
       where observation_id in ($$visits_maled$$)
-      and ontology_term_name = 'EUPATH_0000644'
+      and ontology_term_name = 'EUPATH_0000579'
 $$dateOperator_fv$$
  select distinct vis.participant_id,vis.observation_id,vis.number_value
  from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
  where vis.observation_id in ($$visits_maled$$)
- and vis.ontology_term_name = 'EUPATH_0000644'
+ and vis.ontology_term_name = 'EUPATH_0000579'
 and $$use_relative_visits$$ = 1
 and rv.observation_id in ($$relative_visits_maled$$)
-and rv.ontology_term_name = 'EUPATH_0000644'
+and rv.ontology_term_name = 'EUPATH_0000579'
 and vis.participant_id = rv.participant_id
 and vis.observation_id != rv.observation_id
 and vis.number_value $$date_direction_fv$$ rv.number_value  
