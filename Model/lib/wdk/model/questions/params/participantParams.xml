@@ -1901,14 +1901,12 @@ o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('PCO_0000024')
-union
- select distinct o.ontology_term_source_id as ontology_term_name, 'PCO_0000024' as parent_ontology_term_name, 
- nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision,o.display_order
-from ApidbTuning.$$tbl_prefix$$Ontology o
-where ontology_term_source_id = 'EUPATH_0000579'
      )
-     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627','GAZ_00000448')
-     order by display_name --display_order
+     where ontology_term_name not in ('EUPATH_0000095')
+/*     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448') */
+     order by display_order, display_name 
          ]]>
     </sql>
    </sqlQuery>
@@ -2077,9 +2075,14 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
      <column name="precision"/>
      <column name="is_range"/>
     <sql>
-         <![CDATA[select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+      <![CDATA[
+select * from (
+select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where ontology_term_source_id = 'OBI_0001627'
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448' )
+     where ontology_term_name not in ('GAZ_00000448')
+order by display_name
          ]]>
     </sql>
    </sqlQuery>
@@ -2093,9 +2096,12 @@ where ontology_term_source_id = 'OBI_0001627'
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  household_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
- where ontology_term_name = 'OBI_0001627'
+select  distinct h.household_id as internal, hp.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
+where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+and h.household_id = hp.household_id 
         ]]>
       </sql>
     </sqlQuery>
