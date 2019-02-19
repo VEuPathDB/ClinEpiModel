@@ -1,9 +1,15 @@
 package org.apidb.apicommon.model.datasetInjector;
 
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.Properties;
+import java.util.Iterator;
 
 import org.apidb.apicommon.datasetPresenter.ModelReference;
 import org.apidb.apicommon.datasetPresenter.DatasetInjector;
@@ -115,8 +121,37 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       String tblPrefix = "D" + getPropValue("datasetDigest");
       setPropValue("tblPrefix", tblPrefix);
-      
 
+      //TODO figure how the two below are related
+      String projectId = getPropValue("projectName");; 
+      String gusHome = System.getenv("GUS_HOME");
+      String modelPropPath = gusHome + "/config/" + projectId + "/model.prop";
+      Properties properties = new Properties();
+      InputStream input = null;
+      try {
+        input = new FileInputStream(modelPropPath);
+        properties.load(input);
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        if (input != null) {
+	  try {
+	    input.close();
+	  } catch (IOException ex) {
+	    ex.printStackTrace();
+	  }
+	}	
+      }
+
+      String localhost = properties.getProperty("LOCALHOST") + properties.getProperty("LEGACY_WEBAPP_BASE_URL");
+
+      //inject shiny data loading
+      String datasetName = getPropValue("datasetName");
+      String shinyDataURL = localhost + "/service/shiny/data/" + datasetName;
+      setPropValue("dataURL", shinyDataURL);
+      String shinyOntologyURL = localhost + "/service/shiny/ontology/" + datasetName;
+      setPropValue("ontologyURL", shinyOntologyURL);
+      injectTemplate("shinyDataLoad");
 
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
