@@ -56,8 +56,8 @@ prop=participantRecordMicrosTable
 <!--
             <textAttribute name="demo_plot_heightweight_compact" displayName="Weight for Height Z - DEMO Graph"  truncateTo="100000">
               <text>
-              <![CDATA[
-                  <img src="/cgi-bin/dataPlotter.pl?project_id=$$project_id$$&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000734&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&thumb=1"/>
+              <![CDATA
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=$$project_id$$&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000579&yAxis=EUPATH_0011919&eventStart=EUPATH_0000579&eventDur=EUPATH_0000665&status=EUPATH_0000704&thumb=1"/>
                     ]]>
               </text>
             </textAttribute>
@@ -65,7 +65,7 @@ prop=participantRecordMicrosTable
             <textAttribute name="demo_plot_weightage_compact" displayName="Weight for Age Z - DEMO Graph"  truncateTo="100000">
               <text>
               <![CDATA[
-                  <img src="/cgi-bin/dataPlotter.pl?project_id=$$project_id$$&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000733&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&thumb=1"/>
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=$$project_id$$&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000579&yAxis=EUPATH_0000733&eventStart=EUPATH_0000579&eventDur=EUPATH_0000665&status=EUPATH_0000704&thumb=1"/>
                     ]]>
               </text>
             </textAttribute>
@@ -73,7 +73,7 @@ prop=participantRecordMicrosTable
             <textAttribute name="demo_plot_heightage_compact" displayName="Height for Age Z - DEMO Graph"  truncateTo="100000">
               <text>
               <![CDATA[
-                  <img src="/cgi-bin/dataPlotter.pl?project_id=$$project_id$$&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000644&yAxis=EUPATH_0000689&eventStart=EUPATH_0000644&eventDur=EUPATH_0000665&status=EUPATH_0000704&thumb=1"/>
+                  <img src="/cgi-bin/dataPlotter.pl?project_id=$$project_id$$&id=$$source_id$$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000579&yAxis=EUPATH_0000689&eventStart=EUPATH_0000579&eventDur=EUPATH_0000665&status=EUPATH_0000704&thumb=1"/>
                     ]]>
               </text>
             </textAttribute>
@@ -623,8 +623,8 @@ select pa.name as source_id,
          <sqlParamValue name="orderBy"><![CDATA[${observationSourceIdsToOrderParticipantsObservationsTable}]]></sqlParamValue>
 <!--
 MALED
-         <sqlParamValue name="observationSourceIds"><![CDATA[EUPATH_0000644,BFO_0000015]]></sqlParamValue>
-         <sqlParamValue name="orderBy"><![CDATA[EUPATH_0000644]]></sqlParamValue>
+         <sqlParamValue name="observationSourceIds"><![CDATA[EUPATH_0000579,BFO_0000015]]></sqlParamValue>
+         <sqlParamValue name="orderBy"><![CDATA[EUPATH_0000579]]></sqlParamValue>
 
 
 ICEMR
