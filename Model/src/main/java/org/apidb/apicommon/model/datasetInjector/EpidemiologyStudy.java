@@ -1,18 +1,16 @@
 package org.apidb.apicommon.model.datasetInjector;
 
-import java.io.IOException;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
 import java.util.Properties;
-import java.util.Iterator;
 
-import org.apidb.apicommon.datasetPresenter.ModelReference;
 import org.apidb.apicommon.datasetPresenter.DatasetInjector;
+import org.apidb.apicommon.datasetPresenter.ModelReference;
 
 public abstract class EpidemiologyStudy extends DatasetInjector {
 
@@ -123,7 +121,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       setPropValue("tblPrefix", tblPrefix);
 
       //TODO figure how the two below are related
-      String projectId = getPropValue("projectName");; 
+      String projectId = getPropValue("projectName");
       String gusHome = System.getenv("GUS_HOME");
       String modelPropPath = gusHome + "/config/" + projectId + "/model.prop";
       Properties properties = new Properties();
