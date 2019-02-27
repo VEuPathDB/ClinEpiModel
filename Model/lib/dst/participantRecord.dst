@@ -108,7 +108,7 @@ BEGIN MALED
       </reporter>
 
 
-      <reporter name="tableTabular" displayName="Tab delimited (Excel) - Observations and Samples" scopes="results"
+      <reporter name="tableTabular" displayName="Tab delimited (Excel) - Households and Observations and Samples" scopes="results"
                 implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
               <!-- huge page size to force no paging  -->
               <property name="page_size">1000000</property>
@@ -206,6 +206,16 @@ BEGIN MALED
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
 	    <columnAttribute name="Observation_Id"/>
             <columnAttribute name="Sample_Id"/>
+          </table>
+
+
+           <table name="HouseholdsDownload"
+                 displayName="Households"
+                 queryRef="${presenterId}ParticipantTables.HouseholdsDownload"
+                 attributeMetaQueryRef="${presenterId}ParticipantTables.HouseholdsDownloadColumnAttributes">
+            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="Household_Id"/>
           </table>
 
 
@@ -628,6 +638,44 @@ select pa.name as source_id,
             </sql>
         </sqlQuery>
 
+
+
+
+
+<sqlQuery name="HouseholdsDownloadColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Households')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+ <sqlQuery name="HouseholdsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.HouseholdsDownloadColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="Household_Id"/>
+            <sql>
+            <![CDATA[
+
+select pa.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_Id, hh.*
+              from apidbtuning.${tblPrefix}Participants pa
+               ,apidbtuning.${tblPrefix}Households hh
+              , apidbtuning.${tblPrefix}PANIO io
+              where pa.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = hh.PAN_ID
+
+            ]]>
+            </sql>
+        </sqlQuery>
 
 
 
