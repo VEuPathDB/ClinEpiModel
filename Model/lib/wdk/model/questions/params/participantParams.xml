@@ -405,9 +405,9 @@
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_maled"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_maled"
-                    filterDataTypeDisplayName="Households"
+                    filterDataTypeDisplayName="Household Observations"
                     countPredictsAnswerCount="true"
-                    prompt="Households"
+                    prompt="Household Observations"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_maled"
                     trimMetadataTerms="true">
       <help>
