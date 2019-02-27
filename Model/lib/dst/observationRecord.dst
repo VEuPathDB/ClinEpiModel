@@ -10,6 +10,7 @@ prop=tblPrefix
 prop=presenterId
 prop=includeProjects
 prop=observationRecordSamplesTable
+prop=observationRecordMicrosTable
 
 >templateTextStart<
 
@@ -139,9 +140,9 @@ prop=observationRecordSamplesTable
           </table>
 
 
-
-
 	${observationRecordSamplesTable}
+	${observationRecordMicrosTable}
+
 
     </recordClass>
     </recordClassSet>
@@ -162,6 +163,27 @@ prop=presenterId
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="sample_id" displayName="Sample ID"/>
+        </table>
+>templateTextEnd<
+
+
+
+[templateStart]
+name=observationRecordMicrosTable
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
+prop=presenterId
+
+>templateTextStart<
+        <table name="MicrosInObser"
+               displayName="Stool Microbiology Test"
+               queryRef="\${presenterId}ObservationTables.MicrosInObser">
+               <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
+               <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
+               <columnAttribute name="sample_id" displayName="Sample ID"/>
+               <columnAttribute name="property" displayName="Stool Microbiology Test"/>
+               <columnAttribute name="string_value" displayName="Result"/>
+               <columnAttribute name="property_source_id" inReportMaker="false" internal="true"/>
+
         </table>
 >templateTextEnd<
 
@@ -332,14 +354,34 @@ select count(*) from apidbtuning.${tblPrefix}Observations
 
            <sql>
             <![CDATA[
-       select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+
+with hasHHObser as(
+     select count(*) as ct
+     from apidbtuning.${tblPrefix}PANIO
+     where input_pan_type_source_id = 'PCO_0000024'
+     and output_pan_type_source_id = 'PCO_0000024'
+     )
+select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
             from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
             where s.synonym_name = upper('${tblPrefix}Households')
             and c.owner = 'APIDBTUNING'
             and c.table_name = s.table_name
             and upper(o.ontology_term_source_id) = c.column_name
-            union
-                           select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
+	    and (o.ontology_term_source_id = 'OBI_0001627' or o.ontology_term_source_id = 'EUPATH_0000407') 
+	    and (select ct from hasHHObser) >0
+
+UNION
+
+select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Households')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+	    and (select ct from hasHHObser) = 0
+
+UNION
+        select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
 
             ]]>
               </sql>
@@ -367,6 +409,7 @@ prop=presenterId
 prop=includeProjects
 prop=observationRecordSamplesMetaTableQuery
 prop=observationRecordSamplesTableQuery
+prop=observationRecordMicrosTableQuery
 
 >templateTextStart<
     <querySet name="${presenterId}ObservationTables" queryType="table"  includeProjects="${includeProjects}"
@@ -449,7 +492,9 @@ select cv.name as source_id,
             </sql>
         </sqlQuery>
 
+	 
 
+	 ${observationRecordMicrosTableQuery}
 
     </querySet>
 
@@ -497,8 +542,6 @@ select cv.name as source_id,
 
 
 
-
-
 [templateStart]
 name=observationRecordSamplesMetaTableQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
@@ -522,4 +565,50 @@ prop=tblPrefix
         </sqlQuery>
 >templateTextEnd<
 
+
+
+
+[templateStart] 
+name=observationRecordMicrosTableQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
+prop=tblPrefix
+prop=presenterId
+prop=microSourceIdsForObservationsMicrosQuote
+
+>templateTextStart<
+      <sqlQuery name="MicrosInObser"  isCacheable='false'>
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="sample_id"/>
+            <column name="property"/>
+            <column name="string_value"/>
+	    <column name="property_source_id"/>
+
+	    
+	   <sqlParamValue name="microSourceIds"><![CDATA[\${microSourceIdsForObservationsMicrosQuote}]]></sqlParamValue>
+
+            <sql>
+                 <![CDATA[
+
+with microtest as(
+    SELECT ONTOLOGY_TERM_NAME,ONTOLOGY_TERM_SOURCE_ID, CONNECT_BY_ISLEAF  as "isleaf"
+    FROM  APIDBTUNING.\${tblPrefix}ONTOLOGY                                                                               
+    WHERE CONNECT_BY_ISLEAF=1                                                                                           
+    start with ONTOLOGY_TERM_SOURCE_ID in (&&microSourceIds&&)                                                         
+    connect by prior ONTOLOGY_TERM_SOURCE_ID=PARENT_ONTOLOGY_TERM_SOURCE_ID
+)
+SELECT  ob.name as source_id, me.pan_name as sample_id, me.property, me.string_value, me.property_source_id,
+	'@PROJECT_ID@' as project_id
+FROM (SELECT pan_id, name FROM apidbtuning.\${tblPrefix}Observations) ob,
+     apidbtuning.\${tblPrefix}panio io,
+     apidbtuning.\${tblPrefix}metadata me,
+     microtest                                                                                                                     
+WHERE me.property_source_id=microtest.ONTOLOGY_TERM_SOURCE_ID
+ and me.pan_id=io.output_pan_id
+ and io.input_pan_id=ob.pan_id
+
+                  ]]>
+            </sql>
+        </sqlQuery>    
+>templateTextEnd<
 

@@ -156,6 +156,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
+      boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
@@ -295,7 +296,23 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	      setPropValue("observationRecordSamplesMetaTableQuery", getTemplateInstanceText("observationRecordSamplesMetaTableQuery"));
 	      setPropValue("observationRecordSamplesTableQuery", getTemplateInstanceText("observationRecordSamplesTableQuery"));
           }
+
+
+
+	  	  
+	  //Micros Test results
+          setPropValue("observationRecordMicrosTable", "");
+          setPropValue("observationRecordMicrosTableQuery", "");
+	  setPropValue("microSourceIdsForObservationsMicrosQuote","");
 	  
+          if(hasMicrosInObserPage) {
+	    
+	  String microSourceIdsForObservationsMicrosTable  = getPropValue("microSourceIdsForObservationsMicrosTable");
+          setPropValue("observationRecordMicrosTable", getTemplateInstanceText("observationRecordMicrosTable"));
+	  setPropValue("microSourceIdsForObservationsMicrosQuote", addQuotes(microSourceIdsForObservationsMicrosTable));
+	  setPropValue("observationRecordMicrosTableQuery", getTemplateInstanceText("observationRecordMicrosTableQuery"));
+ 
+	  }
 
 
           injectTemplate("observationRecord");
@@ -387,6 +404,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
+      boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
 
       String presenterId = getPropValue("presenterId");
       
@@ -474,6 +492,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  if(hasSamples) {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
+          }
+	  
+          if(hasMicrosInObserPage) {
+              addWdkReference(observationRecordClass, "table", "MicrosInObser", new String[]{"record"}, CATEGORY_IRI, 0);
           }
       }
 
