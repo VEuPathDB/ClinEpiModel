@@ -165,6 +165,77 @@
        </filterParam>
 
     <!--************************************************************-->
+     <!-- South Africa -->
+    <!--************************************************************-->
+
+       <filterParam name="geographic_region_safrica" 
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_safrica"
+                    metadataQueryRef="ParticipantVQ.RegionMetaData_safrica"
+                    backgroundQueryRef="ParticipantVQ.RegionMetaData_safrica"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Households"
+                    prompt="Geographic region"
+                    dependedParamRef="participantParams.tbl_prefix"
+                    trimMetadataTerms="true">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+       </filterParam>
+       
+       <filterParam name="households_safrica" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_safrica"
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_safrica"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_safrica"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Observations"
+                    prompt="Households"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_safrica"
+                    trimMetadataTerms="true">
+         <help>
+           Select participants based on their geographic region. 
+         </help>
+       </filterParam>
+
+       <filterParam name="participants_safrica" 
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_safrica"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_safrica"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_safrica"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Participants"
+                    prompt="Personal characteristics"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.households_safrica">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_safrica" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_safrica"
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_safrica"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_safrica"
+                    countPredictsAnswerCount="false"
+                    prompt="Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,participantParams.participants_safrica">
+         <help>
+           Select participants based on their visit characteristics. 
+         </help>
+       </filterParam>
+ 
+       <filterParam name="relative_visits_safrica" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_safrica"
+                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_safrica"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_safrica"
+                    prompt="Related Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix">
+         <help>
+           Select related observations based on their characteristics. 
+         </help>
+       </filterParam>
+
+    <!--************************************************************-->
      <!-- SCORE CX -->
     <!--************************************************************-->
 
@@ -334,9 +405,9 @@
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_maled"
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_maled"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_maled"
-                    filterDataTypeDisplayName="Households"
+                    filterDataTypeDisplayName="Household Observations"
                     countPredictsAnswerCount="true"
-                    prompt="Households"
+                    prompt="Household Observations"
                     dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_maled"
                     trimMetadataTerms="true">
       <help>
@@ -1014,6 +1085,238 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     </sqlQuery>
 
     <!--************************************************************-->
+    <!-- Southern Africa -->
+    <!--************************************************************-->
+
+   <sqlQuery name="RegionOntology_safrica" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+      <![CDATA[
+select * from (
+select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448' )
+     where ontology_term_name not in ('GAZ_00000448')
+         ]]>
+    </sql>
+   </sqlQuery>
+
+    <sqlQuery name="RegionMetaData_safrica" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  distinct h.household_id as internal, hp.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
+where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+and h.household_id = hp.household_id 
+        ]]>
+      </sql>
+    </sqlQuery>
+
+   <sqlQuery name="HouseholdOntology_safrica" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('ENVO_00003064','EUPATH_0000144','EUPATH_0024012') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'PCO_0000024'
+     )
+     where ontology_term_name != 'EUPATH_0000094'
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     order by display_order, display_name
+     ]]>
+    </sql>
+   </sqlQuery>
+
+   <sqlQuery name="HouseholdMetaData_safrica" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="participantParams.geographic_region_safrica" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
+where hp.household_id in ($$geographic_region_safrica$$)
+and h.household_id = hp.household_id 
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_safrica" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
+where h.household_id = hp.household_id 
+          ]]>
+    </sql>
+    </sqlQuery>
+
+   <sqlQuery name="ParticipantOntology_safrica" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('multifilter_ontology_source_id') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range, o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'EUPATH_0000096'
+     )
+     where ontology_term_name not in ('EUPATH_0000307','EUPATH_0000095','EUPATH_0000094')  -- source_ids to remove
+     order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_safrica" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <paramRef ref="participantParams.households_safrica" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
+where participant_id in ($$households_safrica$$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_safrica" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    
+    <sqlQuery name="VisitOntology_safrica" isCacheable="true">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0024011','EUPATH_0024032','EUPATH_0024051','EUPATH_0024067','EUPATH_0024081','EUPATH_0024095','EUPATH_0024104','EUPATH_0024141','EUPATH_0024158','EUPATH_0024179','EUPATH_0024198') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision, o.display_order
+from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738','EUPATH_0000609')
+     )
+     order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+       <sqlQuery name="VisitMetaData_safrica" isCacheable="false">
+         <paramRef ref="participantParams.participants_safrica" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="record_id"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_safrica$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+    <sqlQuery name="VisitMetaDataBkgd_safrica" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <!--************************************************************-->
     <!-- SCORE CX -->
     <!--************************************************************-->
 
@@ -1278,11 +1581,10 @@ where ontology_term_source_id = 'EUPATH_0000054'
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select m.pan_id as filter_item_id,  io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
- where m.property_source_id = 'EUPATH_0000054'
- and io.input_pan_id = m.pan_id
- and io.output_pan_type_source_id = 'EUPATH_0000096'
+  select m.household_id as filter_item_id,  io.participant_id as internal, m.ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.$$tbl_prefix$$HouseholdMD m, ApidbTuning.$$tbl_prefix$$HousePartIO io
+ where m.ontology_term_name = 'EUPATH_0000054'
+ and io.household_id = m.household_id
         ]]>
       </sql>
     </sqlQuery>
@@ -1315,16 +1617,11 @@ where ontology_term_source_id = 'EUPATH_0000113'
         <column name="date_value"/>
         <column name="string_value"/>
         <sql>
-        <![CDATA[
-  select m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from  ApidbTuning.$$tbl_prefix$$metadata m,
- (select distinct io.input_pan_id, io.output_pan_id
-  from ApidbTuning.$$tbl_prefix$$PANIO io
-  where io.input_pan_id in ($$geographic_region_prism$$)
-  and output_pan_type_source_id = 'EUPATH_0000738'
-  ) pa
-  where pa.output_pan_id = m.pan_id
-  and m.property_source_id = 'EUPATH_0000113'
+          <![CDATA[
+ select m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+ from  ApidbTuning.$$tbl_prefix$$ObservationMD m
+  where m.participant_id in ($$geographic_region_prism$$)
+  and m.ontology_term_name = 'EUPATH_0000113'
          ]]>   
       </sql>
    </sqlQuery>
@@ -1380,20 +1677,20 @@ from ApidbTuning.$$tbl_prefix$$Ontology o
      <column name="string_value"/>
      <sql>
        <![CDATA[
-select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+select distinct m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from ApidbTuning.$$tbl_prefix$$Observations 
    where pan_id in ($$visits_visitage_metadata_prism$$)
    ) age,
-   ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PANIO iov, ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Observations obs
+   ApidbTuning.$$tbl_prefix$$Participants pa, ApidbTuning.$$tbl_prefix$$PartObsIO iov, ApidbTuning.$$tbl_prefix$$ParticipantMD m, ApidbTuning.$$tbl_prefix$$Observations obs
    where least(pa.EUPATH_0000152, $$visit_date.max$$, pa.EFO_0004950 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, $$visit_date.min$$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= $$duration_observation$$
-       and pa.pan_id = iov.input_pan_id
-       and iov.output_pan_id in ($$visits_visitage_metadata_prism$$)
-       and iov.output_pan_id = obs.pan_id
+       and obs.pan_id in ($$visits_visitage_metadata_prism$$)
        and obs.EUPATH_0000091 >= $$visit_date.min$$ 
        and obs.EUPATH_0000091 <= $$visit_date.max$$ 
-       and pa.pan_id = m.pan_id       
+       and iov.observation_id = obs.pan_id
+       and pa.pan_id = iov.participant_id
+       and pa.pan_id = m.participant_id       
           ]]>
     </sql>
     </sqlQuery>
@@ -1407,9 +1704,8 @@ select distinct m.pan_id as internal,  m.property_source_id as ontology_term_nam
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.category = 'Participant'
+select distinct m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD m
           ]]>
     </sql>
     </sqlQuery>
@@ -1599,18 +1895,18 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
          <![CDATA[
  select * from (
  select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, 
- nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision,o.display_order
+ nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000144') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in ('PCO_0000024')
-union
- select distinct o.ontology_term_source_id as ontology_term_name, 'PCO_0000024' as parent_ontology_term_name, 
- nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision,o.display_order
-from ApidbTuning.$$tbl_prefix$$Ontology o
-where ontology_term_source_id = 'EUPATH_0000579'
      )
-     where ontology_term_name not in ('EUPATH_0000095','OBI_0001627','GAZ_00000448')
-     order by display_name --display_order
+     where ontology_term_name not in ('EUPATH_0000095')
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448') 
+     order by display_order, display_name 
          ]]>
     </sql>
    </sqlQuery>
@@ -1779,9 +2075,14 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
      <column name="precision"/>
      <column name="is_range"/>
     <sql>
-         <![CDATA[select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision
+      <![CDATA[
+select * from (
+select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
-where ontology_term_source_id = 'OBI_0001627'
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448' )
+     where ontology_term_name not in ('GAZ_00000448')
+order by display_name
          ]]>
     </sql>
    </sqlQuery>
@@ -1795,9 +2096,12 @@ where ontology_term_source_id = 'OBI_0001627'
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  household_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
- where ontology_term_name = 'OBI_0001627'
+select  distinct h.household_id as internal, hp.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HousePartIO hp
+where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+and h.household_id = hp.household_id 
         ]]>
       </sql>
     </sqlQuery>
@@ -2201,7 +2505,7 @@ from ApidbTuning.$$tbl_prefix$$ParticipantMD
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
 nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0000344','EUPATH_0000413','EUPATH_0000439','EUPATH_0021002','EUPATH_0000423','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438','OBI_0000655') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000344','EUPATH_0000413','EUPATH_0000439','EUPATH_0021002','EUPATH_0000423','EUPATH_0000433','EUPATH_0000437','EUPATH_0000438') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range,o.precision, o.display_order
 from ApidbTuning.$$tbl_prefix$$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id

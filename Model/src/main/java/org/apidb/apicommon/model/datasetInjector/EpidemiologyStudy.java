@@ -1,12 +1,16 @@
 package org.apidb.apicommon.model.datasetInjector;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
-import org.apidb.apicommon.datasetPresenter.ModelReference;
 import org.apidb.apicommon.datasetPresenter.DatasetInjector;
+import org.apidb.apicommon.datasetPresenter.ModelReference;
 
 public abstract class EpidemiologyStudy extends DatasetInjector {
 
@@ -115,14 +119,44 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       String tblPrefix = "D" + getPropValue("datasetDigest");
       setPropValue("tblPrefix", tblPrefix);
-      
 
+      //TODO figure how the two below are related
+      String projectId = getPropValue("projectName");
+      String gusHome = System.getenv("GUS_HOME");
+      String modelPropPath = gusHome + "/config/" + projectId + "/model.prop";
+      Properties properties = new Properties();
+      InputStream input = null;
+      try {
+        input = new FileInputStream(modelPropPath);
+        properties.load(input);
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        if (input != null) {
+	  try {
+	    input.close();
+	  } catch (IOException ex) {
+	    ex.printStackTrace();
+	  }
+	}	
+      }
+
+      String localhost = properties.getProperty("LOCALHOST") + properties.getProperty("LEGACY_WEBAPP_BASE_URL");
+
+      //inject shiny data loading
+      String datasetName = getPropValue("datasetName");
+      String shinyDataURL = localhost + "/service/shiny/data/" + datasetName;
+      setPropValue("dataURL", shinyDataURL);
+      String shinyOntologyURL = localhost + "/service/shiny/ontology/" + datasetName;
+      setPropValue("ontologyURL", shinyOntologyURL);
+      injectTemplate("shinyDataLoad");
 
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
+      boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
@@ -262,7 +296,23 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	      setPropValue("observationRecordSamplesMetaTableQuery", getTemplateInstanceText("observationRecordSamplesMetaTableQuery"));
 	      setPropValue("observationRecordSamplesTableQuery", getTemplateInstanceText("observationRecordSamplesTableQuery"));
           }
+
+
+
+	  	  
+	  //Micros Test results
+          setPropValue("observationRecordMicrosTable", "");
+          setPropValue("observationRecordMicrosTableQuery", "");
+	  setPropValue("microSourceIdsForObservationsMicrosQuote","");
 	  
+          if(hasMicrosInObserPage) {
+	    
+	  String microSourceIdsForObservationsMicrosTable  = getPropValue("microSourceIdsForObservationsMicrosTable");
+          setPropValue("observationRecordMicrosTable", getTemplateInstanceText("observationRecordMicrosTable"));
+	  setPropValue("microSourceIdsForObservationsMicrosQuote", addQuotes(microSourceIdsForObservationsMicrosTable));
+	  setPropValue("observationRecordMicrosTableQuery", getTemplateInstanceText("observationRecordMicrosTableQuery"));
+ 
+	  }
 
 
           injectTemplate("observationRecord");
@@ -354,6 +404,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
+      boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
 
       String presenterId = getPropValue("presenterId");
       
@@ -412,6 +463,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 	  addWdkReference(participantRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
 
 
           if(hasSamples) {
@@ -432,6 +484,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 	  addWdkReference(observationRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
+	  addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
           for (Map.Entry<String, String[]> entry : observationQuestionTemplateNamesToScopes().entrySet()) {
@@ -441,6 +495,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  if(hasSamples) {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
+          }
+	  
+          if(hasMicrosInObserPage) {
+              addWdkReference(observationRecordClass, "table", "MicrosInObser", new String[]{"record"}, CATEGORY_IRI, 0);
           }
       }
 
