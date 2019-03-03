@@ -11,6 +11,7 @@ name=ParticipantsByRelativeVisits_template
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=participantAttributesList
 prop=participantQuestionName
 >templateTextStart<
         <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
@@ -20,11 +21,9 @@ prop=participantQuestionName
               queryRef="ParticipantId.ParticipantsLongitudinal_template" 
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
-<!-- uncomment when have list of default columns to be returned by search
         <attributesList 
-            summary="EUPATH_0000407, PATO_0000047, EUPATH_0000120, malaria_cat_compact"        
+            summary="${participantAttributesList}"        
         /> 
--->
 
 	<dynamicAttributes>
 	</dynamicAttributes>
@@ -369,6 +368,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=participantQuestionName
+prop=participantAttributesList
 >templateTextStart<
         <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -379,7 +379,7 @@ prop=participantQuestionName
 
 
         <attributesList 
-            summary="OBI_0001627, PATO_0000047, EUPATH_0010477, visit_count"        
+            summary="${participantAttributesList}"        
         /> 
 
 	<dynamicAttributes>
