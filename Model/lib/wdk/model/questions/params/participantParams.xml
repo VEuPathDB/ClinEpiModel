@@ -685,7 +685,7 @@
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_gems"
                        metadataQueryRef="ParticipantVQ.HouseholdMetaData_gems"
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_gems"
-                       filterDataTypeDisplayName="Observations"
+                       filterDataTypeDisplayName="Household Observations"
                        prompt="Household"
                        trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
