@@ -170,6 +170,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=observationQuestionName
+prop=observationAttributesList
 >templateTextStart<
     <question name="${observationQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
@@ -179,7 +180,7 @@ prop=observationQuestionName
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         <attributesList 
-            summary="num_matching_visits,min_days_between"
+            summary="${observationAttributesList}"
         /> 
 
         <dynamicAttributes>
