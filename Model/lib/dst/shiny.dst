@@ -11,7 +11,7 @@ prop=projectName
 
 	projList <- unlist(strsplit("${includeProjects}", ',', fixed = TRUE))
 	if (any(grepl("${projectName}", projList))) {
-	  if (!http_error("${ontologyURL}") & !http_error("${dataURL}")) {
+	  if (!grepl("null", "${ontologyURL}") & !grepl("null", "${dataURL}")) {
 	    metadataList[["${datasetName}"]] <- fread("${ontologyURL}")
 	    if (file.exists(names(metadataList[["${datasetName}"]][1]))) {
               metadataList[["${datasetName}"]] <- fread(names(metadataList[["${datasetName}"]][1]))
