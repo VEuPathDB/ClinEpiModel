@@ -11,21 +11,25 @@ prop=projectName
 
 	projList <- unlist(strsplit("${includeProjects}", ',', fixed = TRUE))
 	if (any(grepl("${projectName}", projList))) {
-	  metadataList[["${datasetName}"]] <- fread("${ontologyURL}")
-	  if (file.exists(names(metadataList[["${datasetName}"]][1]))) {
-            metadataList[["${datasetName}"]] <- fread(names(metadataList[["${datasetName}"]][1]))
-    	    names(metadataList[["${datasetName}"]]) <- gsub(" ", "_", tolower(gsub("\\[|\\]", "", names(metadataList[["${datasetName}"]]))))
-    	    setkey(metadataList[["${datasetName}"]], source_id)
-	    datasetList[["${datasetName}"]] <- fread("${dataURL}")
-	    datasetList[["${datasetName}"]] <- fread(names(datasetList[["${datasetName}"]][1]))
-	    drop <- c("PAN_ID", "PAN_TYPE_ID", "PAN_TYPE", "DESCRIPTION")
-	    datasetList[["${datasetName}"]] <- datasetList[["${datasetName}"]][, !drop, with = FALSE]
-	    dates <- metadataList[["${datasetName}"]]$source_id[metadataList[["${datasetName}"]]$type == 'date']
-	    dates <- dates[dates %in% colnames(datasetList[["${datasetName}"]])]
-	    for (col in dates) set(datasetList[["${datasetName}"]], j=col, value=as.Date(datasetList[["${datasetName}"]][[col]], format = "%d-%b-%y"))
-	    message("just loaded ${datasetName}")
-	  } else {
-	    warning("no data available for ${datasetName}")
+	  if (!grepl("null", "${ontologyURL}") & !grepl("null", "${dataURL}")) {
+	    metadataList[["${datasetName}"]] <- fread("${ontologyURL}")
+	    if (file.exists(names(metadataList[["${datasetName}"]][1]))) {
+              metadataList[["${datasetName}"]] <- fread(names(metadataList[["${datasetName}"]][1]))
+    	      names(metadataList[["${datasetName}"]]) <- gsub(" ", "_", tolower(gsub("\\[|\\]", "", names(metadataList[["${datasetName}"]]))))
+    	      setkey(metadataList[["${datasetName}"]], source_id)
+	      datasetList[["${datasetName}"]] <- fread("${dataURL}")
+	      datasetList[["${datasetName}"]] <- fread(names(datasetList[["${datasetName}"]][1]))
+	      drop <- c("PAN_ID", "PAN_TYPE_ID", "PAN_TYPE", "DESCRIPTION")
+	      datasetList[["${datasetName}"]] <- datasetList[["${datasetName}"]][, !drop, with = FALSE]
+	      dates <- metadataList[["${datasetName}"]]$source_id[metadataList[["${datasetName}"]]$type == 'date']
+	      dates <- dates[dates %in% colnames(datasetList[["${datasetName}"]])]
+	      for (col in dates) set(datasetList[["${datasetName}"]], j=col, value=as.Date(datasetList[["${datasetName}"]][[col]], format = "%d-%b-%y"))
+	      message("just loaded ${datasetName}")
+	    } else {
+	      warning("no data available for ${datasetName}")
+	    }
+          } else {
+	    warning("ontology or data URL is incorrect for ${datasetName}")
 	  }
 	}
 
