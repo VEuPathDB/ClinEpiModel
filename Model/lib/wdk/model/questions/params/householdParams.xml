@@ -36,7 +36,7 @@
 
        <dateRangeParam name="date_range"
                        prompt="Choose start and end dates "
-                       minDate="2011-08-01"
+                       minDate="2011-07-01"
                        maxDate="2020-09-30">
          <help>"select the earliest and latest dates to include for computing mosquito counts."</help>
 <!--         <suggest default="{'min': '2011-08-05', 'max': '2016-06-30'}" />  -->
