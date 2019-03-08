@@ -94,6 +94,12 @@
 -->
 
     <!--************************************************************-->
+    <!-- Anchor for participants filter params -->
+    <!--************************************************************-->
+
+    <!-- TEMPLATE_ANCHOR participantFilterParams -->
+
+    <!--************************************************************-->
      <!-- Template for particiapnts query, copy and replace template with study suffix -->
     <!--************************************************************-->
 
@@ -851,6 +857,12 @@
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
  <querySet name="ParticipantVQ" queryType="vocab" isCacheable="true">
+
+    <!--************************************************************-->
+    <!-- Anchor for participants filter params -->
+    <!--************************************************************-->
+
+    <!-- TEMPLATE_ANCHOR participantFilterParamQueries -->
 
     <!--************************************************************-->
     <!-- Template for particiapnts query, copy and replace template with study suffix -->

@@ -19,6 +19,8 @@
 
     <!-- TEMPLATE_ANCHOR observationSourceIdParam -->
 
+    <!-- TEMPLATE_ANCHOR observationFilterParams -->
+
     <filterParam name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
                     metadataQueryRef="ClinicalVisitVQ.RegionMetaData_prism"
@@ -486,6 +488,8 @@ select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal
             </sql>
         </sqlQuery>
 -->
+
+    <!-- TEMPLATE_ANCHOR observationFilterParamQueries -->
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!--  PRISM specific .. should be injected -->  

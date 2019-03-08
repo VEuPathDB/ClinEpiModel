@@ -13,6 +13,13 @@
     <!-- TEMPLATE_ANCHOR participantSourceIdQuery -->
      
      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+     <!-- meta data queries -->
+     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <!-- TEMPLATE_ANCHOR participantMetadataQuery -->
+    <!-- TEMPLATE_ANCHOR participantLongitudinalQuery -->
+     
+     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
      <!-- Template for particiapnts query, copy and replace template with study suffix -->
      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 

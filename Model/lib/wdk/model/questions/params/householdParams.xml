@@ -144,9 +144,9 @@
        </filterParam>
 
 
+    <!-- TEMPLATE_ANCHOR householdFilterParams -->
 
     <!-- TEMPLATE_ANCHOR householdSourceIdParam -->
-
 
     <!-- TEMPLATE_ANCHOR householdResultParam -->
 
@@ -179,6 +179,8 @@
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
  <querySet name="HouseholdVQ" queryType="vocab" isCacheable="true">
+
+   <!-- TEMPLATE_ANCHOR householdFilterParamQueries -->
 
    <sqlQuery name="RegionMetaData_prism" isCacheable="false" >
       <paramRef ref="participantParams.tbl_prefix" />  

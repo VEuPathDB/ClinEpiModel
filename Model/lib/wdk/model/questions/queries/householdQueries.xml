@@ -13,6 +13,7 @@
 
     <!-- TEMPLATE_ANCHOR householdSourceIdQuery -->
 
+    <!-- TEMPLATE_ANCHOR householdMetadataQuery -->
 
     <sqlQuery name="HouseholdsByCharacteristics_prism" isCacheable="true">
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
