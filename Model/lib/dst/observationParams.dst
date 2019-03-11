@@ -1,5 +1,5 @@
 [templateStart]
-name=observationFilterParams
+name=observationFilterParamsRegion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
 prop=tblPrefix
 >templateTextStart<
@@ -71,7 +71,111 @@ prop=tblPrefix
 >templateTextEnd<
 
 [templateStart]
-name=observationFilterParamQueries
+name=observationFilterParamsHousehold
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+prop=tblPrefix
+>templateTextStart<
+    <filterParam name="households_${tblPrefix}" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
+                    metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_${tblPrefix}"
+                    backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaData_${tblPrefix}"
+                    filterDataTypeDisplayName="Household Observations"
+                    countPredictsAnswerCount="true"
+                    prompt="Household Observations"
+                    dependedParamRef="participantParams.tbl_prefix"
+                    trimMetadataTerms="true">
+      <help>
+        Select observations based on the characteristics of the household where the participants live. 
+      </help>
+    </filterParam>
+
+       <filterParam name="participants_${tblPrefix}" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
+                       metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_${tblPrefix}"
+                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_${tblPrefix}"
+                       countPredictsAnswerCount="true"
+                       prompt="Participants"
+                       trimMetadataTerms="true"
+                       dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.households_${tblPrefix}">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_${tblPrefix}" 
+                    metadataQueryRef="ClinicalVisitVQ.VisitMetaData_${tblPrefix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_${tblPrefix}"
+                    countPredictsAnswerCount="true"
+                    prompt="Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_${tblPrefix}">
+      <help>
+        Select observations based on their observation characteristics. 
+      </help>
+    </filterParam>
+
+    <filterParam name="relative_visits_${tblPrefix}" 
+                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_${tblPrefix}"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_${tblPrefix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
+                    countPredictsAnswerCount="false"
+                    prompt="Related Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix">
+      <help>
+        Select related observations based on their characteristics. 
+      </help>
+    </filterParam>
+>templateTextEnd<
+
+[templateStart]
+name=observationFilterParamsParticipant
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+prop=tblPrefix
+>templateTextStart<
+       <filterParam name="participants_${tblPrefix}" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
+                       metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_${tblPrefix}"
+                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaData_${tblPrefix}"
+                       countPredictsAnswerCount="true"
+                       prompt="Participants"
+                       trimMetadataTerms="true"
+                       dependedParamRef="participantParams.tbl_prefix">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_${tblPrefix}" 
+                    metadataQueryRef="ClinicalVisitVQ.VisitMetaData_${tblPrefix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_${tblPrefix}"
+                    countPredictsAnswerCount="true"
+                    prompt="Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,clinicalVisitParams.participants_${tblPrefix}">
+      <help>
+        Select observations based on their observation characteristics. 
+      </help>
+    </filterParam>
+
+    <filterParam name="relative_visits_${tblPrefix}" 
+                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_${tblPrefix}"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_${tblPrefix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
+                    countPredictsAnswerCount="false"
+                    prompt="Related Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix">
+      <help>
+        Select related observations based on their characteristics. 
+      </help>
+    </filterParam>
+>templateTextEnd<
+
+[templateStart]
+name=observationFilterParamQueriesRegion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
 prop=tblPrefix
 >templateTextStart<
@@ -206,4 +310,158 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
     </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=observationFilterParamQueriesHousehold
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+prop=tblPrefix
+>templateTextStart<
+   <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="filter_item_id"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
+                where ho.household_id = h.old_id
+       ]]>
+     </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.households_${tblPrefix}" />  
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+where p.household_id in ($$households_${tblPrefix}$$)
+and hp.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+where hp.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
+         <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="filter_item_id"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_${tblPrefix}$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+
+
+   <sqlQuery name="RelVisitMetaData_${tblPrefix}" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=observationFilterParamQueriesParticipant
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+prop=tblPrefix
+>templateTextStart<
+   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+where hp.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
+         <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" />  
+         <paramRef ref="participantParams.tbl_prefix" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="filter_item_id"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+where participant_id in ($$participants_${tblPrefix}$$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+
+
+   <sqlQuery name="RelVisitMetaData_${tblPrefix}" isCacheable="false">
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.$$tbl_prefix$$ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+>templateTextEnd<
 

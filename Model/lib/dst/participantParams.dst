@@ -324,7 +324,6 @@ name=participantFilterParamsHousehold
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/participantParams.xml
 prop=tblPrefix
 >templateTextStart<
-       
        <filterParam name="households_${tblPrefix}" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
@@ -332,7 +331,7 @@ prop=tblPrefix
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Observations"
                     prompt="Households"
-                    dependedParamRef="participantParams.tbl_prefix,participantParams.geographic_region_${tblPrefix}"
+                    dependedParamRef="participantParams.tbl_prefix"
                     trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
@@ -567,12 +566,12 @@ prop=tblPrefix
        <filterParam name="participants_${tblPrefix}" 
                     ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
                     metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.ParticipantMetaData${tblPrefix}"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.tbl_prefix,participantParams.households_${tblPrefix}">
+                    dependedParamRef="participantParams.tbl_prefix">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -614,7 +613,6 @@ prop=participantFilterExcludedIdsQuoted
 prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 >templateTextStart<
-
    <sqlQuery name="ParticipantOntology_${tblPrefix}" isCacheable="true">
      <paramRef ref="participantParams.tbl_prefix" />  
      <column name="ontology_term_name"/>

@@ -73,57 +73,60 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
       super.injectTemplates();  
 
       boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
+      boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
       boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
+      boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
       String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
       String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
 
-      //every study has participants ... injectors predicated on this as will share ontology query
+      //Inject the filter param queries for participants if any questions generated
+      if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
+          String householdMultiFilterIdsQuoted = addQuotes(getPropValue("householdMultiFilterIds"));
+          String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
+          String participantMultiFilterIdsQuoted = addQuotes(getPropValue("participantMultiFilterIds"));
+          String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
+          String observationMultiFilterIdsQuoted = addQuotes(getPropValue("observationMultiFilterIds"));
+          String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
+          
+          if(householdMultiFilterIdsQuoted == null || householdMultiFilterIdsQuoted.equals("''")) {
+              householdMultiFilterIdsQuoted = "'NA'";
+          }
+          setPropValue("householdMultiFilterIdsQuoted", householdMultiFilterIdsQuoted);
+          if(householdFilterExcludedIdsQuoted == null || householdFilterExcludedIdsQuoted.equals("''")) {
+              householdFilterExcludedIdsQuoted  = "'NA'";
+          }
+          setPropValue("householdFilterExcludedIdsQuoted", householdFilterExcludedIdsQuoted);
+          if(participantMultiFilterIdsQuoted == null || participantMultiFilterIdsQuoted.equals("''")) {
+              participantMultiFilterIdsQuoted  = "'NA'";
+          }
+          setPropValue("participantMultiFilterIdsQuoted", participantMultiFilterIdsQuoted);
+          if(participantFilterExcludedIdsQuoted == null || participantFilterExcludedIdsQuoted.equals("''")) {
+              participantFilterExcludedIdsQuoted  = "'NA'";
+          }
+          setPropValue("participantFilterExcludedIdsQuoted", participantFilterExcludedIdsQuoted);
+          if(observationMultiFilterIdsQuoted == null || observationMultiFilterIdsQuoted.equals("''")) {
+              observationMultiFilterIdsQuoted  = "'NA'";
+          }
+          setPropValue("observationMultiFilterIdsQuoted", observationMultiFilterIdsQuoted);
+          if(observationFilterExcludedIdsQuoted == null || observationFilterExcludedIdsQuoted.equals("''")) {
+              observationFilterExcludedIdsQuoted  = "'NA'";
+          }
+          setPropValue("observationFilterExcludedIdsQuoted", observationFilterExcludedIdsQuoted);
+          
+          injectTemplate("participantFilterParamQueries" + firstWizardStep);
+      }
 
-      //Inject the particiant metadata query
-      injectTemplate("participant" + studyType + "Query" + firstWizardStep);
 
-      //Inject the filter params 
-      injectTemplate("participantFilterParams" + firstWizardStep);
-
-      //Inject the filter param queries
-      String householdMultiFilterIdsQuoted = addQuotes(getPropValue("householdMultiFilterIds"));
-      String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
-      String participantMultiFilterIdsQuoted = addQuotes(getPropValue("participantMultiFilterIds"));
-      String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
-      String observationMultiFilterIdsQuoted = addQuotes(getPropValue("observationMultiFilterIds"));
-      String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
-      
-      if(householdMultiFilterIdsQuoted == null || householdMultiFilterIdsQuoted.equals("''")) {
-          householdMultiFilterIdsQuoted = "'NA'";
+      if(hasParticipantQuestion && hasParticipants){
+          injectTemplate("participantFilterParams" + firstWizardStep);
+          //Inject the particiant metadata query
+          injectTemplate("participant" + studyType + "Query" + firstWizardStep);
+          
+          cardQuestions = cardQuestions + " \"participants\": \"ParticipantQuestions." + presenterId + "ParticipantsByMetadata\"";
       }
-      setPropValue("householdMultiFilterIdsQuoted", householdMultiFilterIdsQuoted);
-      if(householdFilterExcludedIdsQuoted == null || householdFilterExcludedIdsQuoted.equals("''")) {
-         householdFilterExcludedIdsQuoted  = "'NA'";
-      }
-      setPropValue("householdFilterExcludedIdsQuoted", householdFilterExcludedIdsQuoted);
-      if(participantMultiFilterIdsQuoted == null || participantMultiFilterIdsQuoted.equals("''")) {
-         participantMultiFilterIdsQuoted  = "'NA'";
-      }
-      setPropValue("participantMultiFilterIdsQuoted", participantMultiFilterIdsQuoted);
-      if(participantFilterExcludedIdsQuoted == null || participantFilterExcludedIdsQuoted.equals("''")) {
-         participantFilterExcludedIdsQuoted  = "'NA'";
-      }
-      setPropValue("participantFilterExcludedIdsQuoted", participantFilterExcludedIdsQuoted);
-      if(observationMultiFilterIdsQuoted == null || observationMultiFilterIdsQuoted.equals("''")) {
-         observationMultiFilterIdsQuoted  = "'NA'";
-      }
-      setPropValue("observationMultiFilterIdsQuoted", observationMultiFilterIdsQuoted);
-      if(observationFilterExcludedIdsQuoted == null || observationFilterExcludedIdsQuoted.equals("''")) {
-          observationFilterExcludedIdsQuoted  = "'NA'";
-      }
-      setPropValue("observationFilterExcludedIdsQuoted", observationFilterExcludedIdsQuoted);
-
-      injectTemplate("participantFilterParamQueries" + firstWizardStep);
-
-      cardQuestions = cardQuestions + " \"participants\": \"ParticipantQuestions." + presenterId + "ParticipantsByMetadata\"";
 
       //now to do observations
       if(hasObservationQuestion && hasObservations){
@@ -131,8 +134,8 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
           injectTemplate("observation" + studyType + "Query" + firstWizardStep);
           
           //Inject the filter params .... note these use the ontology queries from particiants filters
-          injectTemplate("observationFilterParams");
-          injectTemplate("observationFilterParamQueries");
+          injectTemplate("observationFilterParams" + firstWizardStep);
+          injectTemplate("observationFilterParamQueries" + firstWizardStep);
 
           cardQuestions = cardQuestions + ", \"observations\": \"ClinicalVisitQuestions." + presenterId + "ObservationsByMetadata\"";
       }
@@ -143,8 +146,8 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
           injectTemplate("householdMetadataQuery" + firstWizardStep);
           
           //Inject the filter params .... note these use the ontology queries from particiants filters
-          injectTemplate("householdFilterParams");
-          injectTemplate("householdFilterParamQueries");
+          injectTemplate("householdFilterParams" + firstWizardStep);
+          injectTemplate("householdFilterParamQueries" + firstWizardStep);
 
           cardQuestions = cardQuestions + ", \"households\": \"HouseholdQuestions." + presenterId + "HouseholdsByMetadata\"";
       }

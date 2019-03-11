@@ -19,7 +19,9 @@
 
     <!-- TEMPLATE_ANCHOR observationSourceIdParam -->
 
-    <!-- TEMPLATE_ANCHOR observationFilterParams -->
+    <!-- TEMPLATE_ANCHOR observationFilterParamsRegion -->
+    <!-- TEMPLATE_ANCHOR observationFilterParamsHousehold -->
+    <!-- TEMPLATE_ANCHOR observationFilterParamsParticipant -->
 
     <filterParam name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
@@ -459,37 +461,9 @@
             </sql>
         </sqlQuery>
 
-<!--
-                <sqlQuery name="minAgeAtVisit">
-            <paramRef ref="clinicalVisitParams.visits_visitage_metadata_prism" />
-            <paramRef ref="clinicalVisitParams.geographic_region_prism" />
-            <column name="internal" />
-            <column name="term" />
-            <sql>
-            <![CDATA[
-select min(EUPATH_0000113) as term, min(EUPATH_0000113) as internal 
-   from ApidbTuning.$$tbl_prefix$$Observations 
-   where pan_id in ($$visits_visitage_metadata_prism$$)
-            ]]>
-            </sql>
-        </sqlQuery>
-
-        <sqlQuery name="maxAgeAtVisit">
-            <paramRef ref="clinicalVisitParams.visits_visitage_metadata_prism" />
-            <paramRef ref="clinicalVisitParams.geographic_region_prism" />
-            <column name="internal" />
-            <column name="term" />
-            <sql>
-            <![CDATA[
-select max(EUPATH_0000113) as term, max(EUPATH_0000113) as internal 
-   from ApidbTuning.$$tbl_prefix$$Observations 
-   where pan_id in ($$visits_visitage_metadata_prism$$)
-            ]]>
-            </sql>
-        </sqlQuery>
--->
-
-    <!-- TEMPLATE_ANCHOR observationFilterParamQueries -->
+    <!-- TEMPLATE_ANCHOR observationFilterParamQueriesRegion -->
+    <!-- TEMPLATE_ANCHOR observationFilterParamQueriesHousehold -->
+    <!-- TEMPLATE_ANCHOR observationFilterParamQueriesParticipant -->
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!--  PRISM specific .. should be injected -->  

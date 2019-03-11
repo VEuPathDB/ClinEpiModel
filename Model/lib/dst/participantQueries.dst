@@ -153,19 +153,20 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries
 prop=tblPrefix
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="participantParams.geographic_region_scorecx" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.households_scorecx" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="participantParams.participants_scorecx" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_scorecx" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$Participants pa
-where pa.pan_id in ($$visits_scorecx$$)
-group by pa.name 
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_${tblPrefix}$$)
+and pa.pan_id = obs.participant_id
+group by pa.name
                 ]]>   
         </sql>
      </sqlQuery>
@@ -177,18 +178,19 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries
 prop=tblPrefix
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="participantParams.households_scorecx" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="participantParams.participants_scorecx" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_scorecx" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$Participants pa
-where pa.pan_id in ($$visits_scorecx$$)
-group by pa.name 
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_${tblPrefix}$$)
+and pa.pan_id = obs.participant_id
+group by pa.name
                 ]]>   
         </sql>
      </sqlQuery>
@@ -200,17 +202,18 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries
 prop=tblPrefix
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="participantParams.participants_scorecx" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_scorecx" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$Participants pa
-where pa.pan_id in ($$visits_scorecx$$)
-group by pa.name 
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_${tblPrefix}$$)
+and pa.pan_id = obs.participant_id
+group by pa.name
                 ]]>   
         </sql>
      </sqlQuery>
