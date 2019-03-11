@@ -1,9 +1,9 @@
 [templateStart]
-name=householdMetadataQuery
+name=householdMetadataQueryRegion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
 prop=tblPrefix
 >templateTextStart<
-    <sqlQuery name="HouseholdsByCharacteristics_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_household_characteristics"/>
@@ -12,7 +12,69 @@ prop=tblPrefix
        <paramRef ref="householdParams.observations_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
-       <column name="ave_anoph"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.$$tbl_prefix$$HousePartIO io, ApidbTuning.$$tbl_prefix$$Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.$$tbl_prefix$$HouseholdMD) h
+where io.participant_id in ($$observations_${tblPrefix}$$)
+and io.household_id = h.household_id
+and h.$$householdOrObservation$$ in ($$households_${tblPrefix}$$)
+and da.pan_id = h.$$householdOrObservation$$ 
+group by da.pan_id,da.name
+) dwpct
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=householdMetadataQueryHousehold
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
+prop=tblPrefix
+>templateTextStart<
+    <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.observations_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.$$tbl_prefix$$HousePartIO io, ApidbTuning.$$tbl_prefix$$Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.$$tbl_prefix$$HouseholdMD) h
+where io.participant_id in ($$observations_${tblPrefix}$$)
+and io.household_id = h.household_id
+and h.$$householdOrObservation$$ in ($$households_${tblPrefix}$$)
+and da.pan_id = h.$$householdOrObservation$$ 
+group by da.pan_id,da.name
+) dwpct
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=householdMetadataQueryParticipant
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
+prop=tblPrefix
+>templateTextStart<
+    <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.observations_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
        <column name="part_count"/>
          <sql>
            <![CDATA[

@@ -465,9 +465,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           for (Map.Entry<String, String[]> entry : participantQuestionTemplateNamesToScopes().entrySet()) {
               String questionName = entry.getKey();
               String questionFullName = "";
-              if(questionName.equals("ParticipantsByRelativeVisits")){
+              if(questionName.equals("ParticipantsByMetadata")){
                   questionFullName = "ParticipantQuestions." + presenterId + entry.getKey();
-                  //System.err.println("Participant questionFullName="+questionFullName);
+                  System.err.println("Participant questionFullName="+questionFullName);
               }else{                  
                   questionFullName = "ParticipantQuestions." + entry.getKey();
               }
@@ -504,9 +504,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           for (Map.Entry<String, String[]> entry : observationQuestionTemplateNamesToScopes().entrySet()) {
               String questionName = entry.getKey();
               String questionFullName = "";
-              if(questionName.equals("ObservationsByRelativeVisits")){
+              if(questionName.equals("ObservationsByMetadata")){
                   questionFullName = "ClinicalVisitQuestions." + presenterId + entry.getKey();
-                  //System.err.println("Observations questionFullName="+questionFullName);
+                  System.err.println("Observations questionFullName="+questionFullName);
               }else{                  
                   questionFullName = "ClinicalVisitQuestions." + entry.getKey();
               }

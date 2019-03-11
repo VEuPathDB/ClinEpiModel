@@ -19,7 +19,7 @@ prop=tblPrefix
               searchCategory="Household"
               displayName="Select a Set of Households (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_${tblPrefix}" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 

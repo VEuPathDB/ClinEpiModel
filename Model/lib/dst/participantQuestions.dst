@@ -7,7 +7,7 @@ ${participantQuestionFull}
 >templateTextEnd<
 
 [templateStart]
-name=ParticipantsByRelativeVisits
+name=ParticipantsByMetadata
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
@@ -15,11 +15,11 @@ prop=participantAttributesList
 prop=tblPrefix
 prop=studyAbbreviation
 >templateTextStart<
-        <question name="${presenterId}ParticipantsByRelativeVisits" newBuild="1" includeProjects="${includeProjects}"
+        <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
               displayName="Select a Set of Participants (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="ParticipantId.ParticipantsLongitudinal_${tblPrefix}" 
+              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         <attributesList 

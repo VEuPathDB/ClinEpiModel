@@ -17,7 +17,10 @@
      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
     <!-- TEMPLATE_ANCHOR participantMetadataQuery -->
-    <!-- TEMPLATE_ANCHOR participantLongitudinalQuery -->
+    <!-- TEMPLATE_ANCHOR participantLongitudinalQueryRegion -->
+    <!-- TEMPLATE_ANCHOR participantSurveyQueryRegion -->
+    <!-- TEMPLATE_ANCHOR participantSurveyQueryHousehold -->
+    <!-- TEMPLATE_ANCHOR participantSurveyQueryParticipant -->
      
      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
      <!-- Template for particiapnts query, copy and replace template with study suffix -->

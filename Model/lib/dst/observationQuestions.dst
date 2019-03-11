@@ -7,7 +7,7 @@ ${observationQuestionFull}
 >templateTextEnd<
 
 [templateStart]
-name=ObservationsByRelativeVisits
+name=ObservationsByMetadata
 anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
@@ -16,11 +16,11 @@ prop=observationAttributesList
 prop=tblPrefix
 prop=studyAbbreviation
 >templateTextStart<
-    <question name="${presenterId}ObservationsByRelativeVisits" newBuild="1" includeProjects="${includeProjects}"
+    <question name="${presenterId}ObservationsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
               displayName="Select a Set of Observations (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="ClinicalVisitId.ObservationsByRelativeVisits_${tblPrefix}" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         <attributesList 
