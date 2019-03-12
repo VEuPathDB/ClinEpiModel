@@ -13,6 +13,13 @@
 
     <!-- TEMPLATE_ANCHOR observationSourceIdQuery -->
 
+    <!-- TEMPLATE_ANCHOR observationLongitudinalQueryRegion -->
+    <!-- TEMPLATE_ANCHOR observationLongitudinalQueryHousehold -->
+    <!-- TEMPLATE_ANCHOR observationLongitudinalQueryParticipant -->
+    <!-- TEMPLATE_ANCHOR observationSurveyQueryRegion -->
+    <!-- TEMPLATE_ANCHOR observationSurveyQueryHousehold -->
+    <!-- TEMPLATE_ANCHOR observationSurveyQueryParticipant -->
+
      <sqlQuery name="ClinicalVisitsByRelativeVisits_prism"
           isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>

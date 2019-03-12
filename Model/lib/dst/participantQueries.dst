@@ -1,0 +1,221 @@
+[templateStart]
+name=participantMetadataQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=partipantQueryTemplate
+>templateTextStart<
+${partipantQueryTemplate}
+>templateTextEnd<
+
+[templateStart]
+name=participantLongitudinalQueryRegion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=tblPrefix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${tblPrefix}"
+          isCacheable="true">
+       <paramRef ref="participantParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.relative_visits_${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
+      where observation_id in ($$visits_${tblPrefix}$$)
+      and ontology_term_name = '${timeSourceId}'
+$$dateOperator_fv$$
+ select distinct vis.participant_id,vis.observation_id,vis.date_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
+ where vis.observation_id in ($$visits_${tblPrefix}$$)
+ and vis.ontology_term_name = '${timeSourceId}'
+and $$use_relative_visits$$ = 1
+and rv.observation_id in ($$relative_visits_${tblPrefix}$$)
+and rv.ontology_term_name = '${timeSourceId}'
+and vis.participant_id = rv.participant_id
+and vis.observation_id != rv.observation_id
+and vis.date_value $$date_direction_fv$$ rv.date_value  
+and abs(rv.date_value - vis.date_value) >= $$days_between.min$$
+and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
+group by vis.participant_id,vis.observation_id,vis.date_value
+) main, ApidbTuning.$$tbl_prefix$$Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantLongitudinalQueryHousehold
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=tblPrefix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${tblPrefix}"
+          isCacheable="true">
+       <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.relative_visits_${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
+      where observation_id in ($$visits_${tblPrefix}$$)
+      and ontology_term_name = '${timeSourceId}'
+$$dateOperator_fv$$
+ select distinct vis.participant_id,vis.observation_id,vis.date_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
+ where vis.observation_id in ($$visits_${tblPrefix}$$)
+ and vis.ontology_term_name = '${timeSourceId}'
+and $$use_relative_visits$$ = 1
+and rv.observation_id in ($$relative_visits_${tblPrefix}$$)
+and rv.ontology_term_name = '${timeSourceId}'
+and vis.participant_id = rv.participant_id
+and vis.observation_id != rv.observation_id
+and vis.date_value $$date_direction_fv$$ rv.date_value  
+and abs(rv.date_value - vis.date_value) >= $$days_between.min$$
+and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
+group by vis.participant_id,vis.observation_id,vis.date_value
+) main, ApidbTuning.$$tbl_prefix$$Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantLongitudinalQueryParticipant
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=tblPrefix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${tblPrefix}"
+          isCacheable="true">
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.relative_visits_${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
+from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
+      where observation_id in ($$visits_${tblPrefix}$$)
+      and ontology_term_name = '${timeSourceId}'
+$$dateOperator_fv$$
+ select distinct vis.participant_id,vis.observation_id,vis.date_value
+ from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
+ where vis.observation_id in ($$visits_${tblPrefix}$$)
+ and vis.ontology_term_name = '${timeSourceId}'
+and $$use_relative_visits$$ = 1
+and rv.observation_id in ($$relative_visits_${tblPrefix}$$)
+and rv.ontology_term_name = '${timeSourceId}'
+and vis.participant_id = rv.participant_id
+and vis.observation_id != rv.observation_id
+and vis.date_value $$date_direction_fv$$ rv.date_value  
+and abs(rv.date_value - vis.date_value) >= $$days_between.min$$
+and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
+group by vis.participant_id,vis.observation_id,vis.date_value
+) main, ApidbTuning.$$tbl_prefix$$Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantSurveyQueryRegion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=tblPrefix
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_${tblPrefix}$$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantSurveyQueryHousehold
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=tblPrefix
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_${tblPrefix}$$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantSurveyQueryParticipant
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+prop=tblPrefix
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
+where obs.observation_id in ($$visits_${tblPrefix}$$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+

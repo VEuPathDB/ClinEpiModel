@@ -97,7 +97,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
     public static final String PARTICIPANT_RECORD_CLASS_PREFIX = "Participant";
     public static final String HOUSEHOLD_RECORD_CLASS_PREFIX = "Household";
 
-
   @Override
   public void injectTemplates() {
 
@@ -429,7 +428,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 
           for (Map.Entry<String, String[]> entry : householdQuestionTemplateNamesToScopes().entrySet()) {
-              String questionFullName = "HouseholdQuestions." + entry.getKey();
+              String questionName = entry.getKey();
+              String questionFullName = "";
+              if(questionName.equals("HouseholdsByMetadata")){
+                  questionFullName = "HouseholdQuestions." + presenterId + entry.getKey();
+                  //System.err.println("Household questionFullName="+questionFullName);
+              }else{                  
+                  questionFullName = "HouseholdQuestions." + entry.getKey();
+              }
               addWdkReference(householdRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
           
@@ -457,7 +463,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 
           for (Map.Entry<String, String[]> entry : participantQuestionTemplateNamesToScopes().entrySet()) {
-              String questionFullName = "ParticipantQuestions." + entry.getKey();
+              String questionName = entry.getKey();
+              String questionFullName = "";
+              if(questionName.equals("ParticipantsByMetadata")){
+                  questionFullName = "ParticipantQuestions." + presenterId + entry.getKey();
+                  System.err.println("Participant questionFullName="+questionFullName);
+              }else{                  
+                  questionFullName = "ParticipantQuestions." + entry.getKey();
+              }
               addWdkReference(participantRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
@@ -489,7 +502,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
           for (Map.Entry<String, String[]> entry : observationQuestionTemplateNamesToScopes().entrySet()) {
-              String questionFullName = "ClinicalVisitQuestions." + entry.getKey();
+              String questionName = entry.getKey();
+              String questionFullName = "";
+              if(questionName.equals("ObservationsByMetadata")){
+                  questionFullName = "ClinicalVisitQuestions." + presenterId + entry.getKey();
+                  System.err.println("Observations questionFullName="+questionFullName);
+              }else{                  
+                  questionFullName = "ClinicalVisitQuestions." + entry.getKey();
+              }
               addWdkReference(observationRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
