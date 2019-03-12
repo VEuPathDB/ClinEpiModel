@@ -97,11 +97,7 @@
     <!-- Anchor for participants filter params -->
     <!--************************************************************-->
 
-    <!-- TEMPLATE_ANCHOR participantFilterParamsRegion -->
-
-    <!-- TEMPLATE_ANCHOR participantFilterParamsHousehold -->
-
-    <!-- TEMPLATE_ANCHOR participantFilterParamsParticipant -->
+    <!-- TEMPLATE_ANCHOR participantFilterParams -->
 
     <!--************************************************************-->
      <!-- Template for particiapnts query, copy and replace template with study suffix -->
@@ -866,9 +862,7 @@
     <!-- Anchor for participants filter params -->
     <!--************************************************************-->
 
-    <!-- TEMPLATE_ANCHOR participantFilterParamQueriesRegion -->
-    <!-- TEMPLATE_ANCHOR participantFilterParamQueriesHousehold -->
-    <!-- TEMPLATE_ANCHOR participantFilterParamQueriesParticipant -->
+    <!-- TEMPLATE_ANCHOR participantFilterParamQueries -->
 
     <!--************************************************************-->
     <!-- Template for particiapnts query, copy and replace template with study suffix -->

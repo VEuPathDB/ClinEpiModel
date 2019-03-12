@@ -1,6 +1,14 @@
 [templateStart]
-name=observationLongitudinalQueryRegion
+name=observationMetadataQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
+prop=injectedTemplateFull
+>templateTextStart<
+${injectedTemplateFull}
+>templateTextEnd<
+
+[templateStart]
+name=observationLongitudinalQueryRegion
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -25,32 +33,32 @@ prop=timeSourceId
            <![CDATA[
 with vis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
-from ApidbTuning.$$tbl_prefix$$ObservationMD md
-where md.observation_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+where md.observation_id in (\$\$visits_${tblPrefix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
-from ApidbTuning.$$tbl_prefix$$ObservationMD md
-where $$use_relative_visits$$ = 1
-and md.observation_id in ($$relative_visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+where \$\$use_relative_visits\$\$ = 1
+and md.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 visits as (
 select * from vis
-$$dateOperator_fv$$
+\$\$dateOperator_fv\$\$
 select vis.input_pan_id, vis.pan_id,vis.${timeSourceId} from vis, relvis rv
-where $$use_relative_visits$$ = 1
+where \$\$use_relative_visits\$\$ = 1
 and vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and vis.${timeSourceId} $$date_direction_fv$$ rv.${timeSourceId}
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= $$days_between.min$$
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= $$days_between.max$$
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
 group by vis.pan_id, vis.input_pan_id,vis.${timeSourceId}
-having count(*) >= $$num_relative_events.min$$ and count(*) <= $$num_relative_events.max$$
+having count(*) >= \$\$num_relative_events.min\$\$ and count(*) <= \$\$num_relative_events.max\$\$
 )
 select name as source_id,'@PROJECT_ID@' as project_id
-, CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
+, CASE WHEN '\$\$dateOperator_fv\$\$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '\$\$dateOperator_fv\$\$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
 select visits.pan_id,o.name,visits.input_pan_id as parent_id,visits.${timeSourceId}, abs(inter.${timeSourceId} - visits.${timeSourceId}) as days_between
 from (
@@ -58,10 +66,10 @@ select vis.pan_id, vis.input_pan_id,rv.${timeSourceId}
 from vis, relvis rv
 where vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and vis.${timeSourceId} $$date_direction_fv$$ rv.${timeSourceId}
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= $$days_between.min$$
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= $$days_between.max$$
-) inter, visits, ApidbTuning.$$tbl_prefix$$Observations o
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
+) inter, visits, ApidbTuning.\$\$tbl_prefix\$\$Observations o
 where visits.pan_id = o.pan_id
 and visits.pan_id = inter.pan_id(+)
 )
@@ -73,7 +81,7 @@ group by name
 
 [templateStart]
 name=observationLongitudinalQueryHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -97,32 +105,32 @@ prop=timeSourceId
            <![CDATA[
 with vis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
-from ApidbTuning.$$tbl_prefix$$ObservationMD md
-where md.observation_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+where md.observation_id in (\$\$visits_${tblPrefix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
-from ApidbTuning.$$tbl_prefix$$ObservationMD md
-where $$use_relative_visits$$ = 1
-and md.observation_id in ($$relative_visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+where \$\$use_relative_visits\$\$ = 1
+and md.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 visits as (
 select * from vis
-$$dateOperator_fv$$
+\$\$dateOperator_fv\$\$
 select vis.input_pan_id, vis.pan_id,vis.${timeSourceId} from vis, relvis rv
-where $$use_relative_visits$$ = 1
+where \$\$use_relative_visits\$\$ = 1
 and vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and vis.${timeSourceId} $$date_direction_fv$$ rv.${timeSourceId}
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= $$days_between.min$$
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= $$days_between.max$$
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
 group by vis.pan_id, vis.input_pan_id,vis.${timeSourceId}
-having count(*) >= $$num_relative_events.min$$ and count(*) <= $$num_relative_events.max$$
+having count(*) >= \$\$num_relative_events.min\$\$ and count(*) <= \$\$num_relative_events.max\$\$
 )
 select name as source_id,'@PROJECT_ID@' as project_id
-, CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
+, CASE WHEN '\$\$dateOperator_fv\$\$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '\$\$dateOperator_fv\$\$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
 select visits.pan_id,o.name,visits.input_pan_id as parent_id,visits.${timeSourceId}, abs(inter.${timeSourceId} - visits.${timeSourceId}) as days_between
 from (
@@ -130,10 +138,10 @@ select vis.pan_id, vis.input_pan_id,rv.${timeSourceId}
 from vis, relvis rv
 where vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and vis.${timeSourceId} $$date_direction_fv$$ rv.${timeSourceId}
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= $$days_between.min$$
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= $$days_between.max$$
-) inter, visits, ApidbTuning.$$tbl_prefix$$Observations o
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
+) inter, visits, ApidbTuning.\$\$tbl_prefix\$\$Observations o
 where visits.pan_id = o.pan_id
 and visits.pan_id = inter.pan_id(+)
 )
@@ -145,7 +153,7 @@ group by name
 
 [templateStart]
 name=observationLongitudinalQueryParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -168,32 +176,32 @@ prop=timeSourceId
            <![CDATA[
 with vis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
-from ApidbTuning.$$tbl_prefix$$ObservationMD md
-where md.observation_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+where md.observation_id in (\$\$visits_${tblPrefix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
-from ApidbTuning.$$tbl_prefix$$ObservationMD md
-where $$use_relative_visits$$ = 1
-and md.observation_id in ($$relative_visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+where \$\$use_relative_visits\$\$ = 1
+and md.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 visits as (
 select * from vis
-$$dateOperator_fv$$
+\$\$dateOperator_fv\$\$
 select vis.input_pan_id, vis.pan_id,vis.${timeSourceId} from vis, relvis rv
-where $$use_relative_visits$$ = 1
+where \$\$use_relative_visits\$\$ = 1
 and vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and vis.${timeSourceId} $$date_direction_fv$$ rv.${timeSourceId}
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= $$days_between.min$$
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= $$days_between.max$$
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
 group by vis.pan_id, vis.input_pan_id,vis.${timeSourceId}
-having count(*) >= $$num_relative_events.min$$ and count(*) <= $$num_relative_events.max$$
+having count(*) >= \$\$num_relative_events.min\$\$ and count(*) <= \$\$num_relative_events.max\$\$
 )
 select name as source_id,'@PROJECT_ID@' as project_id
-, CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '$$dateOperator_fv$$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
+, CASE WHEN '\$\$dateOperator_fv\$\$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '\$\$dateOperator_fv\$\$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
 from (
 select visits.pan_id,o.name,visits.input_pan_id as parent_id,visits.${timeSourceId}, abs(inter.${timeSourceId} - visits.${timeSourceId}) as days_between
 from (
@@ -201,10 +209,10 @@ select vis.pan_id, vis.input_pan_id,rv.${timeSourceId}
 from vis, relvis rv
 where vis.input_pan_id = rv.input_pan_id
 and vis.pan_id != rv.pan_id
-and vis.${timeSourceId} $$date_direction_fv$$ rv.${timeSourceId}
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= $$days_between.min$$
-and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= $$days_between.max$$
-) inter, visits, ApidbTuning.$$tbl_prefix$$Observations o
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
+) inter, visits, ApidbTuning.\$\$tbl_prefix\$\$Observations o
 where visits.pan_id = o.pan_id
 and visits.pan_id = inter.pan_id(+)
 )
@@ -216,7 +224,7 @@ group by name
 
 [templateStart]
 name=observationSurveyQueryRegion
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -233,8 +241,8 @@ prop=timeSourceId
        <sql>
            <![CDATA[
 select distinct name as source_id,'@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$Observations 
-where pan_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$Observations 
+where pan_id in (\$\$visits_${tblPrefix}\$\$)
            ]]>   
         </sql>
      </sqlQuery>
@@ -242,7 +250,7 @@ where pan_id in ($$visits_${tblPrefix}$$)
 
 [templateStart]
 name=observationSurveyQueryHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -258,8 +266,8 @@ prop=timeSourceId
        <sql>
            <![CDATA[
 select distinct name as source_id,'@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$Observations 
-where pan_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$Observations 
+where pan_id in (\$\$visits_${tblPrefix}\$\$)
            ]]>   
         </sql>
      </sqlQuery>
@@ -267,7 +275,7 @@ where pan_id in ($$visits_${tblPrefix}$$)
 
 [templateStart]
 name=observationSurveyQueryParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -282,8 +290,8 @@ prop=timeSourceId
        <sql>
            <![CDATA[
 select distinct name as source_id,'@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$Observations 
-where pan_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$Observations 
+where pan_id in (\$\$visits_${tblPrefix}\$\$)
            ]]>   
         </sql>
      </sqlQuery>

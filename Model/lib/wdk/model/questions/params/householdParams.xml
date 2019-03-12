@@ -147,9 +147,7 @@
 
     <!-- TEMPLATE_ANCHOR householdResultParam -->
 
-    <!-- TEMPLATE_ANCHOR householdFilterParamsRegion -->
-    <!-- TEMPLATE_ANCHOR householdFilterParamsHousehold -->
-    <!-- TEMPLATE_ANCHOR householdFilterParamsParticipant -->
+    <!-- TEMPLATE_ANCHOR householdFilterParams -->
 
  <enumParam name="district"
                prompt="Study site "
@@ -181,9 +179,7 @@
 
  <querySet name="HouseholdVQ" queryType="vocab" isCacheable="true">
 
-   <!-- TEMPLATE_ANCHOR householdFilterParamQueriesRegion -->
-   <!-- TEMPLATE_ANCHOR householdFilterParamQueriesHousehold -->
-   <!-- TEMPLATE_ANCHOR householdFilterParamQueriesParticipant -->
+   <!-- TEMPLATE_ANCHOR householdFilterParamQueries -->
 
    <sqlQuery name="RegionMetaData_prism" isCacheable="false" >
       <paramRef ref="participantParams.tbl_prefix" />  

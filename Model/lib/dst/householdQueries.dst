@@ -1,6 +1,14 @@
 [templateStart]
-name=householdMetadataQueryRegion
+name=householdMetadataQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
+prop=injectedTemplateFull
+>templateTextStart<
+${injectedTemplateFull}
+>templateTextEnd<
+
+[templateStart]
+name=householdMetadataQueryRegion
+anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
@@ -18,12 +26,12 @@ prop=tblPrefix
 select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
-from ApidbTuning.$$tbl_prefix$$HousePartIO io, ApidbTuning.$$tbl_prefix$$Households da, 
-(select distinct household_id, household_observation_id from ApidbTuning.$$tbl_prefix$$HouseholdMD) h
-where io.participant_id in ($$observations_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$HousePartIO io, ApidbTuning.\$\$tbl_prefix\$\$Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD) h
+where io.participant_id in (\$\$observations_${tblPrefix}\$\$)
 and io.household_id = h.household_id
-and h.$$householdOrObservation$$ in ($$households_${tblPrefix}$$)
-and da.pan_id = h.$$householdOrObservation$$ 
+and h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
+and da.pan_id = h.\$\$householdOrObservation\$\$ 
 group by da.pan_id,da.name
 ) dwpct
                 ]]>   
@@ -33,7 +41,7 @@ group by da.pan_id,da.name
 
 [templateStart]
 name=householdMetadataQueryHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
@@ -50,12 +58,12 @@ prop=tblPrefix
 select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
-from ApidbTuning.$$tbl_prefix$$HousePartIO io, ApidbTuning.$$tbl_prefix$$Households da, 
-(select distinct household_id, household_observation_id from ApidbTuning.$$tbl_prefix$$HouseholdMD) h
-where io.participant_id in ($$observations_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$HousePartIO io, ApidbTuning.\$\$tbl_prefix\$\$Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD) h
+where io.participant_id in (\$\$observations_${tblPrefix}\$\$)
 and io.household_id = h.household_id
-and h.$$householdOrObservation$$ in ($$households_${tblPrefix}$$)
-and da.pan_id = h.$$householdOrObservation$$ 
+and h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
+and da.pan_id = h.\$\$householdOrObservation\$\$ 
 group by da.pan_id,da.name
 ) dwpct
                 ]]>   
@@ -65,7 +73,7 @@ group by da.pan_id,da.name
 
 [templateStart]
 name=householdMetadataQueryParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
@@ -81,12 +89,12 @@ prop=tblPrefix
 select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
-from ApidbTuning.$$tbl_prefix$$HousePartIO io, ApidbTuning.$$tbl_prefix$$Households da, 
-(select distinct household_id, household_observation_id from ApidbTuning.$$tbl_prefix$$HouseholdMD) h
-where io.participant_id in ($$observations_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$HousePartIO io, ApidbTuning.\$\$tbl_prefix\$\$Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD) h
+where io.participant_id in (\$\$observations_${tblPrefix}\$\$)
 and io.household_id = h.household_id
-and h.$$householdOrObservation$$ in ($$households_${tblPrefix}$$)
-and da.pan_id = h.$$householdOrObservation$$ 
+and h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
+and da.pan_id = h.\$\$householdOrObservation\$\$ 
 group by da.pan_id,da.name
 ) dwpct
                 ]]>   

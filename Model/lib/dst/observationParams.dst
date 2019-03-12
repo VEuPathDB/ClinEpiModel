@@ -1,6 +1,14 @@
 [templateStart]
-name=observationFilterParamsRegion
+name=observationFilterParams
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+prop=injectedTemplateFull
+>templateTextStart<
+${injectedTemplateFull}
+>templateTextEnd<
+
+[templateStart]
+name=observationFilterParamsRegion
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 >templateTextStart<
     <filterParam name="geographic_region_${tblPrefix}" 
@@ -72,7 +80,7 @@ prop=tblPrefix
 
 [templateStart]
 name=observationFilterParamsHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 >templateTextStart<
     <filterParam name="households_${tblPrefix}" 
@@ -131,7 +139,7 @@ prop=tblPrefix
 
 [templateStart]
 name=observationFilterParamsParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 >templateTextStart<
        <filterParam name="participants_${tblPrefix}" 
@@ -175,8 +183,16 @@ prop=tblPrefix
 >templateTextEnd<
 
 [templateStart]
-name=observationFilterParamQueriesRegion
+name=observationFilterParamQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+prop=injectedTemplateFull
+>templateTextStart<
+${injectedTemplateFull}
+>templateTextEnd<
+
+[templateStart]
+name=observationFilterParamQueriesRegion
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="RegionMetaData_${tblPrefix}" isCacheable="false">
@@ -190,8 +206,8 @@ prop=tblPrefix
       <sql>
         <![CDATA[
 select p.household_id as internal, ho.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD p, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
-where p.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD p, ApidbTuning.\$\$tbl_prefix\$\$HouseObsIO ho
+where p.ontology_term_name in (select ontology_term_source_id from ApidbTuning.\$\$tbl_prefix\$\$Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and ho.household_id = p.household_id
@@ -212,8 +228,8 @@ and ho.household_id = p.household_id
      <sql>
        <![CDATA[
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
-                where h.household_id in ($$geographic_region_${tblPrefix}$$)
+                from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD h, ApidbTuning.\$\$tbl_prefix\$\$HouseObsIO ho
+                where h.household_id in (\$\$geographic_region_${tblPrefix}\$\$)
                 and ho.household_id = h.household_id
        ]]>
      </sql>
@@ -231,7 +247,7 @@ and ho.household_id = p.household_id
       <sql>
          <![CDATA[
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
+                from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD h, ApidbTuning.\$\$tbl_prefix\$\$HouseObsIO ho
                 where ho.household_id = h.household_id
           ]]>
     </sql>
@@ -249,8 +265,8 @@ and ho.household_id = p.household_id
       <sql>
          <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
-where p.household_id in ($$households_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ParticipantMD p, ApidbTuning.\$\$tbl_prefix\$\$PartObsIO hp
+where p.household_id in (\$\$households_${tblPrefix}\$\$)
 and hp.participant_id = p.participant_id
           ]]>
     </sql>
@@ -267,7 +283,7 @@ and hp.participant_id = p.participant_id
       <sql>
         <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+from ApidbTuning.\$\$tbl_prefix\$\$ParticipantMD p, ApidbTuning.\$\$tbl_prefix\$\$PartObsIO hp
 where hp.participant_id = p.participant_id
           ]]>
     </sql>
@@ -285,8 +301,8 @@ where hp.participant_id = p.participant_id
          <sql>
            <![CDATA[
 select observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in ($$participants_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
+where participant_id in (\$\$participants_${tblPrefix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
@@ -304,7 +320,7 @@ where participant_id in ($$participants_${tblPrefix}$$)
       <sql>
         <![CDATA[
 select  observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
           ]]>
     </sql>
     </sqlQuery>
@@ -312,7 +328,7 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
 
 [templateStart]
 name=observationFilterParamQueriesHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 >templateTextStart<
    <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
@@ -327,7 +343,7 @@ prop=tblPrefix
      <sql>
        <![CDATA[
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.$$tbl_prefix$$HouseholdMD h, ApidbTuning.$$tbl_prefix$$HouseObsIO ho
+                from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD h, ApidbTuning.\$\$tbl_prefix\$\$HouseObsIO ho
                 where ho.household_id = h.old_id
        ]]>
      </sql>
@@ -345,8 +361,8 @@ prop=tblPrefix
       <sql>
          <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
-where p.household_id in ($$households_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ParticipantMD p, ApidbTuning.\$\$tbl_prefix\$\$PartObsIO hp
+where p.household_id in (\$\$households_${tblPrefix}\$\$)
 and hp.participant_id = p.participant_id
           ]]>
     </sql>
@@ -363,7 +379,7 @@ and hp.participant_id = p.participant_id
       <sql>
         <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+from ApidbTuning.\$\$tbl_prefix\$\$ParticipantMD p, ApidbTuning.\$\$tbl_prefix\$\$PartObsIO hp
 where hp.participant_id = p.participant_id
           ]]>
     </sql>
@@ -381,8 +397,8 @@ where hp.participant_id = p.participant_id
          <sql>
            <![CDATA[
 select observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in ($$participants_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
+where participant_id in (\$\$participants_${tblPrefix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
@@ -400,7 +416,7 @@ where participant_id in ($$participants_${tblPrefix}$$)
       <sql>
         <![CDATA[
 select  observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
           ]]>
     </sql>
     </sqlQuery>
@@ -408,7 +424,7 @@ from ApidbTuning.$$tbl_prefix$$ObservationMD
 
 [templateStart]
 name=observationFilterParamQueriesParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 >templateTextStart<
    <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
@@ -422,7 +438,7 @@ prop=tblPrefix
       <sql>
          <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$PartObsIO hp
+from ApidbTuning.\$\$tbl_prefix\$\$ParticipantMD p, ApidbTuning.\$\$tbl_prefix\$\$PartObsIO hp
 where hp.participant_id = p.participant_id
           ]]>
     </sql>
@@ -440,8 +456,8 @@ where hp.participant_id = p.participant_id
          <sql>
            <![CDATA[
 select observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
-where participant_id in ($$participants_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
+where participant_id in (\$\$participants_${tblPrefix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
@@ -459,7 +475,7 @@ where participant_id in ($$participants_${tblPrefix}$$)
       <sql>
         <![CDATA[
 select  observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
           ]]>
     </sql>
     </sqlQuery>

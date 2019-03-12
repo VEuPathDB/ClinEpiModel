@@ -13,12 +13,7 @@
 
     <!-- TEMPLATE_ANCHOR observationSourceIdQuery -->
 
-    <!-- TEMPLATE_ANCHOR observationLongitudinalQueryRegion -->
-    <!-- TEMPLATE_ANCHOR observationLongitudinalQueryHousehold -->
-    <!-- TEMPLATE_ANCHOR observationLongitudinalQueryParticipant -->
-    <!-- TEMPLATE_ANCHOR observationSurveyQueryRegion -->
-    <!-- TEMPLATE_ANCHOR observationSurveyQueryHousehold -->
-    <!-- TEMPLATE_ANCHOR observationSurveyQueryParticipant -->
+    <!-- TEMPLATE_ANCHOR observationMetadataQuery -->
 
      <sqlQuery name="ClinicalVisitsByRelativeVisits_prism"
           isCacheable="true">

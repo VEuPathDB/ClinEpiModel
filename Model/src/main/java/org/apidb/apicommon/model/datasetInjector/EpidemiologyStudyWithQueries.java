@@ -38,7 +38,7 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
 
     @Override
     protected String participantGraphAttributesTemplateName() {
-        return(getPropValue("participantGraphAttributesTemplateName"));
+        return(getPropValue("participantGraphAttributesTemplate"));
     }
 
 
@@ -115,15 +115,35 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
               observationFilterExcludedIdsQuoted  = "'NA'";
           }
           setPropValue("observationFilterExcludedIdsQuoted", observationFilterExcludedIdsQuoted);
-          
-          injectTemplate("participantFilterParamQueries" + firstWizardStep);
+          //determine if a special template is used
+          String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
+          if(filterParamQueryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamQueryBaseTemplate));
+          }
+          injectTemplate("participantFilterParamQueries");
       }
 
 
       if(hasParticipantQuestion && hasParticipants){
-          injectTemplate("participantFilterParams" + firstWizardStep);
+          //first the params 
+          String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
+          if(filterParamBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamBaseTemplate));
+          }
+          injectTemplate("participantFilterParams");
+
           //Inject the particiant metadata query
-          injectTemplate("participant" + studyType + "Query" + firstWizardStep);
+          String queryBaseTemplate = getPropValue("queryBaseTemplate");
+          if(queryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + studyType + "Query" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + queryBaseTemplate));
+          }
+          injectTemplate("participantMetadataQuery");
           
           cardQuestions = cardQuestions + " \"participants\": \"ParticipantQuestions." + presenterId + "ParticipantsByMetadata\"";
       }
@@ -131,11 +151,31 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
       //now to do observations
       if(hasObservationQuestion && hasObservations){
           //Inject the metadata query
-          injectTemplate("observation" + studyType + "Query" + firstWizardStep);
+          String queryBaseTemplate = getPropValue("queryBaseTemplate");
+          if(queryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + studyType + "Query" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + queryBaseTemplate));
+          }
+          injectTemplate("observationMetadataQuery");
           
           //Inject the filter params .... note these use the ontology queries from particiants filters
-          injectTemplate("observationFilterParams" + firstWizardStep);
-          injectTemplate("observationFilterParamQueries" + firstWizardStep);
+          String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
+          if(filterParamBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParams" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamBaseTemplate));
+          }
+          injectTemplate("observationFilterParams");
+
+          //and the filter param queries
+          String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
+          if(filterParamQueryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamQueryBaseTemplate));
+          }
+          injectTemplate("observationFilterParamQueries");
 
           cardQuestions = cardQuestions + ", \"observations\": \"ClinicalVisitQuestions." + presenterId + "ObservationsByMetadata\"";
       }
@@ -143,17 +183,37 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
       //and households
       if(hasHouseholdQuestion && hasHouseholds){
           //Inject the metadata query
-          injectTemplate("householdMetadataQuery" + firstWizardStep);
+          String queryBaseTemplate = getPropValue("queryBaseTemplate");
+          if(queryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdMetadataQuery" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + queryBaseTemplate));
+          }
+          injectTemplate("householdMetadataQuery");
           
           //Inject the filter params .... note these use the ontology queries from particiants filters
-          injectTemplate("householdFilterParams" + firstWizardStep);
-          injectTemplate("householdFilterParamQueries" + firstWizardStep);
+          String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
+          if(filterParamBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParams" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamBaseTemplate));
+          }
+          injectTemplate("householdFilterParams");
+
+          //and the filter param queries
+          String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
+          if(filterParamQueryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamQueryBaseTemplate));
+          }
+          injectTemplate("householdFilterParamQueries");
 
           cardQuestions = cardQuestions + ", \"households\": \"HouseholdQuestions." + presenterId + "HouseholdsByMetadata\"";
       }
       //lastly inject the cardQuestions
       cardQuestions = cardQuestions + " }' as value from dual";
-      System.err.println("cardQuestionsSql=" + cardQuestions);
+      //System.err.println("cardQuestionsSql=" + cardQuestions);
       setPropValue("cardQuestionsSql",cardQuestions);
       injectTemplate("injectDatasetQuestions");
   }
@@ -174,9 +234,12 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
                                  {"hasParticipantQuestion", ""},
                                  {"hasHouseholdQuestion", ""},
                                  {"hasObservationQuestion", ""},
-                                 {"participantGraphAttributesTemplateName", ""},
+                                 {"participantGraphAttributesTemplate", ""},
                                  {"firstWizardStep", ""},
                                  {"keepRegionInHouseholdFilter", ""},
+                                 {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
+                                 {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties
+                                 {"queryBaseTemplate", ""},
                                  {"timeSourceId", ""}
       };
 

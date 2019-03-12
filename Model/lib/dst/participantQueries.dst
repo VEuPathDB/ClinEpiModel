@@ -1,14 +1,14 @@
 [templateStart]
 name=participantMetadataQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
-prop=partipantQueryTemplate
+prop=injectedTemplateFull
 >templateTextStart<
-${partipantQueryTemplate}
+${injectedTemplateFull}
 >templateTextEnd<
 
 [templateStart]
 name=participantLongitudinalQueryRegion
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -29,24 +29,24 @@ prop=timeSourceId
          <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
-from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
-      where observation_id in ($$visits_${tblPrefix}$$)
+from (select distinct participant_id,observation_id,date_value from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
+      where observation_id in (\$\$visits_${tblPrefix}\$\$)
       and ontology_term_name = '${timeSourceId}'
-$$dateOperator_fv$$
+\$\$dateOperator_fv\$\$
  select distinct vis.participant_id,vis.observation_id,vis.date_value
- from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
- where vis.observation_id in ($$visits_${tblPrefix}$$)
+ from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD vis, ApidbTuning.\$\$tbl_prefix\$\$ObservationMD rv
+ where vis.observation_id in (\$\$visits_${tblPrefix}\$\$)
  and vis.ontology_term_name = '${timeSourceId}'
-and $$use_relative_visits$$ = 1
-and rv.observation_id in ($$relative_visits_${tblPrefix}$$)
+and \$\$use_relative_visits\$\$ = 1
+and rv.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 and rv.ontology_term_name = '${timeSourceId}'
 and vis.participant_id = rv.participant_id
 and vis.observation_id != rv.observation_id
-and vis.date_value $$date_direction_fv$$ rv.date_value  
-and abs(rv.date_value - vis.date_value) >= $$days_between.min$$
-and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
+and vis.date_value \$\$date_direction_fv\$\$ rv.date_value  
+and abs(rv.date_value - vis.date_value) >= \$\$days_between.min\$\$
+and abs(rv.date_value - vis.date_value) <= \$\$days_between.max\$\$
 group by vis.participant_id,vis.observation_id,vis.date_value
-) main, ApidbTuning.$$tbl_prefix$$Participants pa
+) main, ApidbTuning.\$\$tbl_prefix\$\$Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
                 ]]>   
@@ -56,7 +56,7 @@ group by pa.name
 
 [templateStart]
 name=participantLongitudinalQueryHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -76,24 +76,24 @@ prop=timeSourceId
          <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
-from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
-      where observation_id in ($$visits_${tblPrefix}$$)
+from (select distinct participant_id,observation_id,date_value from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
+      where observation_id in (\$\$visits_${tblPrefix}\$\$)
       and ontology_term_name = '${timeSourceId}'
-$$dateOperator_fv$$
+\$\$dateOperator_fv\$\$
  select distinct vis.participant_id,vis.observation_id,vis.date_value
- from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
- where vis.observation_id in ($$visits_${tblPrefix}$$)
+ from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD vis, ApidbTuning.\$\$tbl_prefix\$\$ObservationMD rv
+ where vis.observation_id in (\$\$visits_${tblPrefix}\$\$)
  and vis.ontology_term_name = '${timeSourceId}'
-and $$use_relative_visits$$ = 1
-and rv.observation_id in ($$relative_visits_${tblPrefix}$$)
+and \$\$use_relative_visits\$\$ = 1
+and rv.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 and rv.ontology_term_name = '${timeSourceId}'
 and vis.participant_id = rv.participant_id
 and vis.observation_id != rv.observation_id
-and vis.date_value $$date_direction_fv$$ rv.date_value  
-and abs(rv.date_value - vis.date_value) >= $$days_between.min$$
-and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
+and vis.date_value \$\$date_direction_fv\$\$ rv.date_value  
+and abs(rv.date_value - vis.date_value) >= \$\$days_between.min\$\$
+and abs(rv.date_value - vis.date_value) <= \$\$days_between.max\$\$
 group by vis.participant_id,vis.observation_id,vis.date_value
-) main, ApidbTuning.$$tbl_prefix$$Participants pa
+) main, ApidbTuning.\$\$tbl_prefix\$\$Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
                 ]]>   
@@ -103,7 +103,7 @@ group by pa.name
 
 [templateStart]
 name=participantLongitudinalQueryParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 prop=timeSourceId
 >templateTextStart<
@@ -122,24 +122,24 @@ prop=timeSourceId
          <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id
-from (select distinct participant_id,observation_id,date_value from ApidbTuning.$$tbl_prefix$$ObservationMD
-      where observation_id in ($$visits_${tblPrefix}$$)
+from (select distinct participant_id,observation_id,date_value from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD
+      where observation_id in (\$\$visits_${tblPrefix}\$\$)
       and ontology_term_name = '${timeSourceId}'
-$$dateOperator_fv$$
+\$\$dateOperator_fv\$\$
  select distinct vis.participant_id,vis.observation_id,vis.date_value
- from ApidbTuning.$$tbl_prefix$$ObservationMD vis, ApidbTuning.$$tbl_prefix$$ObservationMD rv
- where vis.observation_id in ($$visits_${tblPrefix}$$)
+ from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD vis, ApidbTuning.\$\$tbl_prefix\$\$ObservationMD rv
+ where vis.observation_id in (\$\$visits_${tblPrefix}\$\$)
  and vis.ontology_term_name = '${timeSourceId}'
-and $$use_relative_visits$$ = 1
-and rv.observation_id in ($$relative_visits_${tblPrefix}$$)
+and \$\$use_relative_visits\$\$ = 1
+and rv.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 and rv.ontology_term_name = '${timeSourceId}'
 and vis.participant_id = rv.participant_id
 and vis.observation_id != rv.observation_id
-and vis.date_value $$date_direction_fv$$ rv.date_value  
-and abs(rv.date_value - vis.date_value) >= $$days_between.min$$
-and abs(rv.date_value - vis.date_value) <= $$days_between.max$$
+and vis.date_value \$\$date_direction_fv\$\$ rv.date_value  
+and abs(rv.date_value - vis.date_value) >= \$\$days_between.min\$\$
+and abs(rv.date_value - vis.date_value) <= \$\$days_between.max\$\$
 group by vis.participant_id,vis.observation_id,vis.date_value
-) main, ApidbTuning.$$tbl_prefix$$Participants pa
+) main, ApidbTuning.\$\$tbl_prefix\$\$Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
                 ]]>   
@@ -149,7 +149,7 @@ group by pa.name
 
 [templateStart]
 name=participantSurveyQueryRegion
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
@@ -163,8 +163,8 @@ prop=tblPrefix
          <sql>
            <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
-where obs.observation_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD obs, ApidbTuning.\$\$tbl_prefix\$\$Participants pa
+where obs.observation_id in (\$\$visits_${tblPrefix}\$\$)
 and pa.pan_id = obs.participant_id
 group by pa.name
                 ]]>   
@@ -174,7 +174,7 @@ group by pa.name
 
 [templateStart]
 name=participantSurveyQueryHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
@@ -187,8 +187,8 @@ prop=tblPrefix
          <sql>
            <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
-where obs.observation_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD obs, ApidbTuning.\$\$tbl_prefix\$\$Participants pa
+where obs.observation_id in (\$\$visits_${tblPrefix}\$\$)
 and pa.pan_id = obs.participant_id
 group by pa.name
                 ]]>   
@@ -198,7 +198,7 @@ group by pa.name
 
 [templateStart]
 name=participantSurveyQueryParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
@@ -210,10 +210,61 @@ prop=tblPrefix
          <sql>
            <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$ObservationMD obs, ApidbTuning.$$tbl_prefix$$Participants pa
-where obs.observation_id in ($$visits_${tblPrefix}$$)
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD obs, ApidbTuning.\$\$tbl_prefix\$\$Participants pa
+where obs.observation_id in (\$\$visits_${tblPrefix}\$\$)
 and pa.pan_id = obs.participant_id
 group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantLongitudinalQueryWithTreatment
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
+prop=tblPrefix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.treatment_${tblPrefix}" groupRef="metaDataGroups.treatment"/> 
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.relative_visits_${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.visit_count" groupRef="metaDataGroups.event_summary_params"/> 
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, 
+                    count(*) as visit_count, 
+   round(avg(number_value),1) -1 as ave_age_visit
+from (select distinct io.participant_id,io.observation_id,nvl(o.${timeSourceId},0) as number_value from ApidbTuning.\$\$tbl_prefix\$\$Observations o,ApidbTuning.\$\$tbl_prefix\$\$PartObsIO io
+      where o.pan_id in (\$\$treatment_${tblPrefix}\$\$)
+      and io.observation_id = o.pan_id
+\$\$dateOperator_fv\$\$
+ select distinct visio.participant_id,visio.observation_id,nvl(vis.${timeSourceId},0)
+ from ApidbTuning.\$\$tbl_prefix\$\$Observations vis, ApidbTuning.\$\$tbl_prefix\$\$PartObsIO visio, ApidbTuning.\$\$tbl_prefix\$\$Observations rv, ApidbTuning.\$\$tbl_prefix\$\$PartObsIO rvio
+where vis.pan_id in (\$\$treatment_${tblPrefix}\$\$)
+      and visio.observation_id = vis.pan_id
+and \$\$use_relative_visits\$\$ = 1
+and rv.pan_id in (\$\$relative_visits_${tblPrefix}\$\$)
+and rvio.observation_id = rv.pan_id
+and visio.participant_id = rvio.participant_id
+and visio.observation_id != rvio.observation_id
+and nvl(vis.${timeSourceId},0) \$\$date_direction_fv\$\$ nvl(rv.${timeSourceId},0)  
+and abs(nvl(rv.${timeSourceId},0) - nvl(vis.${timeSourceId},0)) >= \$\$days_between.min\$\$
+and abs(nvl(rv.${timeSourceId},0) - nvl(vis.${timeSourceId},0)) <= \$\$days_between.max\$\$
+group by visio.participant_id,visio.observation_id,nvl(vis.${timeSourceId},0)
+) main, ApidbTuning.\$\$tbl_prefix\$\$Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
+having count(*) >= \$\$visit_count.min\$\$
+and count(*) <= \$\$visit_count.max\$\$
                 ]]>   
         </sql>
      </sqlQuery>

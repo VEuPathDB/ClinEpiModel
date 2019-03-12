@@ -19,9 +19,7 @@
 
     <!-- TEMPLATE_ANCHOR observationSourceIdParam -->
 
-    <!-- TEMPLATE_ANCHOR observationFilterParamsRegion -->
-    <!-- TEMPLATE_ANCHOR observationFilterParamsHousehold -->
-    <!-- TEMPLATE_ANCHOR observationFilterParamsParticipant -->
+    <!-- TEMPLATE_ANCHOR observationFilterParams -->
 
     <filterParam name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
@@ -461,9 +459,7 @@
             </sql>
         </sqlQuery>
 
-    <!-- TEMPLATE_ANCHOR observationFilterParamQueriesRegion -->
-    <!-- TEMPLATE_ANCHOR observationFilterParamQueriesHousehold -->
-    <!-- TEMPLATE_ANCHOR observationFilterParamQueriesParticipant -->
+    <!-- TEMPLATE_ANCHOR observationFilterParamQueries -->
 
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!--  PRISM specific .. should be injected -->  
