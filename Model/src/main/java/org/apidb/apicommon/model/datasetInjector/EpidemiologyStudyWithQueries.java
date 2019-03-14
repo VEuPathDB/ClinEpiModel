@@ -51,6 +51,20 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
           scopeMap.put("malaria_cat_compact", new String[] {"results"});
           scopeMap.put("malaria_cat_svg", new String[] {"record"});
       }
+      if(presenterId.equals("DS_3dbf92dc05")){
+          scopeMap.put("demo_plot_allThree", new String[] {"record"});
+          scopeMap.put("demo_plot_heightage", new String[] {"record"});
+          scopeMap.put("demo_plot_weightheight", new String[] {"record"});
+          scopeMap.put("demo_plot_weightage", new String[] {"record"});
+          scopeMap.put("demo_plot_xlength", new String[] {"record"});
+          scopeMap.put("demo_plot_weight", new String[] {"record"});
+          scopeMap.put("demo_plot_allThree_compact", new String[] {"results"});
+          scopeMap.put("demo_plot_heightage_compact", new String[] {"results"});
+          scopeMap.put("demo_plot_weightheight_compact", new String[] {"results"});
+          scopeMap.put("demo_plot_weightage_compact", new String[] {"results"});
+          scopeMap.put("demo_plot_xlength_compact", new String[] {"results"});
+          scopeMap.put("demo_plot_weight_compact", new String[] {"results"});
+      }
       return(scopeMap);
     }
 
@@ -81,6 +95,7 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
       String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
       String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
       String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
+      setPropValue("dynamicColumns","");
 
       //Inject the filter param queries for participants if any questions generated
       if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
@@ -138,13 +153,23 @@ public class EpidemiologyStudyWithQueries extends EpidemiologyStudy {
 
           //Inject the particiant metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
+          //first need to get the dynamic columns ... abstract into params?
+          if(studyType.equals("Longitudinal")){
+              String dynCol = getTemplateInstanceText("visitCountDynamicColumn");
+              System.err.println("Longitudinal DynamicColumns=" + dynCol);
+              
+              setPropValue("dynamicColumns",dynCol);
+          }else{
+              setPropValue("dynamicColumns","");
+          }
           if(queryBaseTemplate.equals("default")){
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + studyType + "Query" + firstWizardStep));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + queryBaseTemplate));
           }
           injectTemplate("participantMetadataQuery");
-          
+          setPropValue("dynamicColumns","");
+
           cardQuestions = cardQuestions + " \"participants\": \"ParticipantQuestions." + presenterId + "ParticipantsByMetadata\"";
       }
 
