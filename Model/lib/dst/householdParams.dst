@@ -805,7 +805,7 @@ and h.household_id = o.household_id
       <sql>
         <![CDATA[
 select  distinct h.\$\$householdOrObservation\$\$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-
+from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD o, ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD h
 where h.household_id = o.household_id
           ]]>
       </sql>
