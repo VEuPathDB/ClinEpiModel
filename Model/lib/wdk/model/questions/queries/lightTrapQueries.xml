@@ -10,44 +10,9 @@
 
       <!-- TEMPLATE_ANCHOR lightTrapSourceIdQuery -->
 
-    <sqlQuery name="DS_0ad509829eLightTrapsByCharacteristics_prism"
-              isCacheable="true"> <!-- TODO:  Add back Clinepidb -->
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D0ad509829e" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="lightTrapParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="householdParams.date_range" minDate="2011-07-01" maxDate="2017-07-31" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="lightTrapParams.lighttraps_prism" groupRef="metaDataGroups.lighttrap_characteristics"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-         <sql>
-           <![CDATA[
-select lta.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$LightTraps lta
-where lta.pan_id in ($$lighttraps_prism$$)
-                ]]>   
-        </sql>
-     </sqlQuery>
+      <!-- TEMPLATE_ANCHOR lightTrapMetadataQuery -->
 
-    <sqlQuery name="DS_0ad509829eLightTrapsByCharacteristics_prism2"
-              isCacheable="true"> <!-- TODO:  Add back Clinepidb -->
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="D51b40fe2e2" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.geographic_region_prism" visible="false" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="householdParams.date_range"  minDate="2017-09-01" maxDate="2019-12-31" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="lightTrapParams.lighttraps_prism" groupRef="metaDataGroups.lighttrap_characteristics"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-         <sql>
-           <![CDATA[
-select lta.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.$$tbl_prefix$$LightTraps lta
-where lta.pan_id in ($$lighttraps_prism$$)
-                ]]>   
-        </sql>
-     </sqlQuery>
-
-
-    <!-- Transforms -->
+      <!-- Transforms -->
       
       <!-- TEMPLATE_ANCHOR lightTrapsByHouseholdsQuery  -->
 

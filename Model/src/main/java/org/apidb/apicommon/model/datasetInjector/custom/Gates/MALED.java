@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 public class MALED extends EpidemiologyStudy {
 
+    @Override
+    protected void setStudySpecificProperties(){}  
 
     @Override
     protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {

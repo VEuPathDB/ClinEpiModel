@@ -66,6 +66,7 @@ name=HouseholdsByCharacteristics_prism
 anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
@@ -73,7 +74,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (PRISM ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_prism" 
+              queryRef="HouseholdId.HouseholdsByCharacteristics_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
@@ -137,6 +138,7 @@ name=HouseholdsByCharacteristics_prism2
 anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
@@ -144,7 +146,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (PRISM2 ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_prism2" 
+              queryRef="HouseholdId.HouseholdsByCharacteristics_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 

@@ -1,6 +1,14 @@
 [templateStart]
-name=householdFilterParamsRegion
+name=householdFilterParams
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
+prop=injectedTemplateFull
+>templateTextStart<
+${injectedTemplateFull}
+>templateTextEnd<
+
+[templateStart]
+name=householdFilterParamsRegion
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 >templateTextStart<
        <filterParam name="geographic_region_${tblPrefix}" 
@@ -10,7 +18,7 @@ prop=tblPrefix
                        countPredictsAnswerCount="true"
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
-                       dependedParamRef="participantParams.tbl_prefix"
+                       dependedParamRef=""
                        trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
@@ -22,9 +30,9 @@ prop=tblPrefix
                        backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_${tblPrefix}"
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                        countPredictsAnswerCount="true"
-                       filterDataTypeDisplayName="Households"
+                       filterDataTypeDisplayName="Household Observations"
                        prompt="Households"
-                       dependedParamRef="participantParams.tbl_prefix,householdParams.geographic_region_${tblPrefix},householdParams.householdOrObservation"
+                       dependedParamRef="householdParams.geographic_region_${tblPrefix},householdParams.householdOrObservation"
                        trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
@@ -39,7 +47,7 @@ prop=tblPrefix
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
                       trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.households_${tblPrefix},householdParams.householdOrObservation">
+                      dependedParamRef="householdParams.households_${tblPrefix},householdParams.householdOrObservation">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -53,7 +61,7 @@ prop=tblPrefix
                       filterDataTypeDisplayName="Observations"
                       prompt="Personal characteristics"
                       trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.participants_${tblPrefix},householdParams.householdOrObservation">
+                      dependedParamRef="householdParams.participants_${tblPrefix},householdParams.householdOrObservation">
          <help>
               Select observations based on their characteristics. 
          </help>
@@ -62,7 +70,7 @@ prop=tblPrefix
 
 [templateStart]
 name=householdFilterParamsHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 >templateTextStart<
     <filterParam name="households_${tblPrefix}" 
@@ -70,9 +78,9 @@ prop=tblPrefix
                        backgroundQueryRef="HouseholdVQ.HouseholdMetaData_${tblPrefix}"
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                        countPredictsAnswerCount="true"
-                       filterDataTypeDisplayName="Households"
+                       filterDataTypeDisplayName="Household Observations"
                        prompt="Households"
-                       dependedParamRef="participantParams.tbl_prefix,householdParams.householdOrObservation"
+                       dependedParamRef="householdParams.householdOrObservation"
                        trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
@@ -87,7 +95,7 @@ prop=tblPrefix
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
                       trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.households_${tblPrefix},householdParams.householdOrObservation">
+                      dependedParamRef="householdParams.households_${tblPrefix},householdParams.householdOrObservation">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -101,7 +109,7 @@ prop=tblPrefix
                       filterDataTypeDisplayName="Observations"
                       prompt="Personal characteristics"
                       trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.participants_${tblPrefix},householdParams.householdOrObservation">
+                      dependedParamRef="householdParams.participants_${tblPrefix},householdParams.householdOrObservation">
          <help>
               Select observations based on their characteristics. 
          </help>
@@ -110,7 +118,7 @@ prop=tblPrefix
 
 [templateStart]
 name=householdFilterParamsParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 >templateTextStart<
        <filterParam name="participants_${tblPrefix}" 
@@ -121,7 +129,7 @@ prop=tblPrefix
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
                       trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.householdOrObservation">
+                      dependedParamRef="householdParams.householdOrObservation">
          <help>
               Select participants based on their characteristics. 
          </help>
@@ -135,7 +143,7 @@ prop=tblPrefix
                       filterDataTypeDisplayName="Observations"
                       prompt="Personal characteristics"
                       trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.participants_${tblPrefix},householdParams.householdOrObservation">
+                      dependedParamRef="householdParams.participants_${tblPrefix},householdParams.householdOrObservation">
          <help>
               Select observations based on their characteristics. 
          </help>
@@ -143,12 +151,19 @@ prop=tblPrefix
 >templateTextEnd<
 
 [templateStart]
-name=householdFilterParamQueriesRegion
+name=householdFilterParamQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
+prop=injectedTemplateFull
+>templateTextStart<
+${injectedTemplateFull}
+>templateTextEnd<
+
+[templateStart]
+name=householdFilterParamQueriesRegion
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="RegionMetaData_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -157,8 +172,8 @@ prop=tblPrefix
       <sql>
         <![CDATA[
 select  household_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
-where ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
+from ApidbTuning.${tblPrefix}HouseholdMD
+where ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
         ]]>
@@ -166,7 +181,6 @@ where ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$t
     </sqlQuery>
 
    <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="householdParams.geographic_region_${tblPrefix}" />  
      <paramRef ref="householdParams.householdOrObservation" />  
      <column name="ontology_term_name"/>
@@ -177,15 +191,14 @@ where ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$t
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct $$householdOrObservation$$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
-where household_id in ($$geographic_region_${tblPrefix}$$)
+select  distinct \$\$householdOrObservation\$\$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}HouseholdMD
+where household_id in (\$\$geographic_region_${tblPrefix}\$\$)
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="HouseholdMetaDataBkgd_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <paramRef ref="householdParams.householdOrObservation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -195,14 +208,13 @@ where household_id in ($$geographic_region_${tblPrefix}$$)
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct $$householdOrObservation$$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
+select  distinct \$\$householdOrObservation\$\$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}HouseholdMD
           ]]>
     </sql>
     </sqlQuery>
 
    <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="householdParams.households_${tblPrefix}" />  
      <paramRef ref="householdParams.householdOrObservation" />  
      <column name="ontology_term_name"/>
@@ -213,16 +225,15 @@ from ApidbTuning.$$tbl_prefix$$HouseholdMD
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where h.$$householdOrObservation$$ in ($$households_${tblPrefix}$$)
+select distinct h.\$\$householdOrObservation\$\$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}HouseholdMD h
+where h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
 and h.household_id = p.household_id
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <paramRef ref="householdParams.householdOrObservation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -232,8 +243,8 @@ and h.household_id = p.household_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
+select distinct h.\$\$householdOrObservation\$\$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}HouseholdMD h
 where h.household_id = p.household_id
           ]]>
     </sql>
@@ -241,7 +252,6 @@ where h.household_id = p.household_id
 
        <sqlQuery name="ObservationMetaData_${tblPrefix}" isCacheable="false">
          <paramRef ref="householdParams.participants_${tblPrefix}" />  
-         <paramRef ref="participantParams.tbl_prefix" />  
          <paramRef ref="householdParams.householdOrObservation" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -252,16 +262,15 @@ where h.household_id = p.household_id
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select  distinct h.$$householdOrObservation$$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD o, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where o.participant_id in ($$participants_${tblPrefix}$$)
+select  distinct h.\$\$householdOrObservation\$\$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HouseholdMD h
+where o.participant_id in (\$\$participants_${tblPrefix}\$\$)
 and h.household_id = o.household_id
           ]]>
     </sql>
     </sqlQuery>    
 
     <sqlQuery name="ObservationMetaDataBkgd_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <paramRef ref="householdParams.householdOrObservation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -272,8 +281,8 @@ and h.household_id = o.household_id
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  distinct h.$$householdOrObservation$$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD o, ApidbTuning.$$tbl_prefix$$HouseholdMD h
+select  distinct h.\$\$householdOrObservation\$\$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HouseholdMD h
 where h.household_id = o.household_id
           ]]>
       </sql>
@@ -282,11 +291,10 @@ where h.household_id = o.household_id
 
 [templateStart]
 name=householdFilterParamQueriesHousehold
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 >templateTextStart<
    <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="householdParams.householdOrObservation" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -296,14 +304,13 @@ prop=tblPrefix
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct $$householdOrObservation$$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
+select  distinct \$\$householdOrObservation\$\$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}HouseholdMD
           ]]>
     </sql>
     </sqlQuery>
 
    <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="householdParams.households_${tblPrefix}" />  
      <paramRef ref="householdParams.householdOrObservation" />  
      <column name="ontology_term_name"/>
@@ -314,16 +321,15 @@ from ApidbTuning.$$tbl_prefix$$HouseholdMD
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where h.$$householdOrObservation$$ in ($$households_${tblPrefix}$$)
+select distinct h.\$\$householdOrObservation\$\$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}HouseholdMD h
+where h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
 and h.household_id = p.household_id
           ]]>
     </sql>
     </sqlQuery>
 
     <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <paramRef ref="householdParams.householdOrObservation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -333,8 +339,8 @@ and h.household_id = p.household_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
+select distinct h.\$\$householdOrObservation\$\$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}HouseholdMD h
 where h.household_id = p.household_id
           ]]>
     </sql>
@@ -342,7 +348,6 @@ where h.household_id = p.household_id
 
        <sqlQuery name="ObservationMetaData_${tblPrefix}" isCacheable="false">
          <paramRef ref="householdParams.participants_${tblPrefix}" />  
-         <paramRef ref="participantParams.tbl_prefix" />  
          <paramRef ref="householdParams.householdOrObservation" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -353,16 +358,15 @@ where h.household_id = p.household_id
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select  distinct h.$$householdOrObservation$$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD o, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where o.participant_id in ($$participants_${tblPrefix}$$)
+select  distinct h.\$\$householdOrObservation\$\$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HouseholdMD h
+where o.participant_id in (\$\$participants_${tblPrefix}\$\$)
 and h.household_id = o.household_id
           ]]>
     </sql>
     </sqlQuery>    
 
     <sqlQuery name="ObservationMetaDataBkgd_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <paramRef ref="householdParams.householdOrObservation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -373,8 +377,8 @@ and h.household_id = o.household_id
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  distinct h.$$householdOrObservation$$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD o, ApidbTuning.$$tbl_prefix$$HouseholdMD h
+select  distinct h.\$\$householdOrObservation\$\$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HouseholdMD h
 where h.household_id = o.household_id
           ]]>
       </sql>
@@ -383,11 +387,10 @@ where h.household_id = o.household_id
 
 [templateStart]
 name=householdFilterParamQueriesParticipant
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 >templateTextStart<
    <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.tbl_prefix" />  
      <paramRef ref="householdParams.householdOrObservation" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -397,8 +400,8 @@ prop=tblPrefix
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select distinct h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
+select distinct h.\$\$householdOrObservation\$\$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}HouseholdMD h
 where h.household_id = p.household_id
           ]]>
     </sql>
@@ -406,7 +409,6 @@ where h.household_id = p.household_id
 
        <sqlQuery name="ObservationMetaData_${tblPrefix}" isCacheable="false">
          <paramRef ref="householdParams.participants_${tblPrefix}" />  
-         <paramRef ref="participantParams.tbl_prefix" />  
          <paramRef ref="householdParams.householdOrObservation" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -417,16 +419,15 @@ where h.household_id = p.household_id
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select  distinct h.$$householdOrObservation$$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD o, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where o.participant_id in ($$participants_${tblPrefix}$$)
+select  distinct h.\$\$householdOrObservation\$\$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HouseholdMD h
+where o.participant_id in (\$\$participants_${tblPrefix}\$\$)
 and h.household_id = o.household_id
           ]]>
     </sql>
     </sqlQuery>    
 
     <sqlQuery name="ObservationMetaDataBkgd_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <paramRef ref="householdParams.householdOrObservation" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
@@ -437,15 +438,179 @@ and h.household_id = o.household_id
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  distinct h.$$householdOrObservation$$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD o, ApidbTuning.$$tbl_prefix$$HouseholdMD h
+select  distinct h.\$\$householdOrObservation\$\$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HouseholdMD h
 where h.household_id = o.household_id
           ]]>
       </sql>
     </sqlQuery>    
 >templateTextEnd<
 
+[templateStart]
+name=householdFilterParamsPRISM
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
+prop=tblPrefix
+>templateTextStart<
+    <filterParam name="households_prism" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
+                    metadataQueryRef="HouseholdVQ.HouseholdMetaData_prism"
+                    backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_prism"
+                    prompt="Households"
+                    countPredictsAnswerCount="true"
+                    trimMetadataTerms="true"
+                    dependedParamRef="participantParams.tbl_prefix,householdParams.geographic_region_prism,householdParams.date_range">
+      <help>
+        Select participants based on their characteristics. 
+      </help>
+    </filterParam>
 
+     <filterParam name="geographic_region_prism" 
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
+                    metadataQueryRef="HouseholdVQ.RegionMetaData_prism"
+                    backgroundQueryRef="HouseholdVQ.RegionMetaData_prism"
+                    prompt="Geographic Region"
+                    filterDataTypeDisplayName="Households"
+                    countPredictsAnswerCount="true"
+                    dependedParamRef="participantParams.tbl_prefix"
+                    trimMetadataTerms="true">
+      <help>
+        Select dwellngs based on geographic region. 
+      </help>
+    </filterParam>          
+
+    <filterParam name="participants_prism" 
+                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
+                      metadataQueryRef="HouseholdVQ.ParticipantMetaData_prism"
+                      backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_prism"
+                      prompt="Participants"
+                      countPredictsAnswerCount="true"
+                      trimMetadataTerms="true"
+                      dependedParamRef="participantParams.tbl_prefix,householdParams.households_prism">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+>templateTextEnd<
+
+[templateStart]
+name=householdFilterParamQueriesPRISM
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
+prop=tblPrefix
+>templateTextStart<
+   <sqlQuery name="RegionMetaData_prism" isCacheable="false" >
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}Households h
+ where m.property_source_id = 'EUPATH_0000054'
+ and m.pan_id = h.pan_id
+        ]]>
+      </sql>
+    </sqlQuery>
+
+
+    <sqlQuery name="HouseholdMetaData_prism" isCacheable="true">
+      <paramRef ref="householdParams.date_range" />  
+      <paramRef ref="householdParams.geographic_region_prism" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+with mos as (
+ select da.pan_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
+  from ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
+  where da.pan_id in (\$\$geographic_region_prism\$\$)
+  and da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  and EUPATH_0020003 >= \$\$date_range.min\$\$
+  and EUPATH_0020003 <= \$\$date_range.max\$\$ 
+  group by da.pan_id
+  )
+select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m, mos
+ where m.pan_id in (\$\$geographic_region_prism\$\$)
+ and m.pan_id = mos.internal
+ union 
+ select * from mos
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_prism" isCacheable="true">
+      <paramRef ref="householdParams.date_range" />  
+      <paramRef ref="householdParams.geographic_region_prism" />  
+      <paramRef ref="participantParams.tbl_prefix" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
+ from ApidbTuning.${tblPrefix}MetaData m
+ where m.category = 'Household'
+ union
+ select da.pan_id as internal,  'average_anopheles' as ontology_term_name, null as string_value, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
+  from ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  group by da.pan_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_prism" isCacheable="true">
+     <paramRef ref="householdParams.households_prism" />  
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+         <![CDATA[
+select distinct m.pan_id as internal, io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
+ where io.input_pan_id in (\$\$households_prism\$\$)
+ and io.output_pan_type_source_id = 'EUPATH_0000096'
+ and m.pan_id = io.output_pan_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_prism" isCacheable="true">
+     <paramRef ref="participantParams.tbl_prefix" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+         <![CDATA[
+select distinct m.pan_id as internal, io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
+ where io.output_pan_type_source_id = 'EUPATH_0000096'
+ and io.input_pan_type_source_id = 'PCO_0000024'
+ and m.pan_id = io.output_pan_id
+          ]]>
+    </sql>
+    </sqlQuery>
+>templateTextEnd<
 
 
 
