@@ -28,6 +28,73 @@ prop=studyAbbreviation
         /> 
 
         <dynamicAttributes>
+	</dynamicAttributes>
+          
+
+        <summary>
+            <![CDATA[
+            In this search, you will build a set of Observations.  You can use the wealth of data in the India ICEMR longitudinal study to find Observations with clinically interesting patterns.
+            More here...
+            ]]>
+        </summary>
+         <description>
+            <![CDATA[
+            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
+            More here...
+            ]]>
+</description>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+
+
+        <propertyList name="relatedObservationsLayoutSettings">
+          <value>
+            {
+              "observationsGroupName": "event_characteristics",
+              "relatedObservationsGroupName": "relative_events",
+              "useRelativeObservationsParamName": "use_relative_visits",
+              "dateOperatorParamName": "dateOperator_fv",
+              "daysBetweenParamName": "days_between",
+              "dateDirectionParamName": "date_direction_fv",
+              "numRelativeEventsParamName": "num_relative_events",
+              "relativeVisitsParamName": "relative_visits_${tblPrefix}"
+            }
+          </value>
+        </propertyList>
+ 
+    </question>
+>templateTextEnd<
+
+[templateStart]
+name=ObservationsByMetadataLongitudinal
+anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
+prop=includeProjects
+prop=presenterId
+prop=observationQuestionName
+prop=observationAttributesList
+prop=tblPrefix
+prop=studyAbbreviation
+>templateTextStart<
+    <question name="${presenterId}ObservationsByMetadata" newBuild="1" includeProjects="${includeProjects}"
+              searchCategory="Observation"
+              displayName="Select a Set of Observations (${studyAbbreviation})"
+              shortDisplayName="${studyAbbreviation}"
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
+              recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
+
+        <attributesList 
+            summary="${observationAttributesList}"
+        /> 
+
+        <dynamicAttributes>
 	  <columnAttribute name="min_days_between" displayName="Min days between observations" help="Reports the minimum days between any matching observations and the observation returned" align="center">
       <reporter name="histogram" displayName="Histogram" scopes=""
         implementation="org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter">
@@ -91,13 +158,14 @@ name=ClinicalVisitsByRelativeVisits_prism
 anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=observationQuestionName
 >templateTextStart<
    <question name="${observationQuestionName}" newBuild="2"
               searchCategory="Clinical Observation"
               displayName="Select a Set of Clinical Observations (PRISM)"
               shortDisplayName="Clinical Observations"
-              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_prism" 
+              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" 
               includeProjects="${includeProjects}"> 
 
@@ -167,13 +235,14 @@ name=ClinicalVisitsByRelativeVisits_prism2
 anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=observationQuestionName
 >templateTextStart<
    <question name="${observationQuestionName}" newBuild="2"
               searchCategory="Clinical Observation"
               displayName="Select a Set of Clinical Observations (PRISM2)"
               shortDisplayName="Clinical Observations"
-              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_prism2" 
+              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" 
               includeProjects="${includeProjects}"> 
 

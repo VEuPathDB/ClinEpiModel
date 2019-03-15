@@ -12,7 +12,6 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
@@ -26,8 +25,8 @@ prop=tblPrefix
 select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
-from ApidbTuning.\$\$tbl_prefix\$\$HousePartIO io, ApidbTuning.\$\$tbl_prefix\$\$Households da, 
-(select distinct household_id, household_observation_id from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD) h
+from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD) h
 where io.participant_id in (\$\$observations_${tblPrefix}\$\$)
 and io.household_id = h.household_id
 and h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
@@ -45,7 +44,6 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
@@ -58,8 +56,8 @@ prop=tblPrefix
 select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
-from ApidbTuning.\$\$tbl_prefix\$\$HousePartIO io, ApidbTuning.\$\$tbl_prefix\$\$Households da, 
-(select distinct household_id, household_observation_id from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD) h
+from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD) h
 where io.participant_id in (\$\$observations_${tblPrefix}\$\$)
 and io.household_id = h.household_id
 and h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
@@ -77,7 +75,6 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.observations_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
@@ -89,8 +86,8 @@ prop=tblPrefix
 select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
-from ApidbTuning.\$\$tbl_prefix\$\$HousePartIO io, ApidbTuning.\$\$tbl_prefix\$\$Households da, 
-(select distinct household_id, household_observation_id from ApidbTuning.\$\$tbl_prefix\$\$HouseholdMD) h
+from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD) h
 where io.participant_id in (\$\$observations_${tblPrefix}\$\$)
 and io.household_id = h.household_id
 and h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
@@ -102,3 +99,40 @@ group by da.pan_id,da.name
      </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=householdMetadataQueryPRISM
+anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
+prop=tblPrefix
+prop=visitMinDate
+prop=visitMaxDate
+>templateTextStart<
+    <sqlQuery name="HouseholdsByCharacteristics_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="householdParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="ave_anoph"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000193,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Households da
+where io.output_pan_id in (\$\$participants_prism\$\$)
+and da.pan_id = io.input_pan_id
+group by da.pan_id,da.name
+) dwpct, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
+  where  dwpct.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  and EUPATH_0020003 >= \$\$date_range.min\$\$
+  and EUPATH_0020003 <= \$\$date_range.max\$\$ 
+  group by dwpct.name,dwpct.part_count
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<

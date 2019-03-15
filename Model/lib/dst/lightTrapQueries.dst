@@ -1,0 +1,34 @@
+[templateStart]
+name=lightTrapMetadataQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/lightTrapQueries.xml
+prop=injectedTemplateFull
+>templateTextStart<
+${injectedTemplateFull}
+>templateTextEnd<
+
+[templateStart]
+name=lightTrapMetadataQueryPRISM
+anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQueries.dst
+prop=tblPrefix
+prop=presenterId
+prop=visitMinDate
+prop=visitMaxDate
+>templateTextStart<
+    <sqlQuery name="LightTrapsByCharacteristics_${tblPrefix}" isCacheable="true"> <!-- TODO:  Add back Clinepidb -->
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="lightTrapParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
+       <paramRef ref="lightTrapParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.lighttraps_prism" groupRef="metaDataGroups.lighttrap_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select lta.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}LightTraps lta
+where lta.pan_id in (\$\$lighttraps_prism\$\$)
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+

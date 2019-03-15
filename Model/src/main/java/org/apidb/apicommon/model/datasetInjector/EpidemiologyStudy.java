@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.apidb.apicommon.datasetPresenter.DatasetInjector;
@@ -20,6 +21,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
     protected abstract String participantGraphAttributesTemplateName();  
     protected abstract Map<String,String[]> participantGraphAttributesToScopes();
+    protected abstract void setStudySpecificProperties();  
 
     protected String participantGraphAttributesString() {
         String participantGraphAttributesTemplateName = participantGraphAttributesTemplateName();
@@ -99,6 +101,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
   @Override
   public void injectTemplates() {
+
+      setPropValue("injectParams","true");  //for studies that are using hard cooded param names ... bringing in old public ones
+      setStudySpecificProperties();  
 
       for (Map.Entry<String, String[]> entry : participantGraphAttributesToScopes().entrySet()) {
         setPropValue(entry.getKey(), entry.getKey());
@@ -394,7 +399,233 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ParticipantAttributesMeta","ParticipantNode");
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.HouseholdAttributesMeta","HouseholdNode");
 
+      //inject the metadata queries and params
+      injectMetadataQueries();
   }
+
+    public void injectMetadataQueries() {
+      String tblPrefix = "D" + getPropValue("datasetDigest");
+      String presenterId = getPropValue("presenterId");
+      String studyType = getPropValue("studyType");
+      String firstWizardStep = getPropValue("firstWizardStep");
+      Boolean keepRegionInHouseholdFilter = getPropValueAsBoolean("keepRegionInHouseholdFilter");
+      if(firstWizardStep.equals("Household") || keepRegionInHouseholdFilter){
+          setPropValue("rmRegionSqlCommentStart","/*");
+          setPropValue("rmRegionSqlCommentEnd","*/");
+      }else{
+          setPropValue("rmRegionSqlCommentStart","");
+          setPropValue("rmRegionSqlCommentEnd","");
+      }
+      
+      boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
+      boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
+      boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
+      boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
+      boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
+      boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+      String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
+      String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
+      String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
+      String householdMultiFilterIdsQuoted = addQuotes(getPropValue("householdMultiFilterIds"));
+      String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
+      String participantMultiFilterIdsQuoted = addQuotes(getPropValue("participantMultiFilterIds"));
+      String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
+      String observationMultiFilterIdsQuoted = addQuotes(getPropValue("observationMultiFilterIds"));
+      String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
+
+      //Inject the filter param queries for participants if any questions generated
+      if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
+          boolean injectParams = getPropValueAsBoolean("injectParams");
+          
+          if(householdMultiFilterIdsQuoted == null || householdMultiFilterIdsQuoted.equals("''")) {
+              householdMultiFilterIdsQuoted = "'NA'";
+          }
+          setPropValue("householdMultiFilterIdsQuoted", householdMultiFilterIdsQuoted);
+          if(householdFilterExcludedIdsQuoted == null || householdFilterExcludedIdsQuoted.equals("''")) {
+              householdFilterExcludedIdsQuoted  = "'NA'";
+          }
+          setPropValue("householdFilterExcludedIdsQuoted", householdFilterExcludedIdsQuoted);
+          if(participantMultiFilterIdsQuoted == null || participantMultiFilterIdsQuoted.equals("''")) {
+              participantMultiFilterIdsQuoted  = "'NA'";
+          }
+          setPropValue("participantMultiFilterIdsQuoted", participantMultiFilterIdsQuoted);
+          if(participantFilterExcludedIdsQuoted == null || participantFilterExcludedIdsQuoted.equals("''")) {
+              participantFilterExcludedIdsQuoted  = "'NA'";
+          }
+          setPropValue("participantFilterExcludedIdsQuoted", participantFilterExcludedIdsQuoted);
+          if(observationMultiFilterIdsQuoted == null || observationMultiFilterIdsQuoted.equals("''")) {
+              observationMultiFilterIdsQuoted  = "'NA'";
+          }
+          setPropValue("observationMultiFilterIdsQuoted", observationMultiFilterIdsQuoted);
+          if(observationFilterExcludedIdsQuoted == null || observationFilterExcludedIdsQuoted.equals("''")) {
+              observationFilterExcludedIdsQuoted  = "'NA'";
+          }
+          setPropValue("observationFilterExcludedIdsQuoted", observationFilterExcludedIdsQuoted);
+          //determine if a special template is used
+          String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
+          if(filterParamQueryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamQueryBaseTemplate));
+          }
+          if(injectParams){
+              injectTemplate("participantFilterParamQueries");
+          }
+      }
+
+
+      if(hasParticipantQuestion && hasParticipants){
+          //first the params 
+          boolean injectParams = getPropValueAsBoolean("injectParams");
+          String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
+          if(filterParamBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamBaseTemplate));
+          }
+          if(injectParams){
+              injectTemplate("participantFilterParams");
+          }
+
+          //Inject the particiant metadata query
+          String queryBaseTemplate = getPropValue("queryBaseTemplate");
+          if(queryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + studyType + "Query" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + queryBaseTemplate));
+          }
+          injectTemplate("participantMetadataQuery");
+
+      }
+
+      //now to do observations
+      if(hasObservationQuestion && hasObservations){
+          //Inject the metadata query
+          String queryBaseTemplate = getPropValue("queryBaseTemplate");
+          if(queryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + studyType + "Query" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + queryBaseTemplate));
+          }
+          injectTemplate("observationMetadataQuery");
+          
+          //Inject the filter params .... note these use the ontology queries from particiants filters
+          boolean injectParams = getPropValueAsBoolean("injectParams");
+          String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
+          if(filterParamBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParams" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamBaseTemplate));
+          }
+          if(injectParams){
+              injectTemplate("observationFilterParams");
+          }
+
+          //and the filter param queries
+          String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
+          if(filterParamQueryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamQueryBaseTemplate));
+          }
+          if(injectParams){
+              injectTemplate("observationFilterParamQueries");
+          }
+
+      }
+
+      //and households
+      if(hasHouseholdQuestion && hasHouseholds){
+          //Inject the metadata query
+          String queryBaseTemplate = getPropValue("queryBaseTemplate");
+          if(queryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdMetadataQuery" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + queryBaseTemplate));
+          }
+          injectTemplate("householdMetadataQuery");
+          
+          //Inject the filter params .... note these use the ontology queries from particiants filters
+          String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
+          boolean injectParams = getPropValueAsBoolean("injectParams");
+          if(filterParamBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParams" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamBaseTemplate));
+          }
+          if(injectParams){
+              injectTemplate("householdFilterParams");
+          }
+
+          //and the filter param queries
+          String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
+          if(filterParamQueryBaseTemplate.equals("default")){
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + firstWizardStep));
+          }else{
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamQueryBaseTemplate));
+          }
+          if(injectParams){
+              injectTemplate("householdFilterParamQueries");
+          }
+
+      }
+      //and inject the cardQuestions
+      injectCardQuestions();
+      
+    }
+
+    public String getCardQuestionString(){
+        String presenterId = getPropValue("presenterId");
+        boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
+        boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
+        boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
+        boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
+        boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
+        boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+        String cardQuestions = "";
+        if(hasParticipantQuestion && hasParticipants){
+            for (Map.Entry<String, String[]> entry : participantQuestionTemplateNamesToScopes().entrySet()) {
+                String questionName = entry.getKey();
+                if(questionName.startsWith("ParticipantsByMetadata")){
+                    cardQuestions = cardQuestions + " \"participants\": \"ParticipantQuestions." + presenterId + "ParticipantsByMetadata\"";
+                }else{                  
+                    cardQuestions = cardQuestions + " \"participants\": \"ParticipantQuestions." + questionName + "\"";
+                }
+            }
+        }
+        if(hasObservationQuestion && hasObservations){
+            for (Map.Entry<String, String[]> entry : observationQuestionTemplateNamesToScopes().entrySet()) {
+                String questionName = entry.getKey();
+                if(questionName.startsWith("ObservationsByMetadata")){
+                    cardQuestions = cardQuestions + ", \"observations\": \"ClinicalVisitQuestions." + presenterId + "ObservationsByMetadata\"";
+                }else{
+                    cardQuestions = cardQuestions + ", \"observations\": \"ClinicalVisitQuestions." + questionName + "\"";
+                }
+            }
+        }
+        if(hasHouseholdQuestion && hasHouseholds){
+            for (Map.Entry<String, String[]> entry : householdQuestionTemplateNamesToScopes().entrySet()) {
+                String questionName = entry.getKey();
+                if(questionName.startsWith("HouseholdsByMetadata")){
+                    cardQuestions = cardQuestions + ", \"households\": \"HouseholdQuestions." + presenterId + "HouseholdsByMetadata\"";
+                }else{
+                    cardQuestions = cardQuestions + ", \"households\": \"HouseholdQuestions." + questionName + "\"";
+                }
+            }
+        }
+        return cardQuestions;
+    }
+
+    private void injectCardQuestions() {
+        String presenterId = getPropValue("presenterId");
+        String cardQuestions = "UNION select '" + presenterId + "' as dataset_presenter_id, 'cardQuestions' as property, '{ ";
+        cardQuestions = cardQuestions + getCardQuestionString();
+        cardQuestions = cardQuestions + " }' as value from dual";
+        //System.err.println("cardQuestionsSql=" + cardQuestions);
+        setPropValue("cardQuestionsSql",cardQuestions);
+        injectTemplate("injectDatasetQuestions");
+
+    }
 
   @Override
   public void addModelReferences() {
@@ -431,7 +662,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               String questionName = entry.getKey();
               String questionFullName = "";
               if(questionName.equals("HouseholdsByMetadata")){
-                  questionFullName = "HouseholdQuestions." + presenterId + entry.getKey();
+                  questionFullName = "HouseholdQuestions." + presenterId + "HouseholdsByMetadata";
                   //System.err.println("Household questionFullName="+questionFullName);
               }else{                  
                   questionFullName = "HouseholdQuestions." + entry.getKey();
@@ -465,9 +696,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           for (Map.Entry<String, String[]> entry : participantQuestionTemplateNamesToScopes().entrySet()) {
               String questionName = entry.getKey();
               String questionFullName = "";
-              if(questionName.equals("ParticipantsByMetadata")){
-                  questionFullName = "ParticipantQuestions." + presenterId + entry.getKey();
-                  System.err.println("Participant questionFullName="+questionFullName);
+              if(questionName.startsWith("ParticipantsByMetadata")){
+                  questionFullName = "ParticipantQuestions." + presenterId + "ParticipantsByMetadata";
+                  //System.err.println("Participant questionFullName="+questionFullName);
               }else{                  
                   questionFullName = "ParticipantQuestions." + entry.getKey();
               }
@@ -504,9 +735,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           for (Map.Entry<String, String[]> entry : observationQuestionTemplateNamesToScopes().entrySet()) {
               String questionName = entry.getKey();
               String questionFullName = "";
-              if(questionName.equals("ObservationsByMetadata")){
-                  questionFullName = "ClinicalVisitQuestions." + presenterId + entry.getKey();
-                  System.err.println("Observations questionFullName="+questionFullName);
+              if(questionName.startsWith("ObservationsByMetadata")){
+                  questionFullName = "ClinicalVisitQuestions." + presenterId + "ObservationsByMetadata";
+                  //System.err.println("Observations questionFullName="+questionFullName);
               }else{                  
                   questionFullName = "ClinicalVisitQuestions." + entry.getKey();
               }
@@ -565,12 +796,30 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"policyUrl", ""},
                                  {"cardHeadline", ""},
                                  {"cardPoints", ""},
-                                 {"cardQuestions", ""},
                                  {"requestProtectionLevel", ""},
                                  {"requestAccessFields", ""},
                                  {"requestEmail", ""},
                                  {"requestEmailBody", ""},
-                                 {"requestNeedsApproval", ""}
+                                 {"requestNeedsApproval", ""},
+                                 //properties for injecting metadata queries
+                                 {"householdMultiFilterIds", ""},
+                                 {"householdFilterExcludedIds", ""},
+                                 {"participantMultiFilterIds", ""},
+                                 {"participantFilterExcludedIds", ""},
+                                 {"observationMultiFilterIds", ""},
+                                 {"observationFilterExcludedIds", ""},
+                                 {"studyAbbreviation", ""},
+                                 {"studyType", ""},
+                                 {"hasParticipantQuestion", ""},
+                                 {"hasHouseholdQuestion", ""},
+                                 {"hasObservationQuestion", ""},
+                                 {"participantGraphAttributesTemplate", ""},
+                                 {"firstWizardStep", ""},
+                                 {"keepRegionInHouseholdFilter", ""},
+                                 {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
+                                 {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties
+                                 {"queryBaseTemplate", ""},
+                                 {"timeSourceId", ""}
       };
 
     return declaration;

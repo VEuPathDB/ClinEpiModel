@@ -6,6 +6,12 @@ import java.util.Map;
 
 public class PRISM2 extends EpidemiologyStudyWithLightTraps {
 
+    @Override
+    protected void setStudySpecificProperties(){
+        setPropValue("visitMinDate","2017-09-01");
+        setPropValue("visitMaxDate","2019-12-31");
+        setPropValue("injectParams","false");
+    }  
 
     @Override
     protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {
