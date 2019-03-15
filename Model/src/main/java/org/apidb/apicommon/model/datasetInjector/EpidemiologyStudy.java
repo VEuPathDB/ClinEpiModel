@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Properties;
 
 import org.apidb.apicommon.datasetPresenter.DatasetInjector;
@@ -404,8 +403,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   }
 
     public void injectMetadataQueries() {
-      String tblPrefix = "D" + getPropValue("datasetDigest");
-      String presenterId = getPropValue("presenterId");
+      //String tblPrefix = "D" + getPropValue("datasetDigest");
+      //String presenterId = getPropValue("presenterId");
       String studyType = getPropValue("studyType");
       String firstWizardStep = getPropValue("firstWizardStep");
       Boolean keepRegionInHouseholdFilter = getPropValueAsBoolean("keepRegionInHouseholdFilter");
@@ -423,9 +422,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
-      String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
-      String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
-      String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
+      //String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
+      //String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
+      //String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
       String householdMultiFilterIdsQuoted = addQuotes(getPropValue("householdMultiFilterIds"));
       String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
       String participantMultiFilterIdsQuoted = addQuotes(getPropValue("participantMultiFilterIds"));
