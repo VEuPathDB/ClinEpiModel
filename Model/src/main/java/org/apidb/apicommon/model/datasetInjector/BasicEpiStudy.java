@@ -14,7 +14,7 @@ public class BasicEpiStudy extends EpidemiologyStudy {
     Map<String,String[]> map = new HashMap<String,String[]>();
     boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
     boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
-    String studyType = getPropValue("studyType");
+    //String studyType = getPropValue("studyType");
     if(hasHouseholdQuestion && hasHouseholds){
         map.put("HouseholdsByMetadata", new String[] {"menu", "webservice"});
     }

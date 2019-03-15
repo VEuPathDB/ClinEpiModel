@@ -58,11 +58,12 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         injectAttributeMetaQuery(makeRecordClassName("LightTrap"), presenterId + "LightTrapAttributes.LightTrapAttributesMeta",null);
     }
 
+    @Override
     public void injectMetadataQueries() {
         super.injectMetadataQueries();
-        String tblPrefix = "D" + getPropValue("datasetDigest");
-        String presenterId = getPropValue("presenterId");
-        String studyType = getPropValue("studyType");
+        //String tblPrefix = "D" + getPropValue("datasetDigest");
+        //String presenterId = getPropValue("presenterId");
+        //String studyType = getPropValue("studyType");
         String firstWizardStep = getPropValue("firstWizardStep");
         Boolean keepRegionInHouseholdFilter = getPropValueAsBoolean("keepRegionInHouseholdFilter");
         if(firstWizardStep.equals("Household") || keepRegionInHouseholdFilter){
@@ -120,12 +121,12 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
     @Override
     public String getCardQuestionString(){
         String presenterId = getPropValue("presenterId");
-        boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
+        //boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
         boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
-        boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
-        boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
+        //boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
+        //boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
         boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
-        boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+        //boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
         String cardQuestions = super.getCardQuestionString();
         if(hasParticipantQuestion && hasParticipants){
             for (Map.Entry<String, String[]> entry : lightTrapQuestionTemplateNamesToScopes().entrySet()) {
