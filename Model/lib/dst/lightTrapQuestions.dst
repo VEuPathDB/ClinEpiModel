@@ -20,7 +20,7 @@ prop=lightTrapQuestionName
                 includeProjects="${includeProjects}"
     		displayName="Select a Set of Light Trap Collections"
     		shortDisplayName="Light Traps"
-    		queryRef="LightTrapId.LightTrapsByCharacteristics_${tblPrefix}"
+    		queryRef="LightTrapId.LightTrapsByMetadata_${tblPrefix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
           <attributesList summary="EUPATH_0000094,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
@@ -62,7 +62,7 @@ prop=lightTrapQuestionName
                 includeProjects="${includeProjects}"
     		displayName="Select a Set of Light Trap Collections (PRISM2)"
     		shortDisplayName="Light Traps"
-    		queryRef="LightTrapId.LightTrapsByCharacteristics_${tblPrefix}"
+    		queryRef="LightTrapId.LightTrapsByMetadata_${tblPrefix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
 <!--          <attributesList summary="" /> -->

@@ -7,7 +7,9 @@ import java.util.HashMap;
 public class GEMS1aCaseControl extends EpidemiologyStudy {
 
     @Override
-    protected void setStudySpecificProperties(){}  
+    protected void setStudySpecificProperties(){
+        setPropValue("injectParams","false");
+    }  
 
     @Override
     protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {

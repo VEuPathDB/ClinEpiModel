@@ -74,7 +74,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (PRISM ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_${tblPrefix}" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
@@ -146,7 +146,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (PRISM2 ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_${tblPrefix}" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
@@ -211,6 +211,7 @@ name=HouseholdsByCharacteristics_india
 anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
@@ -218,7 +219,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (India ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_india" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 

@@ -52,6 +52,18 @@
 
  <querySet name="lightTrapVQ" queryType="vocab" isCacheable="true">
 
+   <!-- there needs to ba at least one query in here I think? -->
+     <sqlQuery name="hhHolder">
+          <column name="display" />
+          <column name="internal" />
+          <column name="term" />
+          <sql>
+            <![CDATA[
+            ]]>
+            SELECT 'Any' as display, 'any' as term, 'any' as internal from dual
+            </sql>
+        </sqlQuery>
+
       <!-- TEMPLATE_ANCHOR lightTrapFilterParamQueries -->
 
  </querySet>

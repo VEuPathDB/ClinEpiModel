@@ -14,8 +14,8 @@ prop=presenterId
 prop=visitMinDate
 prop=visitMaxDate
 >templateTextStart<
-    <sqlQuery name="LightTrapsByCharacteristics_${tblPrefix}" isCacheable="true"> <!-- TODO:  Add back Clinepidb -->
-       <paramRef ref="participantParams.tbl_prefix" visible="false" default="" groupRef="metaDataGroups.geographic_loc"/>
+    <sqlQuery name="LightTrapsByMetadata_${tblPrefix}" isCacheable="true"> 
+       <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="lightTrapParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
        <paramRef ref="lightTrapParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
@@ -25,7 +25,7 @@ prop=visitMaxDate
          <sql>
            <![CDATA[
 select lta.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.${tblPrefix}LightTraps lta
+from ApidbTuning.\$\$tbl_prefix\$\$LightTraps lta
 where lta.pan_id in (\$\$lighttraps_prism\$\$)
                 ]]>   
         </sql>

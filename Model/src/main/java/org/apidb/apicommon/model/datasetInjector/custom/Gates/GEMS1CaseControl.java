@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class GEMS1CaseControl extends EpidemiologyStudy {
 
     @Override
-    protected void setStudySpecificProperties(){}  
+    protected void setStudySpecificProperties(){ }  
 
     @Override
     protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {
@@ -17,8 +17,6 @@ public class GEMS1CaseControl extends EpidemiologyStudy {
     protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
       map.put("ParticipantsByCaseControlVisits_gems", new String[] {"menu", "webservice"});
-      //      map.put("ParticipantsByCaseControlVisitsShort_gems", new String[] {"menu", "webservice"});
-
       return(map);
     }
 

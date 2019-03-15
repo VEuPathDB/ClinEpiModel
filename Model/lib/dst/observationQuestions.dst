@@ -165,7 +165,7 @@ prop=observationQuestionName
               searchCategory="Clinical Observation"
               displayName="Select a Set of Clinical Observations (PRISM)"
               shortDisplayName="Clinical Observations"
-              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_${tblPrefix}" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" 
               includeProjects="${includeProjects}"> 
 
@@ -242,7 +242,7 @@ prop=observationQuestionName
               searchCategory="Clinical Observation"
               displayName="Select a Set of Clinical Observations (PRISM2)"
               shortDisplayName="Clinical Observations"
-              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_${tblPrefix}" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" 
               includeProjects="${includeProjects}"> 
 
@@ -316,6 +316,7 @@ prop=observationQuestionName
 name=ClinicalVisitsByRelativeVisits_maled
 anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
+prop=tblPrefix
 prop=presenterId
 prop=observationQuestionName
 prop=observationAttributesList
@@ -324,7 +325,7 @@ prop=observationAttributesList
               searchCategory="Observation"
               displayName="Select a Set of Observations (MAL-ED)"
               shortDisplayName="Observations"
-              queryRef="ClinicalVisitId.ClinicalVisitsByRelativeVisits_maled" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         <attributesList 
@@ -395,13 +396,14 @@ name=ObservationsByRelativeVisits_india
 anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=observationQuestionName
 >templateTextStart<
     <question name="${observationQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
               displayName="Select a Set of Observations (India ICEMR)"
               shortDisplayName="Observations"
-              queryRef="ClinicalVisitId.ObservationsByRelativeVisits_india" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         <attributesList 
