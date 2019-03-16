@@ -7,7 +7,9 @@ import java.util.HashMap;
 public class BasicEpiStudy extends EpidemiologyStudy {
 
     @Override
-    protected void setStudySpecificProperties(){}  
+    protected void setStudySpecificProperties(){
+        setPropValue("studyArmIsVisible","false");  //sets the default ... need to create injector and change if want true
+    }  
 
     @Override
     protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {
@@ -28,7 +30,7 @@ public class BasicEpiStudy extends EpidemiologyStudy {
       boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
       String studyType = getPropValue("studyType");
       if(hasParticipantQuestion && hasParticipants){
-          if(studyType.equals("Longitudinal") || studyType.equals("Survey")){
+          if(studyType.equals("Longitudinal") || studyType.equals("Survey") || studyType.equals("CaseControl")){
               map.put("ParticipantsByMetadata" + studyType, new String[] {"menu", "webservice"});
           }else{
               map.put("ParticipantsByMetadata", new String[] {"menu", "webservice"});

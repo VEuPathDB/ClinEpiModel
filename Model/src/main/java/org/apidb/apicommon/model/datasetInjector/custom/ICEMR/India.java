@@ -1,13 +1,10 @@
 package org.apidb.apicommon.model.datasetInjector.custom.ICEMR;
 
-import org.apidb.apicommon.model.datasetInjector.EpidemiologyStudy;
+import org.apidb.apicommon.model.datasetInjector.BasicEpiStudy;
 import java.util.Map;
 import java.util.HashMap;
 
-public class India extends EpidemiologyStudy {
-
-    @Override
-    protected void setStudySpecificProperties(){}  
+public class India extends BasicEpiStudy {
 
     @Override
     protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {

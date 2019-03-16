@@ -991,7 +991,7 @@ where observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 >templateTextEnd<
 
 [templateStart]
-name=participantFilterParamsCaseControl
+name=participantFilterParamsCaseControlRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 >templateTextStart<
@@ -1067,7 +1067,7 @@ prop=tblPrefix
 >templateTextEnd<
 
 [templateStart]
-name=participantFilterParamQueriesCaseControl
+name=participantFilterParamQueriesCaseControlRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=householdMultiFilterIdsQuoted
@@ -1100,6 +1100,7 @@ from ApidbTuning.${tblPrefix}Ontology o
           ]]>
       </sql>
     </sqlQuery>
+
     <sqlQuery name="GeographicRegionMetaData_${tblPrefix}" isCacheable="false">
       <paramRef ref="participantParams.case_control" />  
       <paramRef ref="participantParams.study_arm" />  
