@@ -75,7 +75,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.householdOrObservation" visible="false" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.observations_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
@@ -90,7 +90,6 @@ from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households 
 (select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD) h
 where io.participant_id in (\$\$observations_${tblPrefix}\$\$)
 and io.household_id = h.household_id
-and h.\$\$householdOrObservation\$\$ in (\$\$households_${tblPrefix}\$\$)
 and da.pan_id = h.\$\$householdOrObservation\$\$ 
 group by da.pan_id,da.name
 ) dwpct

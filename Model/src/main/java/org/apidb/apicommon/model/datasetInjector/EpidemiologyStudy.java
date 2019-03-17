@@ -823,7 +823,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"hasParticipantQuestion", ""},
                                  {"hasHouseholdQuestion", ""},
                                  {"hasObservationQuestion", ""},
-                                 {"participantGraphAttributesTemplate", ""},
                                  {"firstWizardStep", ""},
                                  {"keepRegionInHouseholdFilter", ""},
                                  {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 

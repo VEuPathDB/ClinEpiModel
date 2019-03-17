@@ -336,7 +336,7 @@ prop=tblPrefix
        <![CDATA[
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
-                where ho.household_id = h.old_id
+                where ho.household_id = h.household_id
        ]]>
      </sql>
    </sqlQuery>
@@ -424,9 +424,14 @@ prop=tblPrefix
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
-where hp.participant_id = p.participant_id
+select p.participant_id as internal, po.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
+where po.participant_id = p.participant_id
+UNION
+select hp.participant_id as internal, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho, ApidbTuning.${tblPrefix}HousePartIO hp
+where h.household_id = ho.household_id 
+and h.household_id = hp.household_id 
           ]]>
     </sql>
     </sqlQuery>

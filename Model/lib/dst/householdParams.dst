@@ -403,6 +403,10 @@ prop=tblPrefix
 select distinct h.\$\$householdOrObservation\$\$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
 from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}HouseholdMD h
 where h.household_id = p.household_id
+UNION
+select distinct h.\$\$householdOrObservation\$\$ as record_id, p.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}HouseholdMD h
+where h.household_id = p.household_id
           ]]>
     </sql>
     </sqlQuery>
