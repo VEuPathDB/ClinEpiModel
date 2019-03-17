@@ -224,7 +224,7 @@ prop=tblPrefix
 >templateTextStart<
        <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
        <paramRef ref="participantParams.case_control" groupRef="metaDataGroups.choose_case_control"/> 
-       <paramRef ref="participantParams.study_arm" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.choose_case_control"/> 
+       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.choose_case_control"/> 
        <paramRef ref="participantParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.household_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participant_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
