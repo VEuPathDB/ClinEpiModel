@@ -8,7 +8,6 @@ public class GEMS1CaseControl extends BasicEpiStudy {
 
     @Override
     protected void setStudySpecificProperties(){
-        setPropValue("studyArmIsVisible","false");
     }  
 
     @Override

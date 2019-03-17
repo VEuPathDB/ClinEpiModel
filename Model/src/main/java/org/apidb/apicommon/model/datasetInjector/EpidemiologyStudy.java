@@ -101,7 +101,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   @Override
   public void injectTemplates() {
 
-      setPropValue("injectParams","true");  //for studies that are using hard cooded param names ... bringing in old public ones
+      boolean injectStudy = getPropValueAsBoolean("injectStudy");
+      if(!injectStudy){
+          return;
+      }
+
+      setPropValue("injectParams","true");  //ONLY for studies that are using hard cooded param names ... for all but one study
       setStudySpecificProperties();  
 
       for (Map.Entry<String, String[]> entry : participantGraphAttributesToScopes().entrySet()) {
@@ -426,6 +431,16 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
       String observationMultiFilterIdsQuoted = addQuotes(getPropValue("observationMultiFilterIds"));
       String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
+
+      //set properties needed for householdObservations
+      boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
+      if(hasHouseholdObservations){
+          setPropValue("householdOrObservationIsVisible", "true");
+          setPropValue("householdFilterDataTypeDisplayName", "Household Observations");
+      }else{
+          setPropValue("householdOrObservationIsVisible", "false");
+          setPropValue("householdFilterDataTypeDisplayName", "Households");
+      }
 
       //Inject the filter param queries for participants if any questions generated
       if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
@@ -779,6 +794,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   public String[][] getPropertiesDeclaration() {
 
       String [][] declaration = {
+                                 {"injectStudy", ""},  
                                  {"isPublic", ""},
                                  {"hasHouseholdRecord", ""},
                                  {"hasObservationRecord", ""},
@@ -824,6 +840,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"hasHouseholdQuestion", ""},
                                  {"hasObservationQuestion", ""},
                                  {"firstWizardStep", ""},
+                                 {"hasStudyArmParameter", ""},
+                                 {"hasHouseholdObservations", ""},
                                  {"keepRegionInHouseholdFilter", ""},
                                  {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
                                  {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties

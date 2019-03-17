@@ -10,6 +10,7 @@ ${injectedTemplateFull}
 name=observationFilterParamsRegion
 anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
+prop=householdFilterDataTypeDisplayName
 >templateTextStart<
     <filterParam name="geographic_region_${tblPrefix}" 
                     metadataQueryRef="ClinicalVisitVQ.RegionMetaData_${tblPrefix}"
@@ -28,7 +29,7 @@ prop=tblPrefix
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                     metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_${tblPrefix}"
                     backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkgd_${tblPrefix}"
-                    filterDataTypeDisplayName="Household Observations"
+                    filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     countPredictsAnswerCount="true"
                     prompt="Household Observations"
                     dependedParamRef="clinicalVisitParams.geographic_region_${tblPrefix}"
@@ -82,12 +83,13 @@ prop=tblPrefix
 name=observationFilterParamsHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
+prop=householdFilterDataTypeDisplayName
 >templateTextStart<
     <filterParam name="households_${tblPrefix}" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                     metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_${tblPrefix}"
                     backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaData_${tblPrefix}"
-                    filterDataTypeDisplayName="Household Observations"
+                    filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     countPredictsAnswerCount="true"
                     prompt="Household Observations"
                     dependedParamRef=""

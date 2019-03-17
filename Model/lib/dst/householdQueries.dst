@@ -10,10 +10,11 @@ ${injectedTemplateFull}
 name=householdMetadataQueryRegion
 anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
+prop=householdOrObservationIsVisible
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
        <paramRef ref="householdParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.observations_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
@@ -42,9 +43,10 @@ group by da.pan_id,da.name
 name=householdMetadataQueryHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
+prop=householdOrObservationIsVisible
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="householdParams.householdOrObservation" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="householdParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.observations_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>

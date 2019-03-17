@@ -10,6 +10,7 @@ ${injectedTemplateFull}
 name=participantFilterParamsRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=householdFilterDataTypeDisplayName
 >templateTextStart<
        <filterParam name="geographic_region_${tblPrefix}" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_${tblPrefix}"
@@ -30,7 +31,7 @@ prop=tblPrefix
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${tblPrefix}"
                     countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Household Observations"
+                    filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef="participantParams.geographic_region_${tblPrefix}"
                     trimMetadataTerms="true">
@@ -320,13 +321,14 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamsHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=householdFilterDataTypeDisplayName
 >templateTextStart<
        <filterParam name="households_${tblPrefix}" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
                     countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Household Observations"
+                    filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef=""
                     trimMetadataTerms="true">
@@ -1000,6 +1002,7 @@ where observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 name=participantFilterParamsCaseControlRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=householdFilterDataTypeDisplayName
 >templateTextStart<
        <filterParam name="geographic_region_${tblPrefix}" 
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_${tblPrefix}" 
@@ -1019,7 +1022,7 @@ prop=tblPrefix
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                        metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${tblPrefix}"
-                       filterDataTypeDisplayName="Household Observations"
+                       filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                        prompt="Household"
                        trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
