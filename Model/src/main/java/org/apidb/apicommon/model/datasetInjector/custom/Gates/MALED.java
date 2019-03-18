@@ -1,17 +1,11 @@
 package org.apidb.apicommon.model.datasetInjector.custom.Gates;
 
-import org.apidb.apicommon.model.datasetInjector.EpidemiologyStudy;
+import org.apidb.apicommon.model.datasetInjector.BasicEpiStudy;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 
-public class MALED extends EpidemiologyStudy {
-
-
-    @Override
-    protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {
-      return(new HashMap<String,String[]>());
-    }
+public class MALED extends BasicEpiStudy {
 
     @Override
     protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
@@ -26,7 +20,6 @@ public class MALED extends EpidemiologyStudy {
       map.put("ClinicalVisitsByRelativeVisits_maled", new String[] {"menu", "webservice"});
       return(map);
     }
-
 
     @Override
     protected String participantGraphAttributesTemplateName() {

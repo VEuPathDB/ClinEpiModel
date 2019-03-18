@@ -6,12 +6,67 @@ prop=householdQuestionFull
 ${householdQuestionFull}
 >templateTextEnd<
 
+[templateStart]
+name=HouseholdsByMetadata
+anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
+prop=includeProjects
+prop=presenterId
+prop=householdAttributesList
+prop=studyAbbreviation
+prop=tblPrefix
+>templateTextStart<
+   <question name="${presenterId}HouseholdsByMetadata" newBuild="1" includeProjects="${includeProjects}"
+              searchCategory="Household"
+              displayName="Select a Set of Households (${studyAbbreviation})"
+              shortDisplayName="${studyAbbreviation}"
+              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
+              recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
+
+        <attributesList 
+            summary="${householdAttributesList}"
+        /> 
+
+	<dynamicAttributes>
+            <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
+              <reporter name="histogram" displayName="Histogram" scopes=""
+                implementation="org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter">
+                <description>Display the histogram of the values of this attribute</description>
+              </reporter>
+            </columnAttribute>
+        </dynamicAttributes>
+            
+
+        <summary>
+            <![CDATA[ 
+           Find households based on household and participant details.
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+               
+        <description>
+            <![CDATA[
+             Find households based on details of the household itself and the participants participants who live there. 
+            ]]>
+        </description>
+ 
+    </question>
+>templateTextEnd<
 
 [templateStart]
 name=HouseholdsByCharacteristics_prism
 anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
@@ -19,7 +74,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (PRISM ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_prism" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
@@ -83,6 +138,7 @@ name=HouseholdsByCharacteristics_prism2
 anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
@@ -90,7 +146,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (PRISM2 ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_prism2" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
@@ -155,6 +211,7 @@ name=HouseholdsByCharacteristics_india
 anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
@@ -162,7 +219,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (India ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristics_india" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
@@ -204,56 +261,3 @@ prop=householdQuestionName
     </question>
 >templateTextEnd<
 
-[templateStart]
-name=HouseholdsByCharacteristicsCS_india
-anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
-prop=includeProjects
-prop=presenterId
-prop=householdQuestionName
->templateTextStart<
-   <question name="${householdQuestionName}" newBuild="1"
-             includeProjects="${includeProjects}"
-              searchCategory="Household"
-              displayName="Select a Set of Households (India ICEMR)"
-              shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByCharacteristicsCS_india" 
-              recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
-
-        <attributesList 
-            summary="EUPATH_0000407,ENVO_01000744,EUPATH_0000435,EUPATH_0000019,part_count"
-        /> 
-
-	<dynamicAttributes>
-            <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 
-              <reporter name="histogram" displayName="Histogram" scopes=""
-                implementation="org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter">
-                <description>Display the histogram of the values of this attribute</description>
-              </reporter>
-            </columnAttribute>
-        </dynamicAttributes>
-            
-
-        <summary>
-            <![CDATA[ 
-           Find households based on household and participant details.
-            ]]>
-        </summary>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
-               
-        <description>
-            <![CDATA[
-             Find households based on details of the household itself and the participants participants who live there. 
-            ]]>
-        </description>
- 
-    </question>
->templateTextEnd<

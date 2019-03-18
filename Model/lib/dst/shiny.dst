@@ -18,7 +18,7 @@ prop=projectName
     	      names(metadataList[["${datasetName}"]]) <- gsub(" ", "_", tolower(gsub("\\[|\\]", "", names(metadataList[["${datasetName}"]]))))
     	      setkey(metadataList[["${datasetName}"]], source_id)
 	      datasetList[["${datasetName}"]] <- fread("${dataURL}")
-	      datasetList[["${datasetName}"]] <- fread(names(datasetList[["${datasetName}"]][1]))
+	      datasetList[["${datasetName}"]] <- fread(names(datasetList[["${datasetName}"]][1]), na.strings = c('NA', 'null', 'N/A', 'na', ''))
 	      drop <- c("PAN_ID", "PAN_TYPE_ID", "PAN_TYPE", "DESCRIPTION")
 	      datasetList[["${datasetName}"]] <- datasetList[["${datasetName}"]][, !drop, with = FALSE]
 	      dates <- metadataList[["${datasetName}"]]$source_id[metadataList[["${datasetName}"]]$type == 'date']

@@ -58,6 +58,88 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         injectAttributeMetaQuery(makeRecordClassName("LightTrap"), presenterId + "LightTrapAttributes.LightTrapAttributesMeta",null);
     }
 
+    @Override
+    public void injectMetadataQueries() {
+        super.injectMetadataQueries();
+        //String tblPrefix = "D" + getPropValue("datasetDigest");
+        //String presenterId = getPropValue("presenterId");
+        //String studyType = getPropValue("studyType");
+        String firstWizardStep = getPropValue("firstWizardStep");
+        Boolean keepRegionInHouseholdFilter = getPropValueAsBoolean("keepRegionInHouseholdFilter");
+        if(firstWizardStep.equals("Household") || keepRegionInHouseholdFilter){
+            setPropValue("rmRegionSqlCommentStart","/*");
+            setPropValue("rmRegionSqlCommentEnd","*/");
+        }else{
+            setPropValue("rmRegionSqlCommentStart","");
+            setPropValue("rmRegionSqlCommentEnd","");
+        }
+        String lightTrapMultiFilterIdsQuoted = addQuotes(getPropValue("lightTrapMultiFilterIds"));
+        String lightTrapFilterExcludedIdsQuoted = addQuotes(getPropValue("lightTrapFilterExcludedIds"));
+        if(lightTrapMultiFilterIdsQuoted == null || lightTrapMultiFilterIdsQuoted.equals("''")) {
+            lightTrapMultiFilterIdsQuoted = "'NA'";
+        }
+        setPropValue("lightTrapMultiFilterIdsQuoted", lightTrapMultiFilterIdsQuoted);
+        if(lightTrapFilterExcludedIdsQuoted == null || lightTrapFilterExcludedIdsQuoted.equals("''")) {
+            lightTrapFilterExcludedIdsQuoted  = "'NA'";
+        }
+        setPropValue("lightTrapFilterExcludedIdsQuoted", lightTrapFilterExcludedIdsQuoted);
+        
+        //Inject the metadata query
+        String queryBaseTemplate = getPropValue("queryBaseTemplate");
+        if(queryBaseTemplate.equals("default")){
+            setPropValue("injectedTemplateFull",getTemplateInstanceText("lightTrapMetadataQuery" + firstWizardStep));
+        }else{
+            setPropValue("injectedTemplateFull",getTemplateInstanceText("lightTrap" + queryBaseTemplate));
+        }
+        injectTemplate("lightTrapMetadataQuery");
+        
+        //Inject the filter params .... note these use the ontology queries from particiants filters
+        boolean injectParams = getPropValueAsBoolean("injectParams");
+        String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
+        if(filterParamBaseTemplate.equals("default")){
+            setPropValue("injectedTemplateFull",getTemplateInstanceText("lightTrapFilterParams" + firstWizardStep));
+        }else{
+            setPropValue("injectedTemplateFull",getTemplateInstanceText("lightTrap" + filterParamBaseTemplate));
+        }
+        if(injectParams){
+            injectTemplate("lightTrapFilterParams");
+        }
+        
+        //and the filter param queries
+        String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
+        if(filterParamQueryBaseTemplate.equals("default")){
+            setPropValue("injectedTemplateFull",getTemplateInstanceText("lightTrapFilterParamQueries" + firstWizardStep));
+        }else{
+            setPropValue("injectedTemplateFull",getTemplateInstanceText("lightTrap" + filterParamQueryBaseTemplate));
+        }
+        if(injectParams){
+            injectTemplate("lightTrapFilterParamQueries");
+        }
+
+    }
+
+    @Override
+    public String getCardQuestionString(){
+        String presenterId = getPropValue("presenterId");
+        //boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
+        boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
+        //boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
+        //boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
+        boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
+        //boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+        String cardQuestions = super.getCardQuestionString();
+        if(hasParticipantQuestion && hasParticipants){
+            for (Map.Entry<String, String[]> entry : lightTrapQuestionTemplateNamesToScopes().entrySet()) {
+                String questionName = entry.getKey();
+                if(questionName.startsWith("LightTrapsByMetadata")){
+                    cardQuestions = cardQuestions + ", \"lighttraps\": \"LighttrapQuestions." + presenterId + "LighttrapsByMetadata\"";
+                }else{                  
+                    cardQuestions = cardQuestions + ", \"lighttraps\": \"LighttrapQuestions." + questionName + "\"";
+                }
+            }
+        }
+        return cardQuestions;
+    }
 
     public static final String LIGHT_TRAP_RECORD_CLASS_PREFIX = "LightTrap";
 
@@ -107,6 +189,8 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
                                    {"lightTrapAttributesList", ""},
                                    {"lightTrapSourceIdsForHouseholdsLightTrapTable", ""},
                                    {"lightTrapSourceIdsToOrderHouseholdsLightTrapTable", ""},
+                                   {"lightTrapMultiFilterIds", ""},
+                                   {"lightTrapFilterExcludedIds", ""},
         };
 
         return combinePropertiesDeclarations(exprDeclaration, declaration);

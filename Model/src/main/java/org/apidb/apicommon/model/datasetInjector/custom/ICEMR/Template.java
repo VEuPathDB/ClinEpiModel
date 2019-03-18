@@ -8,6 +8,9 @@ public class Template extends EpidemiologyStudy {
 
 
     @Override
+    protected void setStudySpecificProperties(){}  
+
+    @Override
     protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {
     Map<String,String[]> map = new HashMap<String,String[]>();
     //    map.put("HouseholdsByCharacteristics_template", new String[] {"menu", "webservice"});

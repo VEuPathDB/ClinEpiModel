@@ -12,6 +12,7 @@ name=CollectionsByCharacteristics_prism
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=lightTrapQuestionName
 >templateTextStart<
     	<question name="${lightTrapQuestionName}" newBuild="22"
@@ -19,8 +20,9 @@ prop=lightTrapQuestionName
                 includeProjects="${includeProjects}"
     		displayName="Select a Set of Light Trap Collections"
     		shortDisplayName="Light Traps"
-    		queryRef="LightTrapId.DS_0ad509829eLightTrapsByCharacteristics_prism"
+    		queryRef="LightTrapId.LightTrapsByMetadata_${tblPrefix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
+
           <attributesList summary="EUPATH_0000094,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
  
           <dynamicAttributes>
@@ -52,6 +54,7 @@ name=CollectionsByCharacteristics_prism2
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=lightTrapQuestionName
 >templateTextStart<
     	<question name="${lightTrapQuestionName}" newBuild="22"
@@ -59,7 +62,7 @@ prop=lightTrapQuestionName
                 includeProjects="${includeProjects}"
     		displayName="Select a Set of Light Trap Collections (PRISM2)"
     		shortDisplayName="Light Traps"
-    		queryRef="LightTrapId.DS_0ad509829eLightTrapsByCharacteristics_prism2"
+    		queryRef="LightTrapId.LightTrapsByMetadata_${tblPrefix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
 <!--          <attributesList summary="" /> -->

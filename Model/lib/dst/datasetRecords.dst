@@ -1,0 +1,8 @@
+[templateStart]
+name=injectDatasetQuestions
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/datasetRecords.xml
+prop=cardQuestionsSql
+>templateTextStart<
+${cardQuestionsSql}
+>templateTextEnd<
+

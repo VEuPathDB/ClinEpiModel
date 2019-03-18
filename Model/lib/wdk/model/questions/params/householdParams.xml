@@ -36,119 +36,20 @@
 
        <dateRangeParam name="date_range"
                        prompt="Choose start and end dates "
-                       minDate="2011-08-01"
+                       minDate="2011-07-01"
                        maxDate="2020-09-30">
          <help>"select the earliest and latest dates to include for computing mosquito counts."</help>
 <!--         <suggest default="{'min': '2011-08-05', 'max': '2016-06-30'}" />  -->
 
        </dateRangeParam>    
 
-    <filterParam name="households_prism" 
-                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
-                    metadataQueryRef="HouseholdVQ.HouseholdMetaData_prism"
-                    backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_prism"
-                    prompt="Households"
-                    countPredictsAnswerCount="true"
-                    trimMetadataTerms="true"
-                    dependedParamRef="participantParams.tbl_prefix,householdParams.geographic_region_prism,householdParams.date_range">
-      <help>
-        Select participants based on their characteristics. 
-      </help>
-    </filterParam>
-
-     <filterParam name="geographic_region_prism" 
-                    ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
-                    metadataQueryRef="HouseholdVQ.RegionMetaData_prism"
-                    backgroundQueryRef="HouseholdVQ.RegionMetaData_prism"
-                    prompt="Geographic Region"
-                    filterDataTypeDisplayName="Households"
-                    countPredictsAnswerCount="true"
-                    dependedParamRef="participantParams.tbl_prefix"
-                    trimMetadataTerms="true">
-      <help>
-        Select dwellngs based on geographic region. 
-      </help>
-    </filterParam>          
-
-    <filterParam name="participants_prism" 
-                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_prism"
-                      metadataQueryRef="HouseholdVQ.ParticipantMetaData_prism"
-                      backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_prism"
-                      prompt="Participants"
-                      countPredictsAnswerCount="true"
-                      trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.households_prism">
-         <help>
-              Select participants based on their characteristics. 
-         </help>
-       </filterParam>
-
-    <!--************************************************************-->
-    <!--   india ICEMR section ... should be injected  -->
-    <!--************************************************************-->
-
-       <filterParam name="geographic_region_india" 
-                       metadataQueryRef="HouseholdVQ.RegionMetaData_india"
-                       backgroundQueryRef="HouseholdVQ.RegionMetaData_india"
-                       ontologyQueryRef="ParticipantVQ.RegionOntology_india"
-                       countPredictsAnswerCount="true"
-                       filterDataTypeDisplayName="Households"
-                       prompt="Geographic region"
-                       dependedParamRef="participantParams.tbl_prefix"
-                       trimMetadataTerms="true">
-         <help>
-           Select participants based on their geographic region. 
-         </help>
-    </filterParam>
-
-    <filterParam name="households_india" 
-                       metadataQueryRef="HouseholdVQ.HouseholdMetaData_india"
-                       backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_india"
-                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_india"
-                       countPredictsAnswerCount="true"
-                       filterDataTypeDisplayName="Households"
-                       prompt="Households"
-                       dependedParamRef="participantParams.tbl_prefix,householdParams.geographic_region_india,householdParams.householdOrObservation"
-                       trimMetadataTerms="true">
-         <help>
-           Select participants based on their geographic region. 
-         </help>
-    </filterParam>
-
-       <filterParam name="participants_india" 
-                      metadataQueryRef="HouseholdVQ.ParticipantMetaData_india"
-                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_india"
-                      backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_india"
-                      countPredictsAnswerCount="true"
-                      filterDataTypeDisplayName="Participants"
-                      prompt="Personal characteristics"
-                      trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.households_india,householdParams.householdOrObservation">
-         <help>
-              Select participants based on their characteristics. 
-         </help>
-       </filterParam>
-
-       <filterParam name="observations_india" 
-                      metadataQueryRef="HouseholdVQ.ObservationMetaData_india"
-                      ontologyQueryRef="ParticipantVQ.VisitOntology_india"
-                      backgroundQueryRef="HouseholdVQ.ObservationMetaDataBkgd_india"
-                      countPredictsAnswerCount="true"
-                      filterDataTypeDisplayName="Observations"
-                      prompt="Personal characteristics"
-                      trimMetadataTerms="true"
-                      dependedParamRef="participantParams.tbl_prefix,householdParams.participants_india,householdParams.householdOrObservation">
-         <help>
-              Select observations based on their characteristics. 
-         </help>
-       </filterParam>
-
 
 
     <!-- TEMPLATE_ANCHOR householdSourceIdParam -->
 
-
     <!-- TEMPLATE_ANCHOR householdResultParam -->
+
+    <!-- TEMPLATE_ANCHOR householdFilterParams -->
 
  <enumParam name="district"
                prompt="Study site "
@@ -180,255 +81,21 @@
 
  <querySet name="HouseholdVQ" queryType="vocab" isCacheable="true">
 
-   <sqlQuery name="RegionMetaData_prism" isCacheable="false" >
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$Households h
- where m.property_source_id = 'EUPATH_0000054'
- and m.pan_id = h.pan_id
-        ]]>
-      </sql>
-    </sqlQuery>
+   <!-- there needs to ba at least one query in here I think? -->
+     <sqlQuery name="hhHolder">
+          <column name="display" />
+          <column name="internal" />
+          <column name="term" />
+          <sql>
+            <![CDATA[
+            ]]>
+            SELECT 'Any' as display, 'any' as term, 'any' as internal from dual
+            </sql>
+        </sqlQuery>
+
+   <!-- TEMPLATE_ANCHOR householdFilterParamQueries -->
 
 
-    <sqlQuery name="HouseholdMetaData_prism" isCacheable="true">
-      <paramRef ref="householdParams.date_range" />  
-      <paramRef ref="householdParams.geographic_region_prism" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-with mos as (
- select da.pan_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, 
-   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
-  where da.pan_id in ($$geographic_region_prism$$)
-  and da.pan_id = io.input_pan_id
-  and la.pan_id = io.output_pan_id
-  and EUPATH_0020003 >= $$date_range.min$$
-  and EUPATH_0020003 <= $$date_range.max$$ 
-  group by da.pan_id
-  )
-select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m, mos
- where m.pan_id in ($$geographic_region_prism$$)
- and m.pan_id = mos.internal
- union 
- select * from mos
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    <sqlQuery name="HouseholdMetaDataBkgd_prism" isCacheable="true">
-      <paramRef ref="householdParams.date_range" />  
-      <paramRef ref="householdParams.geographic_region_prism" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.$$tbl_prefix$$MetaData m
- where m.category = 'Household'
- union
- select da.pan_id as internal,  'average_anopheles' as ontology_term_name, null as string_value, 
-   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from ApidbTuning.$$tbl_prefix$$Households da, ApidbTuning.$$tbl_prefix$$PANIO io, ApidbTuning.$$tbl_prefix$$LightTraps la
-  where da.pan_id = io.input_pan_id
-  and la.pan_id = io.output_pan_id
-  group by da.pan_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-   <sqlQuery name="ParticipantMetaData_prism" isCacheable="true">
-     <paramRef ref="householdParams.households_prism" />  
-     <paramRef ref="participantParams.tbl_prefix" />  
-     <column name="ontology_term_name"/>
-     <column name="internal"/>
-     <column name="record_id"/>
-     <column name="number_value"/>
-     <column name="date_value"/>
-     <column name="string_value"/>
-     <sql>
-         <![CDATA[
-select distinct m.pan_id as internal, io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
- where io.input_pan_id in ($$households_prism$$)
- and io.output_pan_type_source_id = 'EUPATH_0000096'
- and m.pan_id = io.output_pan_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    <sqlQuery name="ParticipantMetaDataBkgd_prism" isCacheable="true">
-     <paramRef ref="participantParams.tbl_prefix" />  
-     <column name="ontology_term_name"/>
-     <column name="internal"/>
-     <column name="record_id"/>
-     <column name="number_value"/>
-     <column name="date_value"/>
-     <column name="string_value"/>
-     <sql>
-         <![CDATA[
-select distinct m.pan_id as internal, io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
-from ApidbTuning.$$tbl_prefix$$MetaData m, ApidbTuning.$$tbl_prefix$$PANIO io
- where io.output_pan_type_source_id = 'EUPATH_0000096'
- and io.input_pan_type_source_id = 'PCO_0000024'
- and m.pan_id = io.output_pan_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    <!--************************************************************-->
-    <!--   india ICEMR section ... should be injected  -->
-    <!--************************************************************-->
-
-    <sqlQuery name="RegionMetaData_india" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select  household_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
-where ontology_term_name in (select ontology_term_source_id from ApidbTuning.$$tbl_prefix$$Ontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id =  'GAZ_00000448')
-        ]]>
-      </sql>
-    </sqlQuery>
-
-   <sqlQuery name="HouseholdMetaData_india" isCacheable="false">
-     <paramRef ref="participantParams.tbl_prefix" />  
-     <paramRef ref="householdParams.geographic_region_india" />  
-     <paramRef ref="householdParams.householdOrObservation" />  
-     <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  distinct $$householdOrObservation$$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
-where household_id in ($$geographic_region_india$$)
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    <sqlQuery name="HouseholdMetaDataBkgd_india" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="householdParams.householdOrObservation" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  distinct $$householdOrObservation$$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.$$tbl_prefix$$HouseholdMD
-          ]]>
-    </sql>
-    </sqlQuery>
-
-   <sqlQuery name="ParticipantMetaData_india" isCacheable="false">
-     <paramRef ref="participantParams.tbl_prefix" />  
-     <paramRef ref="householdParams.households_india" />  
-     <paramRef ref="householdParams.householdOrObservation" />  
-     <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select distinct h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where h.$$householdOrObservation$$ in ($$households_india$$)
-and h.household_id = p.household_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    <sqlQuery name="ParticipantMetaDataBkgd_india" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="householdParams.householdOrObservation" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select distinct h.$$householdOrObservation$$ as record_id, p.participant_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.$$tbl_prefix$$ParticipantMD p, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where h.household_id = p.household_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-       <sqlQuery name="ObservationMetaData_india" isCacheable="false">
-         <paramRef ref="householdParams.participants_india" />  
-         <paramRef ref="participantParams.tbl_prefix" />  
-         <paramRef ref="householdParams.householdOrObservation" />  
-         <column name="ontology_term_name"/>
-         <column name="internal"/>
-         <column name="record_id"/>
-         <column name="filter_item_id"/>
-         <column name="number_value"/>
-         <column name="date_value"/>
-         <column name="string_value"/>
-         <sql>
-           <![CDATA[
-select  distinct h.$$householdOrObservation$$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD o, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where o.participant_id in ($$participants_india$$)
-and h.household_id = o.household_id
-          ]]>
-    </sql>
-    </sqlQuery>    
-
-    <sqlQuery name="ObservationMetaDataBkgd_india" isCacheable="false">
-      <paramRef ref="participantParams.tbl_prefix" />  
-      <paramRef ref="householdParams.householdOrObservation" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select  distinct h.$$householdOrObservation$$ as record_id, o.participant_id as internal, o.observation_id as filter_item_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.$$tbl_prefix$$ObservationMD o, ApidbTuning.$$tbl_prefix$$HouseholdMD h
-where h.household_id = o.household_id
-          ]]>
-      </sql>
-    </sqlQuery>    
 
  </querySet>
 
