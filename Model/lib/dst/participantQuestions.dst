@@ -166,25 +166,11 @@ Use the filters above to select a set of Participants or to explore the data.  S
           <value>hideAttrDescr</value>
         </propertyList>
 
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_${tblPrefix}"
-            }
-          </value>
-        </propertyList>
- 
       </question>
 >templateTextEnd<
 
 [templateStart]
-name=ParticipantsByMetadataCrossSectional
+name=ParticipantsByMetadataCaseControl
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
@@ -223,195 +209,8 @@ Use the filters above to select a set of Participants or to explore the data.  S
           <value>hideAttrDescr</value>
         </propertyList>
 
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_${tblPrefix}"
-            }
-          </value>
-        </propertyList>
- 
       </question>
 >templateTextEnd<
-
-[templateStart]
-name=ParticipantsByRelativeVisits_template
-anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
-prop=includeProjects
-prop=presenterId
-prop=participantAttributesList
-prop=participantQuestionName
->templateTextStart<
-        <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
-              searchCategory="Participant"
-              displayName="Select a Set of Participants (TEMPLATE)"
-              shortDisplayName="Partic TEMPLATE"
-              queryRef="ParticipantId.ParticipantsLongitudinal_template" 
-              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
-
-        <attributesList 
-            summary="${participantAttributesList}"        
-        /> 
-
-	<dynamicAttributes>
-	</dynamicAttributes>
-          
-
-        <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
-            ]]>
-        </summary>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
-
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_template"
-            }
-          </value>
-        </propertyList>
- 
-      </question>
->templateTextEnd<
-
-[templateStart]
-name=ParticipantsByRelativeVisits_safrica
-anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
-prop=includeProjects
-prop=presenterId
-prop=participantQuestionName
->templateTextStart<
-        <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
-              searchCategory="Participant"
-              displayName="Select a Set of Participants (S. Africa)"
-              shortDisplayName="Partic S.Africa"
-              queryRef="ParticipantId.ParticipantsLongitudinal_safrica" 
-              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
-
-<!-- uncomment when have list of default columns to be returned by search
-        <attributesList 
-            summary="EUPATH_0000407, PATO_0000047, EUPATH_0000120, malaria_cat_compact"        
-        /> 
--->
-
-	<dynamicAttributes>
-	</dynamicAttributes>
-          
-
-        <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
-            ]]>
-        </summary>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
-
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_safrica"
-            }
-          </value>
-        </propertyList>
- 
-      </question>
->templateTextEnd<
-
-[templateStart]
-name=ParticipantsByCharacteristics_scorecx
-anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
-prop=includeProjects
-prop=presenterId
-prop=participantQuestionName
->templateTextStart<
-        <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
-              searchCategory="Participant"
-              displayName="Select a Set of Participants (SCORE)"
-              shortDisplayName="Partic SCORE"
-              queryRef="ParticipantId.Participants_scorecx" 
-              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
-
-<!-- uncomment when have list of default columns to be returned by search
-        <attributesList 
-            summary="EUPATH_0000407, PATO_0000047, EUPATH_0000120, malaria_cat_compact"        
-        /> 
--->
-
-	<dynamicAttributes>
-	</dynamicAttributes>
-          
-
-        <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
-            ]]>
-        </summary>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
-
-<!--
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_template"
-            }
-          </value>
-        </propertyList>
--->
- 
-      </question>
->templateTextEnd<
-
 
 [templateStart]
 name=ParticipantsByRelativeVisits_prism
@@ -425,7 +224,7 @@ prop=participantQuestionName
               searchCategory="Participant"
               displayName="Select a Set of Participants (PRISM)"
               shortDisplayName="Particip PRISM"
-              queryRef="ParticipantId.ParticipantsByCharWizRelVis_${tblPrefix}" 
+              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               includeProjects="${includeProjects}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
         <attributesList 
@@ -517,7 +316,7 @@ prop=participantQuestionName
               searchCategory="Participant"
               displayName="Select a Set of Participants (PRISM2)"
               shortDisplayName="Particip PRISM2"
-              queryRef="ParticipantId.ParticipantsByCharWizRelVis_${tblPrefix}" 
+              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}" 
               includeProjects="${includeProjects}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
         <attributesList 
@@ -603,6 +402,7 @@ name=ParticipantsByRelativeVisits_maled
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=participantQuestionName
 prop=participantAttributesList
 >templateTextStart<
@@ -610,7 +410,7 @@ prop=participantAttributesList
               searchCategory="Participant"
               displayName="Select a Set of Participants (MAL-ED)"
               shortDisplayName="Particip MAL-ED"
-              queryRef="ParticipantId.ParticipantsByCharWizRelVis_maled" 
+              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
 
@@ -672,13 +472,14 @@ name=ParticipantsByRelativeVisits_india
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=participantQuestionName
 >templateTextStart<
         <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
               displayName="Select a Set of Participants (India ICEMR)"
               shortDisplayName="Partic India"
-              queryRef="ParticipantId.ParticipantsByCharWizRelVis_india" 
+              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         <attributesList 
@@ -715,228 +516,6 @@ Use the filters above to select a set of Participants or to explore the data.  S
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
               "relativeVisitsParamName": "relative_visits_india"
-            }
-          </value>
-        </propertyList>
- 
-      </question>
->templateTextEnd<
-
-[templateStart]
-name=ParticipantsCrossSectional_indiaFS
-anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
-prop=includeProjects
-prop=presenterId
-prop=participantQuestionName
->templateTextStart<
-        <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
-              searchCategory="Participant"
-              displayName="Select a Set of Participants (India Fever Study ICEMR)"
-              shortDisplayName="Partic IndiaFS"
-              queryRef="ParticipantId.Participant_indiaFS" 
-              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
-
-        <attributesList 
-            summary="PATO_0000047"        
-        /> 
-
-	<dynamicAttributes>
-	</dynamicAttributes>
-          
-
-        <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
-            ]]>
-        </summary>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
-
-<!--
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_india"
-            }
-          </value>
-        </propertyList>
--->
- 
-      </question>
->templateTextEnd<
-
-[templateStart]
-name=ParticipantsXSectional_india
-anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
-prop=includeProjects
-prop=presenterId
-prop=participantQuestionName
->templateTextStart<
-        <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
-              searchCategory="Participant"
-              displayName="Select a Set of Participants (India ICEMR Cross Sectional)"
-              shortDisplayName="Partic India CS"
-              queryRef="ParticipantId.ParticipantsXSectional_india" 
-              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
-
-        <attributesList 
-            summary="EUPATH_0000407, PATO_0000047, EUPATH_0000120, malaria_cat_compact"        
-        /> 
-
-	<dynamicAttributes>
-	</dynamicAttributes>
-          
-
-        <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
-            ]]>
-        </summary>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
-
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_india"
-            }
-          </value>
-        </propertyList>
- 
-      </question>
->templateTextEnd<
-
-[templateStart]
-name=ParticipantsXSectional_sasia
-anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
-prop=includeProjects
-prop=presenterId
-prop=participantQuestionName
->templateTextStart<
-        <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
-              searchCategory="Participant"
-              displayName="Select a Set of Participants (South Asia ICEMR Surveillance)"
-              shortDisplayName="Partic S.Asia"
-              queryRef="ParticipantId.ParticipantsXSectional_sasia" 
-              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
-
-        <attributesList 
-            summary="EUPATH_0021095,EUPATH_0000120,PATO_0000047"
-        /> 
-
-	<dynamicAttributes>
-	</dynamicAttributes>
-          
-
-        <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
-            ]]>
-        </summary>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
-
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_sasia"
-            }
-          </value>
-        </propertyList>
- 
-      </question>
->templateTextEnd<
-
-[templateStart]
-name=ParticipantsByRelativeVisits_amazperu
-anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
-prop=includeProjects
-prop=presenterId
-prop=participantQuestionName
->templateTextStart<
-        <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
-              searchCategory="Participant"
-              displayName="Select a Set of Participants (Amazonia Peru Longitudinal Cohort)"
-              shortDisplayName="Partic Amaz Peru"
-              queryRef="ParticipantId.ParticipantsByRelativeVisits_amazperu" 
-              recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
-
-        <attributesList 
-            summary="EUPATH_0021094"
-        /> 
-
-	<dynamicAttributes>
-	</dynamicAttributes>
-          
-
-        <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
-            ]]>
-        </summary>
-
-        <propertyList name="organism">
-           <value>H. sapien</value>
-        </propertyList>
-        <propertyList name="websiteProperties">
-          <value>useWizard</value>
-          <value>hideOperation</value>
-          <value>hideTitle</value>
-          <value>hideAttrDescr</value>
-        </propertyList>
-
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_amazperu"
             }
           </value>
         </propertyList>
@@ -949,6 +528,7 @@ name=ParticipantsByCaseControlVisits_gems
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=participantQuestionName
 prop=participantAttributesList
 >templateTextStart<
@@ -956,7 +536,7 @@ prop=participantAttributesList
               searchCategory="Participant"
               displayName="Select a Set of Participants (GEMS)"
               shortDisplayName="Particip GEMS"
-              queryRef="ParticipantId.ParticipantsByCaseControl_gems" 
+              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
 
@@ -988,6 +568,7 @@ name=ParticipantsByCaseControlVisits_gems1a
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=tblPrefix
 prop=participantQuestionName
 prop=participantAttributesList
 >templateTextStart<
@@ -995,7 +576,7 @@ prop=participantAttributesList
               searchCategory="Participant"
               displayName="Select a Set of Participants (GEMS1a)"
               shortDisplayName="Particip GEMS1a"
-              queryRef="ParticipantId.ParticipantsByCaseControl_gems1a" 
+              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
 
@@ -1019,22 +600,6 @@ Use the filters above to select a set of Participants or to explore the data.  S
           <value>hideAttrDescr</value>
         </propertyList>
 
-<!--
-        <propertyList name="relatedObservationsLayoutSettings">
-          <value>
-            {
-              "observationsGroupName": "part_event_characteristics",
-              "relatedObservationsGroupName": "relative_events",
-              "useRelativeObservationsParamName": "use_relative_visits",
-              "dateOperatorParamName": "dateOperator_fv",
-              "daysBetweenParamName": "days_between",
-              "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_gems"
-            }
-          </value>
-        </propertyList>
--->
- 
       </question>
 >templateTextEnd<
 

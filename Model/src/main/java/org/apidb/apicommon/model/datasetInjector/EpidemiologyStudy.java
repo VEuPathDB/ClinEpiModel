@@ -101,7 +101,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   @Override
   public void injectTemplates() {
 
-      setPropValue("injectParams","true");  //for studies that are using hard cooded param names ... bringing in old public ones
+      boolean injectStudy = getPropValueAsBoolean("injectStudy");
+      if(!injectStudy){
+          return;
+      }
+
+      setPropValue("injectParams","true");  //ONLY for studies that are using hard cooded param names ... for all but one study
       setStudySpecificProperties();  
 
       for (Map.Entry<String, String[]> entry : participantGraphAttributesToScopes().entrySet()) {
@@ -403,8 +408,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   }
 
     public void injectMetadataQueries() {
-      //String tblPrefix = "D" + getPropValue("datasetDigest");
-      //String presenterId = getPropValue("presenterId");
       String studyType = getPropValue("studyType");
       String firstWizardStep = getPropValue("firstWizardStep");
       Boolean keepRegionInHouseholdFilter = getPropValueAsBoolean("keepRegionInHouseholdFilter");
@@ -422,15 +425,22 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
-      //String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
-      //String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
-      //String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
       String householdMultiFilterIdsQuoted = addQuotes(getPropValue("householdMultiFilterIds"));
       String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
       String participantMultiFilterIdsQuoted = addQuotes(getPropValue("participantMultiFilterIds"));
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
       String observationMultiFilterIdsQuoted = addQuotes(getPropValue("observationMultiFilterIds"));
       String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
+
+      //set properties needed for householdObservations
+      boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
+      if(hasHouseholdObservations){
+          setPropValue("householdOrObservationIsVisible", "true");
+          setPropValue("householdFilterDataTypeDisplayName", "Household Observations");
+      }else{
+          setPropValue("householdOrObservationIsVisible", "false");
+          setPropValue("householdFilterDataTypeDisplayName", "Households");
+      }
 
       //Inject the filter param queries for participants if any questions generated
       if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
@@ -463,7 +473,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //determine if a special template is used
           String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
           if(filterParamQueryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + firstWizardStep));
+              if(studyType.equals("CaseControl")){
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + studyType + firstWizardStep));
+              }else{
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + firstWizardStep));
+              }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamQueryBaseTemplate));
           }
@@ -478,7 +492,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           boolean injectParams = getPropValueAsBoolean("injectParams");
           String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
           if(filterParamBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + firstWizardStep));
+              if(studyType.equals("CaseControl")){
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + studyType + firstWizardStep));
+              }else{
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + firstWizardStep));
+              }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamBaseTemplate));
           }
@@ -523,7 +541,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //and the filter param queries
           String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
           if(filterParamQueryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + firstWizardStep));
+              if(studyType.equals("CaseControl")){
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + studyType + firstWizardStep));
+              }else{
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + firstWizardStep));
+              }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamQueryBaseTemplate));
           }
@@ -559,7 +581,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //and the filter param queries
           String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
           if(filterParamQueryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + firstWizardStep));
+              if(studyType.equals("CaseControl")){
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + studyType + firstWizardStep));
+              }else{
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + firstWizardStep));
+              }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamQueryBaseTemplate));
           }
@@ -768,6 +794,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   public String[][] getPropertiesDeclaration() {
 
       String [][] declaration = {
+                                 {"injectStudy", ""},  
                                  {"isPublic", ""},
                                  {"hasHouseholdRecord", ""},
                                  {"hasObservationRecord", ""},
@@ -812,8 +839,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"hasParticipantQuestion", ""},
                                  {"hasHouseholdQuestion", ""},
                                  {"hasObservationQuestion", ""},
-                                 {"participantGraphAttributesTemplate", ""},
                                  {"firstWizardStep", ""},
+                                 {"hasStudyArmParameter", ""},
+                                 {"hasHouseholdObservations", ""},
                                  {"keepRegionInHouseholdFilter", ""},
                                  {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
                                  {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties
