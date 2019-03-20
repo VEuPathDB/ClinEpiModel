@@ -3,7 +3,7 @@ name=lightTrapRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/lightTrapRecord.xml
 prop=datasetName
 prop=lightTrapRecordOverview
-prop=lightTrapAttributesList
+prop=lightTrapRecordAttributesListFull
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
@@ -19,6 +19,8 @@ prop=includeProjects
                 <columnRef>source_id</columnRef>
                 <columnRef>project_id</columnRef>
               </primaryKey>
+
+            ${lightTrapRecordAttributesListFull}
 
               <idAttribute name="primary_key" displayName="Collection Barcode">
                 <text>
@@ -85,7 +87,7 @@ prop=includeProjects
 name=lightTrapRecordAttributeQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/lightTrapRecord.xml
 prop=datasetName
-prop=householdAttributesList
+prop=householdRecordAttributesListFull
 prop=householdSourceIdsIncludedInLightTrapAttributes
 prop=householdSourceIdsIncludedInLightTrapAttributesQuote
 prop=householdSourceIdsForHouseholdMemberTable
@@ -179,7 +181,7 @@ select count(*) from apidbtuning.${tblPrefix}LightTraps
 name=lightTrapRecordTableQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/lightTrapRecord.xml
 prop=datasetName
-prop=householdAttributesList
+prop=householdRecordAttributesListFull
 prop=householdSourceIdsIncludedInLightTrapAttributes
 prop=householdSourceIdsIncludedInLightTrapAttributesQuote
 prop=tblPrefix
