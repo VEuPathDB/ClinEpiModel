@@ -24,6 +24,18 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
 
         String householdSourceIdsIncludedInLightTrapAttributes = getPropValue("householdSourceIdsIncludedInLightTrapAttributes");
         setPropValue("householdSourceIdsIncludedInLightTrapAttributesQuote", addQuotes(householdSourceIdsIncludedInLightTrapAttributes));
+        String lightTrapAttList = getPropValue("lightTrapAttributesList");
+        if(lightTrapAttList != null && !lightTrapAttList.equals("")) {
+            setPropValue("lightTrapAttributesListFull","<attributesList summary=\"" + lightTrapAttList + "\" />");
+        }else{
+            setPropValue("lightTrapAttributesListFull","");
+        }
+        String lightTrapRecordAttList = getPropValue("lightTrapRecordAttributesList");
+        if(lightTrapRecordAttList != null && !lightTrapRecordAttList.equals("")) {
+            setPropValue("lightTrapRecordAttributesListFull","<attributesList summary=\"" + lightTrapRecordAttList + "\" />");
+        }else{
+            setPropValue("lightTrapRecordAttributesListFull","");
+        }
 
         // Record
         injectTemplate("lightTrapRecord");
@@ -187,6 +199,7 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         String [][] declaration = {{"householdSourceIdsIncludedInLightTrapAttributes", ""},
                                    {"lightTrapRecordOverview", ""},
                                    {"lightTrapAttributesList", ""},
+                                   {"lightTrapRecordAttributesList", ""},
                                    {"lightTrapSourceIdsForHouseholdsLightTrapTable", ""},
                                    {"lightTrapSourceIdsToOrderHouseholdsLightTrapTable", ""},
                                    {"lightTrapMultiFilterIds", ""},

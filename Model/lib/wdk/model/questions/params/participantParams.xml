@@ -225,7 +225,6 @@
           <column name="term" />
           <sql>
             <![CDATA[
-            ]]>
             SELECT * from (
             SELECT 'Any' as display, 'any' as term, 'any' as internal from dual
             UNION
@@ -234,6 +233,7 @@
             from apidbtuning.Df6c59e88c1ParticipantMD
             where ontology_term_name = 'OBI_0500000'  )
             ORDER by term
+            ]]>
             </sql>
         </sqlQuery>
 

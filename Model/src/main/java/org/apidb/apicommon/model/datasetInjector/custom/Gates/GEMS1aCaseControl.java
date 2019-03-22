@@ -9,7 +9,6 @@ public class GEMS1aCaseControl extends BasicEpiStudy {
     @Override
     protected void setStudySpecificProperties(){
         setPropValue("injectParams","false");
-        setPropValue("studyArmIsVisible","true");
     }  
 
     @Override

@@ -101,7 +101,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   @Override
   public void injectTemplates() {
 
-      setPropValue("injectParams","true");  //for studies that are using hard cooded param names ... bringing in old public ones
+      boolean injectStudy = getPropValueAsBoolean("injectStudy");
+      if(!injectStudy){
+          return;
+      }
+
+      setPropValue("injectParams","true");  //ONLY for studies that are using hard cooded param names ... for all but one study
       setStudySpecificProperties();  
 
       for (Map.Entry<String, String[]> entry : participantGraphAttributesToScopes().entrySet()) {
@@ -172,6 +177,18 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("extraHouseholdTables", this.extraHouseholdTables());
           setPropValue("extraHouseholdTableQueries", this.extraHouseholdTableQueries());
 
+          String householdAttList = getPropValue("householdAttributesList");
+          if(householdAttList != null && !householdAttList.equals("")) {
+              setPropValue("householdAttributesListFull","<attributesList summary=\"" + householdAttList + "\" />");
+          }else{
+              setPropValue("householdAttributesListFull","");
+          }
+          String householdRecordAttList = getPropValue("householdRecordAttributesList");
+          if(householdRecordAttList != null && !householdRecordAttList.equals("")) {
+              setPropValue("householdRecordAttributesListFull","<attributesList summary=\"" + householdRecordAttList + "\" />");
+          }else{
+              setPropValue("householdRecordAttributesListFull","");
+          }
 
 
           injectTemplate("householdRecord");
@@ -237,6 +254,19 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
  
 
 	  }
+          //before injecting any templates need to determine and set the attributes list ... can't be null
+          String participantAttList = getPropValue("participantAttributesList");
+          if(participantAttList != null && !participantAttList.equals("")) {
+              setPropValue("participantAttributesListFull","<attributesList summary=\"" + participantAttList + "\" />");
+          }else{
+              setPropValue("participantAttributesListFull","");
+          }
+          String participantRecordAttList = getPropValue("participantRecordAttributesList");
+          if(participantRecordAttList != null && !participantRecordAttList.equals("")) {
+              setPropValue("participantRecordAttributesListFull","<attributesList summary=\"" + participantRecordAttList + "\" />");
+          }else{
+              setPropValue("participantRecordAttributesListFull","");
+          }
 
           injectTemplate("participantRecord");
           injectTemplate("participantRecordAttributeQueries");
@@ -317,6 +347,18 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
  
 	  }
 
+          String observationAttList = getPropValue("observationAttributesList");
+          if(observationAttList != null && !observationAttList.equals("")) {
+              setPropValue("observationAttributesListFull","<attributesList summary=\"" + observationAttList + "\" />");
+          }else{
+              setPropValue("observationAttributesListFull","");
+          }
+          String observationRecordAttList = getPropValue("observationRecordAttributesList");
+          if(observationRecordAttList != null && !observationRecordAttList.equals("")) {
+              setPropValue("observationRecordAttributesListFull","<attributesList summary=\"" + observationRecordAttList + "\" />");
+          }else{
+              setPropValue("observationRecordAttributesListFull","");
+          }
 
           injectTemplate("observationRecord");
           injectTemplate("observationRecordAttributeQueries");
@@ -426,6 +468,16 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
       String observationMultiFilterIdsQuoted = addQuotes(getPropValue("observationMultiFilterIds"));
       String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
+
+      //set properties needed for householdObservations
+      boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
+      if(hasHouseholdObservations){
+          setPropValue("householdOrObservationIsVisible", "true");
+          setPropValue("householdFilterDataTypeDisplayName", "Household Observations");
+      }else{
+          setPropValue("householdOrObservationIsVisible", "false");
+          setPropValue("householdFilterDataTypeDisplayName", "Households");
+      }
 
       //Inject the filter param queries for participants if any questions generated
       if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
@@ -779,21 +831,25 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
   public String[][] getPropertiesDeclaration() {
 
       String [][] declaration = {
+                                 {"injectStudy", ""},  
                                  {"isPublic", ""},
                                  {"hasHouseholdRecord", ""},
                                  {"hasObservationRecord", ""},
                                  {"hasParticipantRecord", ""},
 
                                  {"householdAttributesList", ""},
+                                 {"householdRecordAttributesList", ""},
                                  {"householdSourceIdsForHouseholdMemberTable", ""},
                                  {"householdRecordOverview", ""},
 
                                  {"observationAttributesList", ""},
+                                 {"observationRecordAttributesList", ""},
                                  {"observationRecordOverview", ""},
                                  {"householdSourceIdsIncludedInObservationAttributes", ""},
                                  {"participantSourceIdsIncludedInObservationAttributes", ""},
 
                                  {"participantAttributesList", ""},
+                                 {"participantRecordAttributesList", ""},
                                  {"participantRecordOverview", ""},
                                  {"householdSourceIdsIncludedInParticipantAttributes", ""},
                                  {"participantSourceIdsExcludedFromParticipantAttributes", ""},
@@ -824,6 +880,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"hasHouseholdQuestion", ""},
                                  {"hasObservationQuestion", ""},
                                  {"firstWizardStep", ""},
+                                 {"hasStudyArmParameter", ""},
+                                 {"hasHouseholdObservations", ""},
                                  {"keepRegionInHouseholdFilter", ""},
                                  {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
                                  {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties

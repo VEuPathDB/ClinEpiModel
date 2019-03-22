@@ -8,7 +8,6 @@ public class BasicEpiStudy extends EpidemiologyStudy {
 
     @Override
     protected void setStudySpecificProperties(){
-        setPropValue("studyArmIsVisible","false");  //sets the default ... need to create injector and change if want true
     }  
 
     @Override

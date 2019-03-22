@@ -10,6 +10,7 @@ ${injectedTemplateFull}
 name=participantFilterParamsRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=householdFilterDataTypeDisplayName
 >templateTextStart<
        <filterParam name="geographic_region_${tblPrefix}" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_${tblPrefix}"
@@ -30,7 +31,7 @@ prop=tblPrefix
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${tblPrefix}"
                     countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Household Observations"
+                    filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef="participantParams.geographic_region_${tblPrefix}"
                     trimMetadataTerms="true">
@@ -320,13 +321,14 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamsHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=householdFilterDataTypeDisplayName
 >templateTextStart<
        <filterParam name="households_${tblPrefix}" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
                     countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Household Observations"
+                    filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef=""
                     trimMetadataTerms="true">
@@ -1000,7 +1002,18 @@ where observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 name=participantFilterParamsCaseControlRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=householdFilterDataTypeDisplayName
 >templateTextStart<
+        <flatVocabParam name="study_arm_${tblPrefix}"
+               prompt="Study Arm"
+               multiPick="false"
+               quote="true"
+               visible="true"
+               dependedParamRef=""
+               queryRef="ParticipantVQ.StudyArm_${tblPrefix}">
+      <help>You may choose to limit your search to a specific study arm.</help>
+    </flatVocabParam>
+
        <filterParam name="geographic_region_${tblPrefix}" 
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_${tblPrefix}" 
                        metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_${tblPrefix}"
@@ -1009,7 +1022,7 @@ prop=tblPrefix
                        prompt="Study Site"
                        trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.case_control,participantParams.study_arm">
+                       dependedParamRef="participantParams.case_control,participantParams.study_arm_${tblPrefix}">
          <help>
            Select participants based on their study site.
          </help>
@@ -1019,7 +1032,7 @@ prop=tblPrefix
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
                        metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${tblPrefix}"
-                       filterDataTypeDisplayName="Household Observations"
+                       filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                        prompt="Household"
                        trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
@@ -1085,6 +1098,23 @@ prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
+        <sqlQuery name="StudyArm_${tblPrefix}">
+          <column name="display" />
+          <column name="internal" />
+          <column name="term" />
+          <sql>
+         <![CDATA[
+SELECT * from (
+SELECT 'Any Study Arm' as display, 'AnY' as term, 'AnY' as internal, 1 as ordernum from dual
+UNION
+select distinct initcap(string_value) as display, string_value as term, string_value as internal, 2 as ordernum
+from apidbtuning.${tblPrefix}ParticipantMD
+where ontology_term_name = 'EUPATH_0015457')
+order by ordernum,display
+            ]]>
+            </sql>
+        </sqlQuery>
+
     <sqlQuery name="GeographicRegionOntology_${tblPrefix}">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
@@ -1109,7 +1139,7 @@ from ApidbTuning.${tblPrefix}Ontology o
 
     <sqlQuery name="GeographicRegionMetaData_${tblPrefix}" isCacheable="false">
       <paramRef ref="participantParams.case_control" />  
-      <paramRef ref="participantParams.study_arm" />  
+      <paramRef ref="participantParams.study_arm_${tblPrefix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -1120,16 +1150,18 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 select m.household_id as internal, hp.participant_id as record_id,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
-where m.ontology_term_name = 'OBI_0001627'
+where m.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and m.household_id = hp.household_id 
 and hp.participant_id in (select pan_id
        from ApidbTuning.${tblPrefix}Participants
        where lower(EUPATH_0010375) in (\$\$case_control\$\$))
-and ('Both' = \$\$study_arm\$\$
+and ('AnY' = \$\$study_arm_${tblPrefix}\$\$
        or hp.participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
-       and lower(string_value) in (\$\$study_arm\$\$)))
+       and string_value = \$\$study_arm_${tblPrefix}\$\$))
           ]]>
     </sql>    
     </sqlQuery>

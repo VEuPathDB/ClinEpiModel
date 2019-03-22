@@ -3,7 +3,7 @@ name=participantRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=datasetName
 prop=participantRecordOverview
-prop=participantAttributesList
+prop=participantRecordAttributesListFull
 prop=participantGraphAttributes
 prop=participantGraphAttributeNames
 prop=householdSourceIdsIncludedInParticipantAttributes
@@ -42,13 +42,7 @@ prop=participantRecordMicrosTable
                 </text>                
             </idAttribute>
 
-            <!-- TODO:  Default list of attributes for step results. This will be used by combined steps, eg.
-            <attributesList summary="EUPATH_0000452,demo_plot_allThree_compact,EUPATH_0000741" />
-             -->        
-
-<!-- todo
-            <attributesList summary="${participantAttributesList}" />
--->
+           ${participantRecordAttributesListFull}        
            
            ${participantGraphAttributes}
 
@@ -284,7 +278,7 @@ prop=presenterId
 name=participantRecordAttributeQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=datasetName
-prop=participantAttributesList
+prop=participantRecordAttributesListFull
 prop=participantGraphAttributes
 prop=participantGraphAttributeNames
 prop=householdSourceIdsIncludedInParticipantAttributes
@@ -462,7 +456,7 @@ UNION
 name=participantRecordTableQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=datasetName
-prop=participantAttributesList
+prop=participantRecordAttributesListFull
 prop=participantGraphAttributes
 prop=participantGraphAttributeNames
 prop=householdSourceIdsIncludedInParticipantAttributes
