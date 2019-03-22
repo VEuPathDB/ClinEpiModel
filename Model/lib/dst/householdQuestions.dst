@@ -11,7 +11,7 @@ name=HouseholdsByMetadata
 anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
-prop=householdAttributesList
+prop=householdAttributesListFull
 prop=studyAbbreviation
 prop=tblPrefix
 >templateTextStart<
@@ -22,9 +22,7 @@ prop=tblPrefix
               queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
-        <attributesList 
-            summary="${householdAttributesList}"
-        /> 
+        ${householdAttributesListFull}
 
 	<dynamicAttributes>
             <columnAttribute name="part_count" displayName="# Matching Participants" help="Number of participants from this household who matched your participants criteria" align="center"> 

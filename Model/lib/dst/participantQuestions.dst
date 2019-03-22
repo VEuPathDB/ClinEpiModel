@@ -11,7 +11,7 @@ name=ParticipantsByMetadata
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
-prop=participantAttributesList
+prop=participantAttributesListFull
 prop=tblPrefix
 prop=studyAbbreviation
 >templateTextStart<
@@ -22,9 +22,7 @@ prop=studyAbbreviation
               queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
-        <attributesList 
-            summary="${participantAttributesList}"        
-        /> 
+        ${participantAttributesListFull}        
 
 	<dynamicAttributes>
 	</dynamicAttributes>
@@ -68,7 +66,7 @@ name=ParticipantsByMetadataLongitudinal
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
-prop=participantAttributesList
+prop=participantAttributesListFull
 prop=tblPrefix
 prop=studyAbbreviation
 >templateTextStart<
@@ -79,9 +77,7 @@ prop=studyAbbreviation
               queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
-        <attributesList 
-            summary="${participantAttributesList}"        
-        /> 
+        ${participantAttributesListFull}        
 
 	<dynamicAttributes>
             <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations matching the search criteria for this participant"> 
@@ -131,7 +127,7 @@ name=ParticipantsByMetadataSurvey
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
-prop=participantAttributesList
+prop=participantAttributesListFull
 prop=tblPrefix
 prop=studyAbbreviation
 >templateTextStart<
@@ -142,9 +138,7 @@ prop=studyAbbreviation
               queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
-        <attributesList 
-            summary="${participantAttributesList}"        
-        /> 
+        ${participantAttributesListFull}        
 
 	<dynamicAttributes>
 	</dynamicAttributes>
@@ -174,7 +168,7 @@ name=ParticipantsByMetadataCaseControl
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
-prop=participantAttributesList
+prop=participantAttributesListFull
 prop=tblPrefix
 prop=studyAbbreviation
 >templateTextStart<
@@ -185,9 +179,7 @@ prop=studyAbbreviation
               queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
-        <attributesList 
-            summary="${participantAttributesList}"        
-        /> 
+        ${participantAttributesListFull}        
 
 	<dynamicAttributes>
 	</dynamicAttributes>
@@ -404,7 +396,7 @@ prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=participantQuestionName
-prop=participantAttributesList
+prop=participantAttributesListFull
 >templateTextStart<
         <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -414,9 +406,7 @@ prop=participantAttributesList
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
 
-        <attributesList 
-            summary="${participantAttributesList}"        
-        /> 
+        ${participantAttributesListFull}        
 
 	<dynamicAttributes>
 	     <columnAttribute name="visit_count" displayName="# matching observations" align="center" help="Number of observations matching the search criteria for this participant"> 
@@ -530,7 +520,7 @@ prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=participantQuestionName
-prop=participantAttributesList
+prop=participantAttributesListFull
 >templateTextStart<
       <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -539,10 +529,7 @@ prop=participantAttributesList
               queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
-
-        <attributesList 
-            summary="${participantAttributesList}"        
-        /> 
+        ${participantAttributesListFull}        
 
         <summary>
             <![CDATA[
@@ -570,7 +557,7 @@ prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=participantQuestionName
-prop=participantAttributesList
+prop=participantAttributesListFull
 >templateTextStart<
       <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -579,10 +566,7 @@ prop=participantAttributesList
               queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
-
-        <attributesList 
-            summary="${participantAttributesList}"        
-        /> 
+        ${participantAttributesListFull}        
 
         <summary>
             <![CDATA[

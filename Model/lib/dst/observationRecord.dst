@@ -3,7 +3,7 @@ name=observationRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
 prop=observationRecordOverview
-prop=observationAttributesList
+prop=observationRecordAttributesListFull
 prop=householdSourceIdsIncludedInObservationAttributes
 prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix
@@ -33,10 +33,7 @@ prop=observationRecordMicrosTable
                 </text>
             </idAttribute>
 
-<!--     
-           <attributesList summary="${observationAttributesList}"       
-            />
--->
+           ${observationRecordAttributesListFull}
 
         <!-- =============================================================== -->
       <!--  Step Analysis Plugins -->
@@ -205,7 +202,7 @@ prop=presenterId
 name=observationRecordAttributeQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
-prop=observationAttributesList
+prop=observationRecordAttributesListFull
 prop=householdSourceIdsIncludedInObservationAttributes
 prop=participantSourceIdsIncludedInObservationAttributes
 prop=participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote
@@ -414,7 +411,7 @@ UNION
 name=observationRecordTableQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
-prop=observationAttributesList
+prop=observationRecordAttributesListFull
 prop=householdSourceIdsIncludedInObservationAttributes
 prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix

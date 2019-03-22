@@ -177,6 +177,18 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("extraHouseholdTables", this.extraHouseholdTables());
           setPropValue("extraHouseholdTableQueries", this.extraHouseholdTableQueries());
 
+          String householdAttList = getPropValue("householdAttributesList");
+          if(householdAttList != null && !householdAttList.equals("")) {
+              setPropValue("householdAttributesListFull","<attributesList summary=\"" + householdAttList + "\" />");
+          }else{
+              setPropValue("householdAttributesListFull","");
+          }
+          String householdRecordAttList = getPropValue("householdRecordAttributesList");
+          if(householdRecordAttList != null && !householdRecordAttList.equals("")) {
+              setPropValue("householdRecordAttributesListFull","<attributesList summary=\"" + householdRecordAttList + "\" />");
+          }else{
+              setPropValue("householdRecordAttributesListFull","");
+          }
 
 
           injectTemplate("householdRecord");
@@ -242,6 +254,19 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
  
 
 	  }
+          //before injecting any templates need to determine and set the attributes list ... can't be null
+          String participantAttList = getPropValue("participantAttributesList");
+          if(participantAttList != null && !participantAttList.equals("")) {
+              setPropValue("participantAttributesListFull","<attributesList summary=\"" + participantAttList + "\" />");
+          }else{
+              setPropValue("participantAttributesListFull","");
+          }
+          String participantRecordAttList = getPropValue("participantRecordAttributesList");
+          if(participantRecordAttList != null && !participantRecordAttList.equals("")) {
+              setPropValue("participantRecordAttributesListFull","<attributesList summary=\"" + participantRecordAttList + "\" />");
+          }else{
+              setPropValue("participantRecordAttributesListFull","");
+          }
 
           injectTemplate("participantRecord");
           injectTemplate("participantRecordAttributeQueries");
@@ -322,6 +347,18 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
  
 	  }
 
+          String observationAttList = getPropValue("observationAttributesList");
+          if(observationAttList != null && !observationAttList.equals("")) {
+              setPropValue("observationAttributesListFull","<attributesList summary=\"" + observationAttList + "\" />");
+          }else{
+              setPropValue("observationAttributesListFull","");
+          }
+          String observationRecordAttList = getPropValue("observationRecordAttributesList");
+          if(observationRecordAttList != null && !observationRecordAttList.equals("")) {
+              setPropValue("observationRecordAttributesListFull","<attributesList summary=\"" + observationRecordAttList + "\" />");
+          }else{
+              setPropValue("observationRecordAttributesListFull","");
+          }
 
           injectTemplate("observationRecord");
           injectTemplate("observationRecordAttributeQueries");
@@ -801,15 +838,18 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"hasParticipantRecord", ""},
 
                                  {"householdAttributesList", ""},
+                                 {"householdRecordAttributesList", ""},
                                  {"householdSourceIdsForHouseholdMemberTable", ""},
                                  {"householdRecordOverview", ""},
 
                                  {"observationAttributesList", ""},
+                                 {"observationRecordAttributesList", ""},
                                  {"observationRecordOverview", ""},
                                  {"householdSourceIdsIncludedInObservationAttributes", ""},
                                  {"participantSourceIdsIncludedInObservationAttributes", ""},
 
                                  {"participantAttributesList", ""},
+                                 {"participantRecordAttributesList", ""},
                                  {"participantRecordOverview", ""},
                                  {"householdSourceIdsIncludedInParticipantAttributes", ""},
                                  {"participantSourceIdsExcludedFromParticipantAttributes", ""},

@@ -12,7 +12,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=observationQuestionName
-prop=observationAttributesList
+prop=observationAttributesListFull
 prop=tblPrefix
 prop=studyAbbreviation
 >templateTextStart<
@@ -23,9 +23,7 @@ prop=studyAbbreviation
               queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
-        <attributesList 
-            summary="${observationAttributesList}"
-        /> 
+        ${observationAttributesListFull}
 
         <dynamicAttributes>
 	</dynamicAttributes>
@@ -79,7 +77,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=observationQuestionName
-prop=observationAttributesList
+prop=observationAttributesListFull
 prop=tblPrefix
 prop=studyAbbreviation
 >templateTextStart<
@@ -90,9 +88,7 @@ prop=studyAbbreviation
               queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
-        <attributesList 
-            summary="${observationAttributesList}"
-        /> 
+        ${observationAttributesListFull}
 
         <dynamicAttributes>
 	  <columnAttribute name="min_days_between" displayName="Min days between observations" help="Reports the minimum days between any matching observations and the observation returned" align="center">
@@ -319,7 +315,7 @@ prop=includeProjects
 prop=tblPrefix
 prop=presenterId
 prop=observationQuestionName
-prop=observationAttributesList
+prop=observationAttributesListFull
 >templateTextStart<
     <question name="${observationQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
@@ -328,9 +324,7 @@ prop=observationAttributesList
               queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
-        <attributesList 
-            summary="${observationAttributesList}"
-        /> 
+        ${observationAttributesListFull}
 
         <dynamicAttributes>
 	  <columnAttribute name="min_days_between" displayName="Min days between observations" help="Reports the minimum days between any matching observations and the observation returned" align="center">
