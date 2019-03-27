@@ -327,7 +327,7 @@ You can restrict the observations returned in your search by selecting character
        <group name="part_event_characteristics" displayName="Observations" displayType="ShowHide">
             <description>
                 <![CDATA[
-    Filter participants based on information gained at observations.     
+    Filter participants based on information gained at observations. Data collected at different timepoints may require a multi-step search strategy to access.     
                 ]]>
             </description>
         </group>
