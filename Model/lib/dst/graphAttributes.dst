@@ -8,7 +8,7 @@ prop=malaria_cat_svg
  <textAttribute name="${malaria_cat_compact}" displayName="Malaria status timeline"  truncateTo="100000">
                     <text>
                       <![CDATA[
-                        <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000036&h=40&w=800&thumb=1&datasetId=${presenterId}"/>
+                        <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000036&h=100&w=800&thumb=1&datasetId=${presenterId}" type="image/svg+xml" style="height:100px; width:800px;"/>
                       ]]>
                     </text>
                   </textAttribute>
@@ -32,7 +32,7 @@ prop=malaria_cat_svg
  <textAttribute name="${malaria_cat_compact}" displayName="Malaria status timeline"  truncateTo="100000">
                     <text>
                       <![CDATA[
-                        <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=png&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=40&w=800&thumb=1&datasetId=${presenterId}"/>
+                        <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0000091&status=EUPATH_0000338&optStatus=EUPATH_0000097&h=100&w=800&thumb=1&datasetId=${presenterId}" type="image/svg+xml" style="height:100px; width:800px;"/>
                       ]]>
                     </text>
                   </textAttribute>
