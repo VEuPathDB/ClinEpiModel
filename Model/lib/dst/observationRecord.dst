@@ -313,18 +313,35 @@ select count(*) from apidbtuning.${tblPrefix}Observations
 <sqlQuery name="ParticipantAttributesMeta" isCacheable="false">
            <column name="name" />
            <column name="display_name" />
+	   <column name="help" />
+           <column name="reporter_name" />
+           <column name="reporter_display" />
+           <column name="reporter_description" />
+           <column name="reporter_implementation" />
+           <column name="reporter_properties" />
 
            <sql>
             <![CDATA[
+
+select meta.display_name, meta.name, meta.help,
+                   decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
+                   decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
+                   decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
+                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation, null as reporter_properties
+from (
+
        select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
             from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
             where s.synonym_name = upper('${tblPrefix}Participants')
             and c.owner = 'APIDBTUNING'
             and c.table_name = s.table_name
             and upper(o.ontology_term_source_id) = c.column_name
-            union
-                           select 'Participant ID' as display_name, 'participant_id' as name, '' as help, '' as type from dual
 
+       union
+
+       select 'Participant ID' as display_name, 'participant_id' as name, '' as help, '' as type from dual
+
+ ) meta
             ]]>
               </sql>
 
@@ -361,6 +378,12 @@ select count(*) from apidbtuning.${tblPrefix}Observations
 <sqlQuery name="HouseholdAttributesMeta" isCacheable="false">
            <column name="name" />
            <column name="display_name" />
+	   <column name="help" />
+           <column name="reporter_name" />
+           <column name="reporter_display" />
+           <column name="reporter_description" />
+           <column name="reporter_implementation" />
+           <column name="reporter_properties" />
 
            <sql>
             <![CDATA[
@@ -371,8 +394,16 @@ with hasHHObser as(
      where input_pan_type_source_id = 'PCO_0000024'
      and output_pan_type_source_id = 'PCO_0000024'
      )
-select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+
+select meta.display_name, meta.name, meta.help,
+                   decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
+                   decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
+                   decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
+                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation, null as reporter_properties
+from ( 
+
+     select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+     from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
             where s.synonym_name = upper('${tblPrefix}Households')
             and c.owner = 'APIDBTUNING'
             and c.table_name = s.table_name
@@ -380,9 +411,9 @@ select distinct o.display_name as display_name, o.ontology_term_source_id as nam
 	    and (o.ontology_term_source_id = 'OBI_0001627' or o.ontology_term_source_id = 'EUPATH_0000407') 
 	    and (select ct from hasHHObser) >0
 
-UNION
+    UNION
 
-select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+    select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
             from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
             where s.synonym_name = upper('${tblPrefix}Households')
             and c.owner = 'APIDBTUNING'
@@ -390,8 +421,12 @@ select distinct o.display_name as display_name, o.ontology_term_source_id as nam
             and upper(o.ontology_term_source_id) = c.column_name
 	    and (select ct from hasHHObser) = 0
 
-UNION
+   UNION
+
         select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
+
+
+) meta
 
             ]]>
               </sql>
