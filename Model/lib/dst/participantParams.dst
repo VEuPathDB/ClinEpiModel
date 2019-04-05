@@ -780,7 +780,7 @@ from ApidbTuning.${tblPrefix}Ontology o
 select participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ParticipantMD
 where ('AnY' = \$\$study_arm_${tblPrefix}\$\$
-       or hp.participant_id in (select participant_id
+       or participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
        and string_value = \$\$study_arm_${tblPrefix}\$\$))
