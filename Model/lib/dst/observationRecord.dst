@@ -408,7 +408,7 @@ from (
             and c.owner = 'APIDBTUNING'
             and c.table_name = s.table_name
             and upper(o.ontology_term_source_id) = c.column_name
-	    and (o.ontology_term_source_id = 'OBI_0001627' or o.ontology_term_source_id = 'EUPATH_0000407') 
+	    and (o.ontology_term_source_id = 'OBI_0001627' or o.ontology_term_source_id = 'EUPATH_0000407' or o.ontology_term_source_id = 'EUPATH_0000054') 
 	    and (select ct from hasHHObser) >0
 
     UNION
