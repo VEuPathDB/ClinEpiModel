@@ -138,7 +138,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         input = new FileInputStream(modelPropPath);
         properties.load(input);
       } catch (IOException e) {
-        e.printStackTrace();
+          //        e.printStackTrace();
       } finally {
         if (input != null) {
 	  try {
@@ -631,8 +631,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           }
 
       }
-      //and inject the cardQuestions
+      //and inject the cardQuestions and projectAvailability to drive home page
       injectCardQuestions();
+      injectProjectAvailability();
       
     }
 
@@ -686,7 +687,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         //System.err.println("cardQuestionsSql=" + cardQuestions);
         setPropValue("cardQuestionsSql",cardQuestions);
         injectTemplate("injectDatasetQuestions");
+    }
 
+    private void injectProjectAvailability() {
+        String presenterId = getPropValue("presenterId");
+        String subProjectName = getPropValue("subProjectName");
+        String projectAvailability = "UNION select '" + presenterId + "' as dataset_presenter_id, 'projectAvailability' as property, '[\"" + subProjectName +  "\"" + (getPropValueAsBoolean("isPublic") ? ",\"ClinEpiDB\"" : "") + "]' as value from dual";
+        setPropValue("projectAvailabilitySql",projectAvailability);
+        injectTemplate("injectProjectAvailability");
     }
 
   @Override
@@ -857,7 +865,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"observationSourceIdsToOrderParticipantsObservationsTable", ""},
                                  //attributes to be added to the record for the studies.jason replacement
                                  {"studyCategories", ""},
-                                 {"projectAvailability", ""},
                                  {"studyAccess", ""},
                                  {"policyUrl", ""},
                                  {"cardHeadline", ""},
