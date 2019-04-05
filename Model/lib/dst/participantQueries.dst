@@ -10,10 +10,12 @@ ${injectedTemplateFull}
 name=participantLongitudinalQueryRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
+prop=hasStudyArmParameter
 prop=timeSourceId
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}"
           isCacheable="true">
+       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.geographic_loc"/> 
        <paramRef ref="participantParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
@@ -59,9 +61,11 @@ name=participantLongitudinalQueryHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 prop=timeSourceId
+prop=hasStudyArmParameter
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}"
           isCacheable="true">
+       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.part_household_characteristics"/> 
        <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
@@ -106,9 +110,11 @@ name=participantLongitudinalQueryParticipant
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 prop=timeSourceId
+prop=hasStudyArmParameter
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}"
           isCacheable="true">
+       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.part_characteristics"/> 
        <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
@@ -150,9 +156,11 @@ group by pa.name
 [templateStart]
 name=participantSurveyQueryRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
+prop=hasStudyArmParameter
 prop=tblPrefix
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.geographic_loc"/> 
        <paramRef ref="participantParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
@@ -175,8 +183,10 @@ group by pa.name
 name=participantSurveyQueryHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
+prop=hasStudyArmParameter
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.part_household_characteristics"/> 
        <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
@@ -198,9 +208,11 @@ group by pa.name
 name=participantSurveyQueryParticipant
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
+prop=hasStudyArmParameter
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
        <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.part_characteristics"/> 
        <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
