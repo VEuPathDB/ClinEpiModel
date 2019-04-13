@@ -1026,7 +1026,7 @@ from ApidbTuning.${tblPrefix}Ontology o
      and ontology_term_name not in (select distinct ontology_term_name
 from ApidbTuning.${tblPrefix}ObservationMD
 where sub_observation_id in (select distinct sub_observation_id from ApidbTuning.${tblPrefix}ObsObsIO))
-     order by display_order
+     order by display_order,display_name
          ]]>
     </sql>
    </sqlQuery>
