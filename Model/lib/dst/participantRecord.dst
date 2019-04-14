@@ -2,6 +2,7 @@
 name=participantRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=datasetName
+prop=studyAbbreviation
 prop=participantRecordOverview
 prop=participantRecordAttributesListFull
 prop=participantGraphAttributes
@@ -23,7 +24,8 @@ prop=participantRecordMicrosTable
 
       <recordClass name="${presenterId}ParticipantRecordClass" 
                    urlName="${presenterId}_participant" 
-                   displayName="Participant"
+                   shortDisplayName="Participant"
+                   displayName="Participant ${studyAbbreviation}"
                    iconName="fa fa-male"
                    allRecordsQueryRef="${presenterId}ParticipantAttributes.AllParticipants"
                    includeProjects="${includeProjects}"> 
