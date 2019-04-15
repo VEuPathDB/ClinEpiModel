@@ -25,7 +25,7 @@ prop=visitMaxDate
          <sql>
            <![CDATA[
 select lta.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.\$\$tbl_prefix\$\$LightTraps lta
+from ApidbTuning.${tblPrefix}LightTraps lta
 where lta.pan_id in (\$\$lighttraps_prism\$\$)
                 ]]>   
         </sql>
