@@ -2,6 +2,7 @@
 name=observationRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
+prop=studyAbbreviation
 prop=observationRecordOverview
 prop=observationRecordAttributesListFull
 prop=householdSourceIdsIncludedInObservationAttributes
@@ -16,7 +17,7 @@ prop=observationRecordMicrosTable
 
     <recordClassSet name="${presenterId}ObservationRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="Observation" iconName="fa fa-stethoscope" includeProjects="${includeProjects}"> 
+      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" shortDisplayName="Observation" displayName="${studyAbbreviation} Observation" iconName="fa fa-stethoscope" includeProjects="${includeProjects}"> 
 
 
             <!-- primary key definition -->

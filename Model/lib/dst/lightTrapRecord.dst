@@ -2,6 +2,7 @@
 name=lightTrapRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/lightTrapRecord.xml
 prop=datasetName
+prop=studyAbbreviation
 prop=lightTrapRecordOverview
 prop=lightTrapRecordAttributesListFull
 prop=tblPrefix
@@ -11,7 +12,7 @@ prop=includeProjects
 >templateTextStart<
     <recordClassSet name="${presenterId}LightTrapRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" displayName="Light Trap Collection" iconName="fa fa-bug" > 
+      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" shortDisplayName="Light Trap Collection" displayName="${studyAbbreviation} Light Trap Collection" iconName="fa fa-bug" > 
 
 
             <!-- primary key definition -->
