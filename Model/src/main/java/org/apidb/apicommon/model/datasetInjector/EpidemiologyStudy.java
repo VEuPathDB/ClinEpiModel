@@ -747,7 +747,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 	  addWdkReference(participantRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0); 
-	  addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  //addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+
+          if(hasHouseholds) {
+	      addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+          }
 
 
           if(hasSamples) {
@@ -768,7 +772,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 	  addWdkReference(observationRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
-	  addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+	  //addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
@@ -784,6 +788,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               addWdkReference(observationRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
+	  if(hasHouseholds) {
+	      addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+
+          }
 	  if(hasSamples) {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
           }
