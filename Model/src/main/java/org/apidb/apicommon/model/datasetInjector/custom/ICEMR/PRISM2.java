@@ -1,44 +1,16 @@
 package org.apidb.apicommon.model.datasetInjector.custom.ICEMR;
 
-import org.apidb.apicommon.model.datasetInjector.EpidemiologyStudyWithLightTraps;
+import org.apidb.apicommon.model.datasetInjector.BasicEpiStudy;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PRISM2 extends EpidemiologyStudyWithLightTraps {
+public class PRISM2 extends BasicEpiStudy {
 
     @Override
     protected void setStudySpecificProperties(){
         setPropValue("visitMinDate","2017-09-01");
         setPropValue("visitMaxDate","2019-12-31");
-        setPropValue("injectParams","false");
     }  
-
-    @Override
-    protected Map<String,String[]> householdQuestionTemplateNamesToScopes() {
-      Map<String,String[]> map = new HashMap<String,String[]>();
-      map.put("HouseholdsByCharacteristics_prism2", new String[] {"menu", "webservice"});
-      return(map);
-    }
-    @Override
-    protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
-      Map<String,String[]> map = new HashMap<String,String[]>();
-      map.put("ParticipantsByRelativeVisits_prism2", new String[] {"menu", "webservice"});
-
-      return(map);
-    }
-    @Override
-    protected Map<String,String[]> observationQuestionTemplateNamesToScopes() {
-      Map<String,String[]> map = new HashMap<String,String[]>();
-      map.put("ClinicalVisitsByRelativeVisits_prism2", new String[] {"menu", "webservice"});
-      return(map);
-    }
-
-    @Override
-    protected Map<String,String[]> lightTrapQuestionTemplateNamesToScopes() {
-      Map<String,String[]> map = new HashMap<String,String[]>();
-      map.put("CollectionsByCharacteristics_prism2", new String[] {"menu", "webservice"});
-      return(map);
-    }
 
     @Override
     protected String participantGraphAttributesTemplateName() {
