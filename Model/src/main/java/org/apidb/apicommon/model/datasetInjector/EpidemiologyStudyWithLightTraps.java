@@ -20,6 +20,11 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
 
     @Override
     public void injectTemplates() {
+        boolean injectStudy = getPropValueAsBoolean("injectStudy");
+        if(!injectStudy){
+            return;
+        }
+
         super.injectTemplates();
 
         String householdSourceIdsIncludedInLightTrapAttributes = getPropValue("householdSourceIdsIncludedInLightTrapAttributes");

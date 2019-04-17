@@ -2,6 +2,7 @@
 name=householdRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/householdRecord.xml
 prop=datasetName
+prop=studyAbbreviation
 prop=householdRecordOverview
 prop=householdRecordAttributesListFull
 prop=householdSourceIdsForHouseholdMemberTable
@@ -12,7 +13,7 @@ prop=extraHouseholdTables
 
 >templateTextStart<
     <recordClassSet name="${presenterId}HouseholdRecordClasses" includeProjects="${includeProjects}">
-      <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" displayName="Household" iconName="fa fa-home" includeProjects="${includeProjects}"> 
+    <recordClass name="${presenterId}HouseholdRecordClass" urlName="${presenterId}_household" shortDisplayName="Household" displayName="${studyAbbreviation} Household" iconName="fa fa-home" includeProjects="${includeProjects}"> 
 
             <!-- primary key definition -->
             <primaryKey aliasQueryRef="${presenterId}HouseholdAttributes.HouseholdAlias">
@@ -202,9 +203,9 @@ select count(*) from apidbtuning.${tblPrefix}Households
                      and c.owner = 'APIDBTUNING'
                      and c.table_name = s.table_name
                      and upper(o.ontology_term_source_id) = c.column_name
-                     union
-                     select 'Name' as displayName, 'name' as name, '' as help, '' as type from dual
+
                      ) meta
+		     order by meta.display_name
                      
             ]]>
          </sql>

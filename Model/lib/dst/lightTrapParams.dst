@@ -26,7 +26,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.tbl_prefix">
+                    dependedParamRef="">
       <help>
         Select light trap collections based on geographic region. 
       </help>
@@ -39,7 +39,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
                     prompt="Households"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.tbl_prefix,lightTrapParams.geographic_region_prism,householdParams.date_range">
+                    dependedParamRef="lightTrapParams.geographic_region_prism,householdParams.date_range">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
       </help>
@@ -53,7 +53,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
                     filterDataTypeDisplayName="Collections"
                     countPredictsAnswerCount="true"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.tbl_prefix,householdParams.date_range,lightTrapParams.households_prism">
+                    dependedParamRef="householdParams.date_range,lightTrapParams.households_prism">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
       </help>
@@ -76,7 +76,6 @@ prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
     <sqlQuery name="RegionMetaData_prism" isCacheable="false" >
-      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -86,7 +85,7 @@ prop=rmRegionSqlCommentEnd
       <sql>
         <![CDATA[
 select m.pan_id as internal,  io.output_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.\$\$tbl_prefix\$\$MetaData m, ApidbTuning.\$\$tbl_prefix\$\$PANIO io
+ from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
  where m.property_source_id = 'EUPATH_0000054'
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000327'
@@ -97,7 +96,6 @@ select m.pan_id as internal,  io.output_pan_id as record_id, m.property_source_i
     <sqlQuery name="HouseholdMetaData_prism" isCacheable="true">
       <paramRef ref="householdParams.date_range" />  
       <paramRef ref="lightTrapParams.geographic_region_prism" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -109,7 +107,7 @@ select m.pan_id as internal,  io.output_pan_id as record_id, m.property_source_i
 with mos as (
  select da.pan_id, 'average_anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from ApidbTuning.\$\$tbl_prefix\$\$Households da, ApidbTuning.\$\$tbl_prefix\$\$PANIO io, ApidbTuning.\$\$tbl_prefix\$\$LightTraps la
+  from ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
   where da.pan_id in (\$\$geographic_region_prism\$\$)
   and da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
@@ -118,7 +116,7 @@ with mos as (
   group by da.pan_id
   )
 select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.\$\$tbl_prefix\$\$MetaData m, mos, ApidbTuning.\$\$tbl_prefix\$\$PANIO io, ApidbTuning.\$\$tbl_prefix\$\$LightTraps la
+ from ApidbTuning.${tblPrefix}MetaData m, mos, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
  where m.pan_id in (\$\$geographic_region_prism\$\$)
  and m.pan_id = mos.pan_id
  and m.pan_id = io.input_pan_id
@@ -127,7 +125,7 @@ select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.prop
   and EUPATH_0020003 <= \$\$date_range.max\$\$ 
  union 
  select mos.pan_id as filter_item_id, io.output_pan_id as internal, mos.ontology_term_name, mos.string_value,mos.number_value, mos.date_value 
- from mos, ApidbTuning.\$\$tbl_prefix\$\$PANIO io, ApidbTuning.\$\$tbl_prefix\$\$LightTraps la
+ from mos, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
  where mos.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
   and EUPATH_0020003 >= \$\$date_range.min\$\$
@@ -137,7 +135,6 @@ select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.prop
     </sqlQuery>
 
      <sqlQuery name="HouseholdMetaDataBkgd_prism" isCacheable="true">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -149,19 +146,19 @@ select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.prop
 with mos as (
  select da.pan_id, 'average_anopheles' as ontology_term_name, null as string_value, 
    round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
-  from ApidbTuning.\$\$tbl_prefix\$\$Households da, ApidbTuning.\$\$tbl_prefix\$\$PANIO io, ApidbTuning.\$\$tbl_prefix\$\$LightTraps la
+  from ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
   where da.pan_id = io.input_pan_id
   and la.pan_id = io.output_pan_id
   group by da.pan_id
   )
 select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.\$\$tbl_prefix\$\$MetaData m, mos, ApidbTuning.\$\$tbl_prefix\$\$PANIO io
+ from ApidbTuning.${tblPrefix}MetaData m, mos, ApidbTuning.${tblPrefix}PANIO io
  where m.pan_id = mos.pan_id
  and m.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000327'
  union 
  select mos.pan_id as filter_item_id, io.output_pan_id as internal, mos.ontology_term_name, mos.string_value,mos.number_value, mos.date_value 
- from mos, ApidbTuning.\$\$tbl_prefix\$\$PANIO io
+ from mos, ApidbTuning.${tblPrefix}PANIO io
  where mos.pan_id = io.input_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000327'
           ]]>
@@ -169,7 +166,6 @@ select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.prop
     </sqlQuery>   
 
     <sqlQuery name="LightTrapOntology_prism">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -181,7 +177,7 @@ select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.prop
       <sql>
         <![CDATA[
  select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
-from ApidbTuning.\$\$tbl_prefix\$\$Ontology o
+from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'EUPATH_0000327'
         ]]>
@@ -191,7 +187,6 @@ from ApidbTuning.\$\$tbl_prefix\$\$Ontology o
     <sqlQuery name="LightTrapMetaData_prism">
       <paramRef ref="householdParams.date_range" />  
       <paramRef ref="lightTrapParams.households_prism" />  
-      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -200,7 +195,7 @@ from ApidbTuning.\$\$tbl_prefix\$\$Ontology o
       <sql>
         <![CDATA[
 select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.\$\$tbl_prefix\$\$MetaData m, ApidbTuning.\$\$tbl_prefix\$\$LightTraps lta
+ from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}LightTraps lta
  where lta.pan_id in (\$\$households_prism\$\$)
  and lta.EUPATH_0020003 >= \$\$date_range.min\$\$
  and lta.EUPATH_0020003 <= \$\$date_range.max\$\$ 
@@ -210,7 +205,6 @@ select distinct m.pan_id as internal, property_source_id as ontology_term_name, 
     </sqlQuery>
 
     <sqlQuery name="LightTrapMetaDataBkgd_prism">
-      <paramRef ref="participantParams.tbl_prefix" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -219,7 +213,7 @@ select distinct m.pan_id as internal, property_source_id as ontology_term_name, 
       <sql>
         <![CDATA[
 select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
- from ApidbTuning.\$\$tbl_prefix\$\$MetaData m
+ from ApidbTuning.${tblPrefix}MetaData m
  where m.category = 'Entomological measurements'
         ]]>
       </sql>

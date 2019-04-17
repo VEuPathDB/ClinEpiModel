@@ -317,13 +317,13 @@ prop=visitMaxDate
            <![CDATA[
 with vis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
-from ApidbTuning.\$\$tbl_prefix\$\$Observations ca,ApidbTuning.\$\$tbl_prefix\$\$PANIO io
+from ApidbTuning.${tblPrefix}Observations ca,ApidbTuning.${tblPrefix}PANIO io
 where ca.pan_id in (\$\$visits_prism\$\$)
 and ca.pan_id = io.output_pan_id
 ),
 relvis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
-from ApidbTuning.\$\$tbl_prefix\$\$Observations ca,ApidbTuning.\$\$tbl_prefix\$\$PANIO io
+from ApidbTuning.${tblPrefix}Observations ca,ApidbTuning.${tblPrefix}PANIO io
 where ca.pan_id in (\$\$relative_visits_prism\$\$)
 and ca.pan_id = io.output_pan_id
 ),
@@ -386,13 +386,13 @@ prop=timeSourceId
            <![CDATA[
 with vis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as EUPATH_0000579
-from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+from ApidbTuning.${tblPrefix}ObservationMD md
 where md.observation_id in (\$\$visits_maled\$\$)
 and md.ontology_term_name = 'EUPATH_0000579'
 ),
 relvis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as EUPATH_0000579
-from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
 and md.observation_id in (\$\$relative_visits_maled\$\$)
 and md.ontology_term_name = 'EUPATH_0000579'
@@ -422,7 +422,7 @@ and vis.pan_id != rv.pan_id
 and vis.EUPATH_0000579 \$\$date_direction_fv\$\$ rv.EUPATH_0000579
 and abs(rv.EUPATH_0000579 - vis.EUPATH_0000579) >= \$\$days_between.min\$\$
 and abs(rv.EUPATH_0000579 - vis.EUPATH_0000579) <= \$\$days_between.max\$\$
-) inter, visits, ApidbTuning.\$\$tbl_prefix\$\$Observations o
+) inter, visits, ApidbTuning.${tblPrefix}Observations o
 where visits.pan_id = o.pan_id
 and visits.pan_id = inter.pan_id(+)
 )
@@ -458,13 +458,13 @@ prop=timeSourceId
            <![CDATA[
 with vis as (
 select distinct md.participant_id as participant_id,md.observation_id as pan_id,md.date_value as visit_date
-from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+from ApidbTuning.${tblPrefix}ObservationMD md
 where md.observation_id in (\$\$visits_india\$\$)
 and md.ontology_term_name = 'EUPATH_0000091'
 ),
 relvis as (
 select distinct md.participant_id as participant_id,md.observation_id as pan_id,md.date_value as visit_date
-from ApidbTuning.\$\$tbl_prefix\$\$ObservationMD md
+from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
 and md.observation_id in (\$\$relative_visits_india\$\$)
 and md.ontology_term_name = 'EUPATH_0000091'
@@ -495,7 +495,7 @@ and vis.pan_id != rv.pan_id
 and vis.visit_date \$\$date_direction_fv\$\$ rv.visit_date
 and abs(rv.visit_date - vis.visit_date) >= \$\$days_between.min\$\$
 and abs(rv.visit_date - vis.visit_date) <= \$\$days_between.max\$\$
-) inter, visits, ApidbTuning.\$\$tbl_prefix\$\$Observations o
+) inter, visits, ApidbTuning.${tblPrefix}Observations o
 where visits.pan_id = o.pan_id
 and visits.pan_id = inter.pan_id(+)
 )

@@ -211,20 +211,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 
       if(hasParticipants) {
-          String householdSourceIdsIncludedInParticipantAttributes = getPropValue("householdSourceIdsIncludedInParticipantAttributes");
-          String participantSourceIdsExcludedFromParticipantAttributes = getPropValue("participantSourceIdsExcludedFromParticipantAttributes");
           String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
+          String participantSourceIdsExcludedFromParticipantAttributes = getPropValue("participantSourceIdsExcludedFromParticipantAttributes");
 
-          setPropValue("householdSourceIdsIncludedInParticipantAttributesQuote", addQuotes(householdSourceIdsIncludedInParticipantAttributes));
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
           setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
 
-
-          if(householdSourceIdsIncludedInParticipantAttributes != null && !householdSourceIdsIncludedInParticipantAttributes.equals("")) {
-              householdSourceIdsIncludedInParticipantAttributes = ", " + householdSourceIdsIncludedInParticipantAttributes;
-              setPropValue("householdSourceIdsIncludedInParticipantAttributes", householdSourceIdsIncludedInParticipantAttributes);
-          }
- 
           setPropValue("participantRecordSamplesTable", "");
           setPropValue("participantRecordSamplesMetaTableQuery", "");
           setPropValue("participantRecordSamplesTableQuery", "");
@@ -292,28 +284,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
  
       if(hasObservations) {
 
-
-          String householdSourceIdsIncludedInObservationAttributes = getPropValue("householdSourceIdsIncludedInObservationAttributes");
-          String participantSourceIdsIncludedInObservationAttributes = getPropValue("participantSourceIdsIncludedInObservationAttributes");
-          String hhAndPIncludedInObservationAttributes = householdSourceIdsIncludedInObservationAttributes + " " + participantSourceIdsIncludedInObservationAttributes;
-          if(participantSourceIdsIncludedInObservationAttributes != null && !participantSourceIdsIncludedInObservationAttributes.equals("") &&
-          householdSourceIdsIncludedInObservationAttributes != null && !householdSourceIdsIncludedInObservationAttributes.equals("")) {
-              hhAndPIncludedInObservationAttributes = householdSourceIdsIncludedInObservationAttributes + "," + participantSourceIdsIncludedInObservationAttributes;
-          }
-          setPropValue("participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote", addQuotes(hhAndPIncludedInObservationAttributes));
-
-
-          if(participantSourceIdsIncludedInObservationAttributes != null && !participantSourceIdsIncludedInObservationAttributes.equals("")) {
-              participantSourceIdsIncludedInObservationAttributes = ", " + participantSourceIdsIncludedInObservationAttributes;
-              setPropValue("participantSourceIdsIncludedInObservationAttributes", participantSourceIdsIncludedInObservationAttributes);
-          }
-          if(householdSourceIdsIncludedInObservationAttributes != null && !householdSourceIdsIncludedInObservationAttributes.equals("")) {
-              householdSourceIdsIncludedInObservationAttributes = ", " + householdSourceIdsIncludedInObservationAttributes;
-              setPropValue("householdSourceIdsIncludedInObservationAttributes", householdSourceIdsIncludedInObservationAttributes);
-          }
-
-
-	  
           setPropValue("observationRecordSamplesTable", "");
           setPropValue("observationRecordSamplesMetaTableQuery", "");
           setPropValue("observationRecordSamplesTableQuery", "");
@@ -777,7 +747,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 	  addWdkReference(participantRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0); 
-	  addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  //addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+
+          if(hasHouseholds) {
+	      addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+          }
 
 
           if(hasSamples) {
@@ -798,7 +772,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 	  addWdkReference(observationRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
-	  addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+	  //addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
@@ -814,6 +788,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               addWdkReference(observationRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
+	  if(hasHouseholds) {
+	      addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+
+          }
 	  if(hasSamples) {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
           }
@@ -853,13 +831,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"observationAttributesList", ""},
                                  {"observationRecordAttributesList", ""},
                                  {"observationRecordOverview", ""},
-                                 {"householdSourceIdsIncludedInObservationAttributes", ""},
-                                 {"participantSourceIdsIncludedInObservationAttributes", ""},
 
                                  {"participantAttributesList", ""},
                                  {"participantRecordAttributesList", ""},
                                  {"participantRecordOverview", ""},
-                                 {"householdSourceIdsIncludedInParticipantAttributes", ""},
                                  {"participantSourceIdsExcludedFromParticipantAttributes", ""},
                                  {"observationSourceIdsForParticipantsObservationsTable", ""},
                                  {"observationSourceIdsToOrderParticipantsObservationsTable", ""},
@@ -892,7 +867,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"keepRegionInHouseholdFilter", ""},
                                  {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
                                  {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties
-                                 {"queryBaseTemplate", ""},
+                                 {"queryBaseTemplate", ""},            //so need set of templates for each record with question
                                  {"timeSourceId", ""}
       };
 

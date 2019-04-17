@@ -2,11 +2,11 @@
 name=participantRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=datasetName
+prop=studyAbbreviation
 prop=participantRecordOverview
 prop=participantRecordAttributesListFull
 prop=participantGraphAttributes
 prop=participantGraphAttributeNames
-prop=householdSourceIdsIncludedInParticipantAttributes
 prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsToOrderParticipantsObservationsTable
@@ -23,7 +23,8 @@ prop=participantRecordMicrosTable
 
       <recordClass name="${presenterId}ParticipantRecordClass" 
                    urlName="${presenterId}_participant" 
-                   displayName="Participant"
+                   shortDisplayName="Participant"
+                   displayName="${studyAbbreviation} Participant"
                    iconName="fa fa-male"
                    allRecordsQueryRef="${presenterId}ParticipantAttributes.AllParticipants"
                    includeProjects="${includeProjects}"> 
@@ -187,6 +188,7 @@ BEGIN MALED
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="name" internal="true" inReportMaker="false"/>
 	    <columnAttribute name="Observation_Id"/>
+	    <columnAttribute name="Household_Id"/>
           </table>
 
 	  
@@ -200,6 +202,7 @@ BEGIN MALED
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
 	    <columnAttribute name="Observation_Id"/>
             <columnAttribute name="Sample_Id"/>
+            <columnAttribute name="Household_Id"/>
           </table>
 
 
@@ -281,8 +284,6 @@ prop=datasetName
 prop=participantRecordAttributesListFull
 prop=participantGraphAttributes
 prop=participantGraphAttributeNames
-prop=householdSourceIdsIncludedInParticipantAttributes
-prop=householdSourceIdsIncludedInParticipantAttributesQuote
 prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=participantSourceIdsExcludedFromParticipantAttributesQuote
 prop=observationSourceIdsForParticipantsObservationsTable
@@ -475,7 +476,6 @@ prop=datasetName
 prop=participantRecordAttributesListFull
 prop=participantGraphAttributes
 prop=participantGraphAttributeNames
-prop=householdSourceIdsIncludedInParticipantAttributes
 prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsForParticipantsObservationsTableSubquery
@@ -569,34 +569,45 @@ WHERE o.dataset_name = '&&datasetName&&'
             <column name="project_id"/>
             <column name="name"/>
 	    <column name="Observation_Id"/>
+	    <column name="Household_Id"/>
             <sql>
             <![CDATA[
-select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, cv.*
-        from apidbtuning.${tblPrefix}Observations cv
-              , apidbtuning.${tblPrefix}Participants pa
-              , apidbtuning.${tblPrefix}PANIO io
-              where cv.PAN_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = pa.PAN_ID
-              
-union 
 
-select t1.source_id, t1.project_id, t1.Observation_Id, t2.* from 
-       (select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, cv.pan_id
+select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, hh.name as Household_Id, cv.*
         from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}Participants pa
+              , apidbtuning.${tblPrefix}Households hh
               , apidbtuning.${tblPrefix}PANIO io
-              where cv.PAN_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = pa.PAN_ID) t1,
+              , apidbtuning.${tblPrefix}PANIO io2
+              where pa.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = hh.PAN_ID
+              and cv.PAN_ID = io2.OUTPUT_PAN_ID
+              and io2.INPUT_PAN_ID = pa.PAN_ID
+
+union
+
+select t1.source_id, t1.project_id, t1.Observation_Id, t1.Household_Id, t2.* from
+       (select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, hh.name as Household_Id, cv.pan_id
+        from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}Participants pa
+              , apidbtuning.${tblPrefix}Households hh
+              , apidbtuning.${tblPrefix}PANIO io
+              , apidbtuning.${tblPrefix}PANIO io2
+               where pa.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = hh.PAN_ID
+              and cv.PAN_ID = io2.OUTPUT_PAN_ID
+              and io2.INPUT_PAN_ID = pa.PAN_ID) t1,
 
          (select cv.* from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}PANIO io
               where io.INPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738' and io.OUTPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738'
-              and cv.PAN_ID=io.OUTPUT_PAN_ID) t2,  
+              and cv.PAN_ID=io.OUTPUT_PAN_ID) t2,
 
               apidbtuning.${tblPrefix}PANIO t3
-              
+
               where t2.pan_id = t3.output_pan_id
               and t3.input_pan_id = t1.pan_id
+
 
             ]]>
 
@@ -628,21 +639,25 @@ select t1.source_id, t1.project_id, t1.Observation_Id, t2.* from
             <column name="observation_source_id"/>
 	    <column name="Observation_Id"/>
             <column name="Sample_Id"/>
+            <column name="Household_Id"/>
             <sql>
             <![CDATA[
 
-select pa.name as source_id,
-        '@PROJECT_ID@' as project_id, cv.name as observation_source_id, cv.name as Observation_Id, sp.name as Sample_Id,
-                   sp.*
-              from apidbtuning.${tblPrefix}Participants pa
+SELECT pa.name as source_id,
+        '@PROJECT_ID@' as project_id, cv.name as observation_source_id, cv.name as Observation_Id, hh.name as Household_Id, sp.name as Sample_Id, sp.*
+FROM apidbtuning.${tblPrefix}Households hh
+              ,apidbtuning.${tblPrefix}Participants pa
               ,apidbtuning.${tblPrefix}Observations cv
                ,apidbtuning.${tblPrefix}Samples sp
               , apidbtuning.${tblPrefix}PANIO io
               ,apidbtuning.${tblPrefix}PANIO io2
+              ,apidbtuning.${tblPrefix}PANIO io3
               where sp.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = cv.PAN_ID
               and cv.PAN_ID = io2.OUTPUT_PAN_ID
               and io2.INPUT_PAN_ID = pa.PAN_ID
+              and pa.PAN_ID = io3.OUTPUT_PAN_ID
+              and io3.INPUT_PAN_ID = hh.PAN_ID
 
             ]]>
             </sql>

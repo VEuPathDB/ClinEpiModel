@@ -191,6 +191,18 @@ Use the filters above to select a set of Participants or to explore the data.  S
             ]]>
         </summary>
 
+        <propertyList name="relatedCaseControlLayoutSettings">
+          <value>
+            {
+              "relatedCaseControlGroupName": "relative_case_control",
+              "toggleParamName": "use_rel_case_control",
+              "keepRemoveParamName": "keep_remove",
+              "filterParamName": "relative_event_${tblPrefix}",
+              "caseControlParamName": "case_control"
+            }
+          </value>
+        </propertyList>
+
         <propertyList name="organism">
            <value>H. sapien</value>
         </propertyList>
@@ -547,6 +559,18 @@ Use the filters above to select a set of Participants or to explore the data.  S
           <value>hideAttrDescr</value>
         </propertyList>
 
+        <propertyList name="relatedCaseControlLayoutSettings">
+          <value>
+            {
+              "relatedCaseControlGroupName": "relative_case_control",
+              "toggleParamName": "use_rel_case_control",
+              "keepRemoveParamName": "keep_remove",
+              "filterParamName": "relative_event_gems",
+              "caseControlParamName": "case_control"
+            }
+          </value>
+        </propertyList>
+
       </question>
 >templateTextEnd<
 
@@ -582,6 +606,18 @@ Use the filters above to select a set of Participants or to explore the data.  S
           <value>hideOperation</value>
           <value>hideTitle</value>
           <value>hideAttrDescr</value>
+        </propertyList>
+
+        <propertyList name="relatedCaseControlLayoutSettings">
+          <value>
+            {
+              "relatedCaseControlGroupName": "relative_case_control",
+              "toggleParamName": "use_rel_case_control",
+              "keepRemoveParamName": "keep_remove",
+              "filterParamName": "relative_event_gems",
+              "caseControlParamName": "case_control"
+            }
+          </value>
         </propertyList>
 
       </question>

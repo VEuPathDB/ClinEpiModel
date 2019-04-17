@@ -2,10 +2,9 @@
 name=observationRecord
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
+prop=studyAbbreviation
 prop=observationRecordOverview
 prop=observationRecordAttributesListFull
-prop=householdSourceIdsIncludedInObservationAttributes
-prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
@@ -16,7 +15,7 @@ prop=observationRecordMicrosTable
 
     <recordClassSet name="${presenterId}ObservationRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" displayName="Observation" iconName="fa fa-stethoscope" includeProjects="${includeProjects}"> 
+      <recordClass name="${presenterId}ObservationRecordClass" urlName="${presenterId}_observation" shortDisplayName="Observation" displayName="${studyAbbreviation} Observation" iconName="fa fa-stethoscope" includeProjects="${includeProjects}"> 
 
 
             <!-- primary key definition -->
@@ -134,6 +133,8 @@ prop=observationRecordMicrosTable
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
 	    <columnAttribute name="Sample_Id"/>
+	    <columnAttribute name="Participant_Id"/>
+	    <columnAttribute name="Household_Id"/>
           </table>
 
 
@@ -203,9 +204,6 @@ name=observationRecordAttributeQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
 prop=observationRecordAttributesListFull
-prop=householdSourceIdsIncludedInObservationAttributes
-prop=participantSourceIdsIncludedInObservationAttributes
-prop=participantAndHouseholdSourceIdsIncludedInObservationAttributesQuote
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
@@ -447,8 +445,6 @@ name=observationRecordTableQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
 prop=observationRecordAttributesListFull
-prop=householdSourceIdsIncludedInObservationAttributes
-prop=participantSourceIdsIncludedInObservationAttributes
 prop=tblPrefix
 prop=presenterId
 prop=includeProjects
@@ -521,17 +517,25 @@ WHERE o.dataset_name = '&&datasetName&&'
             <column name="source_id"/>
             <column name="project_id"/>
 	    <column name="Sample_Id"/>
+            <column name="Participant_Id"/>
+            <column name="Household_Id"/>
             <sql>
             <![CDATA[
-
 select cv.name as source_id,
-        '@PROJECT_ID@' as project_id, sp.name as Sample_Id,
-                   sp.*
-              from apidbtuning.${tblPrefix}Observations cv
-               ,apidbtuning.${tblPrefix}Samples sp
-              , apidbtuning.${tblPrefix}PANIO io
-              where sp.PAN_ID = io.OUTPUT_PAN_ID
+        '@PROJECT_ID@' as project_id, sp.name as Sample_Id, pa.name as Participant_Id, hh.name as Household_Id, sp.*
+from apidbtuning.${tblPrefix}Households hh
+              ,apidbtuning.${tblPrefix}Participants pa
+              ,apidbtuning.${tblPrefix}Observations cv
+              ,apidbtuning.${tblPrefix}Samples sp
+              ,apidbtuning.${tblPrefix}PANIO io
+              ,apidbtuning.${tblPrefix}PANIO io2
+              ,apidbtuning.${tblPrefix}PANIO io3
+             where sp.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = cv.PAN_ID
+              and cv.PAN_ID = io2.OUTPUT_PAN_ID
+              and io2.INPUT_PAN_ID = pa.PAN_ID
+              and pa.PAN_ID = io3.OUTPUT_PAN_ID
+              and io3.INPUT_PAN_ID = hh.PAN_ID
 
             ]]>
             </sql>
