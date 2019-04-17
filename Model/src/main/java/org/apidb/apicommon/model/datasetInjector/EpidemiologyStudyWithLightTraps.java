@@ -148,8 +148,8 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         if(hasParticipantQuestion && hasParticipants){
             for (Map.Entry<String, String[]> entry : lightTrapQuestionTemplateNamesToScopes().entrySet()) {
                 String questionName = entry.getKey();
-                if(questionName.startsWith("LightTrapsByMetadata")){
-                    cardQuestions = cardQuestions + ", \"lighttraps\": \"LighttrapQuestions." + presenterId + "LighttrapsByMetadata\"";
+                if(questionName.equals("LightTrapsByMetadata")){
+                    cardQuestions = cardQuestions + ", \"lighttraps\": \"LighttrapQuestions." + presenterId + "LightTrapsByMetadata\"";
                 }else{                  
                     cardQuestions = cardQuestions + ", \"lighttraps\": \"LighttrapQuestions." + questionName + "\"";
                 }

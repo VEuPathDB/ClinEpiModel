@@ -484,7 +484,7 @@ greatest(pa.EUPATH_0000151, \$\$visit_date.min\$\$, pa.EFO_0004950 + ( age.min_a
 >templateTextEnd<
 
 [templateStart]
-name=participantlMetadataQueryPRISM2
+name=participantMetadataQueryPRISM2
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 prop=visitMinDate

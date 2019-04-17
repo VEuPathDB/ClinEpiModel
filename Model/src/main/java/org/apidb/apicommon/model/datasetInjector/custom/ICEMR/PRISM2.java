@@ -1,10 +1,10 @@
 package org.apidb.apicommon.model.datasetInjector.custom.ICEMR;
 
-import org.apidb.apicommon.model.datasetInjector.BasicEpiStudy;
+import org.apidb.apicommon.model.datasetInjector.BasicEpiStudyWithLightTraps;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PRISM2 extends BasicEpiStudy {
+public class PRISM2 extends BasicEpiStudyWithLightTraps {
 
     @Override
     protected void setStudySpecificProperties(){

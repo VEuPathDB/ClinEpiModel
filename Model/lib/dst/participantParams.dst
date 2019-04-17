@@ -1727,7 +1727,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     prompt="Participants"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.visits_visitage_metadata_${tblPrefix},clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region_${tblPrefix}">
+                    dependedParamRef="participantParams.visits_visitage_metadata_${tblPrefix},clinicalVisitParams.visit_date,participantParams.duration_observation">
       <help>
         Select participants based on their characteristics. 
       </help>
@@ -2496,7 +2496,6 @@ from ApidbTuning.${tblPrefix}Ontology o
      <paramRef ref="participantParams.visits_visitage_metadata_${tblPrefix}" />
      <paramRef ref="clinicalVisitParams.visit_date" /> 
      <paramRef ref="participantParams.duration_observation" />  
-     <paramRef ref="participantParams.geographic_region_${tblPrefix}" />  
      <column name="ontology_term_name"/>
      <column name="internal"/>
      <column name="number_value"/>

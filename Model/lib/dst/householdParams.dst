@@ -614,6 +614,156 @@ from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
 >templateTextEnd<
 
 [templateStart]
+name=householdFilterParamsPRISM2
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
+prop=tblPrefix
+>templateTextStart<
+    <filterParam name="households_${tblPrefix}" 
+                    ontologyQueryRef="HouseholdVQ.HouseholdOntology_${tblPrefix}"
+                    metadataQueryRef="HouseholdVQ.HouseholdMetaData_${tblPrefix}"
+                    backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_${tblPrefix}"
+                    prompt="Households"
+                    countPredictsAnswerCount="true"
+                    trimMetadataTerms="true"
+                    dependedParamRef="householdParams.date_range">
+      <help>
+        Select participants based on their characteristics. 
+      </help>
+    </filterParam>
+
+    <filterParam name="participants_${tblPrefix}" 
+                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
+                      metadataQueryRef="HouseholdVQ.ParticipantMetaData_${tblPrefix}"
+                      backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_${tblPrefix}"
+                      prompt="Participants"
+                      countPredictsAnswerCount="true"
+                      trimMetadataTerms="true"
+                      dependedParamRef="householdParams.households_${tblPrefix}">
+         <help>
+              Select participants based on their characteristics. 
+         </help>
+       </filterParam>
+>templateTextEnd<
+
+[templateStart]
+name=householdFilterParamQueriesPRISM2
+anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
+prop=tblPrefix
+>templateTextStart<
+    <sqlQuery name="HouseholdOntology_${tblPrefix}" isCacheable="true">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000144') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision
+from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('PCO_0000024','ENVO_01000744')
+ union
+ select 'average_anopheles' as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, 'Average Female Anopheles Collected' as display_name, 'Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
+ null as precision from dual)
+ where ontology_term_name not in ('EUPATH_0000094')
+ order by display_name
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="true">
+      <paramRef ref="householdParams.date_range" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+with mos as (
+ select da.pan_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
+  from ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  and EUPATH_0020003 >= \$\$date_range.min\$\$
+  and EUPATH_0020003 <= \$\$date_range.max\$\$ 
+  group by da.pan_id
+  )
+select distinct m.pan_id as internal,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m, mos
+ where m.pan_id = mos.internal
+ union 
+ select * from mos
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaDataBkgd_${tblPrefix}" isCacheable="true">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
+ from ApidbTuning.${tblPrefix}MetaData m
+ where m.category = 'Household'
+ union
+ select da.pan_id as internal,  'average_anopheles' as ontology_term_name, null as string_value, 
+   round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as number_value, null as date_value
+  from ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  group by da.pan_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="true">
+     <paramRef ref="householdParams.households_${tblPrefix}" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+         <![CDATA[
+select distinct m.pan_id as internal, io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
+ where io.input_pan_id in (\$\$households_${tblPrefix}\$\$)
+ and io.output_pan_type_source_id = 'EUPATH_0000096'
+ and m.pan_id = io.output_pan_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="true">
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+         <![CDATA[
+select distinct m.pan_id as internal, io.input_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
+ where io.output_pan_type_source_id = 'EUPATH_0000096'
+ and io.input_pan_type_source_id = 'PCO_0000024'
+ and m.pan_id = io.output_pan_id
+          ]]>
+    </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
 name=householdFilterParamsINDIA
 anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
