@@ -188,7 +188,6 @@ BEGIN MALED
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="name" internal="true" inReportMaker="false"/>
 	    <columnAttribute name="Observation_Id"/>
-	    <columnAttribute name="Household_Id"/>
           </table>
 
 	  
@@ -202,7 +201,6 @@ BEGIN MALED
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
 	    <columnAttribute name="Observation_Id"/>
             <columnAttribute name="Sample_Id"/>
-            <columnAttribute name="Household_Id"/>
           </table>
 
 
@@ -569,34 +567,25 @@ WHERE o.dataset_name = '&&datasetName&&'
             <column name="project_id"/>
             <column name="name"/>
 	    <column name="Observation_Id"/>
-	    <column name="Household_Id"/>
             <sql>
             <![CDATA[
 
-select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, hh.name as Household_Id, cv.*
+select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, cv.*
         from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}Participants pa
-              , apidbtuning.${tblPrefix}Households hh
               , apidbtuning.${tblPrefix}PANIO io
-              , apidbtuning.${tblPrefix}PANIO io2
-              where pa.PAN_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = hh.PAN_ID
-              and cv.PAN_ID = io2.OUTPUT_PAN_ID
-              and io2.INPUT_PAN_ID = pa.PAN_ID
+              where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
 
 union
 
-select t1.source_id, t1.project_id, t1.Observation_Id, t1.Household_Id, t2.* from
-       (select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, hh.name as Household_Id, cv.pan_id
+select t1.source_id, t1.project_id, t1.Observation_Id, t2.* from
+       (select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, cv.pan_id
         from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}Participants pa
-              , apidbtuning.${tblPrefix}Households hh
               , apidbtuning.${tblPrefix}PANIO io
-              , apidbtuning.${tblPrefix}PANIO io2
-               where pa.PAN_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = hh.PAN_ID
-              and cv.PAN_ID = io2.OUTPUT_PAN_ID
-              and io2.INPUT_PAN_ID = pa.PAN_ID) t1,
+               where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID) t1,
 
          (select cv.* from apidbtuning.${tblPrefix}Observations cv
               , apidbtuning.${tblPrefix}PANIO io
@@ -639,26 +628,21 @@ select t1.source_id, t1.project_id, t1.Observation_Id, t1.Household_Id, t2.* fro
             <column name="observation_source_id"/>
 	    <column name="Observation_Id"/>
             <column name="Sample_Id"/>
-            <column name="Household_Id"/>
             <sql>
             <![CDATA[
 
 SELECT pa.name as source_id,
-        '@PROJECT_ID@' as project_id, cv.name as observation_source_id, cv.name as Observation_Id, hh.name as Household_Id, sp.name as Sample_Id, sp.*
-FROM apidbtuning.${tblPrefix}Households hh
-              ,apidbtuning.${tblPrefix}Participants pa
+        '@PROJECT_ID@' as project_id, cv.name as observation_source_id, cv.name as Observation_Id, sp.name as Sample_Id, sp.*
+FROM 	apidbtuning.${tblPrefix}Participants pa
               ,apidbtuning.${tblPrefix}Observations cv
                ,apidbtuning.${tblPrefix}Samples sp
               , apidbtuning.${tblPrefix}PANIO io
               ,apidbtuning.${tblPrefix}PANIO io2
-              ,apidbtuning.${tblPrefix}PANIO io3
               where sp.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = cv.PAN_ID
               and cv.PAN_ID = io2.OUTPUT_PAN_ID
               and io2.INPUT_PAN_ID = pa.PAN_ID
-              and pa.PAN_ID = io3.OUTPUT_PAN_ID
-              and io3.INPUT_PAN_ID = hh.PAN_ID
-
+        
             ]]>
             </sql>
         </sqlQuery>
@@ -697,7 +681,7 @@ select pa.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_
               , apidbtuning.${tblPrefix}PANIO io
               where pa.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = hh.PAN_ID
-
+	      and (select count(*) from apidbtuning.${tblPrefix}Households) >0
             ]]>
             </sql>
         </sqlQuery>
