@@ -508,13 +508,15 @@ prop=visitMaxDate
        <column name="visit_count"/>
        <column name="visits_per_year_obs"/>
        <column name="time_of_obs"/>
+       <column name="ave_anoph"/>
        <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, core.visit_count,
 round(core.visit_count / ((abs(least(pa.EUPATH_0000152, \$\$visit_date.max\$\$, pa.EFO_0004950 + ( age.max_age * 365)) -
       greatest(pa.EUPATH_0000151, \$\$visit_date.min\$\$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365),1) as visits_per_year_obs,
 round((abs(least(pa.EUPATH_0000152, \$\$visit_date.max\$\$, pa.EFO_0004950 + ( age.max_age * 365)) - 
-      greatest(pa.EUPATH_0000151, \$\$visit_date.min\$\$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365,1) as time_of_obs
+      greatest(pa.EUPATH_0000151, \$\$visit_date.min\$\$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365,1) as time_of_obs,
+mos.ave_anoph
 from
 (select pa.pan_id, nvl(visits.visit_count,0) as visit_count
 from ApidbTuning.${tblPrefix}Participants pa, 
@@ -544,12 +546,22 @@ and pa.pan_id = visits.input_pan_id(+)) core, ApidbTuning.${tblPrefix}Participan
 (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from ApidbTuning.${tblPrefix}Observations 
    where pan_id in (\$\$visits_visitage_metadata_${tblPrefix}\$\$)
-   ) age
+   ) age,
+(select iop.output_pan_id as part_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as ave_anoph
+  from ApidbTuning.${tblPrefix}Panio iol, ApidbTuning.${tblPrefix}LightTraps la, ApidbTuning.${tblPrefix}Panio iop
+  where iol.output_pan_id = la.pan_id
+  and Iol.Input_Pan_Type_Source_Id = 'PCO_0000024'
+  and iop.input_pan_id = iol.input_pan_id
+  and Iop.Output_Pan_Type_Source_Id = 'EUPATH_0000096'
+  and EUPATH_0020003 >= \$\$visit_date.min\$\$ 
+  and EUPATH_0020003 <= \$\$visit_date.max\$\$ 
+  group by iop.output_pan_id) mos
 where pa.pan_id = core.pan_id
 and round(core.visit_count / ((abs(least(pa.EUPATH_0000152, \$\$visit_date.max\$\$, pa.EFO_0004950 + ( age.max_age * 365)) -
 greatest(pa.EUPATH_0000151, \$\$visit_date.min\$\$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365),1) >= \$\$visits_per_year.min\$\$
 and round(core.visit_count / ((abs(least(pa.EUPATH_0000152, \$\$visit_date.max\$\$, pa.EFO_0004950 + ( age.max_age * 365)) -
 greatest(pa.EUPATH_0000151, \$\$visit_date.min\$\$, pa.EFO_0004950 + ( age.min_age * 365))) + 1) / 365),1) <= \$\$visits_per_year.max\$\$
+and pa.pan_id = mos.part_id(+) 
                 ]]>   
         </sql>
      </sqlQuery>
