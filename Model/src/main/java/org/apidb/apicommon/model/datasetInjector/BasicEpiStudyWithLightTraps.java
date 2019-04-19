@@ -57,12 +57,7 @@ public class BasicEpiStudyWithLightTraps extends EpidemiologyStudyWithLightTraps
     @Override
     protected Map<String,String[]> lightTrapQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
-      String studyType = getPropValue("studyType");
-      if(studyType.equals("Longitudinal")){
-          map.put("LightTrapsByMetadata" + studyType, new String[] {"menu", "webservice"});
-      }else{
-          map.put("LightTrapsByMetadata", new String[] {"menu", "webservice"});
-      }
+      map.put("LightTrapsByMetadata", new String[] {"menu", "webservice"});
       return(map);
     }
 

@@ -21,8 +21,6 @@
       <property name="externalAppUrl"><![CDATA[/shiny/App-2-ps]]></property>
       <property name="attributesToExtract">name,avg_hemo,avg_weight,ave_anoph,ave_para_density,visits_per_year_obs,visit_count,time_of_obs,ave_age_visit,EUPATH_0000034,EUPATH_0000054,EUPATH_0000033,EUPATH_0000035,PATO_0000047,ENVO_01000744</property>
       <property name="addHeader">true</property>
-      <property name="iframeWidthPx">1000</property>
-      <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 
     <stepAnalysisPlugin
@@ -39,8 +37,6 @@
       <property name="externalAppUrl"><![CDATA[/shiny/App-3-lts]]></property>
       <property name="attributesToExtract">source_id,sum_female_As_in_a_collection,sum_female_As_gambiae_in_a_co,sum_female_As_funestus_in_a_c,total_anopheles_tested,total_anopheles_positive,subcounty_in_uganda,date_of_visit,gravid_a_gambiae,gravid_a_funestus,parous,nulliparous</property>
       <property name="addHeader">true</property>
-      <property name="iframeWidthPx">1000</property>
-      <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 
 <!--
@@ -61,8 +57,6 @@
       <property name="tablesToExtract">ShinyParticipants,ShinyHouseholds,ShinyObservations</property>
       <property name="attributesToExtract">visit_type,malaria_diagnosis_and_parasit,subcounty_in_uganda,febrile,hemoglobin,asexual_parasite_density,asexual_parasites_present_mic,age_since_birth_at_time_of_vi,visit_date</property>
       <property name="addHeader">true</property>
-      <property name="iframeWidthPx">1000</property>
-      <property name="iframeLengthPx">800</property>
     </stepAnalysisPlugin>
 -->
 
@@ -81,8 +75,6 @@
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_2x2]]></property>
       <property name="attributesToExtract">primary_key,project_id</property>
       <property name="addHeader">true</property>
-      <property name="iframeWidthPx">1200</property>
-      <property name="iframeLengthPx">800</property>
       <property name="dumpModelProps">true</property>
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
@@ -105,8 +97,6 @@
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_EventDist]]></property>
       <property name="attributesToExtract">primary_key,project_id</property>
       <property name="addHeader">true</property>
-      <property name="iframeWidthPx">1200</property>
-      <property name="iframeLengthPx">800</property>
       <property name="dumpModelProps">true</property>
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>
@@ -132,8 +122,6 @@
       <property name="externalAppUrl"><![CDATA[/shiny/ClinEpi_Summaries]]></property>
       <property name="attributesToExtract">primary_key,project_id</property>
       <property name="addHeader">true</property>
-      <property name="iframeWidthPx">1200</property>
-      <property name="iframeLengthPx">800</property>
       <property name="dumpModelProps">true</property>
 <!--
       <property name="datasetTblPrefix">OVERRIDE_FROM_RECORD</property>

@@ -159,6 +159,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       setPropValue("ontologyURL", shinyOntologyURL);
       injectTemplate("shinyDataLoad");
 
+      // boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
@@ -429,6 +430,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
       boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
       boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
+      // boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
@@ -612,6 +614,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
         boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
         boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
+	//boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
         boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
         boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
         boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
@@ -669,6 +672,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
   @Override
   public void addModelReferences() {
+      //boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
@@ -747,11 +751,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 	  addWdkReference(participantRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0); 
-	  //addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
 
-          if(hasHouseholds) {
-	      addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
-          }
+          //if(hasHouseholdDataCollection) {
+	  //  addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+          //}
 
 
           if(hasSamples) {
@@ -772,7 +776,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 	  addWdkReference(observationRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
-	  //addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+	  addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
@@ -788,10 +792,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               addWdkReference(observationRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
-	  if(hasHouseholds) {
-	      addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
-
-          }
+	  //if(hasHouseholdDataCollection) {
+	  //  addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+          //}
 	  if(hasSamples) {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
           }
@@ -819,11 +822,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String [][] declaration = {
                                  {"injectStudy", ""},  
                                  {"isPublic", ""},
+				 //{"hasHouseholdDataCollection", ""},
                                  {"hasHouseholdRecord", ""},
                                  {"hasObservationRecord", ""},
                                  {"hasParticipantRecord", ""},
 
-                                 {"householdAttributesList", ""},
+                                {"householdAttributesList", ""},
                                  {"householdRecordAttributesList", ""},
                                  {"householdSourceIdsForHouseholdMemberTable", ""},
                                  {"householdRecordOverview", ""},

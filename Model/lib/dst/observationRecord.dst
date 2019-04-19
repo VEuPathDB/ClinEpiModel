@@ -422,7 +422,7 @@ from (
    UNION
 
         select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
-
+	where (select count(*) from apidbtuning.${tblPrefix}Households) >0	
 
 ) meta
 

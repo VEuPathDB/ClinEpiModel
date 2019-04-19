@@ -50,22 +50,24 @@ prop=lightTrapQuestionName
 >templateTextEnd<
 
 [templateStart]
-name=CollectionsByCharacteristics_prism2
+name=LightTrapsByMetadata
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=lightTrapQuestionName
+prop=lightTrapAttributesListFull
+prop=studyAbbreviation
 >templateTextStart<
-    	<question name="${lightTrapQuestionName}" newBuild="22"
+    	<question name="${presenterId}LightTrapsByMetadata" newBuild="22"
     		searchCategory="Lighttraps"
                 includeProjects="${includeProjects}"
-    		displayName="Select a Set of Light Trap Collections (PRISM2)"
+    		displayName="Select a Set of Light Trap Collections (${studyAbbreviation})"
     		shortDisplayName="Light Traps"
     		queryRef="LightTrapId.LightTrapsByMetadata_${tblPrefix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
-<!--          <attributesList summary="" /> -->
+          ${lightTrapAttributesListFull}
  
           <dynamicAttributes>
           </dynamicAttributes>
@@ -90,3 +92,4 @@ prop=lightTrapQuestionName
         </description>
     	</question>
 >templateTextEnd<
+

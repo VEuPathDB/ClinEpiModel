@@ -1727,7 +1727,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     prompt="Participants"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.visits_visitage_metadata_${tblPrefix},clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region_${tblPrefix}">
+                    dependedParamRef="participantParams.visits_visitage_metadata_${tblPrefix},clinicalVisitParams.visit_date,participantParams.duration_observation">
       <help>
         Select participants based on their characteristics. 
       </help>
@@ -2496,7 +2496,6 @@ from ApidbTuning.${tblPrefix}Ontology o
      <paramRef ref="participantParams.visits_visitage_metadata_${tblPrefix}" />
      <paramRef ref="clinicalVisitParams.visit_date" /> 
      <paramRef ref="participantParams.duration_observation" />  
-     <paramRef ref="participantParams.geographic_region_${tblPrefix}" />  
      <column name="ontology_term_name"/>
      <column name="internal"/>
      <column name="number_value"/>
@@ -2536,6 +2535,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD m
     </sql>
     </sqlQuery>
 
+
     <sqlQuery name="HouseholdOntology_${tblPrefix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
@@ -2547,21 +2547,17 @@ from ApidbTuning.${tblPrefix}ParticipantMD m
       <column name="is_range"/>
       <sql>
 select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
-CASE WHEN o.ontology_term_source_id in (${householdMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range,o.precision, o.display_order
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000144') AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision
 from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id =  'PCO_0000024'
-     )
-     where ontology_term_name not in (${householdFilterExcludedIdsQuoted})
-     ${rmRegionSqlCommentStart}
-     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id =  'GAZ_00000448')
-     ${rmRegionSqlCommentEnd}
-     order by display_order, display_name
+     START WITH o.ontology_term_source_id in ('PCO_0000024','ENVO_01000744')
+ union
+ select 'average_anopheles' as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, 'Average Female Anopheles Collected' as display_name, 'Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search' as description, null as units, 'number' as type, 1 as is_range,
+ null as precision from dual)
+ where ontology_term_name not in ('EUPATH_0000094')
+ order by display_name
     </sql>
     </sqlQuery>
 
@@ -2583,6 +2579,16 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}MetaData m, part
  where part.household_id = m.pan_id
+ union all
+ select distinct part.household_id as filter_item_id, part.part_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ from (select da.pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from ApidbTuning.${tblPrefix}Households da, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
+  where da.pan_id = io.input_pan_id
+  and la.pan_id = io.output_pan_id
+  and la.EUPATH_0020003 >= \$\$visit_date.min\$\$ 
+  and la.EUPATH_0020003 <= \$\$visit_date.max\$\$ 
+  group by da.pan_id) mos, part
+  where part.household_id = mos.pan_id(+)
           ]]>
     </sql>    
 
@@ -2604,6 +2610,15 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}MetaData m, part
  where part.household_id = m.pan_id
+ union all
+ select distinct part.household_id as filter_item_id, part.part_id as internal, 'average_anopheles' as ontology_term_name, null as string_value, nvl(mos.avg_anoph,0) as number_value, null as date_value
+ from (select io.input_pan_id as pan_id, round(avg(nvl(EUPATH_0000192,0)+nvl(EUPATH_0000204,0)+nvl(EUPATH_0000205,0)),1) as avg_anoph
+  from ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}LightTraps la
+  where io.input_pan_type_source_id = 'PCO_0000024'
+  and io.output_pan_type_source_id = 'EUPATH_0000327'
+  and la.pan_id = io.output_pan_id
+  group by io.input_pan_id) mos, part
+  where part.household_id = mos.pan_id(+)
           ]]>
       </sql>    
     </sqlQuery>
