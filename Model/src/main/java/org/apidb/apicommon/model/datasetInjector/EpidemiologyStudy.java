@@ -166,6 +166,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
+      boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
@@ -686,7 +687,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
       String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
       String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
-
+      
       if(hasHouseholds) {
           addWdkReference(householdRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
           addWdkReference(householdRecordClass, "table", "HouseholdMembers", new String[]{"record"}, CATEGORY_IRI, 0);
