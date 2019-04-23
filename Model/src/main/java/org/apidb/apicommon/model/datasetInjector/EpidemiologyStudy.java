@@ -166,6 +166,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
+      boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
@@ -679,13 +680,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
+      boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
 
       String presenterId = getPropValue("presenterId");
       
       String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
       String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
       String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
-
+      
       if(hasHouseholds) {
           addWdkReference(householdRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
           addWdkReference(householdRecordClass, "table", "HouseholdMembers", new String[]{"record"}, CATEGORY_IRI, 0);
@@ -751,12 +753,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 	  addWdkReference(participantRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+
+
+	  if(hasHouseholdObservations){
 	  addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
-
-          //if(hasHouseholdDataCollection) {
-	  //  addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
-          //}
-
+	  }
 
           if(hasSamples) {
               addWdkReference(participantRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
@@ -776,7 +777,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(observationRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
 	  addWdkReference(observationRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
-	  addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+	  //addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationssBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 
@@ -792,9 +793,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               addWdkReference(observationRecordClass, "question", questionFullName, entry.getValue(), CATEGORY_IRI, 0);
           }
 
-	  //if(hasHouseholdDataCollection) {
-	  //  addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
-          //}
+	  if(hasHouseholdObservations) {
+	      addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+          }
+	  
 	  if(hasSamples) {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
           }
@@ -822,8 +824,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String [][] declaration = {
                                  {"injectStudy", ""},  
                                  {"isPublic", ""},
-				 //{"hasHouseholdDataCollection", ""},
-                                 {"hasHouseholdRecord", ""},
+				 {"hasHouseholdRecord", ""},
                                  {"hasObservationRecord", ""},
                                  {"hasParticipantRecord", ""},
 
