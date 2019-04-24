@@ -669,7 +669,7 @@ FROM 	apidbtuning.${tblPrefix}Participants pa
 
 
  <sqlQuery name="HouseholdsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.HouseholdsDownloadColumnAttributes">
- 	    <column name="source_id" internal="true"/>
+ 	    <column name="source_id"/>
             <column name="project_id"/>
             <column name="Household_Id"/>
             <sql>
