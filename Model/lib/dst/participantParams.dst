@@ -1334,7 +1334,9 @@ and ('AnY' = \$\$study_arm_${tblPrefix}\$\$
          <![CDATA[
 select m.household_id as internal, hp.participant_id as record_id,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
-where m.ontology_term_name = 'OBI_0001627'
+where m.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and m.household_id = hp.household_id  
           ]]>
     </sql>    
