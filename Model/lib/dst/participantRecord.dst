@@ -669,19 +669,33 @@ FROM 	apidbtuning.${tblPrefix}Participants pa
 
 
  <sqlQuery name="HouseholdsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.HouseholdsDownloadColumnAttributes">
-            <column name="source_id"/>
+ 	    <column name="source_id"/>
             <column name="project_id"/>
             <column name="Household_Id"/>
             <sql>
             <![CDATA[
 
+ with HHob as(
+        select *
+        from apidbtuning.${tblPrefix}PANIO
+        where input_pan_type_source_id = 'PCO_0000024'
+        and output_pan_type_source_id = 'PCO_0000024'
+    )
 select pa.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_Id, hh.*
-              from apidbtuning.${tblPrefix}Participants pa
-               ,apidbtuning.${tblPrefix}Households hh
-              , apidbtuning.${tblPrefix}PANIO io
-              where pa.PAN_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = hh.PAN_ID
-	      and (select count(*) from apidbtuning.${tblPrefix}Households) >0
+    from apidbtuning.${tblPrefix}Households hh, HHob, apidbtuning.${tblPrefix}Participants pa, apidbtuning.${tblPrefix}Panio io1
+   where  hh.pan_id =  HHob.output_pan_id
+   
+   and pa.pan_id = io1.output_pan_id
+   and io1.input_pan_id  = HHob.input_pan_id
+   
+ union 
+ 
+   select pa.name as source_id,  '@PROJECT_ID@' as project_id, hh.name as Household_Id, hh.*                  
+         from apidbtuning.${tblPrefix}Households hh, HHob,  apidbtuning.${tblPrefix}Participants pa,  apidbtuning.${tblPrefix}Panio io2
+        where HHob.input_pan_id = hh.pan_id
+        and pa.PAN_ID = io2.OUTPUT_PAN_ID
+        and io2.INPUT_PAN_ID = hh.PAN_ID
+
             ]]>
             </sql>
         </sqlQuery>
