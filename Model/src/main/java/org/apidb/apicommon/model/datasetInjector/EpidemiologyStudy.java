@@ -409,6 +409,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantTables.ObservationsColumnAttributes",null);
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ObservationAttributesMeta","ObservationNode");
       injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.HouseholdAttributesMeta","HouseholdNode");
+      injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.ObservationAttributesMeta","ObservationNode");
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ParticipantAttributesMeta","ParticipantNode");
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.HouseholdAttributesMeta","HouseholdNode");
 
