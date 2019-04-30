@@ -569,7 +569,7 @@ from apidbtuning.${tblPrefix}Households hh
             <sql>
             <![CDATA[
 
-with HHob as(
+ with HHob as(
         select *
         from apidbtuning.${tblPrefix}PANIO
         where input_pan_type_source_id = 'PCO_0000024'
@@ -580,10 +580,8 @@ with HHob as(
                 apidbtuning.${tblPrefix}Participants pa,
                 apidbtuning.${tblPrefix}Households hh,
                 apidbtuning.${tblPrefix}PANIO io,
-                apidbtuning.${tblPrefix}PANIO io2,
-                HHob
-              where HHob.input_pan_id = hh.pan_id
-              and ob.PAN_ID = io.OUTPUT_PAN_ID
+                apidbtuning.${tblPrefix}PANIO io2
+              where ob.PAN_ID = io.OUTPUT_PAN_ID
               and io.INPUT_PAN_ID = pa.PAN_ID
               and pa.PAN_ID = io2.OUTPUT_PAN_ID
               and io2.INPUT_PAN_ID = hh.PAN_ID
@@ -603,6 +601,7 @@ select ob.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_
             and io.INPUT_PAN_ID = pa.PAN_ID
             and pa.pan_id = io2.output_pan_id
             and io2.input_pan_id  = HHob.input_pan_id
+            and (select count(*) from HHob) >0
 
 
             ]]>
