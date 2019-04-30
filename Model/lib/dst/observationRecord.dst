@@ -568,16 +568,42 @@ from apidbtuning.${tblPrefix}Households hh
 	    <column name="Household_Id"/>
             <sql>
             <![CDATA[
+
+with HHob as(
+        select *
+        from apidbtuning.${tblPrefix}PANIO
+        where input_pan_type_source_id = 'PCO_0000024'
+        and output_pan_type_source_id = 'PCO_0000024'
+    )
+ select ob.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_Id, pa.name as Participant_Id, hh.*
+              from apidbtuning.${tblPrefix}Observations ob,
+                apidbtuning.${tblPrefix}Participants pa,
+                apidbtuning.${tblPrefix}Households hh,
+                apidbtuning.${tblPrefix}PANIO io,
+                apidbtuning.${tblPrefix}PANIO io2,
+                HHob
+              where HHob.input_pan_id = hh.pan_id
+              and ob.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
+              and pa.PAN_ID = io2.OUTPUT_PAN_ID
+              and io2.INPUT_PAN_ID = hh.PAN_ID
+              and (select count(*) from apidbtuning.${tblPrefix}Households) >0
+              
+UNION
+
 select ob.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_Id, pa.name as Participant_Id, hh.*
               from apidbtuning.${tblPrefix}Observations ob,
                 apidbtuning.${tblPrefix}Participants pa,
                 apidbtuning.${tblPrefix}Households hh,
                 apidbtuning.${tblPrefix}PANIO io,
-                apidbtuning.${tblPrefix}PANIO io2
-              where ob.PAN_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = pa.PAN_ID
-              and pa.PAN_ID = io2.OUTPUT_PAN_ID
-              and io2.INPUT_PAN_ID = hh.PAN_ID
+                apidbtuning.${tblPrefix}PANIO io2,
+                HHob
+            where hh.pan_id =  HHob.output_pan_id
+            and ob.PAN_ID = io.OUTPUT_PAN_ID
+            and io.INPUT_PAN_ID = pa.PAN_ID
+            and pa.pan_id = io2.output_pan_id
+            and io2.input_pan_id  = HHob.input_pan_id
+
 
             ]]>
             </sql>

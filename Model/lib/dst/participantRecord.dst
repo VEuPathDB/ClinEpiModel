@@ -145,6 +145,9 @@ BEGIN MALED
          <attributeQueryRef ref="${presenterId}ParticipantAttributes.HouseholdAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.HouseholdAttributesMeta"/>
 
 
+         <attributeQueryRef ref="${presenterId}ParticipantAttributes.ObservationAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ObservationAttributesMeta"/>
+
+
         <table name="Characteristics"
                displayName="Participant Characteristics"
                queryRef="${presenterId}ParticipantTables.Characteristics">
@@ -456,6 +459,84 @@ from (
               </sql>
 
            </sqlQuery>
+
+
+
+<sqlQuery name="ObservationAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.ObservationAttributesMeta">
+         <column name="source_id"/>
+         <column name="project_id"/>
+          <sql>
+            <![CDATA[
+
+select pa.name as source_id, '@PROJECT_ID@' as project_id, ob.*
+        from APIDBTUNING.${tblPrefix}Participants pa,
+             APIDBTUNING.${tblPrefix}Observations ob ,
+             apidbtuning.${tblPrefix}PANIO io
+
+    where  ob.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
+
+            ]]>
+            </sql>
+
+        </sqlQuery>
+
+
+
+<sqlQuery name="ObservationAttributesMeta" isCacheable="false">
+           <column name="name" />
+           <column name="display_name" />
+	   <column name="help" />
+           <column name="reporter_name" />
+           <column name="reporter_display" />
+           <column name="reporter_description" />
+           <column name="reporter_implementation" />
+           <column name="reporter_properties" />
+
+           <sql>
+            <![CDATA[
+
+with hasObserDuplication as(
+    select count(ct) as ct_total from 
+    ( select count(observationID)  as ct
+     from (
+        select ob.pan_id as ObservationID, pa.pan_id as ParticipantID, ob.* 
+        from  apidbtuning.${tblPrefix}Participants pa,
+              apidbtuning.${tblPrefix}Observations ob,
+              apidbtuning.${tblPrefix}PANIO io
+        where ob.pan_id = io.output_pan_id
+        and io.input_pan_id  = pa.pan_id) 
+        group by participantID
+     )  where ct=1 
+     )
+
+select meta.display_name, meta.name, meta.help,
+                   decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
+                   decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
+                   decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
+                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
+                    null as reporter_properties
+from (
+select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o, hasObserDuplication
+                                      
+    where s.synonym_name = upper('${tblPrefix}Observations')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+            and (select ct_total from hasObserDuplication) = 
+                (select count(*) from (select ob.pan_id as ObservationID, pa.pan_id as ParticipantID, ob.* 
+                 from  apidbtuning.${tblPrefix}Participants pa, apidbtuning.${tblPrefix}Observations ob, apidbtuning.${tblPrefix}PANIO io
+                where ob.pan_id = io.output_pan_id
+                and io.input_pan_id  = pa.pan_id))
+ )meta
+
+
+      ]]>
+              </sql>
+
+           </sqlQuery>
+
 
 
 
