@@ -321,25 +321,124 @@ select count(*) from apidbtuning.${tblPrefix}Observations
            <sql>
             <![CDATA[
 
-select meta.display_name, meta.name, meta.help,
+select * from (
+select distinct CASE when meta.display_name  = t1.display_name and meta.name=t1.ontology_term_source_id then
+concat(concat(t1.parent_ontology_term_name, ' >> '),meta.display_name) ELSE meta.display_name end as display_name , meta.name,
+meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
                    decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
-                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation, null as reporter_properties
+                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
+                            null as reporter_properties
 from (
-
-       select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
             from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}Participants')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
+                where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                and c.owner = 'APIDBTUNING'
+                and c.table_name = s.table_name
+                and upper(o.ontology_term_source_id) = c.column_name
 
-       union
+    ) meta, (select * from (
+                    with Par as ( select distinct display_name, count(display_name) as ct from(
+                                        select distinct o.display_name as display_name, o.ontology_term_source_id as name
+                                        from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                                            where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                                            and c.owner = 'APIDBTUNING'
+                                            and c.table_name = s.table_name
+                                            and upper(o.ontology_term_source_id) = c.column_name
+                                                )
+                                    group by display_name
+                                )
+                        select distinct o.display_name, o.ONTOLOGY_TERM_source_id, o.parent_ontology_term_name from ApidbTuning.${tblPrefix}Ontology o, Par where o.display_name  = Par.display_name and Par.ct > 1
+                            and o.ONTOLOGY_TERM_source_id in (select distinct o.ontology_term_source_id
+                        from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                            where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                            and c.owner = 'APIDBTUNING'
+                            and c.table_name = s.table_name
+                            and upper(o.ontology_term_source_id) = c.column_name)))t1
 
-       select 'Participant ID' as display_name, 'participant_id' as name, '' as help, '' as type from dual
+    where meta.display_name  = t1.display_name
+) where display_name like '%>>%'
 
- ) meta
+
+UNION
+
+
+select distinct meta.display_name
+ , meta.name, meta.help,
+                   decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
+                   decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
+                   decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
+                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
+                            null as reporter_properties
+from (
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                and c.owner = 'APIDBTUNING'
+                and c.table_name = s.table_name
+                and upper(o.ontology_term_source_id) = c.column_name
+
+    ) meta, (select * from (
+                    with Par as ( select distinct display_name, count(display_name) as ct from(
+                                        select distinct o.display_name as display_name, o.ontology_term_source_id as name
+                                        from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                                            where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                                            and c.owner = 'APIDBTUNING'
+                                            and c.table_name = s.table_name
+                                            and upper(o.ontology_term_source_id) = c.column_name
+                                                )
+                                    group by display_name
+                                )
+                        select distinct o.display_name, o.ONTOLOGY_TERM_source_id, o.parent_ontology_term_name from ApidbTuning.${tblPrefix}Ontology o, Par where o.display_name  = Par.display_name and Par.ct>1
+                            and o.ONTOLOGY_TERM_source_id in (select distinct o.ontology_term_source_id
+                        from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                            where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                            and c.owner = 'APIDBTUNING'
+                            and c.table_name = s.table_name
+                            and upper(o.ontology_term_source_id) = c.column_name)))t1
+
+    where meta.display_name  != t1.display_name
+    
+    
+    
+ UNION
+ 
+ select distinct meta.display_name
+ , meta.name, meta.help,
+                   decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
+                   decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
+                   decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
+                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
+                            null as reporter_properties
+from (
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                and c.owner = 'APIDBTUNING'
+                and c.table_name = s.table_name
+                and upper(o.ontology_term_source_id) = c.column_name
+ 
+    ) meta
+    
+    where (select count(distinct display_name) from 
+    (select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                and c.owner = 'APIDBTUNING'
+                and c.table_name = s.table_name
+                and upper(o.ontology_term_source_id) = c.column_name)) = (select count(*) from (select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
+                and c.owner = 'APIDBTUNING'
+                and c.table_name = s.table_name
+                and upper(o.ontology_term_source_id) = c.column_name))
+           
+  UNION
+
+       select 'Participant ID' as display_name, 'participant_id' as name, '' as help, '' as reporter_name, 
+       '' as reporter_display, '' as reporter_description, '' as reporter_implementation, '' as reporter_properties from dual
+
             ]]>
               </sql>
 
