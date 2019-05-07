@@ -704,8 +704,22 @@ WHERE o.dataset_name = '&&datasetName&&'
             <column name="Household_Id"/>
             <sql>
             <![CDATA[
-select cv.name as source_id,
-        '@PROJECT_ID@' as project_id, sp.name as Sample_Id, pa.name as Participant_Id, hh.name as Household_Id, sp.*
+select cv.name as source_id, '@PROJECT_ID@' as project_id, sp.name as Sample_Id, pa.name as Participant_Id, '' as Household_Id, sp.*
+from  apidbtuning.${tblPrefix}Participants pa
+              ,apidbtuning.${tblPrefix}Observations cv
+              ,apidbtuning.${tblPrefix}Samples sp
+              ,apidbtuning.${tblPrefix}PANIO io
+              ,apidbtuning.${tblPrefix}PANIO io2
+              ,dual
+             where sp.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = cv.PAN_ID
+              and cv.PAN_ID = io2.OUTPUT_PAN_ID
+              and io2.INPUT_PAN_ID = pa.PAN_ID
+              and (select count(*) from apidbtuning.${tblPrefix}Households) = 0
+
+UNION
+
+select cv.name as source_id, '@PROJECT_ID@' as project_id, sp.name as Sample_Id, pa.name as Participant_Id, hh.name as Household_Id, sp.*
 from apidbtuning.${tblPrefix}Households hh
               ,apidbtuning.${tblPrefix}Participants pa
               ,apidbtuning.${tblPrefix}Observations cv
@@ -719,6 +733,7 @@ from apidbtuning.${tblPrefix}Households hh
               and io2.INPUT_PAN_ID = pa.PAN_ID
               and pa.PAN_ID = io3.OUTPUT_PAN_ID
               and io3.INPUT_PAN_ID = hh.PAN_ID
+              and (select count(*) from apidbtuning.${tblPrefix}Households) > 0
 
             ]]>
             </sql>
