@@ -529,23 +529,21 @@ select pa.name as source_id, '@PROJECT_ID@' as project_id, ob.*
            <sql>
             <![CDATA[
 
-select * from (
-select distinct CASE when meta.display_name  = t1.display_name and meta.name=t1.ontology_term_source_id then
-concat(concat(t1.parent_ontology_term_name, ' >> '),meta.display_name) ELSE meta.display_name end as display_name,
-meta.name,meta.help,
+ with whole as (
+    select distinct CASE when meta.display_name  = t1.display_name and meta.name=t1.ontology_term_source_id then concat(concat(t1.parent_ontology_term_name, ' >> '), meta.display_name) 
+    ELSE meta.display_name end as display_name, meta.name,meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
                    decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
                    decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
                             null as reporter_properties
-from (
-    select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
-    from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-    where s.synonym_name = upper('${tblPrefix}Observations')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
-            and (select count(ct) from
+        from  (select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
+                from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+                where s.synonym_name = upper('${tblPrefix}OBSERVATIONS')
+                and c.owner = 'APIDBTUNING'
+                and c.table_name = s.table_name
+                and upper(o.ontology_term_source_id) = c.column_name
+                and (select count(ct) from
                     (select count(observationID)  as ct
                     from (
                             select ob.pan_id as ObservationID, pa.pan_id as ParticipantID
@@ -557,80 +555,24 @@ from (
                     (select count(*) from (select ob.pan_id as ObservationID, pa.pan_id as ParticipantID
                     from  apidbtuning.${tblPrefix}Participants pa, apidbtuning.${tblPrefix}Observations ob, apidbtuning.${tblPrefix}PANIO io
                         where ob.pan_id = io.output_pan_id
-                        and io.input_pan_id  = pa.pan_id))
-    )meta ,
-    (select * from (
-                    with OB as ( select distinct display_name, count(display_name) as ct from(
+                        and io.input_pan_id  = pa.pan_id))                              
+            )meta,
+
+               (select distinct o.display_name, o.ONTOLOGY_TERM_source_id, o.parent_ontology_term_name
+                from ApidbTuning.${tblPrefix}Ontology o, (select distinct display_name, count(display_name) as ct from(
                                         select distinct o.display_name as display_name, o.ontology_term_source_id as name
                                         from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-                                            where s.synonym_name = upper('${tblPrefix}Observations')
+                                            where s.synonym_name = upper('${tblPrefix}OBSERVATIONS')
                                             and c.owner = 'APIDBTUNING'
                                             and c.table_name = s.table_name
-                                            and upper(o.ontology_term_source_id) = c.column_name
-                                                )
-                                    group by display_name
-                                )
-                        select distinct o.display_name, o.ONTOLOGY_TERM_source_id, o.parent_ontology_term_name from ApidbTuning.${tblPrefix}Ontology o, OB where o.display_name  = OB.display_name and OB.ct > 1
-                            and o.ONTOLOGY_TERM_source_id in (select distinct o.ontology_term_source_id
-                        from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-                            where s.synonym_name = upper('${tblPrefix}Observations')
-                            and c.owner = 'APIDBTUNING'
-                            and c.table_name = s.table_name
-                            and upper(o.ontology_term_source_id) = c.column_name)))t1
-    where meta.display_name  = t1.display_name
- ) where display_name like '%>>%'
- 
+                                            and upper(o.ontology_term_source_id) = c.column_name )
+                                    group by display_name) par
+                            where o.display_name  = par.display_name and par.ct > 1)t1
+)
+select * from whole where display_name like '%>>%'
 UNION
-
-select distinct meta.display_name, meta.name, meta.help, 
-                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
-                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
-                    decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
-                    decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
-                            null as reporter_properties
-    from (
-    select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
-    from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-    where s.synonym_name = upper('${tblPrefix}Observations')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
-            and (select count(ct) from
-                    (select count(observationID)  as ct
-                    from (
-                            select ob.pan_id as ObservationID, pa.pan_id as ParticipantID
-                            from  apidbtuning.${tblPrefix}Participants pa, apidbtuning.${tblPrefix}Observations ob, apidbtuning.${tblPrefix}PANIO io
-                                where ob.pan_id = io.output_pan_id
-                                and io.input_pan_id  = pa.pan_id)
-                                group by participantID
-                    )where ct=1) =
-                    (select count(*) from (select ob.pan_id as ObservationID, pa.pan_id as ParticipantID
-                    from  apidbtuning.${tblPrefix}Participants pa, apidbtuning.${tblPrefix}Observations ob, apidbtuning.${tblPrefix}PANIO io
-                        where ob.pan_id = io.output_pan_id
-                        and io.input_pan_id  = pa.pan_id))
-    )meta 
-
- where meta.display_name not in (select tt.display_name from ( (select * from (
-                    with OB as ( select distinct display_name, count(display_name) as ct_num from(
-                                        select distinct o.display_name as display_name, o.ontology_term_source_id as name
-                                        from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-                                            where s.synonym_name = upper('${tblPrefix}Observations')
-                                            and c.owner = 'APIDBTUNING'
-                                            and c.table_name = s.table_name
-                                            and upper(o.ontology_term_source_id) = c.column_name
-                                                )
-                                    group by display_name
-                                )
-                        select distinct o.display_name, o.ONTOLOGY_TERM_source_id, o.parent_ontology_term_name from ApidbTuning.${tblPrefix}Ontology o, OB where o.display_name  = OB.display_name and OB.ct_num > 1
-                            and o.ONTOLOGY_TERM_source_id in (select distinct o.ontology_term_source_id
-                        from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-                            where s.synonym_name = upper('${tblPrefix}Observations')
-                            and c.owner = 'APIDBTUNING'
-                            and c.table_name = s.table_name
-                            and upper(o.ontology_term_source_id) = c.column_name)))tt))
-
+select * from whole where whole.name not in  (select name from whole where display_name like '%>>%')
 UNION
-
 select meta.display_name, meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
@@ -654,7 +596,7 @@ from(
                             and c.table_name = s.table_name
                             and upper(o.ontology_term_source_id) = c.column_name
                             and o.display_name =  OB.display_name
-                            and o.display_name  = OB.display_name and OB.ct =0
+                            and o.display_name  = OB.display_name and OB.ct =1
                             )meta
 
       ]]>
