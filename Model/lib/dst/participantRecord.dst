@@ -596,7 +596,7 @@ from(
                             and c.table_name = s.table_name
                             and upper(o.ontology_term_source_id) = c.column_name
                             and o.display_name =  OB.display_name
-                            and o.display_name  = OB.display_name and OB.ct =1
+                            and o.display_name  = OB.display_name and OB.ct =0
                             )meta
 
       ]]>
