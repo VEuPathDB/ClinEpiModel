@@ -128,15 +128,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String tblPrefix = "D" + getPropValue("datasetDigest");
       setPropValue("tblPrefix", tblPrefix);
 
-      //TODO figure how the two below are related
       String projectId = getPropValue("projectName");
       String gusHome = System.getenv("GUS_HOME");
       String modelPropPath = gusHome + "/config/" + projectId + "/model.prop";
-      Properties properties = new Properties();
+      Properties modelProp = new Properties();
       InputStream input = null;
       try {
         input = new FileInputStream(modelPropPath);
-        properties.load(input);
+        modelProp.load(input);
       } catch (IOException e) {
           //        e.printStackTrace();
       } finally {
@@ -149,7 +148,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	}	
       }
 
-      String localhost = properties.getProperty("LOCALHOST") + properties.getProperty("LEGACY_WEBAPP_BASE_URL");
+      String localhost = modelProp.getProperty("LOCALHOST") + modelProp.getProperty("LEGACY_WEBAPP_BASE_URL");
 
       //inject shiny data loading
       String datasetName = getPropValue("datasetName");
