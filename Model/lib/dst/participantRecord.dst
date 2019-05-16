@@ -219,6 +219,15 @@ BEGIN MALED
           </table>
 
 
+           <table name="TreatmentsDownload"
+                 displayName="Treatments"
+                 queryRef="${presenterId}ParticipantTables.TreatmentsDownload"
+                 attributeMetaQueryRef="${presenterId}ParticipantTables.TreatmentsDownloadColumnAttributes">
+            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+          </table>
+
+
      ${participantRecordSamplesTable}
      ${participantRecordMicrosTable}
 
@@ -898,6 +907,52 @@ select pa.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_
          from apidbtuning.${tblPrefix}Households hh,  apidbtuning.${tblPrefix}Participants pa,  apidbtuning.${tblPrefix}Panio io2
         where pa.PAN_ID = io2.OUTPUT_PAN_ID
         and io2.INPUT_PAN_ID = hh.PAN_ID
+
+            ]]>
+            </sql>
+        </sqlQuery>
+
+<sqlQuery name="TreatmentsDownloadColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Observations')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+	    and c.column_name in ('EUPATH_0023015', 'EUPATH_0023014', 'EUPATH_0000058', 'EUPATH_0023016')
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+
+ <sqlQuery name="TreatmentsDownload"  isCacheable='false'>
+ 	    <column name="source_id"/>
+            <column name="project_id"/>
+            <sql>
+            <![CDATA[
+
+select t1.source_id, t1.project_id, t2.* from
+       (select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.pan_id
+        from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}Participants pa
+              , apidbtuning.${tblPrefix}PANIO io
+               where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
+              ) t1,
+
+         (select cv.pan_id,cv.EUPATH_0023015, cv.EUPATH_0023014, cv.EUPATH_0000058, cv.EUPATH_0023016 from apidbtuning.D13c737a528Observations cv
+              ,apidbtuning.${tblPrefix}PANIO io
+              where io.INPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738' and io.OUTPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738'
+              and cv.PAN_ID=io.OUTPUT_PAN_ID) t2
+    ,apidbtuning.${tblPrefix}PANIO t3
+    where t2.pan_id = t3.output_pan_id
+    and t3.input_pan_id = t1.pan_id
 
             ]]>
             </sql>
