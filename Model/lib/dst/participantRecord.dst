@@ -715,6 +715,8 @@ WHERE o.dataset_name = '&&datasetName&&'
             and c.owner = 'APIDBTUNING'
             and c.table_name = s.table_name
             and upper(o.ontology_term_source_id) = c.column_name
+	    and c.column_name not in ('EUPATH_0023015', 'EUPATH_0023014', 'EUPATH_0000058', 'EUPATH_0023016')
+
             ]]>
           </sql>
         </sqlQuery>
