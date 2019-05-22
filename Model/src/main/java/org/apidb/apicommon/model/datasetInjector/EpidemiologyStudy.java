@@ -166,6 +166,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
+      //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
@@ -681,6 +682,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
+      boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       String presenterId = getPropValue("presenterId");
       
@@ -766,6 +768,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  if(hasMicros) {
               addWdkReference(participantRecordClass, "table", "Micros", new String[]{"record"}, CATEGORY_IRI, 0);
           }
+
+
+	  if(hasTreatments){
+	  addWdkReference(participantRecordClass, "table", "TreatmentsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  }
 
 
       }

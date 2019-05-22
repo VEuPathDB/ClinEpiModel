@@ -667,4 +667,29 @@ and count(*) <= \$\$visit_count.max\$\$
      </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=participantSurveyQuerySCORE
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
+prop=hasStudyArmParameter
+prop=tblPrefix
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
+       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.geographic_loc"/> 
+       <paramRef ref="participantParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${tblPrefix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
+where obs.observation_id in (\$\$visits_${tblPrefix}\$\$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
 

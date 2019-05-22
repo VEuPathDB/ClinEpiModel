@@ -331,6 +331,13 @@ You can restrict the observations returned in your search by selecting character
                 ]]>
             </description>
         </group>
+       <group name="part_sample_characteristics" displayName="Samples" displayType="ShowHide">
+            <description>
+                <![CDATA[
+    Filter participants based on information derived from samples collected in the study.     
+                ]]>
+            </description>
+        </group>
         <group name="summary_params" displayName="Visit aggregates" displayType="ShowHide">
             <description>
                 <![CDATA[
