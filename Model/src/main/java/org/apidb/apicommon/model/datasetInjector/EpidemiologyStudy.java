@@ -166,7 +166,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
-      boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
+      //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
