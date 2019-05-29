@@ -157,6 +157,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String shinyOntologyURL = localhost + "/service/shiny/ontology/" + datasetName;
       setPropValue("ontologyURL", shinyOntologyURL);
       injectTemplate("shinyDataLoad");
+      injectTemplate("shinyDatasetConfig");
 
       // boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
