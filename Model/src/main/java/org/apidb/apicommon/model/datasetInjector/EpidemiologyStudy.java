@@ -166,7 +166,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
-      //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
+      boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
@@ -219,6 +219,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
           setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
 
+	  //Samples Test results
           setPropValue("participantRecordSamplesTable", "");
           setPropValue("participantRecordSamplesMetaTableQuery", "");
           setPropValue("participantRecordSamplesTableQuery", "");
@@ -245,9 +246,24 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantRecordMicrosTable", getTemplateInstanceText("participantRecordMicrosTable"));
 	  setPropValue("microSourceIdsForParticipantsMicrosQuote", addQuotes(microSourceIdsForParticipantsMicrosTable));
 	  setPropValue("participantRecordMicrosTableQuery", getTemplateInstanceText("participantRecordMicrosTableQuery"));
- 
+ 	  }
 
+
+	  //Treatments Download Table
+          setPropValue("participantRecordTreatmentsTable", "");
+          setPropValue("participantRecordTreatmentsTableQuery", "");
+	     //setPropValue("treatmentSourceIdsForTreatmentsQuote","");
+	  
+          if(hasTreatments) {
+	    
+	  String treatmentSourceIdsForTreatmentsDownloadTable  = getPropValue("treatmentSourceIdsForTreatmentsDownloadTable");
+          setPropValue("participantRecordTreatmentsTable", getTemplateInstanceText("participantRecordTreatmentsTable"));
+	     //setPropValue("treatmentSourceIdsForTreatmentsQuote", addQuotes(treatmentSourceIdsForTreatmentsDownloadTable));
+	  setPropValue("participantRecordTreatmentsTableQuery", getTemplateInstanceText("participantRecordTreatmentsTableQuery"));
+ 
 	  }
+
+
           //before injecting any templates need to determine and set the attributes list ... can't be null
           String participantAttList = getPropValue("participantAttributesList");
           if(participantAttList != null && !participantAttList.equals("")) {
@@ -769,10 +785,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               addWdkReference(participantRecordClass, "table", "Micros", new String[]{"record"}, CATEGORY_IRI, 0);
           }
 
+	  if(hasTreatments) {
+              addWdkReference(participantRecordClass, "table", "Treatments", new String[]{"download"}, CATEGORY_IRI, 0);
+          }
 
-	  if(hasTreatments){
-	  addWdkReference(participantRecordClass, "table", "TreatmentsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
-	  }
+
+	  //if(hasTreatments){
+	  //addWdkReference(participantRecordClass, "table", "TreatmentsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  //}
 
 
       }
