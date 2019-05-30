@@ -18,6 +18,8 @@ prop=hasObservationRecord
 prop=participantRecordSamplesTable
 prop=participantRecordMicrosTable
 prop=participantRecordTreatmentsTable
+prop=treatmentSourceIdsForTreatmentsDownloadTable
+prop=condition
  
 >templateTextStart<
     <recordClassSet name="${presenterId}ParticipantRecordClasses" includeProjects="${includeProjects}">
@@ -657,6 +659,7 @@ prop=participantRecordSamplesTableQuery
 prop=participantRecordSamplesMetaTableQuery
 prop=participantRecordMicrosTableQuery
 prop=participantRecordTreatmentsTableQuery
+prop=condition
 
 >templateTextStart<
     <querySet name="${presenterId}ParticipantTables" queryType="table" includeProjects="${includeProjects}" 
@@ -720,8 +723,12 @@ WHERE o.dataset_name = '&&datasetName&&'
       <sqlQuery name="ObservationsDownloadColumnAttributes"  isCacheable='false'>
           <column name="name" />
           <column name="display_name" />
+	  
 
-          <sql>
+	<sqlParamValue name="treatmentSourceIds"><![CDATA[${condition}]]></sqlParamValue>
+
+          
+	  <sql>
             <![CDATA[
             select distinct o.display_name as display_name, o.ontology_term_source_id as name
             from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
@@ -729,7 +736,7 @@ WHERE o.dataset_name = '&&datasetName&&'
             and c.owner = 'APIDBTUNING'
             and c.table_name = s.table_name
             and upper(o.ontology_term_source_id) = c.column_name
-
+	    &&treatmentSourceIds&&
             ]]>
           </sql>
         </sqlQuery>
@@ -939,7 +946,7 @@ select pa.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_
            <column name="link"/>
            <column name="name"/>
 
-         <sqlParamValue name="observationSourceIds"><![CDATA[${observationSourceIdsForParticipantsObservationsTable}]]></sqlParamValue>
+        <sqlParamValue name="observationSourceIds"><![CDATA[${observationSourceIdsForParticipantsObservationsTable}]]></sqlParamValue>
          <sqlParamValue name="orderBy"><![CDATA[${observationSourceIdsToOrderParticipantsObservationsTable}]]></sqlParamValue>
 <!--
 MALED

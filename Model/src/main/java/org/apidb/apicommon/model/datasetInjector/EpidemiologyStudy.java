@@ -253,16 +253,22 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  //Treatments Download Table
           setPropValue("participantRecordTreatmentsTable", "");
           setPropValue("participantRecordTreatmentsTableQuery", "");
-	     //setPropValue("treatmentSourceIdsForTreatmentsQuote","");
+	  setPropValue("treatmentSourceIdsForTreatmentsDownloadTableQuote","");
+
 	  
           if(hasTreatments) {
-	    
 	  String treatmentSourceIdsForTreatmentsDownloadTable  = getPropValue("treatmentSourceIdsForTreatmentsDownloadTable");
+
           setPropValue("participantRecordTreatmentsTable", getTemplateInstanceText("participantRecordTreatmentsTable"));
-	     //setPropValue("treatmentSourceIdsForTreatmentsQuote", addQuotes(treatmentSourceIdsForTreatmentsDownloadTable));
 	  setPropValue("participantRecordTreatmentsTableQuery", getTemplateInstanceText("participantRecordTreatmentsTableQuery"));
- 
+	  
+	  //setPropValue("condition", "and c.column_name not in ('EUPATH_0023015', 'EUPATH_0023014', 'EUPATH_0000058', 'EUPATH_0023016')");
+	  setPropValue("condition", "and c.column_name not in (" + addQuotes(treatmentSourceIdsForTreatmentsDownloadTable) + ")");
+
+	  }else{ 
+	      setPropValue("condition", "");
 	  }
+      
 
 
           //before injecting any templates need to determine and set the attributes list ... can't be null
