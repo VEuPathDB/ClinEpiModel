@@ -17,9 +17,7 @@ prop=!hasObservationRecord
 prop=hasObservationRecord
 prop=participantRecordSamplesTable
 prop=participantRecordMicrosTable
-prop=participantRecordTreatmentsTable
-prop=treatmentSourceIdsForTreatmentsDownloadTable
-prop=condition
+
  
 >templateTextStart<
     <recordClassSet name="${presenterId}ParticipantRecordClasses" includeProjects="${includeProjects}">
@@ -225,7 +223,6 @@ BEGIN MALED
 
      ${participantRecordSamplesTable}
      ${participantRecordMicrosTable}
-     ${participantRecordTreatmentsTable}
 
     </recordClass>
     </recordClassSet>
@@ -280,27 +277,6 @@ prop=presenterId
 	       <columnAttribute name="property" displayName="Stool Microbiology Test"/>
 	       <columnAttribute name="string_value" displayName="Result"/>
 	       <columnAttribute name="property_source_id" inReportMaker="false" internal="true"/>
-
-        </table>
->templateTextEnd<
-
-
-[templateStart] 
-name=participantRecordTreatmentsTable
-anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
-prop=presenterId
-
->templateTextStart<
-        <table name="Treatments"
-               displayName="Treatments"
-               queryRef="\${presenterId}ParticipantTables.Treatments">
-	       <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
-               <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
-	       <columnAttribute name="Observation_Id"/>
-	       <columnAttribute name="EUPATH_0023015" displayName="Medication administration route"/>
-	       <columnAttribute name="EUPATH_0023014" displayName="Medication dose"/>
-	       <columnAttribute name="EUPATH_0000058" displayName="Antimalarial medication"/>
-	       <columnAttribute name="EUPATH_0023016" displayName="Medication timepoint"/>
 
         </table>
 >templateTextEnd<
@@ -658,8 +634,6 @@ prop=includeProjects
 prop=participantRecordSamplesTableQuery
 prop=participantRecordSamplesMetaTableQuery
 prop=participantRecordMicrosTableQuery
-prop=participantRecordTreatmentsTableQuery
-prop=condition
 
 >templateTextStart<
     <querySet name="${presenterId}ParticipantTables" queryType="table" includeProjects="${includeProjects}" 
@@ -724,10 +698,6 @@ WHERE o.dataset_name = '&&datasetName&&'
           <column name="name" />
           <column name="display_name" />
 	  
-
-	<sqlParamValue name="treatmentSourceIds"><![CDATA[${condition}]]></sqlParamValue>
-
-          
 	  <sql>
             <![CDATA[
             select distinct o.display_name as display_name, o.ontology_term_source_id as name
@@ -736,7 +706,6 @@ WHERE o.dataset_name = '&&datasetName&&'
             and c.owner = 'APIDBTUNING'
             and c.table_name = s.table_name
             and upper(o.ontology_term_source_id) = c.column_name
-	    &&treatmentSourceIds&&
             ]]>
           </sql>
         </sqlQuery>
@@ -979,7 +948,6 @@ select pa.name as source_id,
 
        ${participantRecordMicrosTableQuery}
 
-       ${participantRecordTreatmentsTableQuery}
 
   </querySet>
 
@@ -1088,53 +1056,5 @@ FROM ( SELECT pan_id, name,BFO_0000015 FROM apidbtuning.\${tblPrefix}Observation
             </sql>
         </sqlQuery>    
 >templateTextEnd<
-
-
-
-[templateStart] 
-name=participantRecordTreatmentsTableQuery
-anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
-prop=tblPrefix
-prop=presenterId
-prop=treatmentSourceIdsForTreatmentsDownloadTable
-
->templateTextStart<
-      <sqlQuery name="Treatments"  isCacheable='false'>
-            <column name="source_id"/>
-            <column name="project_id"/>
-            <column name="Observation_Id"/>
-            <column name="EUPATH_0023015"/>
-            <column name="EUPATH_0023014"/>
-            <column name="EUPATH_0000058"/>
-            <column name="EUPATH_0023016"/>
-
-	   <sqlParamValue name="treatmentSourceIds"><![CDATA[\${treatmentSourceIdsForTreatmentsDownloadTable}]]></sqlParamValue>
-
-            <sql>
-                 <![CDATA[
-
-select t1.source_id, t1.project_id, t1.Observation_Id, t2.* from
-       (select pa.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, cv.pan_id
-        from apidbtuning.${tblPrefix}Observations cv
-              , apidbtuning.${tblPrefix}Participants pa
-              , apidbtuning.${tblPrefix}PANIO io
-               where cv.PAN_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = pa.PAN_ID
-              ) t1,
-
-      (select cv.pan_id, cv.&&treatmentSourceIds&&  from apidbtuning.${tblPrefix}Observations cv
-              ,apidbtuning.${tblPrefix}PANIO io
-              where io.INPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738' and io.OUTPUT_PAN_TYPE_SOURCE_ID='EUPATH_0000738'
-              and cv.PAN_ID=io.OUTPUT_PAN_ID) t2
-    ,apidbtuning.${tblPrefix}PANIO t3
-    where t2.pan_id = t3.output_pan_id
-    and t3.input_pan_id = t1.pan_id
-
-                  ]]>
-            </sql>
-        </sqlQuery>    
->templateTextEnd<
-
-
 
 

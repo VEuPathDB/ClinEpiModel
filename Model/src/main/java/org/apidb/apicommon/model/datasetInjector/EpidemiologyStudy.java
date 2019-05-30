@@ -167,7 +167,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
-      boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
@@ -248,27 +247,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  setPropValue("microSourceIdsForParticipantsMicrosQuote", addQuotes(microSourceIdsForParticipantsMicrosTable));
 	  setPropValue("participantRecordMicrosTableQuery", getTemplateInstanceText("participantRecordMicrosTableQuery"));
  	  }
-
-
-	  //Treatments Download Table
-          setPropValue("participantRecordTreatmentsTable", "");
-          setPropValue("participantRecordTreatmentsTableQuery", "");
-	  setPropValue("treatmentSourceIdsForTreatmentsDownloadTableQuote","");
-
-	  
-          if(hasTreatments) {
-	  String treatmentSourceIdsForTreatmentsDownloadTable  = getPropValue("treatmentSourceIdsForTreatmentsDownloadTable");
-
-          setPropValue("participantRecordTreatmentsTable", getTemplateInstanceText("participantRecordTreatmentsTable"));
-	  setPropValue("participantRecordTreatmentsTableQuery", getTemplateInstanceText("participantRecordTreatmentsTableQuery"));
-	  
-	  //setPropValue("condition", "and c.column_name not in ('EUPATH_0023015', 'EUPATH_0023014', 'EUPATH_0000058', 'EUPATH_0023016')");
-	  setPropValue("condition", "and c.column_name not in (" + addQuotes(treatmentSourceIdsForTreatmentsDownloadTable) + ")");
-
-	  }else{ 
-	      setPropValue("condition", "");
-	  }
-      
 
 
           //before injecting any templates need to determine and set the attributes list ... can't be null
@@ -705,7 +683,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
-      boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
+      //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       String presenterId = getPropValue("presenterId");
       
@@ -790,10 +768,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  
 	  if(hasMicros) {
               addWdkReference(participantRecordClass, "table", "Micros", new String[]{"record"}, CATEGORY_IRI, 0);
-          }
-
-	  if(hasTreatments) {
-              addWdkReference(participantRecordClass, "table", "Treatments", new String[]{"download"}, CATEGORY_IRI, 0);
           }
 
 
