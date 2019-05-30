@@ -157,6 +157,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String shinyOntologyURL = localhost + "/service/shiny/ontology/" + datasetName;
       setPropValue("ontologyURL", shinyOntologyURL);
       injectTemplate("shinyDataLoad");
+      injectTemplate("shinyDatasetConfig");
 
       // boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
@@ -166,7 +167,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
-      //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
 
@@ -219,6 +219,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
           setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
 
+	  //Samples Test results
           setPropValue("participantRecordSamplesTable", "");
           setPropValue("participantRecordSamplesMetaTableQuery", "");
           setPropValue("participantRecordSamplesTableQuery", "");
@@ -245,9 +246,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantRecordMicrosTable", getTemplateInstanceText("participantRecordMicrosTable"));
 	  setPropValue("microSourceIdsForParticipantsMicrosQuote", addQuotes(microSourceIdsForParticipantsMicrosTable));
 	  setPropValue("participantRecordMicrosTableQuery", getTemplateInstanceText("participantRecordMicrosTableQuery"));
- 
+ 	  }
 
-	  }
+
           //before injecting any templates need to determine and set the attributes list ... can't be null
           String participantAttList = getPropValue("participantAttributesList");
           if(participantAttList != null && !participantAttList.equals("")) {
@@ -682,7 +683,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
-      boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
+      //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       String presenterId = getPropValue("presenterId");
       
@@ -770,9 +771,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           }
 
 
-	  if(hasTreatments){
-	  addWdkReference(participantRecordClass, "table", "TreatmentsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
-	  }
+	  //if(hasTreatments){
+	  //addWdkReference(participantRecordClass, "table", "TreatmentsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  //}
 
 
       }

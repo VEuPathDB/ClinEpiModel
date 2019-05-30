@@ -34,3 +34,14 @@ prop=projectName
 	}
 
 >templateTextEnd<
+
+[templateStart]
+name=shinyDatasetConfig
+anchorFile=ClinEpiWebsite/View/lib/R/shiny/functions/longitudinal.tab
+prop=shinyLongitudinalObservationSourceIds
+prop=datasetName
+prop=shinyLongitudinalHouseholdSourceIds
+
+>templateTextStart<
+"${datasetName}","${shinyLongitudinalObservationSourceIds}","${shinyLongitudinalHouseholdSourceIds}"
+>templateTextEnd<
