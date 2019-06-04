@@ -35,26 +35,47 @@
       <!-- Person record  -->
     <import file="model/records/participantRecord.xml"/>
     <import file="model/questions/queries/participantQueries.xml"/>
-    <import file="model/questions/participantQuestions.xml"/> 
+    <import file="model/questions/participantQuestions.xml"/>
     <import file="model/questions/params/participantParams.xml"/>
 
     <!-- Household record -->
     <import file="model/records/householdRecord.xml"/>
     <import file="model/questions/queries/householdQueries.xml"/>
-    <import file="model/questions/householdQuestions.xml"/> 
+    <import file="model/questions/householdQuestions.xml"/>
     <import file="model/questions/params/householdParams.xml"/>
 
     <!-- Light Trap record -->
     <import file="model/records/lightTrapRecord.xml"/>
     <import file="model/questions/queries/lightTrapQueries.xml"/>
-    <import file="model/questions/lightTrapQuestions.xml"/> 
+    <import file="model/questions/lightTrapQuestions.xml"/>
     <import file="model/questions/params/lightTrapParams.xml"/>
 
 
     <!-- Observation record -->
     <import file="model/records/observationRecord.xml"/>
     <import file="model/questions/queries/observationQueries.xml"/>
-    <import file="model/questions/observationQuestions.xml"/> 
+    <import file="model/questions/observationQuestions.xml"/>
     <import file="model/questions/params/observationParams.xml"/>
+
+  <defaultColumnToolBundle ref="standard" />
+
+  <columnToolBundles>
+    <toolBundle name="standard">
+      <tool name="standard">
+        <string>
+          <reporter implementation="org.gusdb.wdk.model.bundle.reporter.MultiTypeColumnReporter" />
+          <filter implementation="org.gusdb.wdk.model.bundle.filter.MultiTypeColumnFilter" />
+        </string>
+        <number>
+          <reporter implementation="org.gusdb.wdk.model.bundle.reporter.MultiTypeColumnReporter" />
+          <filter implementation="org.gusdb.wdk.model.bundle.filter.MultiTypeColumnFilter" />
+        </number>
+        <date>
+          <reporter implementation="org.gusdb.wdk.model.bundle.reporter.MultiTypeColumnReporter" />
+          <filter implementation="org.gusdb.wdk.model.bundle.filter.MultiTypeColumnFilter" />
+        </date>
+      </tool>
+    </toolBundle>
+  </columnToolBundles>
 
 </wdkModel>
