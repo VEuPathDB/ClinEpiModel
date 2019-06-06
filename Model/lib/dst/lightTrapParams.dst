@@ -391,3 +391,194 @@ select distinct m.pan_id as internal, property_source_id as ontology_term_name, 
       </sql>
     </sqlQuery>
 >templateTextEnd<
+
+[templateStart]
+name=lightTrapFilterParamsMalawi
+anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
+prop=tblPrefix
+>templateTextStart<
+    <filterParam name="geographic_region_${tblPrefix}" 
+                    ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_${tblPrefix}" 
+                    metadataQueryRef="lightTrapVQ.RegionMetaData_${tblPrefix}"
+                    backgroundQueryRef="lightTrapVQ.RegionMetaData_${tblPrefix}"
+                    prompt="Geographic Region"
+                    filterDataTypeDisplayName="Households"
+                    countPredictsAnswerCount="true"
+                    trimMetadataTerms="true"
+                    dependedParamRef="">
+      <help>
+        Select light trap collections based on geographic region. 
+      </help>
+     </filterParam>
+     
+     <filterParam name="households_${tblPrefix}" 
+                    ontologyQueryRef="lightTrapVQ.HouseholdOntology_${tblPrefix}"
+                    metadataQueryRef="lightTrapVQ.HouseholdMetaData_${tblPrefix}"
+                    backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_${tblPrefix}"
+                    prompt="Households"
+                    countPredictsAnswerCount="true"
+                    trimMetadataTerms="true"
+                    dependedParamRef="lightTrapParams.geographic_region_${tblPrefix}">
+      <help>
+        Select light trap collections based on the characteristics of the household where collection was performed. 
+      </help>
+    </filterParam>
+
+    <filterParam name="lighttraps_${tblPrefix}" 
+                    ontologyQueryRef="lightTrapVQ.LightTrapOntology_${tblPrefix}"
+                    metadataQueryRef="lightTrapVQ.LightTrapMetaData_${tblPrefix}"
+                    backgroundQueryRef="lightTrapVQ.LightTrapMetaDataBkgd_${tblPrefix}"
+                    prompt="CDC Light Trap Collections"
+                    filterDataTypeDisplayName="Collections"
+                    countPredictsAnswerCount="true"
+                    trimMetadataTerms="true"
+                    dependedParamRef="lightTrapParams.households_${tblPrefix}">
+      <help>
+        Select light trap collections based on the characteristics of the household where collection was performed. 
+      </help>
+    </filterParam>
+>templateTextEnd<
+
+[templateStart]
+name=lightTrapFilterParamQueriesMalawi
+anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
+prop=tblPrefix
+prop=householdMultiFilterIdsQuoted
+prop=householdFilterExcludedIdsQuoted
+prop=participantMultiFilterIdsQuoted
+prop=participantFilterExcludedIdsQuoted
+prop=observationMultiFilterIdsQuoted
+prop=observationFilterExcludedIdsQuoted
+prop=lightTrapMultiFilterIdsQuoted
+prop=lightTrapFilterExcludedIdsQuoted
+prop=rmRegionSqlCommentStart
+prop=rmRegionSqlCommentEnd
+>templateTextStart<
+    <sqlQuery name="RegionMetaData_${tblPrefix}" isCacheable="false" >
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select m.pan_id as internal,  io.output_pan_id as record_id, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
+where m.property_source_id in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+ and m.pan_id = io.input_pan_id
+ and io.output_pan_type_source_id = 'EUPATH_0000327'
+        ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdOntology_${tblPrefix}">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.is_range,o.precision,
+CASE WHEN o.ontology_term_source_id in (${householdMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type, o.display_order
+from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id = 'PCO_0000024'
+) where ontology_term_name not in (${householdFilterExcludedIdsQuoted})
+order by display_order, display_name
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="true">
+      <paramRef ref="lightTrapParams.geographic_region_${tblPrefix}" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
+ where m.pan_id in (\$\$geographic_region_${tblPrefix}\$\$)
+ and m.pan_id = io.input_pan_id
+ and io.output_pan_type_source_id = 'EUPATH_0000327'
+          ]]>
+    </sql>
+    </sqlQuery>
+
+     <sqlQuery name="HouseholdMetaDataBkgd_${tblPrefix}" isCacheable="true">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io
+ where m.pan_id = io.input_pan_id
+ and io.output_pan_type_source_id = 'EUPATH_0000327'
+          ]]>
+    </sql>
+    </sqlQuery>   
+
+    <sqlQuery name="LightTrapOntology_${tblPrefix}">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+        <![CDATA[
+ select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'EUPATH_0000327'
+        ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="LightTrapMetaData_${tblPrefix}">
+      <paramRef ref="lightTrapParams.households_${tblPrefix}" />  
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m
+ where m.pan_id in (\$\$households_${tblPrefix}\$\$)
+        ]]>
+      </sql>
+    </sqlQuery>
+
+    <sqlQuery name="LightTrapMetaDataBkgd_${tblPrefix}">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m
+ where m.category = 'Entomology'
+        ]]>
+      </sql>
+    </sqlQuery>
+>templateTextEnd<
+

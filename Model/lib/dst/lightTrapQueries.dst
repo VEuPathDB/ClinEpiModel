@@ -56,3 +56,27 @@ where lta.pan_id in (\$\$lighttraps_${tblPrefix}\$\$)
      </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=lightTrapMetadataQueryMalawi
+anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQueries.dst
+prop=tblPrefix
+prop=presenterId
+prop=visitMinDate
+prop=visitMaxDate
+>templateTextStart<
+    <sqlQuery name="LightTrapsByMetadata_${tblPrefix}" isCacheable="true"> 
+       <paramRef ref="lightTrapParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="lightTrapParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.lighttraps_${tblPrefix}" groupRef="metaDataGroups.lighttrap_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select lta.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}LightTraps lta
+where lta.pan_id in (\$\$lighttraps_${tblPrefix}\$\$)
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
