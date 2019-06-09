@@ -233,17 +233,18 @@ name=participantCaseControlQueryRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=hasStudyArmParameter
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
        <sqlQuery name="ParticipantsMetadata_${tblPrefix}" isCacheable="true">
        <paramRef ref="participantParams.case_control" groupRef="metaDataGroups.choose_case_control"/> 
-       <paramRef ref="participantParams.study_arm_${tblPrefix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.choose_case_control"/> 
-       <paramRef ref="participantParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.household_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="participantParams.participant_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.event_${tblPrefix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.choose_case_control"/> 
+       <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.household_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participant_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.event_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <paramRef ref="participantParams.use_rel_case_control" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.keep_remove" groupRef="metaDataGroups.relative_case_control"/>
-       <paramRef ref="participantParams.relative_event_${tblPrefix}" groupRef="metaDataGroups.relative_case_control"/>
+       <paramRef ref="participantParams.relative_event_${paramSuffix}" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.return_case_control" groupRef="metaDataGroups.results_options"/>
        <column name="source_id"/>
        <column name="project_id"/>
