@@ -6,6 +6,7 @@ prop=studyAbbreviation
 prop=lightTrapRecordOverview
 prop=lightTrapRecordAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 
@@ -93,6 +94,7 @@ prop=householdSourceIdsIncludedInLightTrapAttributes
 prop=householdSourceIdsIncludedInLightTrapAttributesQuote
 prop=householdSourceIdsForHouseholdMemberTable
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -186,6 +188,7 @@ prop=householdRecordAttributesListFull
 prop=householdSourceIdsIncludedInLightTrapAttributes
 prop=householdSourceIdsIncludedInLightTrapAttributesQuote
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<

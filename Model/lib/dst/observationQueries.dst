@@ -10,20 +10,21 @@ ${injectedTemplateFull}
 name=observationLongitudinalQueryRegion
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
-     <sqlQuery name="ObservationsByMetadata_${tblPrefix}"
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
-       <paramRef ref="clinicalVisitParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_${tblPrefix}" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="clinicalVisitParams.relative_visits_${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_${paramSuffix}" groupRef="metaDataGroups.relative_events"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -33,14 +34,14 @@ prop=timeSourceId
 with vis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
-where md.observation_id in (\$\$visits_${tblPrefix}\$\$)
+where md.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
-and md.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
+and md.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 visits as (
@@ -82,19 +83,20 @@ group by name
 name=observationLongitudinalQueryHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
-     <sqlQuery name="ObservationsByMetadata_${tblPrefix}"
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
-       <paramRef ref="clinicalVisitParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_${tblPrefix}" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="clinicalVisitParams.relative_visits_${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_${paramSuffix}" groupRef="metaDataGroups.relative_events"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -104,14 +106,14 @@ prop=timeSourceId
 with vis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
-where md.observation_id in (\$\$visits_${tblPrefix}\$\$)
+where md.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
-and md.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
+and md.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 visits as (
@@ -153,18 +155,19 @@ group by name
 name=observationLongitudinalQueryParticipant
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
-     <sqlQuery name="ObservationsByMetadata_${tblPrefix}"
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
-       <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_${tblPrefix}" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="clinicalVisitParams.relative_visits_${tblPrefix}" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_${paramSuffix}" groupRef="metaDataGroups.relative_events"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -174,14 +177,14 @@ prop=timeSourceId
 with vis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
-where md.observation_id in (\$\$visits_${tblPrefix}\$\$)
+where md.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
 select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
-and md.observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
+and md.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 visits as (
@@ -223,20 +226,21 @@ group by name
 name=observationSurveyQueryRegion
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
-     <sqlQuery name="ObservationsByMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="clinicalVisitParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_${tblPrefix}" groupRef="metaDataGroups.event_characteristics"/>
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="clinicalVisitParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <sql>
            <![CDATA[
 select distinct name as source_id,'@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Observations 
-where pan_id in (\$\$visits_${tblPrefix}\$\$)
+where pan_id in (\$\$visits_${paramSuffix}\$\$)
            ]]>   
         </sql>
      </sqlQuery>
@@ -246,12 +250,13 @@ where pan_id in (\$\$visits_${tblPrefix}\$\$)
 name=observationSurveyQueryHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
-     <sqlQuery name="ObservationsByMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="clinicalVisitParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_${tblPrefix}" groupRef="metaDataGroups.event_characteristics"/>
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -260,7 +265,7 @@ prop=timeSourceId
            <![CDATA[
 select distinct name as source_id,'@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Observations 
-where pan_id in (\$\$visits_${tblPrefix}\$\$)
+where pan_id in (\$\$visits_${paramSuffix}\$\$)
            ]]>   
         </sql>
      </sqlQuery>
@@ -270,18 +275,19 @@ where pan_id in (\$\$visits_${tblPrefix}\$\$)
 name=observationSurveyQueryParticipant
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
-     <sqlQuery name="ObservationsByMetadata_${tblPrefix}" isCacheable="true">
-       <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_${tblPrefix}" groupRef="metaDataGroups.event_characteristics"/>
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <sql>
            <![CDATA[
 select distinct name as source_id,'@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Observations 
-where pan_id in (\$\$visits_${tblPrefix}\$\$)
+where pan_id in (\$\$visits_${paramSuffix}\$\$)
            ]]>   
         </sql>
      </sqlQuery>
@@ -291,11 +297,12 @@ where pan_id in (\$\$visits_${tblPrefix}\$\$)
 name=observationMetadataQueryPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 prop=visitMinDate
 prop=visitMaxDate
 >templateTextStart<
-       <sqlQuery name="ObservationsByMetadata_${tblPrefix}" isCacheable="true">
+       <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.visit_date" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
@@ -364,22 +371,23 @@ group by name
 name=observationMetadataQueryPRISM2
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 prop=visitMinDate
 prop=visitMaxDate
 >templateTextStart<
-       <sqlQuery name="ObservationsByMetadata_${tblPrefix}" isCacheable="true">
+       <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.visit_date" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
-       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_${tblPrefix}" groupRef="metaDataGroups.daterange"/>
-       <paramRef ref="clinicalVisitParams.participants_${tblPrefix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_${tblPrefix}" groupRef="metaDataGroups.observ_visit_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_visitage_metadata_${paramSuffix}" groupRef="metaDataGroups.daterange"/>
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.observ_visit_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_visits"/>
-       <paramRef ref="participantParams.relative_visits_${tblPrefix}" groupRef="metaDataGroups.relative_visits"/>
+       <paramRef ref="participantParams.relative_visits_${paramSuffix}" groupRef="metaDataGroups.relative_visits"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -389,13 +397,13 @@ prop=visitMaxDate
 with vis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
 from ApidbTuning.${tblPrefix}Observations ca,ApidbTuning.${tblPrefix}PANIO io
-where ca.pan_id in (\$\$visits_${tblPrefix}\$\$)
+where ca.pan_id in (\$\$visits_${paramSuffix}\$\$)
 and ca.pan_id = io.output_pan_id
 ),
 relvis as (
 select distinct ca.pan_id, ca.name, io.input_pan_id ,ca.EUPATH_0000091 
 from ApidbTuning.${tblPrefix}Observations ca,ApidbTuning.${tblPrefix}PANIO io
-where ca.pan_id in (\$\$relative_visits_${tblPrefix}\$\$)
+where ca.pan_id in (\$\$relative_visits_${paramSuffix}\$\$)
 and ca.pan_id = io.output_pan_id
 ),
 visits as (
@@ -435,9 +443,10 @@ group by name
 name=observationMetadataQueryMALED
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
-       <sqlQuery name="ObservationsByMetadata_${tblPrefix}" isCacheable="true">
+       <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_maled" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="clinicalVisitParams.households_maled" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.participants_maled" groupRef="metaDataGroups.part_characteristics"/>

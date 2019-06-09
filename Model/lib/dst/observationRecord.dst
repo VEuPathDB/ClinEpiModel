@@ -6,6 +6,7 @@ prop=studyAbbreviation
 prop=observationRecordOverview
 prop=observationRecordAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 prop=observationRecordSamplesTable
@@ -205,6 +206,7 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
 prop=observationRecordAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 
@@ -527,6 +529,7 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
 prop=observationRecordAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 prop=observationRecordSamplesMetaTableQuery
@@ -721,6 +724,7 @@ prop=sampleSourceIdsForParticipantsSamplesTable
 prop=sampleSourceIdsToOrderParticipantsSamplesTable
 
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 
 >templateTextStart<
@@ -759,6 +763,7 @@ name=observationRecordSamplesMetaTableQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=sampleSourceIdsForParticipantsSamplesTableSubquery
 prop=tblPrefix
+prop=paramSuffix
 
 >templateTextStart<
       <sqlQuery name="SamplesColumnAttributes"  isCacheable='false'>
@@ -784,6 +789,7 @@ prop=tblPrefix
 name=observationRecordMicrosTableQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=microSourceIdsForObservationsMicrosQuote
 

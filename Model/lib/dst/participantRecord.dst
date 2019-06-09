@@ -11,6 +11,7 @@ prop=participantSourceIdsExcludedFromParticipantAttributes
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsToOrderParticipantsObservationsTable
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 prop=!hasObservationRecord
@@ -294,6 +295,7 @@ prop=participantSourceIdsExcludedFromParticipantAttributesQuote
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsToOrderParticipantsObservationsTable
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -629,6 +631,7 @@ prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsForParticipantsObservationsTableSubquery
 prop=observationSourceIdsToOrderParticipantsObservationsTable
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 prop=participantRecordSamplesTableQuery
@@ -960,6 +963,7 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=sampleSourceIdsForParticipantsSamplesTable
 prop=sampleSourceIdsToOrderParticipantsSamplesTable
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 >templateTextStart<
       <sqlQuery name="Samples"  isCacheable='false'  attributeMetaQueryRef="\${presenterId}ParticipantTables.SamplesColumnAttributes">
@@ -998,6 +1002,7 @@ name=participantRecordSamplesMetaTableQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=sampleSourceIdsForParticipantsSamplesTableSubquery
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
       <sqlQuery name="SamplesColumnAttributes"  isCacheable='false'>
           <column name="name" />
@@ -1023,6 +1028,7 @@ prop=tblPrefix
 name=participantRecordMicrosTableQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=microSourceIdsForParticipantsMicrosQuote
 

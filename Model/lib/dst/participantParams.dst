@@ -10,77 +10,78 @@ ${injectedTemplateFull}
 name=participantFilterParamsRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
 >templateTextStart<
-        <flatVocabParam name="study_arm_${tblPrefix}"
+        <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
                multiPick="false"
                quote="true"
                visible="true"
                dependedParamRef=""
-               queryRef="ParticipantVQ.StudyArm_${tblPrefix}">
+               queryRef="ParticipantVQ.StudyArm_${paramSuffix}">
       <help>You may choose to limit your search to a specific study arm.</help>
     </flatVocabParam>
 
-       <filterParam name="geographic_region_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.RegionOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.RegionMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.RegionMetaDataBkg_${tblPrefix}"
+       <filterParam name="geographic_region_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.RegionMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.RegionMetaDataBkg_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Households"
                     prompt="Geographic region"
-                    dependedParamRef="participantParams.study_arm_${tblPrefix}"
+                    dependedParamRef="participantParams.study_arm_${paramSuffix}"
                     trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
        </filterParam>
        
-       <filterParam name="households_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${tblPrefix}"
+       <filterParam name="households_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
-                    dependedParamRef="participantParams.geographic_region_${tblPrefix}"
+                    dependedParamRef="participantParams.geographic_region_${paramSuffix}"
                     trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
        </filterParam>
 
-       <filterParam name="participants_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${tblPrefix}"
+       <filterParam name="participants_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.households_${tblPrefix}">
+                    dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
          </help>
        </filterParam>
 
-       <filterParam name="visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.participants_${tblPrefix}">
+                    dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
          </help>
        </filterParam>
  
-       <filterParam name="relative_visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="relative_visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
                     trimMetadataTerms="true"
                     dependedParamRef="">
@@ -95,6 +96,7 @@ prop=householdFilterDataTypeDisplayName
 name=participantFilterParamQueriesRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -104,7 +106,7 @@ prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
-        <sqlQuery name="StudyArm_${tblPrefix}">
+        <sqlQuery name="StudyArm_${paramSuffix}">
           <column name="display" />
           <column name="internal" />
           <column name="term" />
@@ -121,7 +123,7 @@ order by ordernum,display
             </sql>
         </sqlQuery>
 
-   <sqlQuery name="RegionOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="RegionOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -143,8 +145,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-    <sqlQuery name="RegionMetaData_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.study_arm_${tblPrefix}" />  
+    <sqlQuery name="RegionMetaData_${paramSuffix}" isCacheable="false">
+      <paramRef ref="participantParams.study_arm_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -159,16 +161,16 @@ where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and h.household_id = hp.household_id 
-and ('AnY' = \$\$study_arm_${tblPrefix}\$\$
+and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        or hp.participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
-       and string_value = \$\$study_arm_${tblPrefix}\$\$))
+       and string_value = \$\$study_arm_${paramSuffix}\$\$))
         ]]>
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="RegionMetaDataBkg_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="RegionMetaDataBkg_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -187,7 +189,7 @@ and h.household_id = hp.household_id
       </sql>
     </sqlQuery>
 
-   <sqlQuery name="HouseholdOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="HouseholdOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -218,8 +220,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.geographic_region_${tblPrefix}" />  
+   <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="participantParams.geographic_region_${paramSuffix}" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -230,13 +232,13 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
-where hp.household_id in (\$\$geographic_region_${tblPrefix}\$\$)
+where hp.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
 and h.household_id = hp.household_id 
           ]]>
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="HouseholdMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -252,7 +254,7 @@ where h.household_id = hp.household_id
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="ParticipantOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="ParticipantOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -278,8 +280,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.households_${tblPrefix}" />  
+   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="participantParams.households_${paramSuffix}" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -289,12 +291,12 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ParticipantMD
-where participant_id in (\$\$households_${tblPrefix}\$\$)
+where participant_id in (\$\$households_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="ParticipantMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -309,7 +311,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD
     </sqlQuery>
 
     
-    <sqlQuery name="VisitOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -335,8 +337,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.participants_${tblPrefix}" />  
+       <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.participants_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
@@ -347,12 +349,12 @@ from ApidbTuning.${tblPrefix}Ontology o
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where participant_id in (\$\$participants_${tblPrefix}\$\$)
+where participant_id in (\$\$participants_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="VisitMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -373,63 +375,64 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamsHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
 >templateTextStart<
-        <flatVocabParam name="study_arm_${tblPrefix}"
+        <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
                multiPick="false"
                quote="true"
                visible="true"
                dependedParamRef=""
-               queryRef="ParticipantVQ.StudyArm_${tblPrefix}">
+               queryRef="ParticipantVQ.StudyArm_${paramSuffix}">
       <help>You may choose to limit your search to a specific study arm.</help>
     </flatVocabParam>
 
-       <filterParam name="households_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${tblPrefix}"
+       <filterParam name="households_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
-                    dependedParamRef="participantParams.study_arm_${tblPrefix}"
+                    dependedParamRef="participantParams.study_arm_${paramSuffix}"
                     trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
        </filterParam>
 
-       <filterParam name="participants_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${tblPrefix}"
+       <filterParam name="participants_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.households_${tblPrefix}">
+                    dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
          </help>
        </filterParam>
 
-       <filterParam name="visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.participants_${tblPrefix}">
+                    dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
          </help>
        </filterParam>
  
-       <filterParam name="relative_visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="relative_visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
                     trimMetadataTerms="true"
                     dependedParamRef="">
@@ -503,6 +506,7 @@ name=participantMicrobiomeMetadataBkgQuery
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=MicrobiomeDatasetName
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
 UNION ALL
 select idmap.participant_id as internal, idmap.sub_observation_id as filter_item_id, 
@@ -531,6 +535,7 @@ ${injectedTemplateFull}
 name=participantFilterParamQueriesHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -539,7 +544,7 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
-        <sqlQuery name="StudyArm_${tblPrefix}">
+        <sqlQuery name="StudyArm_${paramSuffix}">
           <column name="display" />
           <column name="internal" />
           <column name="term" />
@@ -556,7 +561,7 @@ order by ordernum,display
             </sql>
         </sqlQuery>
 
-   <sqlQuery name="HouseholdOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="HouseholdOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -582,8 +587,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.study_arm_${tblPrefix}" />  
+   <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
+      <paramRef ref="participantParams.study_arm_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -595,16 +600,16 @@ from ApidbTuning.${tblPrefix}Ontology o
 select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
 where h.household_id = hp.household_id 
-and ('AnY' = \$\$study_arm_${tblPrefix}\$\$
+and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        or hp.participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
-       and string_value = \$\$study_arm_${tblPrefix}\$\$))
+       and string_value = \$\$study_arm_${paramSuffix}\$\$))
           ]]>
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="HouseholdMetaDataBkg_${tblPrefix}" isCacheable="false">
+   <sqlQuery name="HouseholdMetaDataBkg_${paramSuffix}" isCacheable="false">
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -620,7 +625,7 @@ where h.household_id = hp.household_id
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="ParticipantOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="ParticipantOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -646,8 +651,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.households_${tblPrefix}" />  
+   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="participantParams.households_${paramSuffix}" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -657,12 +662,12 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ParticipantMD
-where participant_id in (\$\$households_${tblPrefix}\$\$)
+where participant_id in (\$\$households_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="ParticipantMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -677,7 +682,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD
     </sqlQuery>
 
     
-    <sqlQuery name="VisitOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -703,8 +708,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.participants_${tblPrefix}" />  
+       <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.participants_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
@@ -715,12 +720,12 @@ from ApidbTuning.${tblPrefix}Ontology o
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where participant_id in (\$\$participants_${tblPrefix}\$\$)
+where participant_id in (\$\$participants_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="VisitMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -741,48 +746,49 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamsParticipant
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
-        <flatVocabParam name="study_arm_${tblPrefix}"
+        <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
                multiPick="false"
                quote="true"
                visible="true"
                dependedParamRef=""
-               queryRef="ParticipantVQ.StudyArm_${tblPrefix}">
+               queryRef="ParticipantVQ.StudyArm_${paramSuffix}">
       <help>You may choose to limit your search to a specific study arm.</help>
     </flatVocabParam>
 
-       <filterParam name="participants_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_${tblPrefix}"
+       <filterParam name="participants_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.study_arm_${tblPrefix}">
+                    dependedParamRef="participantParams.study_arm_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
          </help>
        </filterParam>
 
-       <filterParam name="visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.participants_${tblPrefix}">
+                    dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
          </help>
        </filterParam>
  
-       <filterParam name="relative_visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="relative_visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
                     trimMetadataTerms="true"
                     dependedParamRef="">
@@ -797,6 +803,7 @@ prop=tblPrefix
 name=participantFilterParamQueriesParticipant
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -804,7 +811,7 @@ prop=participantFilterExcludedIdsQuoted
 prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 >templateTextStart<
-        <sqlQuery name="StudyArm_${tblPrefix}">
+        <sqlQuery name="StudyArm_${paramSuffix}">
           <column name="display" />
           <column name="internal" />
           <column name="term" />
@@ -821,7 +828,7 @@ order by ordernum,display
             </sql>
         </sqlQuery>
 
-   <sqlQuery name="ParticipantOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="ParticipantOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -847,8 +854,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.study_arm_${tblPrefix}" />  
+   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
+      <paramRef ref="participantParams.study_arm_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -858,25 +865,25 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 select participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ParticipantMD
-where ('AnY' = \$\$study_arm_${tblPrefix}\$\$
+where ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        or participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
-       and string_value = \$\$study_arm_${tblPrefix}\$\$))
+       and string_value = \$\$study_arm_${paramSuffix}\$\$))
 UNION
 select hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
 where h.household_id = hp.household_id 
-and ('AnY' = \$\$study_arm_${tblPrefix}\$\$
+and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        or hp.participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
-       and string_value = \$\$study_arm_${tblPrefix}\$\$))
+       and string_value = \$\$study_arm_${paramSuffix}\$\$))
           ]]>
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaDataBkg_${tblPrefix}" isCacheable="false">
+   <sqlQuery name="ParticipantMetaDataBkg_${paramSuffix}" isCacheable="false">
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -894,7 +901,7 @@ where h.household_id = hp.household_id
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="VisitOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -920,8 +927,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.participants_${tblPrefix}" />  
+       <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.participants_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
@@ -932,12 +939,12 @@ from ApidbTuning.${tblPrefix}Ontology o
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where participant_id in (\$\$participants_${tblPrefix}\$\$)
+where participant_id in (\$\$participants_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="VisitMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -958,11 +965,12 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamsWithTreatment
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
-       <filterParam name="participants_${tblPrefix}" 
-                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
-                      metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                      backgroundQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
+       <filterParam name="participants_${paramSuffix}" 
+                      ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                      metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
+                      backgroundQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
@@ -973,36 +981,36 @@ prop=tblPrefix
          </help>
        </filterParam>
 
-       <filterParam name="visits_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                       metadataQueryRef="ParticipantVQ.VisitMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="visits_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                       metadataQueryRef="ParticipantVQ.VisitMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                        countPredictsAnswerCount="true"
                        prompt="Observations"
                        trimMetadataTerms="true"
-                       dependedParamRef="participantParams.participants_${tblPrefix}">
+                       dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
          </help>
        </filterParam>
 
-       <filterParam name="treatment_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.TreatmentOntology_${tblPrefix}"
-                       metadataQueryRef="ParticipantVQ.TreatmentMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.TreatmentMetaDataBkgd_${tblPrefix}"
+       <filterParam name="treatment_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.TreatmentOntology_${paramSuffix}"
+                       metadataQueryRef="ParticipantVQ.TreatmentMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.TreatmentMetaDataBkgd_${paramSuffix}"
                        countPredictsAnswerCount="true"
                        prompt="Observations"
                        trimMetadataTerms="true"
-                       dependedParamRef="participantParams.visits_${tblPrefix}">
+                       dependedParamRef="participantParams.visits_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
          </help>
        </filterParam>
 
-    <filterParam name="relative_visits_${tblPrefix}" 
-                    metadataQueryRef="ParticipantVQ.RelVisitMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.RelVisitMetaData_${tblPrefix}"
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
+    <filterParam name="relative_visits_${paramSuffix}" 
+                    metadataQueryRef="ParticipantVQ.RelVisitMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.RelVisitMetaData_${paramSuffix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
                     prompt="Related Observations"
                     trimMetadataTerms="true"
                     dependedParamRef="">
@@ -1011,14 +1019,14 @@ prop=tblPrefix
       </help>
     </filterParam>
 
-       <filterParam name="relative_treatment_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.TreatmentOntology_${tblPrefix}"
-                       metadataQueryRef="ParticipantVQ.RelativeTreatmentMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.TreatmentMetaDataBkgd_${tblPrefix}"
+       <filterParam name="relative_treatment_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.TreatmentOntology_${paramSuffix}"
+                       metadataQueryRef="ParticipantVQ.RelativeTreatmentMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.TreatmentMetaDataBkgd_${paramSuffix}"
                        countPredictsAnswerCount="false"
                        prompt="Observations"
                        trimMetadataTerms="true"
-                       dependedParamRef="participantParams.relative_visits_${tblPrefix}">
+                       dependedParamRef="participantParams.relative_visits_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
          </help>
@@ -1029,12 +1037,13 @@ prop=tblPrefix
 name=participantFilterParamQueriesWithTreatment
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=participantMultiFilterIdsQuoted
 prop=participantFilterExcludedIdsQuoted
 prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 >templateTextStart<
-   <sqlQuery name="ParticipantOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="ParticipantOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -1063,7 +1072,7 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
+   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1082,7 +1091,7 @@ where household_id not in ('29082466','29082990')
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="VisitOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -1110,8 +1119,8 @@ where sub_observation_id in (select distinct sub_observation_id from ApidbTuning
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.participants_${tblPrefix}" />  
+       <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.participants_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
@@ -1122,13 +1131,13 @@ where sub_observation_id in (select distinct sub_observation_id from ApidbTuning
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where participant_id in (\$\$participants_${tblPrefix}\$\$)
+where participant_id in (\$\$participants_${paramSuffix}\$\$)
 and sub_observation_id not in (select distinct sub_observation_id from ApidbTuning.${tblPrefix}ObsObsIO)
           ]]>
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="VisitMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -1144,7 +1153,7 @@ where sub_observation_id not in (select distinct sub_observation_id from ApidbTu
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="TreatmentOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="TreatmentOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -1166,8 +1175,8 @@ order by display_order, display_name
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="TreatmentMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.visits_${tblPrefix}" />  
+       <sqlQuery name="TreatmentMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.visits_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
@@ -1179,12 +1188,12 @@ order by display_order, display_name
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, sub_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where observation_id in (\$\$visits_${tblPrefix}\$\$)
+where observation_id in (\$\$visits_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="TreatmentMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="TreatmentMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -1200,7 +1209,7 @@ from ApidbTuning.${tblPrefix}ObservationMD
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="RelVisitMetaData_${tblPrefix}" isCacheable="false">
+   <sqlQuery name="RelVisitMetaData_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -1215,8 +1224,8 @@ where sub_observation_id not in (select distinct sub_observation_id from ApidbTu
     </sql>
     </sqlQuery>
    
-       <sqlQuery name="RelativeTreatmentMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.relative_visits_${tblPrefix}" />  
+       <sqlQuery name="RelativeTreatmentMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.relative_visits_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
@@ -1228,7 +1237,7 @@ where sub_observation_id not in (select distinct sub_observation_id from ApidbTu
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, sub_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
+where observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
@@ -1237,8 +1246,8 @@ where observation_id in (\$\$relative_visits_${tblPrefix}\$\$)
 [templateStart]
 name=participantFilterParamsCaseControlRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
-prop=paramSuffix
 prop=tblPrefix
+prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
 >templateTextStart<
         <flatVocabParam name="study_arm_${paramSuffix}"
@@ -1618,6 +1627,7 @@ where participant_id in (select pan_id
 name=participantFilterParamsPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
        <filterParam name="geographic_region_prism" 
                        ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
@@ -1706,12 +1716,13 @@ prop=tblPrefix
 name=participantFilterParamsEntomolRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
 >templateTextStart<
-       <filterParam name="geographic_region_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.RegionOntology_${tblPrefix}"
-                       metadataQueryRef="ParticipantVQ.RegionMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.RegionMetaData_${tblPrefix}"
+       <filterParam name="geographic_region_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.RegionOntology_${paramSuffix}"
+                       metadataQueryRef="ParticipantVQ.RegionMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.RegionMetaData_${paramSuffix}"
                        filterDataTypeDisplayName="Households"
                        prompt="Geographic region"
                        countPredictsAnswerCount="true"
@@ -1722,65 +1733,65 @@ prop=householdFilterDataTypeDisplayName
          </help>
     </filterParam>
 
-    <filterParam name="visits_visitage_metadata_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitAgeOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitAgeMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_${tblPrefix}"
+    <filterParam name="visits_visitage_metadata_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitAgeOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitAgeMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Age at visit"
                     filterDataTypeDisplayName="Participants"
-                    dependedParamRef="participantParams.geographic_region_${tblPrefix}"
+                    dependedParamRef="participantParams.geographic_region_${paramSuffix}"
                     trimMetadataTerms="true">
       <help>
         Select reference samples. 
       </help>
     </filterParam>
     
-    <filterParam name="participants_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${tblPrefix}"
+    <filterParam name="participants_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     prompt="Participants"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.visits_visitage_metadata_${tblPrefix},clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region_${tblPrefix}">
+                    dependedParamRef="participantParams.visits_visitage_metadata_${paramSuffix},clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region_${paramSuffix}">
       <help>
         Select participants based on their characteristics. 
       </help>
     </filterParam>
 
 
-    <filterParam name="households_${tblPrefix}" 
-                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
-                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${tblPrefix}"
+    <filterParam name="households_${paramSuffix}" 
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${paramSuffix}"
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${paramSuffix}"
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
                     prompt="Households"
-                    dependedParamRef="clinicalVisitParams.visit_date,participantParams.participants_${tblPrefix}"
+                    dependedParamRef="clinicalVisitParams.visit_date,participantParams.participants_${paramSuffix}"
                     trimMetadataTerms="true">
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
     </filterParam>
 
-    <filterParam name="visits_${tblPrefix}" 
-                    metadataQueryRef="ParticipantVQ.VisitMetaData_${tblPrefix}"
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+    <filterParam name="visits_${paramSuffix}" 
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_${paramSuffix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.visits_visitage_metadata_${tblPrefix},participantParams.households_${tblPrefix},clinicalVisitParams.visit_date">
+                    dependedParamRef="participantParams.visits_visitage_metadata_${paramSuffix},participantParams.households_${paramSuffix},clinicalVisitParams.visit_date">
       <help>
         Select participants based on their visit characteristics. 
       </help>
     </filterParam>
 
-        <filterParam name="relative_visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+        <filterParam name="relative_visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="true"
@@ -1795,12 +1806,13 @@ prop=householdFilterDataTypeDisplayName
 name=participantFilterParamsPRISM2
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
 >templateTextStart<
-    <filterParam name="visits_visitage_metadata_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitAgeOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitAgeMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_${tblPrefix}"
+    <filterParam name="visits_visitage_metadata_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitAgeOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitAgeMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitAgeMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Age at visit"
                     filterDataTypeDisplayName="Participants"
@@ -1811,51 +1823,51 @@ prop=householdFilterDataTypeDisplayName
       </help>
     </filterParam>
     
-    <filterParam name="participants_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${tblPrefix}"
+    <filterParam name="participants_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     prompt="Participants"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.visits_visitage_metadata_${tblPrefix},clinicalVisitParams.visit_date,participantParams.duration_observation">
+                    dependedParamRef="participantParams.visits_visitage_metadata_${paramSuffix},clinicalVisitParams.visit_date,participantParams.duration_observation">
       <help>
         Select participants based on their characteristics. 
       </help>
     </filterParam>
 
 
-    <filterParam name="households_${tblPrefix}" 
-                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
-                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${tblPrefix}"
+    <filterParam name="households_${paramSuffix}" 
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${paramSuffix}"
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${paramSuffix}"
                     filterDataTypeDisplayName="Households"
                     countPredictsAnswerCount="true"
                     prompt="Households"
-                    dependedParamRef="clinicalVisitParams.visit_date,participantParams.participants_${tblPrefix}"
+                    dependedParamRef="clinicalVisitParams.visit_date,participantParams.participants_${paramSuffix}"
                     trimMetadataTerms="true">
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
     </filterParam>
 
-    <filterParam name="visits_${tblPrefix}" 
-                    metadataQueryRef="ParticipantVQ.VisitMetaData_${tblPrefix}"
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+    <filterParam name="visits_${paramSuffix}" 
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_${paramSuffix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.visits_visitage_metadata_${tblPrefix},participantParams.households_${tblPrefix},clinicalVisitParams.visit_date">
+                    dependedParamRef="participantParams.visits_visitage_metadata_${paramSuffix},participantParams.households_${paramSuffix},clinicalVisitParams.visit_date">
       <help>
         Select participants based on their visit characteristics. 
       </help>
     </filterParam>
 
-        <filterParam name="relative_visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+        <filterParam name="relative_visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
                     trimMetadataTerms="true"
@@ -1870,6 +1882,7 @@ prop=householdFilterDataTypeDisplayName
 name=participantFilterParamQueriesPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -2195,6 +2208,7 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamQueriesEntomolRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -2204,7 +2218,7 @@ prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
-   <sqlQuery name="RegionOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="RegionOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -2222,7 +2236,7 @@ where ontology_term_source_id = 'EUPATH_0000054'
     </sql>
    </sqlQuery>
 
-    <sqlQuery name="RegionMetaData_${tblPrefix}" isCacheable="false" >
+    <sqlQuery name="RegionMetaData_${paramSuffix}" isCacheable="false" >
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -2239,7 +2253,7 @@ where ontology_term_source_id = 'EUPATH_0000054'
       </sql>
     </sqlQuery>
 
-       <sqlQuery name="VisitAgeOntology_${tblPrefix}" isCacheable="true">
+       <sqlQuery name="VisitAgeOntology_${paramSuffix}" isCacheable="true">
          <column name="ontology_term_name"/>
          <column name="parent_ontology_term_name"/>
          <column name="display_name"/>
@@ -2257,8 +2271,8 @@ where ontology_term_source_id = 'EUPATH_0000113'
         </sql>
       </sqlQuery>
           
-      <sqlQuery name="VisitAgeMetaData_${tblPrefix}" isCacheable="false">
-        <paramRef ref="participantParams.geographic_region_${tblPrefix}" /> 
+      <sqlQuery name="VisitAgeMetaData_${paramSuffix}" isCacheable="false">
+        <paramRef ref="participantParams.geographic_region_${paramSuffix}" /> 
         <column name="ontology_term_name"/>
         <column name="internal"/>
         <column name="number_value"/>
@@ -2268,13 +2282,13 @@ where ontology_term_source_id = 'EUPATH_0000113'
           <![CDATA[
  select m.observation_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
  from  ApidbTuning.${tblPrefix}ObservationMD m
-  where m.participant_id in (\$\$geographic_region_${tblPrefix}\$\$)
+  where m.participant_id in (\$\$geographic_region_${paramSuffix}\$\$)
   and m.ontology_term_name = 'EUPATH_0000113'
          ]]>   
       </sql>
    </sqlQuery>
 
-      <sqlQuery name="VisitAgeMetaDataBkgd_${tblPrefix}" isCacheable="true">
+      <sqlQuery name="VisitAgeMetaDataBkgd_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -2289,7 +2303,7 @@ where m.ontology_term_name = 'EUPATH_0000113'
       </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="ParticipantOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -2310,11 +2324,11 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.visits_visitage_metadata_${tblPrefix}" />
+   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="participantParams.visits_visitage_metadata_${paramSuffix}" />
      <paramRef ref="clinicalVisitParams.visit_date" /> 
      <paramRef ref="participantParams.duration_observation" />  
-     <paramRef ref="participantParams.geographic_region_${tblPrefix}" />  
+     <paramRef ref="participantParams.geographic_region_${paramSuffix}" />  
      <column name="ontology_term_name"/>
      <column name="internal"/>
      <column name="number_value"/>
@@ -2325,12 +2339,12 @@ from ApidbTuning.${tblPrefix}Ontology o
 select distinct m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from ApidbTuning.${tblPrefix}Observations 
-   where pan_id in (\$\$visits_visitage_metadata_${tblPrefix}\$\$)
+   where pan_id in (\$\$visits_visitage_metadata_${paramSuffix}\$\$)
    ) age,
    ApidbTuning.${tblPrefix}Participants pa, ApidbTuning.${tblPrefix}PartObsIO iov, ApidbTuning.${tblPrefix}ParticipantMD m, ApidbTuning.${tblPrefix}Observations obs
    where least(pa.EUPATH_0000152, \$\$visit_date.max\$\$, pa.EFO_0004950 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, \$\$visit_date.min\$\$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= \$\$duration_observation\$\$
-       and obs.pan_id in (\$\$visits_visitage_metadata_${tblPrefix}\$\$)
+       and obs.pan_id in (\$\$visits_visitage_metadata_${paramSuffix}\$\$)
        and obs.EUPATH_0000091 >= \$\$visit_date.min\$\$ 
        and obs.EUPATH_0000091 <= \$\$visit_date.max\$\$ 
        and iov.observation_id = obs.pan_id
@@ -2340,7 +2354,7 @@ select distinct m.participant_id as internal,  m.ontology_term_name, m.string_va
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="ParticipantMetaDataBkgd_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -2354,7 +2368,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD m
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="HouseholdOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="HouseholdOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -2383,9 +2397,9 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
       <paramRef ref="clinicalVisitParams.visit_date" /> 
-      <paramRef ref="participantParams.participants_${tblPrefix}" />  
+      <paramRef ref="participantParams.participants_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -2396,7 +2410,7 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
   from  ApidbTuning.${tblPrefix}PANIO io
-   where io.output_pan_id in (\$\$participants_${tblPrefix}\$\$)
+   where io.output_pan_id in (\$\$participants_${paramSuffix}\$\$)
        and io.input_pan_type_source_id = 'PCO_0000024' )
  select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}MetaData m, part
@@ -2406,7 +2420,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
 
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaDataBkgd_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="HouseholdMetaDataBkgd_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -2426,7 +2440,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
       </sql>    
     </sqlQuery>
 
-    <sqlQuery name="VisitOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -2451,10 +2465,10 @@ from ApidbTuning.${tblPrefix}Ontology o
       </sql>
     </sqlQuery>
 
-       <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.visits_visitage_metadata_${tblPrefix}" />
+       <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.visits_visitage_metadata_${paramSuffix}" />
          <paramRef ref="clinicalVisitParams.visit_date" /> 
-         <paramRef ref="participantParams.households_${tblPrefix}" />  
+         <paramRef ref="participantParams.households_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="number_value"/>
@@ -2465,8 +2479,8 @@ from ApidbTuning.${tblPrefix}Ontology o
 with valid as (
 select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
 from ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Observations obs
-where io.input_pan_id in (\$\$households_${tblPrefix}\$\$)
-and io.output_pan_id in (\$\$visits_visitage_metadata_${tblPrefix}\$\$)
+where io.input_pan_id in (\$\$households_${paramSuffix}\$\$)
+and io.output_pan_id in (\$\$visits_visitage_metadata_${paramSuffix}\$\$)
 and obs.pan_id = io.output_pan_id
 and obs.EUPATH_0000091 >= \$\$visit_date.min\$\$ 
 and obs.EUPATH_0000091 <= \$\$visit_date.max\$\$ 
@@ -2486,7 +2500,7 @@ and ios.input_pan_id = valid.visit_id
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitMetaDataBkgd_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -2505,6 +2519,7 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamQueriesPRISM2
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -2514,7 +2529,7 @@ prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
-       <sqlQuery name="VisitAgeOntology_${tblPrefix}" isCacheable="true">
+       <sqlQuery name="VisitAgeOntology_${paramSuffix}" isCacheable="true">
          <column name="ontology_term_name"/>
          <column name="parent_ontology_term_name"/>
          <column name="display_name"/>
@@ -2532,7 +2547,7 @@ where ontology_term_source_id = 'EUPATH_0000113'
         </sql>
       </sqlQuery>
           
-      <sqlQuery name="VisitAgeMetaData_${tblPrefix}" isCacheable="false">
+      <sqlQuery name="VisitAgeMetaData_${paramSuffix}" isCacheable="false">
         <column name="ontology_term_name"/>
         <column name="internal"/>
         <column name="number_value"/>
@@ -2547,7 +2562,7 @@ where ontology_term_source_id = 'EUPATH_0000113'
       </sql>
    </sqlQuery>
 
-      <sqlQuery name="VisitAgeMetaDataBkgd_${tblPrefix}" isCacheable="true">
+      <sqlQuery name="VisitAgeMetaDataBkgd_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -2562,7 +2577,7 @@ where m.ontology_term_name = 'EUPATH_0000113'
       </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="ParticipantOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -2583,8 +2598,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.visits_visitage_metadata_${tblPrefix}" />
+   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="participantParams.visits_visitage_metadata_${paramSuffix}" />
      <paramRef ref="clinicalVisitParams.visit_date" /> 
      <paramRef ref="participantParams.duration_observation" />  
      <column name="ontology_term_name"/>
@@ -2597,12 +2612,12 @@ from ApidbTuning.${tblPrefix}Ontology o
 select distinct m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
   from (select min(EUPATH_0000113) as min_age, max(EUPATH_0000113) as max_age
    from ApidbTuning.${tblPrefix}Observations 
-   where pan_id in (\$\$visits_visitage_metadata_${tblPrefix}\$\$)
+   where pan_id in (\$\$visits_visitage_metadata_${paramSuffix}\$\$)
    ) age,
    ApidbTuning.${tblPrefix}Participants pa, ApidbTuning.${tblPrefix}PartObsIO iov, ApidbTuning.${tblPrefix}ParticipantMD m, ApidbTuning.${tblPrefix}Observations obs
    where least(pa.EUPATH_0000152, \$\$visit_date.max\$\$, pa.EFO_0004950 + ( age.max_age * 365)) - 
        greatest(pa.EUPATH_0000151, \$\$visit_date.min\$\$, pa.EFO_0004950 + ( age.min_age * 365)) + 1 >= \$\$duration_observation\$\$
-       and obs.pan_id in (\$\$visits_visitage_metadata_${tblPrefix}\$\$)
+       and obs.pan_id in (\$\$visits_visitage_metadata_${paramSuffix}\$\$)
        and obs.EUPATH_0000091 >= \$\$visit_date.min\$\$ 
        and obs.EUPATH_0000091 <= \$\$visit_date.max\$\$ 
        and iov.observation_id = obs.pan_id
@@ -2612,7 +2627,7 @@ select distinct m.participant_id as internal,  m.ontology_term_name, m.string_va
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="ParticipantMetaDataBkgd_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -2627,7 +2642,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD m
     </sqlQuery>
 
 
-    <sqlQuery name="HouseholdOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="HouseholdOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -2652,9 +2667,9 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
       <paramRef ref="clinicalVisitParams.visit_date" /> 
-      <paramRef ref="participantParams.participants_${tblPrefix}" />  
+      <paramRef ref="participantParams.participants_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -2665,7 +2680,7 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
   from  ApidbTuning.${tblPrefix}PANIO io
-   where io.output_pan_id in (\$\$participants_${tblPrefix}\$\$)
+   where io.output_pan_id in (\$\$participants_${paramSuffix}\$\$)
        and io.input_pan_type_source_id = 'PCO_0000024' )
  select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}MetaData m, part
@@ -2685,7 +2700,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
 
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaDataBkgd_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="HouseholdMetaDataBkgd_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -2714,7 +2729,7 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
       </sql>    
     </sqlQuery>
 
-    <sqlQuery name="VisitOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -2739,10 +2754,10 @@ from ApidbTuning.${tblPrefix}Ontology o
       </sql>
     </sqlQuery>
 
-       <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.visits_visitage_metadata_${tblPrefix}" />
+       <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.visits_visitage_metadata_${paramSuffix}" />
          <paramRef ref="clinicalVisitParams.visit_date" /> 
-         <paramRef ref="participantParams.households_${tblPrefix}" />  
+         <paramRef ref="participantParams.households_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="number_value"/>
@@ -2753,8 +2768,8 @@ from ApidbTuning.${tblPrefix}Ontology o
 with valid as (
 select distinct io.output_pan_id as visit_id, io.input_pan_id as part_id
 from ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}Observations obs
-where io.input_pan_id in (\$\$households_${tblPrefix}\$\$)
-and io.output_pan_id in (\$\$visits_visitage_metadata_${tblPrefix}\$\$)
+where io.input_pan_id in (\$\$households_${paramSuffix}\$\$)
+and io.output_pan_id in (\$\$visits_visitage_metadata_${paramSuffix}\$\$)
 and obs.pan_id = io.output_pan_id
 and obs.EUPATH_0000091 >= \$\$visit_date.min\$\$ 
 and obs.EUPATH_0000091 <= \$\$visit_date.max\$\$ 
@@ -2774,7 +2789,7 @@ and ios.input_pan_id = valid.visit_id
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitMetaDataBkgd_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -2793,6 +2808,7 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamsGEMS
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
        <filterParam name="geographic_region_gems" 
                        ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_gems" 
@@ -2869,6 +2885,7 @@ prop=tblPrefix
 name=participantFilterParamQueriesGEMS
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -3142,6 +3159,7 @@ where participant_id in (select pan_id
 name=participantFilterParamsMALED
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
        <filterParam name="geographic_region_maled" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData_maled"
@@ -3203,6 +3221,7 @@ prop=tblPrefix
 name=participantFilterParamQueriesMALED
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -3431,77 +3450,78 @@ and h.household_id = hp.household_id
 name=participantFilterParamsSCORE
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
 >templateTextStart<
-        <flatVocabParam name="study_arm_${tblPrefix}"
+        <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
                multiPick="false"
                quote="true"
                visible="true"
                dependedParamRef=""
-               queryRef="ParticipantVQ.StudyArm_${tblPrefix}">
+               queryRef="ParticipantVQ.StudyArm_${paramSuffix}">
       <help>You may choose to limit your search to a specific study arm.</help>
     </flatVocabParam>
 
-       <filterParam name="geographic_region_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.RegionOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.RegionMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.RegionMetaDataBkg_${tblPrefix}"
+       <filterParam name="geographic_region_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.RegionOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.RegionMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.RegionMetaDataBkg_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Households"
                     prompt="Geographic region"
-                    dependedParamRef="participantParams.study_arm_${tblPrefix}"
+                    dependedParamRef="participantParams.study_arm_${paramSuffix}"
                     trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
        </filterParam>
        
-       <filterParam name="households_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${tblPrefix}"
+       <filterParam name="households_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
-                    dependedParamRef="participantParams.geographic_region_${tblPrefix}"
+                    dependedParamRef="participantParams.geographic_region_${paramSuffix}"
                     trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
          </help>
        </filterParam>
 
-       <filterParam name="participants_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${tblPrefix}"
+       <filterParam name="participants_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.households_${tblPrefix}">
+                    dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
          </help>
        </filterParam>
 
-       <filterParam name="visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaData_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaData_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Samples"
                     trimMetadataTerms="true"
-                    dependedParamRef="participantParams.participants_${tblPrefix}">
+                    dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their sample characteristics. 
          </help>
        </filterParam>
  
-       <filterParam name="relative_visits_${tblPrefix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${tblPrefix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${tblPrefix}"
+       <filterParam name="relative_visits_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
+                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
                     trimMetadataTerms="true"
                     dependedParamRef="">
@@ -3516,6 +3536,7 @@ prop=householdFilterDataTypeDisplayName
 name=participantFilterParamQueriesSCORE
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -3525,7 +3546,7 @@ prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
-        <sqlQuery name="StudyArm_${tblPrefix}">
+        <sqlQuery name="StudyArm_${paramSuffix}">
           <column name="display" />
           <column name="internal" />
           <column name="term" />
@@ -3542,7 +3563,7 @@ order by ordernum,display
             </sql>
         </sqlQuery>
 
-   <sqlQuery name="RegionOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="RegionOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -3564,8 +3585,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-    <sqlQuery name="RegionMetaData_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.study_arm_${tblPrefix}" />  
+    <sqlQuery name="RegionMetaData_${paramSuffix}" isCacheable="false">
+      <paramRef ref="participantParams.study_arm_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -3580,16 +3601,16 @@ where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and h.household_id = hp.household_id 
-and ('AnY' = \$\$study_arm_${tblPrefix}\$\$
+and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        or hp.participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
-       and string_value = \$\$study_arm_${tblPrefix}\$\$))
+       and string_value = \$\$study_arm_${paramSuffix}\$\$))
         ]]>
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="RegionMetaDataBkg_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="RegionMetaDataBkg_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -3608,7 +3629,7 @@ and h.household_id = hp.household_id
       </sql>
     </sqlQuery>
 
-   <sqlQuery name="HouseholdOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="HouseholdOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -3639,8 +3660,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.geographic_region_${tblPrefix}" />  
+   <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="participantParams.geographic_region_${paramSuffix}" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -3651,13 +3672,13 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
-where hp.household_id in (\$\$geographic_region_${tblPrefix}\$\$)
+where hp.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
 and h.household_id = hp.household_id 
           ]]>
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="HouseholdMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -3673,7 +3694,7 @@ where h.household_id = hp.household_id
     </sql>
     </sqlQuery>
 
-   <sqlQuery name="ParticipantOntology_${tblPrefix}" isCacheable="true">
+   <sqlQuery name="ParticipantOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
@@ -3699,8 +3720,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-   <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-     <paramRef ref="participantParams.households_${tblPrefix}" />  
+   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="participantParams.households_${paramSuffix}" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -3710,12 +3731,12 @@ from ApidbTuning.${tblPrefix}Ontology o
          <![CDATA[
 select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ParticipantMD
-where participant_id in (\$\$households_${tblPrefix}\$\$)
+where participant_id in (\$\$households_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="ParticipantMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -3730,7 +3751,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD
     </sqlQuery>
 
     
-    <sqlQuery name="VisitOntology_${tblPrefix}" isCacheable="true">
+    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -3756,8 +3777,8 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-       <sqlQuery name="VisitMetaData_${tblPrefix}" isCacheable="false">
-         <paramRef ref="participantParams.participants_${tblPrefix}" />  
+       <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="participantParams.participants_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
@@ -3769,12 +3790,12 @@ from ApidbTuning.${tblPrefix}Ontology o
            <![CDATA[
 select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where participant_id in (\$\$participants_${tblPrefix}\$\$)
+where participant_id in (\$\$participants_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    
 
-    <sqlQuery name="VisitMetaDataBkgd_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="VisitMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -3795,78 +3816,79 @@ from ApidbTuning.${tblPrefix}ObservationMD
 name=participantFilterParamsMalawi
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
 >templateTextStart<
-        <flatVocabParam name="study_arm_${tblPrefix}"
+        <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
                multiPick="false"
                quote="true"
                visible="true"
                dependedParamRef=""
-               queryRef="ParticipantVQ.StudyArm_${tblPrefix}">
+               queryRef="ParticipantVQ.StudyArm_${paramSuffix}">
       <help>You may choose to limit your search to a specific study arm.</help>
     </flatVocabParam>
 
-       <filterParam name="geographic_region_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_${tblPrefix}" 
-                       metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.GeographicRegionMetaDataBkg_${tblPrefix}"
+       <filterParam name="geographic_region_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_${paramSuffix}" 
+                       metadataQueryRef="ParticipantVQ.GeographicRegionMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.GeographicRegionMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Participants"
                        prompt="Study Site"
                        trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.case_control,participantParams.study_arm_${tblPrefix}">
+                       dependedParamRef="participantParams.case_control,participantParams.study_arm_${paramSuffix}">
          <help>
            Select participants based on their study site.
          </help>
        </filterParam>
 
-       <filterParam name="household_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_${tblPrefix}"
-                       metadataQueryRef="ParticipantVQ.HouseholdMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${tblPrefix}"
+       <filterParam name="household_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
+                       metadataQueryRef="ParticipantVQ.HouseholdMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                        prompt="Household"
                        trimMetadataTerms="true"
                        countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.geographic_region_${tblPrefix}">
+                       dependedParamRef="participantParams.geographic_region_${paramSuffix}">
          <help>
            Select participants based on household characteristics. 
          </help>
        </filterParam>
        
-       <filterParam name="participant_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_${tblPrefix}"
-                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_${tblPrefix}"
+       <filterParam name="participant_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                       metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
                        trimMetadataTerms="false"
                        countPredictsAnswerCount="true"
-                       dependedParamRef="participantParams.household_${tblPrefix}">
+                       dependedParamRef="participantParams.household_${paramSuffix}">
          <help>
            Select participants based on their personal characteristics. 
          </help>
        </filterParam>
 
-       <filterParam name="event_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.ObservationOntology_${tblPrefix}"
-                       metadataQueryRef="ParticipantVQ.ObservationMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_${tblPrefix}"
+       <filterParam name="event_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.ObservationOntology_${paramSuffix}"
+                       metadataQueryRef="ParticipantVQ.ObservationMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Observations"
                        prompt="Observations"
                        trimMetadataTerms="true"
                        countPredictsAnswerCount="false"
-                       dependedParamRef="participantParams.participant_${tblPrefix}">
+                       dependedParamRef="participantParams.participant_${paramSuffix}">
          <help>
            Select participants based on variables associated with their enrollment or followup events. 
          </help>
        </filterParam>       
 
-      <filterParam name="relative_event_${tblPrefix}" 
-                       ontologyQueryRef="ParticipantVQ.ObservationOntology_${tblPrefix}"
-                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolObservationMetaData_${tblPrefix}"
-                       backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_${tblPrefix}"
+      <filterParam name="relative_event_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.ObservationOntology_${paramSuffix}"
+                       metadataQueryRef="ParticipantVQ.RelativeCasecontrolObservationMetaData_${paramSuffix}"
+                       backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Observations"
                        prompt="Related Case or Control"
                        trimMetadataTerms="true"
@@ -3882,6 +3904,7 @@ prop=householdFilterDataTypeDisplayName
 name=participantFilterParamQueriesMalawi
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -3891,7 +3914,7 @@ prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
-        <sqlQuery name="StudyArm_${tblPrefix}">
+        <sqlQuery name="StudyArm_${paramSuffix}">
           <column name="display" />
           <column name="internal" />
           <column name="term" />
@@ -3908,7 +3931,7 @@ order by ordernum,display
             </sql>
         </sqlQuery>
 
-    <sqlQuery name="GeographicRegionOntology_${tblPrefix}">
+    <sqlQuery name="GeographicRegionOntology_${paramSuffix}">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -3930,9 +3953,9 @@ from ApidbTuning.${tblPrefix}Ontology o
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="GeographicRegionMetaData_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="GeographicRegionMetaData_${paramSuffix}" isCacheable="false">
       <paramRef ref="participantParams.case_control" />  
-      <paramRef ref="participantParams.study_arm_${tblPrefix}" />  
+      <paramRef ref="participantParams.study_arm_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -3950,16 +3973,16 @@ and m.household_id = hp.household_id
 and hp.participant_id in (select pan_id
        from ApidbTuning.${tblPrefix}Participants
        where lower(EUPATH_0010375) in (\$\$case_control\$\$))
-and ('AnY' = \$\$study_arm_${tblPrefix}\$\$
+and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        or hp.participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
-       and string_value = \$\$study_arm_${tblPrefix}\$\$))
+       and string_value = \$\$study_arm_${paramSuffix}\$\$))
           ]]>
     </sql>    
     </sqlQuery>
     
-    <sqlQuery name="GeographicRegionMetaDataBkg_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="GeographicRegionMetaDataBkg_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -3978,7 +4001,7 @@ and m.household_id = hp.household_id
     </sql>    
     </sqlQuery>
     
-    <sqlQuery name="HouseholdOntology_${tblPrefix}">
+    <sqlQuery name="HouseholdOntology_${paramSuffix}">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -4006,8 +4029,8 @@ order by display_order, display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaData_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.geographic_region_${tblPrefix}" />  
+    <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
+      <paramRef ref="participantParams.geographic_region_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -4019,12 +4042,12 @@ order by display_order, display_name
                   select hp.participant_id as internal,  m.household_id as filter_item_id,
                   m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
-where hp.household_id in (\$\$geographic_region_${tblPrefix}\$\$)
+where hp.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
 and m.household_id = hp.household_id 
 UNION
 select distinct hp.participant_id as internal, io.input_pan_id as filter_item_id,  m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}MetaData m, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}HousePartIO hp
- where io.input_pan_id in (\$\$geographic_region_${tblPrefix}\$\$)
+ where io.input_pan_id in (\$\$geographic_region_${paramSuffix}\$\$)
  and m.pan_id = io.output_pan_id
  and io.output_pan_type_source_id = 'EUPATH_0000327'
  and io.input_pan_id = hp.household_id
@@ -4032,8 +4055,8 @@ select distinct hp.participant_id as internal, io.input_pan_id as filter_item_id
       </sql>    
     </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaDataBkg_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.geographic_region_${tblPrefix}" />  
+    <sqlQuery name="HouseholdMetaDataBkg_${paramSuffix}" isCacheable="false">
+      <paramRef ref="participantParams.geographic_region_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -4056,7 +4079,7 @@ select distinct hp.participant_id as internal, io.input_pan_id as filter_item_id
       </sql>    
     </sqlQuery>
 
-    <sqlQuery name="ParticipantOntology_${tblPrefix}">
+    <sqlQuery name="ParticipantOntology_${paramSuffix}">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -4078,8 +4101,8 @@ order by display_order, display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaData_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.household_${tblPrefix}" />  
+    <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
+      <paramRef ref="participantParams.household_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -4089,12 +4112,12 @@ order by display_order, display_name
          <![CDATA[
 select m.participant_id as internal,  m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}ParticipantMD m
-where m.participant_id in (\$\$household_${tblPrefix}\$\$)
+where m.participant_id in (\$\$household_${paramSuffix}\$\$)
          ]]>
       </sql>    
     </sqlQuery>
 
-    <sqlQuery name="ParticipantMetaDataBkg_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="ParticipantMetaDataBkg_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -4108,7 +4131,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD m
       </sql>    
     </sqlQuery>
 
-    <sqlQuery name="ObservationOntology_${tblPrefix}">
+    <sqlQuery name="ObservationOntology_${paramSuffix}">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -4129,8 +4152,8 @@ order by display_order, display_name
       </sql>
     </sqlQuery>
 
-    <sqlQuery name="ObservationMetaData_${tblPrefix}" isCacheable="false">
-      <paramRef ref="participantParams.participant_${tblPrefix}" />  
+    <sqlQuery name="ObservationMetaData_${paramSuffix}" isCacheable="false">
+      <paramRef ref="participantParams.participant_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -4141,12 +4164,12 @@ order by display_order, display_name
          <![CDATA[
 select  participant_id as internal, sub_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where participant_id in (\$\$participant_${tblPrefix}\$\$)
+where participant_id in (\$\$participant_${paramSuffix}\$\$)
           ]]>
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="ObservationMetaDataBkg_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="ObservationMetaDataBkg_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -4161,7 +4184,7 @@ from ApidbTuning.${tblPrefix}ObservationMD
     </sql>    
     </sqlQuery>
 
-    <sqlQuery name="RelativeCasecontrolObservationMetaData_${tblPrefix}" isCacheable="false">
+    <sqlQuery name="RelativeCasecontrolObservationMetaData_${paramSuffix}" isCacheable="false">
       <paramRef ref="participantParams.case_control" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>

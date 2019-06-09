@@ -3,6 +3,7 @@ name=householdSourceIdQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/householdQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -35,6 +36,7 @@ name=participantSourceIdQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/participantQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -64,6 +66,7 @@ name=observationSourceIdQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/observationQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -92,6 +95,7 @@ name=householdSourceIdQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -114,6 +118,7 @@ name=participantSourceIdQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -139,6 +144,7 @@ name=observationSourceIdQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -163,6 +169,7 @@ name=householdSourceIdParam
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -185,6 +192,7 @@ name=participantSourceIdParam
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/participantParams.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -208,6 +216,7 @@ name=observationSourceIdParam
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -232,6 +241,7 @@ name=householdsByParticipantQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/householdQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -281,6 +291,7 @@ name=householdsByParticipantQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -314,6 +325,7 @@ name=participantResultParam
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/participantParams.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -331,6 +343,7 @@ name=householdResultParam
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/householdParams.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -347,6 +360,7 @@ name=observationResultParam
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/observationParams.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -364,6 +378,7 @@ name=lightTrapResultParam
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/lightTrapParams.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -383,6 +398,7 @@ name=participantsByHouseholdsQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/participantQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -421,6 +437,7 @@ name=participantsByObservationsQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/participantQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -467,6 +484,7 @@ name=participantsByHouseholdsQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -496,6 +514,7 @@ name=participantsByObservationsQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/participantQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -530,6 +549,7 @@ name=observationsByParticipantsQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/observationQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -574,6 +594,7 @@ name=observationsByParticipantsQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/observationQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -603,6 +624,7 @@ name=lightTrapSourceIdQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/lightTrapQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -638,6 +660,7 @@ name=lightTrapSourceIdQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/lightTrapQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -659,6 +682,7 @@ name=lightTrapSourceIdParam
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/lightTrapParams.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -681,6 +705,7 @@ name=householdsByLightTrapsQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/householdQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -727,6 +752,7 @@ name=householdsByLightTrapsQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/householdQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -762,6 +788,7 @@ name=lightTrapsByHouseholdsQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/lightTrapQuestions.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<
@@ -810,6 +837,7 @@ name=lightTrapsByHouseholdsQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/lightTrapQueries.xml
 prop=datasetName
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=includeProjects
 >templateTextStart<

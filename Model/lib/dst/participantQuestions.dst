@@ -13,13 +13,14 @@ prop=includeProjects
 prop=presenterId
 prop=participantAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=studyAbbreviation
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
               displayName="Select a Set of Participants (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         ${participantAttributesListFull}        
@@ -53,7 +54,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_${tblPrefix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
             }
           </value>
         </propertyList>
@@ -68,13 +69,14 @@ prop=includeProjects
 prop=presenterId
 prop=participantAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=studyAbbreviation
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
               displayName="Select a Set of Participants (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         ${participantAttributesListFull}        
@@ -114,7 +116,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_${tblPrefix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
             }
           </value>
         </propertyList>
@@ -129,13 +131,14 @@ prop=includeProjects
 prop=presenterId
 prop=participantAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=studyAbbreviation
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
               displayName="Select a Set of Participants (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         ${participantAttributesListFull}        
@@ -170,13 +173,14 @@ prop=includeProjects
 prop=presenterId
 prop=participantAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=studyAbbreviation
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
               displayName="Select a Set of Participants (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         ${participantAttributesListFull}        
@@ -197,7 +201,7 @@ Use the filters above to select a set of Participants or to explore the data.  S
               "relatedCaseControlGroupName": "relative_case_control",
               "toggleParamName": "use_rel_case_control",
               "keepRemoveParamName": "keep_remove",
-              "filterParamName": "relative_event_${tblPrefix}",
+              "filterParamName": "relative_event_${paramSuffix}",
               "caseControlParamName": "case_control"
             }
           </value>
@@ -222,13 +226,14 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=participantQuestionName
 >templateTextStart<
     <question name="${participantQuestionName}" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants (PRISM)"
               shortDisplayName="Particip PRISM"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}"
               includeProjects="${includeProjects}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
         <attributesList 
@@ -314,13 +319,14 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=participantQuestionName
 >templateTextStart<
     <question name="${participantQuestionName}" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants (PRISM2)"
               shortDisplayName="Particip PRISM2"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}" 
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}" 
               includeProjects="${includeProjects}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
         <attributesList 
@@ -407,6 +413,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=participantQuestionName
 prop=participantAttributesListFull
 >templateTextStart<
@@ -414,7 +421,7 @@ prop=participantAttributesListFull
               searchCategory="Participant"
               displayName="Select a Set of Participants (MAL-ED)"
               shortDisplayName="Particip MAL-ED"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
 
@@ -475,6 +482,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=participantQuestionName
 prop=participantAttributesListFull
 >templateTextStart<
@@ -482,7 +490,7 @@ prop=participantAttributesListFull
               searchCategory="Participant"
               displayName="Select a Set of Participants (GEMS)"
               shortDisplayName="Particip GEMS"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         ${participantAttributesListFull}        
@@ -524,6 +532,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=participantQuestionName
 prop=participantAttributesListFull
 >templateTextStart<
@@ -531,7 +540,7 @@ prop=participantAttributesListFull
               searchCategory="Participant"
               displayName="Select a Set of Participants (GEMS1a)"
               shortDisplayName="Particip GEMS1a"
-              queryRef="ParticipantId.ParticipantsMetadata_${tblPrefix}"
+              queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
 
         ${participantAttributesListFull}        

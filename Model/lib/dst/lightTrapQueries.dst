@@ -10,11 +10,12 @@ ${injectedTemplateFull}
 name=lightTrapMetadataQueryPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=visitMinDate
 prop=visitMaxDate
 >templateTextStart<
-    <sqlQuery name="LightTrapsByMetadata_${tblPrefix}" isCacheable="true"> 
+    <sqlQuery name="LightTrapsByMetadata_${paramSuffix}" isCacheable="true"> 
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="lightTrapParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
@@ -36,21 +37,22 @@ where lta.pan_id in (\$\$lighttraps_prism\$\$)
 name=lightTrapMetadataQueryPRISM2
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=visitMinDate
 prop=visitMaxDate
 >templateTextStart<
-    <sqlQuery name="LightTrapsByMetadata_${tblPrefix}" isCacheable="true"> 
+    <sqlQuery name="LightTrapsByMetadata_${paramSuffix}" isCacheable="true"> 
        <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="lightTrapParams.lighttraps_${tblPrefix}" groupRef="metaDataGroups.lighttrap_characteristics"/>
+       <paramRef ref="lightTrapParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.lighttraps_${paramSuffix}" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
            <![CDATA[
 select lta.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}LightTraps lta
-where lta.pan_id in (\$\$lighttraps_${tblPrefix}\$\$)
+where lta.pan_id in (\$\$lighttraps_${paramSuffix}\$\$)
                 ]]>   
         </sql>
      </sqlQuery>
@@ -60,21 +62,22 @@ where lta.pan_id in (\$\$lighttraps_${tblPrefix}\$\$)
 name=lightTrapMetadataQueryMalawi
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQueries.dst
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=visitMinDate
 prop=visitMaxDate
 >templateTextStart<
-    <sqlQuery name="LightTrapsByMetadata_${tblPrefix}" isCacheable="true"> 
-       <paramRef ref="lightTrapParams.geographic_region_${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="lightTrapParams.households_${tblPrefix}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="lightTrapParams.lighttraps_${tblPrefix}" groupRef="metaDataGroups.lighttrap_characteristics"/>
+    <sqlQuery name="LightTrapsByMetadata_${paramSuffix}" isCacheable="true"> 
+       <paramRef ref="lightTrapParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="lightTrapParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.lighttraps_${paramSuffix}" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
            <![CDATA[
 select lta.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}LightTraps lta
-where lta.pan_id in (\$\$lighttraps_${tblPrefix}\$\$)
+where lta.pan_id in (\$\$lighttraps_${paramSuffix}\$\$)
                 ]]>   
         </sql>
      </sqlQuery>
