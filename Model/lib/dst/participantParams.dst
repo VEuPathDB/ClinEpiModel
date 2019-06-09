@@ -441,6 +441,84 @@ prop=householdFilterDataTypeDisplayName
 >templateTextEnd<
 
 [templateStart]
+name=microbiomeOntologyQuery
+anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
+prop=MicrobiomeDatasetName
+>templateTextStart<
+UNION
+select 'microbiome_results' as ontology_term_name,
+'EUPATH_0000609' as parent_ontology_term_name,
+'Microbiome Results' as display_name,
+'Results from MicrobiomeDB' as description,
+cast(null as varchar2(1)) as type, cast(null as varchar2(1)) as units,
+1 as precision, 0 as is_range,
+100 as display_order
+FROM dual
+UNION
+select category as ontology_term_name,
+'microbiome_results' as parent_ontology_term_name,
+category as display_name,
+'taxonomic rank' as description,
+cast(null as varchar2(1)) as type, cast(null as varchar2(1)) as units,
+1 as precision, 0 as is_range,
+taxon_level * 2 - 1 as display_order
+from apidbTuning.TaxonAbundance@clin2mbio
+where dataset_name = '${MicrobiomeDatasetName}'
+UNION
+select term_id as ontology_term_name,
+category as parent_ontology_term_name,
+term as display_name,
+cast(null as varchar2(1)) as description,
+'number' as type, null as units, 1 as precision, 1 as is_range,
+taxon_level * 2 as display_order
+from apidbTuning.TaxonAbundance@clin2mbio
+where dataset_name = '${MicrobiomeDatasetName}'
+>templateTextEnd<
+
+[templateStart]
+name=participantMicrobiomeMetadataQuery
+anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
+prop=MicrobiomeDatasetName
+prop=tblPrefix
+>templateTextStart<
+UNION ALL
+select idmap.participant_id as internal, idmap.sub_observation_id as filter_item_id,
+ta.term_id as ontology_term_name,
+cast(null as varchar2(1)) as string_value,
+cast(ta.value as number) as number_value,
+cast(null as date) as date_value
+from apidbTuning.TaxonAbundance@clin2mbio ta, apidbTuning.SampleProcess@clin2mbio sp, apidbTuning.Samples@clin2mbio sa,
+(select distinct participant_id,sub_observation_id, number_value as splid from apidbtuning.${tblPrefix}ObservationMD where ontology_term_name = 'OBI_0001616'
+and participant_id in (\\\$\\\$participant_${tblPrefix}\\\$\\\$)) idmap
+where ta.dataset_name = '${MicrobiomeDatasetName}'
+and ta.protocol_app_node_id = sp.output_pan_id
+AND sp.output_isa_type = 'Data'
+and sa.pan_id = sp.protocol_app_node_id
+and idmap.splid = sa.EUPATH_0009017
+>templateTextEnd<
+
+[templateStart]
+name=participantMicrobiomeMetadataBkgQuery
+anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
+prop=MicrobiomeDatasetName
+prop=tblPrefix
+>templateTextStart<
+UNION ALL
+select idmap.participant_id as internal, idmap.sub_observation_id as filter_item_id, 
+ta.term_id as ontology_term_name,
+cast(null as varchar2(1)) as string_value,
+cast(ta.value as number) as number_value,
+cast(null as date) as date_value
+from apidbTuning.TaxonAbundance@clin2mbio ta, apidbTuning.SampleProcess@clin2mbio sp, apidbTuning.Samples@clin2mbio sa,
+(select distinct participant_id,sub_observation_id, number_value as splid from apidbtuning.${tblPrefix}ObservationMD where ontology_term_name = 'OBI_0001616') idmap
+where ta.dataset_name = '${MicrobiomeDatasetName}'
+and ta.protocol_app_node_id = sp.output_pan_id
+AND sp.output_isa_type = 'Data'
+and sa.pan_id = sp.protocol_app_node_id
+and idmap.splid = sa.EUPATH_0009017
+>templateTextEnd<
+
+[templateStart]
 name=participantFilterParamQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/participantParams.xml
 prop=injectedTemplateFull
@@ -1254,6 +1332,9 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=microbiomeOntologyQueryFull
+prop=participantMicrobiomeMetadataQueryFull
+prop=participantMicrobiomeMetadataBkgQueryFull
 >templateTextStart<
         <sqlQuery name="StudyArm_${tblPrefix}">
           <column name="display" />
@@ -1463,11 +1544,14 @@ from ApidbTuning.${tblPrefix}ParticipantMD m
       <column name="is_range"/>
       <sql>
 select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.is_range,o.precision,
-CASE WHEN o.ontology_term_source_id in (${observationMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type, o.display_order
+select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, 
+nvl(o.display_name,o.ontology_term_name) as display_name, o.description, 
+CASE WHEN o.ontology_term_source_id in (${observationMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type, 
+o.units, o.precision, o.is_range, o.display_order
 from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')
+${microbiomeOntologyQueryFull}
 ) where ontology_term_name not in (${observationFilterExcludedIdsQuoted})
 order by display_order, display_name
       </sql>
@@ -1486,6 +1570,7 @@ order by display_order, display_name
 select  participant_id as internal, sub_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
 where participant_id in (\$\$participant_${tblPrefix}\$\$)
+${participantMicrobiomeMetadataQueryFull}
           ]]>
     </sql>    
     </sqlQuery>
@@ -1501,6 +1586,7 @@ where participant_id in (\$\$participant_${tblPrefix}\$\$)
          <![CDATA[
 select  participant_id as internal, sub_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
+${participantMicrobiomeMetadataBkgQueryFull}
           ]]>
     </sql>    
     </sqlQuery>
@@ -2979,8 +3065,10 @@ from ApidbTuning.${tblPrefix}ParticipantMD m
       <column name="is_range"/>
       <sql>
 select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.is_range,o.precision,
-CASE WHEN o.ontology_term_source_id in ('EUPATH_0000321','EUPATH_0010011','EUPATH_0010351','EUPATH_0010357','EUPATH_0010378','EUPATH_0010379','EUPATH_0010380','EUPATH_0010383','EUPATH_0010389','EUPATH_0010390','EUPATH_0010391','EUPATH_0010393','EUPATH_0010394','EUPATH_0010395','EUPATH_0010040','NCBITaxon_10239','NCBITaxon_2','NCBITaxon_2759') AND o.type is null THEN 'multiFilter' ELSE o.type END as type, o.display_order
+select o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, 
+nvl(o.display_name,o.ontology_term_name) as display_name, o.description, 
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000321','EUPATH_0010011','EUPATH_0010351','EUPATH_0010357','EUPATH_0010378','EUPATH_0010379','EUPATH_0010380','EUPATH_0010383','EUPATH_0010389','EUPATH_0010390','EUPATH_0010391','EUPATH_0010393','EUPATH_0010394','EUPATH_0010395','EUPATH_0010040','NCBITaxon_10239','NCBITaxon_2','NCBITaxon_2759') AND o.type is null THEN 'multiFilter' ELSE o.type END as type, 
+o.units, o.precision, o.is_range, o.display_order
 from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id in  ('EUPATH_0000738','EUPATH_0000609')

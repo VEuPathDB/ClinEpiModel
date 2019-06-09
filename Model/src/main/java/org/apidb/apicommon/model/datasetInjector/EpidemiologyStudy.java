@@ -106,7 +106,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           return;
       }
 
+      //default property values
       setPropValue("injectParams","true");  //ONLY for studies that are using hard cooded param names ... for all but one study
+      //microbiome defaults ... no linkage. NOTE: ONLY implemented for participantCaseControlRegion
+      setPropValue("hasMicrobiomeData","false");
+      setPropValue("MicrobiomeDatasetName","none");
+      
       setStudySpecificProperties();  
 
       for (Map.Entry<String, String[]> entry : participantGraphAttributesToScopes().entrySet()) {
@@ -273,6 +278,18 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("participantSourceIdParam");
 
           injectTemplate("participantResultParam");
+
+          // Deal with microbiomedb linkage.
+          boolean hasMbioData = getPropValueAsBoolean("hasMicrobiomeData");
+          if(hasMbioData){
+              setPropValue("microbiomeOntologyQueryFull",getTemplateInstanceText("microbiomeOntologyQuery"));
+              setPropValue("participantMicrobiomeMetadataQueryFull",getTemplateInstanceText("participantMicrobiomeMetadataQuery"));
+              setPropValue("participantMicrobiomeMetadataBkgQueryFull",getTemplateInstanceText("participantMicrobiomeMetadataBkgQuery"));
+          }else{  //need to setProps to empty string
+              setPropValue("microbiomeOntologyQueryFull","");
+              setPropValue("participantMicrobiomeMetadataQueryFull","");
+              setPropValue("participantMicrobiomeMetadataBkgQueryFull","");
+          }
 
           for(String key : participantQuestionTemplateNamesToScopes().keySet()) {
               setPropValue("participantQuestionName", key);
