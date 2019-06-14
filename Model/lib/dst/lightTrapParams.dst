@@ -547,10 +547,15 @@ select distinct m.pan_id as filter_item_id, io.output_pan_id as internal, m.prop
       <column name="is_range"/>
       <sql>
         <![CDATA[
- select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+     select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
 from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'EUPATH_0000327'
+UNION
+   select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name, nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,o.type,o.is_range,o.precision
+from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'EUPATH_0025169'
         ]]>
       </sql>
     </sqlQuery>
@@ -564,9 +569,9 @@ from ApidbTuning.${tblPrefix}Ontology o
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.${tblPrefix}MetaData m
- where m.pan_id in (\$\$households_${paramSuffix}\$\$)
+select distinct ent.entomology_id as internal, ent.ontology_term_name, ent.string_value, ent.number_value, ent.date_value
+ from ApidbTuning.${tblPrefix}EntomologyMD ent
+ where ent.entomology_id in (\$\$households_${paramSuffix}\$\$)
         ]]>
       </sql>
     </sqlQuery>
@@ -579,9 +584,8 @@ select distinct m.pan_id as internal, m.property_source_id as ontology_term_name
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct m.pan_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
- from ApidbTuning.${tblPrefix}MetaData m
- where m.category = 'Entomology'
+select distinct ent.entomology_id as internal, ent.ontology_term_name, ent.string_value, ent.number_value, ent.date_value
+ from ApidbTuning.${tblPrefix}EntomologyMD ent
         ]]>
       </sql>
     </sqlQuery>
