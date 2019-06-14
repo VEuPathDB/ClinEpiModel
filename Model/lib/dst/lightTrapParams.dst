@@ -564,14 +564,21 @@ from ApidbTuning.${tblPrefix}Ontology o
       <paramRef ref="lightTrapParams.households_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct ent.entomology_id as internal, ent.ontology_term_name, ent.string_value, ent.number_value, ent.date_value
- from ApidbTuning.${tblPrefix}EntomologyMD ent
- where ent.entomology_id in (\$\$households_${paramSuffix}\$\$)
+ select distinct ent.entomology_id as internal, ent.insect_sample_id as filter_item_id, ent.ontology_term_name, ent.string_value, ent.number_value, ent.date_value
+ from ApidbTuning.${tblPrefix}EntomologyMD ent, ApidbTuning.${tblPrefix}EntoInsSplIO eis
+ where eis.insect_sample_id = ent.insect_sample_id
+ UNION
+ select distinct ent.entomology_id as internal, nvl(eis.insect_sample_id,ent.entomology_id) as filter_item_id, ent.ontology_term_name, ent.string_value, ent.number_value, ent.date_value
+ from ApidbTuning.${tblPrefix}EntomologyMD ent, ApidbTuning.${tblPrefix}EntoInsSplIO eis
+ where ent.entomology_id = ent.insect_sample_id  --this is not an insect_sample row
+ and ent.entomology_id = eis.entomology_id(+)
+ and ent.entomology_id in (\$\$households_${paramSuffix}\$\$)
         ]]>
       </sql>
     </sqlQuery>
@@ -579,13 +586,20 @@ select distinct ent.entomology_id as internal, ent.ontology_term_name, ent.strin
     <sqlQuery name="LightTrapMetaDataBkgd_${paramSuffix}">
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select distinct ent.entomology_id as internal, ent.ontology_term_name, ent.string_value, ent.number_value, ent.date_value
- from ApidbTuning.${tblPrefix}EntomologyMD ent
+ select distinct ent.entomology_id as internal, ent.insect_sample_id as filter_item_id, ent.ontology_term_name, ent.string_value, ent.number_value, ent.date_value
+ from ApidbTuning.${tblPrefix}EntomologyMD ent, ApidbTuning.${tblPrefix}EntoInsSplIO eis
+ where eis.insect_sample_id = ent.insect_sample_id
+ UNION
+ select distinct ent.entomology_id as internal, nvl(eis.insect_sample_id,ent.entomology_id) as filter_item_id, ent.ontology_term_name, ent.string_value, ent.number_value, ent.date_value
+ from ApidbTuning.${tblPrefix}EntomologyMD ent, ApidbTuning.${tblPrefix}EntoInsSplIO eis
+ where ent.entomology_id = ent.insect_sample_id  --this is not an insect_sample row
+ and ent.entomology_id = eis.entomology_id(+)
         ]]>
       </sql>
     </sqlQuery>
