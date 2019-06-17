@@ -68,6 +68,9 @@ prop=includeProjects
 
   <attributeQueryRef ref="${presenterId}LightTrapAttributes.LightTrapAttributes" attributeMetaQueryRef="${presenterId}LightTrapAttributes.LightTrapAttributesMeta"/>
 
+  <attributeQueryRef ref="${presenterId}LightTrapAttributes.HouseholdAttributes" attributeMetaQueryRef="${presenterId}LightTrapAttributes.HouseholdAttributesMeta"/>
+
+
         <table name="Characteristics"
                displayName="Lighttrap Characteristics"
                queryRef="${presenterId}LightTrapTables.Characteristics">
@@ -97,6 +100,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
 prop=includeProjects
+
 >templateTextStart<
     <querySet name="${presenterId}LightTrapAttributes" queryType="attribute" doNotTest="true"  
               isCacheable='false'  includeProjects="${includeProjects}">
@@ -120,17 +124,14 @@ select count(*) from apidbtuning.${tblPrefix}LightTraps
          <column name="project_id"/>
 
 
-          <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInLightTrapAttributes}]]></sqlParamValue>
-
           <sql>
             <![CDATA[
-                     select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*,
-                     da.*
-                     from apidbtuning.${tblPrefix}PANIO io
-                        , apidbtuning.${tblPrefix}LightTraps pa
-                        , (select pan_id as hh_protocol_app_node_id, name as parent from apidbtuning.${tblPrefix}Households) da
-                     where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
-                     and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
+                select pa.name as source_id, '@PROJECT_ID@' as project_id, pa.*, da.*
+                from apidbtuning.${tblPrefix}PANIO io
+                    ,apidbtuning.${tblPrefix}LightTraps pa
+                    ,(select pan_id as hh_protocol_app_node_id, name as parent from apidbtuning.${tblPrefix}Households) da
+		    where pa.PAN_ID = io.OUTPUT_PAN_ID (+)
+		    and io.input_pan_id = da.hh_PROTOCOL_APP_NODE_ID (+)
             ]]>
           </sql>  
          </sqlQuery>
@@ -147,7 +148,6 @@ select count(*) from apidbtuning.${tblPrefix}LightTraps
 
          <!-- WARNING:  if you change this you must also change in the AttributeQuery ABOVE -->
 
-          <sqlParamValue name="householdSourceIds"><![CDATA[${householdSourceIdsIncludedInLightTrapAttributesQuote}]]></sqlParamValue>
 
          <sql>
             <![CDATA[
@@ -164,15 +164,95 @@ select count(*) from apidbtuning.${tblPrefix}LightTraps
                           and c.owner = 'APIDBTUNING'
                           and c.table_name = s.table_name
                           and upper(o.ontology_term_source_id) = c.column_name
---                           union
---                           select 'Name' as display_name, 'name' as name, '' as help, '' as type from dual
-                           union
-                           select ot.name as display_name, ot.source_id as name, ot.definition as help, mt.type from apidbtuning.${tblPrefix}PropertyType mt, sres.ontologyterm ot where ot.source_id = mt.property_source_id and mt.property_source_id in (&&householdSourceIds&&)
+
+
                            ) meta
             ]]>
          </sql>
 
          </sqlQuery>
+
+
+
+<sqlQuery name="HouseholdAttributes" attributeMetaQueryRef="${presenterId}LightTrapAttributes.HouseholdAttributesMeta">
+         <column name="source_id"/>
+         <column name="project_id"/>
+         <column name="household_id"/>
+          <sql>
+            <![CDATA[
+
+        select  lt.name as source_id, '@PROJECT_ID@' as project_id, hh.name as household_id, hh.*
+        from apidbtuning.${tblPrefix}Households hh,
+             APIDBTUNING.${tblPrefix}LightTraps lt,
+             apidbtuning.${tblPrefix}PANIO io
+
+    where  lt.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = hh.PAN_ID
+
+            ]]>
+            </sql>
+
+        </sqlQuery>
+
+
+<sqlQuery name="HouseholdAttributesMeta" isCacheable="false">
+           <column name="name" />
+           <column name="display_name" />
+	   <column name="help" />
+           <column name="reporter_name" />
+           <column name="reporter_display" />
+           <column name="reporter_description" />
+           <column name="reporter_implementation" />
+           <column name="reporter_properties" />
+
+           <sql>
+            <![CDATA[
+
+with hasHHObser as(
+     select count(*) as ct
+     from apidbtuning.${tblPrefix}PANIO
+     where input_pan_type_source_id = 'PCO_0000024'
+     and output_pan_type_source_id = 'PCO_0000024'
+     )
+
+select meta.display_name, meta.name, meta.help,
+                   decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
+                   decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
+                   decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
+                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
+                    null as reporter_properties
+from (
+
+     select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Households')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+	    and (o.ontology_term_source_id != 'EUPATH_0000054') 
+
+	    and (select ct from hasHHObser) >0
+
+     UNION
+ 
+      select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Households')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+	    and (o.ontology_term_source_id != 'EUPATH_0000054')
+	    and (select ct from hasHHObser) = 0
+
+     UNION
+     
+     select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
+     	    where (select count(*) from apidbtuning.${tblPrefix}Households) >0
+      )meta
+            ]]>
+              </sql>
+
+           </sqlQuery>
 
 
 
@@ -191,6 +271,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
 prop=includeProjects
+
 >templateTextStart<
     <querySet name="${presenterId}LightTrapTables" queryType="table" 
               isCacheable='false'  includeProjects="${includeProjects}">
@@ -214,7 +295,7 @@ SELECT pan_name  AS source_id,
   1 as is_leaf
 FROM apidbtuning.${tblPrefix}metadata
 WHERE dataset_name = '&&datasetName&&'
-AND category       = 'CDC light trap assay'
+AND category       = 'Entomological measurements' or  category  = 'Entomology'
 UNION
 SELECT pa.name                AS source_id,
   '@PROJECT_ID@'              AS project_id,
@@ -230,4 +311,3 @@ WHERE o.dataset_name = '&&datasetName&&'
       </sqlQuery>
     </querySet>
 >templateTextEnd<
-
