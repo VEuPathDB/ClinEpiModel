@@ -14,13 +14,14 @@ prop=presenterId
 prop=observationQuestionName
 prop=observationAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=studyAbbreviation
 >templateTextStart<
     <question name="${presenterId}ObservationsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
               displayName="Select a Set of Observations (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         ${observationAttributesListFull}
@@ -63,7 +64,7 @@ prop=studyAbbreviation
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
               "numRelativeEventsParamName": "num_relative_events",
-              "relativeVisitsParamName": "relative_visits_${tblPrefix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
             }
           </value>
         </propertyList>
@@ -79,13 +80,14 @@ prop=presenterId
 prop=observationQuestionName
 prop=observationAttributesListFull
 prop=tblPrefix
+prop=paramSuffix
 prop=studyAbbreviation
 >templateTextStart<
     <question name="${presenterId}ObservationsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
               displayName="Select a Set of Observations (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         ${observationAttributesListFull}
@@ -140,7 +142,7 @@ prop=studyAbbreviation
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
               "numRelativeEventsParamName": "num_relative_events",
-              "relativeVisitsParamName": "relative_visits_${tblPrefix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
             }
           </value>
         </propertyList>
@@ -155,13 +157,14 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=observationQuestionName
 >templateTextStart<
    <question name="${observationQuestionName}" newBuild="2"
               searchCategory="Clinical Observation"
               displayName="Select a Set of Clinical Observations (PRISM)"
               shortDisplayName="Clinical Observations"
-              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" 
               includeProjects="${includeProjects}"> 
 
@@ -232,13 +235,14 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=observationQuestionName
 >templateTextStart<
    <question name="${observationQuestionName}" newBuild="2"
               searchCategory="Clinical Observation"
               displayName="Select a Set of Clinical Observations (PRISM2)"
               shortDisplayName="Clinical Observations"
-              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" 
               includeProjects="${includeProjects}"> 
 
@@ -313,6 +317,7 @@ name=ClinicalVisitsByRelativeVisits_maled
 anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=tblPrefix
+prop=paramSuffix
 prop=presenterId
 prop=observationQuestionName
 prop=observationAttributesListFull
@@ -321,7 +326,7 @@ prop=observationAttributesListFull
               searchCategory="Observation"
               displayName="Select a Set of Observations (MAL-ED)"
               shortDisplayName="Observations"
-              queryRef="ClinicalVisitId.ObservationsByMetadata_${tblPrefix}" 
+              queryRef="ClinicalVisitId.ObservationsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" >
 
         ${observationAttributesListFull}

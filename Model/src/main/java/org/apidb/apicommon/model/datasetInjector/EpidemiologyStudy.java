@@ -132,6 +132,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       String tblPrefix = "D" + getPropValue("datasetDigest");
       setPropValue("tblPrefix", tblPrefix);
+      // want to have optional param suffixes so if that prop is not set ... non-null .. then make tblPrefix
+      String paramSuffix = getPropValue("paramSuffix");
+      if (paramSuffix == null) {
+          setPropValue("paramSuffix", tblPrefix);
+      }
+          
 
       String projectId = getPropValue("projectName");
       String gusHome = System.getenv("GUS_HOME");

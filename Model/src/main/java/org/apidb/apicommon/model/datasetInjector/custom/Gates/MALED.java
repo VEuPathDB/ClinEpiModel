@@ -8,6 +8,11 @@ import java.util.HashMap;
 public class MALED extends BasicEpiStudy {
 
     @Override
+    protected void setStudySpecificProperties(){
+        //        setPropValue("paramSuffix","maled");
+    }  
+
+    @Override
     protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
       map.put("ParticipantsByRelativeVisits_maled", new String[] {"menu", "webservice"});

@@ -13,6 +13,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=lightTrapQuestionName
 >templateTextStart<
     	<question name="${lightTrapQuestionName}" newBuild="22"
@@ -20,7 +21,7 @@ prop=lightTrapQuestionName
                 includeProjects="${includeProjects}"
     		displayName="Select a Set of Light Trap Collections"
     		shortDisplayName="Light Traps"
-    		queryRef="LightTrapId.LightTrapsByMetadata_${tblPrefix}"
+    		queryRef="LightTrapId.LightTrapsByMetadata_${paramSuffix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
           <attributesList summary="EUPATH_0000094,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
@@ -55,6 +56,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/lightTrapQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=lightTrapQuestionName
 prop=lightTrapAttributesListFull
 prop=studyAbbreviation
@@ -64,7 +66,7 @@ prop=studyAbbreviation
                 includeProjects="${includeProjects}"
     		displayName="Select a Set of Light Trap Collections (${studyAbbreviation})"
     		shortDisplayName="Light Traps"
-    		queryRef="LightTrapId.LightTrapsByMetadata_${tblPrefix}"
+    		queryRef="LightTrapId.LightTrapsByMetadata_${paramSuffix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
           ${lightTrapAttributesListFull}

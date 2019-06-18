@@ -8,13 +8,14 @@ public class GEMS1CaseControl extends BasicEpiStudy {
     protected void setStudySpecificProperties(){
         setPropValue("hasMicrobiomeData","true");
         setPropValue("MicrobiomeDatasetName","otuDADA2_GEMS_RSRC");
+        setPropValue("paramSuffix","gems");
     }  
 
-    //    @Override
-    //    protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
-    //      Map<String,String[]> map = new HashMap<String,String[]>();
-    //      map.put("ParticipantsByCaseControlVisits_gems", new String[] {"menu", "webservice"});
-    //      return(map);
-    //    }
+    @Override
+    protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
+        Map<String,String[]> map = new HashMap<String,String[]>();
+        map.put("ParticipantsByCaseControlVisits_gems", new String[] {"menu", "webservice"});
+        return(map);
+    }
 
 }

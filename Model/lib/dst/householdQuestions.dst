@@ -14,12 +14,13 @@ prop=presenterId
 prop=householdAttributesListFull
 prop=studyAbbreviation
 prop=tblPrefix
+prop=paramSuffix
 >templateTextStart<
    <question name="${presenterId}HouseholdsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Household"
               displayName="Select a Set of Households (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
-              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         ${householdAttributesListFull}
@@ -65,6 +66,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
@@ -72,7 +74,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (PRISM ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 
@@ -137,6 +139,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdQuestions.dst
 prop=includeProjects
 prop=presenterId
 prop=tblPrefix
+prop=paramSuffix
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
@@ -144,7 +147,7 @@ prop=householdQuestionName
               searchCategory="Household"
               displayName="Select a Set of Households (PRISM2 ICEMR)"
               shortDisplayName="Household Details"
-              queryRef="HouseholdId.HouseholdsByMetadata_${tblPrefix}" 
+              queryRef="HouseholdId.HouseholdsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
         <attributesList 

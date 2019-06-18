@@ -27,8 +27,11 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
 
         super.injectTemplates();
 
-        String householdSourceIdsIncludedInLightTrapAttributes = getPropValue("householdSourceIdsIncludedInLightTrapAttributes");
-        setPropValue("householdSourceIdsIncludedInLightTrapAttributesQuote", addQuotes(householdSourceIdsIncludedInLightTrapAttributes));
+	String householdSourceIdsIncludedInLightTrapAttributes = getPropValue("householdSourceIdsIncludedInLightTrapAttributes");
+	//System.err.println("householdSourceIdsIncludedInLightTrapAttributes="+householdSourceIdsIncludedInLightTrapAttributes);
+
+	
+
         String lightTrapAttList = getPropValue("lightTrapAttributesList");
         if(lightTrapAttList != null && !lightTrapAttList.equals("")) {
             setPropValue("lightTrapAttributesListFull","<attributesList summary=\"" + lightTrapAttList + "\" />");
@@ -41,6 +44,8 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         }else{
             setPropValue("lightTrapRecordAttributesListFull","");
         }
+
+	
 
         // Record
         injectTemplate("lightTrapRecord");
@@ -72,7 +77,9 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         }
         
         String presenterId = getPropValue("presenterId");
-        injectAttributeMetaQuery(makeRecordClassName("LightTrap"), presenterId + "LightTrapAttributes.LightTrapAttributesMeta",null);
+        injectAttributeMetaQuery(makeRecordClassName("LightTrap"), presenterId + "LightTrapAttributes.LightTrapAttributesMeta","LightTrapNode");
+        injectAttributeMetaQuery(makeRecordClassName("LightTrap"), presenterId + "LightTrapAttributes.HouseholdAttributesMeta","HouseholdNode");
+
     }
 
     @Override
