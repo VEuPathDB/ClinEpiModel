@@ -9,7 +9,7 @@ public class MALED extends BasicEpiStudy {
 
     @Override
     protected void setStudySpecificProperties(){
-        //        setPropValue("paramSuffix","maled");
+        setPropValue("paramSuffix","maled");
     }  
 
     @Override
