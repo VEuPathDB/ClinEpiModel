@@ -9,8 +9,8 @@ public class GEMS1CaseControl extends BasicEpiStudy {
 
     @Override
     protected void setStudySpecificProperties(){
-        setPropValue("hasMicrobiomeData","true");
-        setPropValue("MicrobiomeDatasetName","otuDADA2_GEMS_RSRC");
+        // setPropValue("hasMicrobiomeData","true");
+        // setPropValue("MicrobiomeDatasetName","otuDADA2_GEMS_RSRC");
         setPropValue("paramSuffix","gems");
     }  
 
