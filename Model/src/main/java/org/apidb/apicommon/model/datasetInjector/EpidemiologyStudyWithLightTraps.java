@@ -27,10 +27,8 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
 
         super.injectTemplates();
 
-	String householdSourceIdsIncludedInLightTrapAttributes = getPropValue("householdSourceIdsIncludedInLightTrapAttributes");
-	//System.err.println("householdSourceIdsIncludedInLightTrapAttributes="+householdSourceIdsIncludedInLightTrapAttributes);
-
-	
+        //String householdSourceIdsIncludedInLightTrapAttributes = getPropValue("householdSourceIdsIncludedInLightTrapAttributes");
+        //System.err.println("householdSourceIdsIncludedInLightTrapAttributes="+householdSourceIdsIncludedInLightTrapAttributes);
 
         String lightTrapAttList = getPropValue("lightTrapAttributesList");
         if(lightTrapAttList != null && !lightTrapAttList.equals("")) {
@@ -44,8 +42,6 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
         }else{
             setPropValue("lightTrapRecordAttributesListFull","");
         }
-
-	
 
         // Record
         injectTemplate("lightTrapRecord");
