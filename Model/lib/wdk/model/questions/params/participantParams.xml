@@ -269,21 +269,21 @@ Filter households based on the date range they were in the study.  Note that the
                 ]]>
             </description>
         </group>
-        <group name="part_characteristics" displayName="Personal characteristics" displayType="ShowHide">
+        <group name="part_characteristics" displayName="Participant" displayType="ShowHide">
             <description>
                 <![CDATA[
 		       Filter participants based on their characteristics that do not change over time.
                 ]]>
             </description>
         </group>
-        <group name="visit_part_characteristics" displayName="Personal characteristics" displayType="ShowHide">
+        <group name="visit_part_characteristics" displayName="Participant" displayType="ShowHide">
             <description>
                 <![CDATA[
 You can restrict visits returned based on participants by selecting characteristics about where they live including their household type and their own characteristics such as genotype information.
                 ]]>
             </description>
         </group>
-        <group name="part_household_characteristics" displayName="Households" displayType="ShowHide">
+        <group name="part_household_characteristics" displayName="Household" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
         <group name="geographic_loc" displayName="Geographic region" displayType="ShowHide">
@@ -303,35 +303,35 @@ You can restrict the observations returned in your search by selecting character
              ]]>
             </description>
         </group>
-        <group name="event_characteristics" displayName="Observations" displayType="ShowHide">
+        <group name="event_characteristics" displayName="Observation" displayType="ShowHide">
             <description>
                 <![CDATA[
     Filter observations based on information gained at those observations. 
              ]]>
             </description>
         </group>
-       <group name="part_visit_characteristics" displayName="Observations" displayType="ShowHide">
+       <group name="part_visit_characteristics" displayName="Observation" displayType="ShowHide">
             <description>
                 <![CDATA[
     Filter participants based on observations at visits.  Observations shown are for the selected set of participants when they were within the age range specified in the Age filter.  Change the default values for the Observations per Year parameter to restrict the participants based on your selected observation values.
                 ]]>
             </description>
         </group>
-        <group name="observ_visit_characteristics" displayName="Observations" displayType="ShowHide">
+        <group name="observ_visit_characteristics" displayName="Observation" displayType="ShowHide">
             <description>
                 <![CDATA[
     Observations shown are for the selected set of participants when they were within the age range specified in the Age filter.  Change the default values for the Observations per Year parameter to restrict observations returned based on your selected observation values.
                 ]]>
             </description>
         </group>
-       <group name="part_event_characteristics" displayName="Observations" displayType="ShowHide">
+       <group name="part_event_characteristics" displayName="Observation" displayType="ShowHide">
             <description>
                 <![CDATA[
     Filter participants based on information gained at observations. Data collected at different timepoints may require a multi-step search strategy to access.     
                 ]]>
             </description>
         </group>
-       <group name="part_sample_characteristics" displayName="Samples" displayType="ShowHide">
+       <group name="part_sample_characteristics" displayName="Sample" displayType="ShowHide">
             <description>
                 <![CDATA[
     Filter participants based on information derived from samples collected in the study.     
@@ -352,7 +352,7 @@ You can further restrict the participants returned in your search by setting a r
                 ]]>
             </description>
         </group>
-        <group name="relative_visits" displayName="Related Observations" displayType="ShowHide">
+        <group name="relative_visits" displayName="Related Observation" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can further restrict the observations you selected in the previous step by removing (or keeping) those observations based on related observations you define below.  For example, you may want to only keep observations with a diagnosis of asymptomatic parasitemia if they are not followed within 14 days by an observation where the participant was diagnosed with malaria.  In this example, set the days between observations to 1 to 14 and direction to before to remove observations where the related observation diagnosis of malaria = yes.
@@ -360,7 +360,7 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
-        <group name="relative_events" displayName="Related observations" displayType="ShowHide">
+        <group name="relative_events" displayName="Related Observation" displayType="ShowHide">
             <description>
                 <![CDATA[
                          You can restrict the observations you have previously selected by removing (or keeping) those observations based on related observations you define below. For example, you may want to only keep diarrheal observations if they are followed between 0 - 5 days by an observation where a laboratory test was positive for shigella.
