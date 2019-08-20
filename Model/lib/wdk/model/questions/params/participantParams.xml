@@ -241,14 +241,14 @@
 
       <groupSet name="metaDataGroups">
         
-        <group name="daterange" displayName="Time period / age at visit" displayType="ShowHide">
+        <group name="daterange" displayName="Time Period / Age at Visit" displayType="ShowHide">
             <description>
                 <![CDATA[
 Filter participants based on the date range they were observed, the number of days they were observed in that period, and their age at each observation (ie clinical visit). Study data is available from 05-AUG-2011 to 30-JUN-2016.
                 ]]>
             </description>
         </group>
-        <group name="household_daterange" displayName="Time period" displayType="ShowHide">
+        <group name="household_daterange" displayName="Time Period" displayType="ShowHide">
             <description>
                 <![CDATA[
 Filter households based on the date range they were in the study.  Note that the Average Anopheles is computed from monthly CDC light trap collections within this time frame.  
@@ -262,7 +262,7 @@ Filter households based on the date range they were in the study.  Note that the
                 ]]>
             </description>
         </group>
-        <group name="lighttrap_characteristics" displayName="Light Trap Collections" displayType="ShowHide">
+        <group name="lighttrap_characteristics" displayName="Entomology Collection" displayType="ShowHide">
             <description>
                 <![CDATA[
 		       Filter light trap collections based on their characteristics.
@@ -286,7 +286,7 @@ You can restrict visits returned based on participants by selecting characterist
         <group name="part_household_characteristics" displayName="Household" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
-        <group name="geographic_loc" displayName="Geographic region" displayType="ShowHide">
+        <group name="geographic_loc" displayName="Geographic Region" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
         <group name="visit_visit_characteristics" displayName="Visits" displayType="ShowHide">

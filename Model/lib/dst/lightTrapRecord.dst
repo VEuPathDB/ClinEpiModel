@@ -13,7 +13,7 @@ prop=includeProjects
 >templateTextStart<
     <recordClassSet name="${presenterId}LightTrapRecordClasses" includeProjects="${includeProjects}">
 
-      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" shortDisplayName="Light Trap Collection" displayName="${studyAbbreviation} Light Trap Collection" iconName="fa fa-bug" > 
+      <recordClass name="${presenterId}LightTrapRecordClass" urlName="${presenterId}_light-trap" shortDisplayName="Entomology Collection" displayName="${studyAbbreviation} Entomology Collection" iconName="fa fa-bug" > 
 
 
             <!-- primary key definition -->
