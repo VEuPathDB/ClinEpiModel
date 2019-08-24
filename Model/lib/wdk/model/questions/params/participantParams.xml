@@ -384,7 +384,7 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
         
-        <group name="choose_case_control" displayName="Choose Case/Control" displayType="ShowHide">
+        <group name="choose_case_control" displayName="Case/Control" displayType="ShowHide">
             <description>
                 <![CDATA[
                          Choose whether to query just cases, just controls or both. 
