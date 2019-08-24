@@ -19,7 +19,7 @@ prop=lightTrapQuestionName
     	<question name="${lightTrapQuestionName}" newBuild="22"
     		searchCategory="Lighttraps"
                 includeProjects="${includeProjects}"
-    		displayName="Select a Set of Light Trap Collections"
+    		displayName="Select a Set of Entomology Collections"
     		shortDisplayName="Light Traps"
     		queryRef="LightTrapId.LightTrapsByMetadata_${paramSuffix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
@@ -64,7 +64,7 @@ prop=studyAbbreviation
     	<question name="${presenterId}LightTrapsByMetadata" newBuild="22"
     		searchCategory="Lighttraps"
                 includeProjects="${includeProjects}"
-    		displayName="Select a Set of Light Trap Collections (${studyAbbreviation})"
+    		displayName="Select a Set of Entomology Collections (${studyAbbreviation})"
     		shortDisplayName="Light Traps"
     		queryRef="LightTrapId.LightTrapsByMetadata_${paramSuffix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
