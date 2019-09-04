@@ -690,7 +690,7 @@ prop=paramSuffix
      <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.geographic_loc"/> 
        <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_village_characteristics"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
        <column name="source_id"/>
@@ -749,6 +749,34 @@ select distinct pa.name as source_id, '@PROJECT_ID@' as project_id
 from core, ApidbTuning.${tblPrefix}Participants pa
 where 'caseid' = \$\$return_case_control\$\$
 and core.EUPATH_0010049 = pa.EUPATH_0010049
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantSurveyQueryPerch
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
+prop=hasStudyArmParameter
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="participantParams.case_control_filter_${paramSuffix}" groupRef="metaDataGroups.choose_case_control"/> 
+       <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.choose_case_control"/> 
+       <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
+where obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
+and pa.pan_id = obs.participant_id
+group by pa.name
                 ]]>   
         </sql>
      </sqlQuery>
