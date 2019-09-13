@@ -387,6 +387,14 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
         
+        <group name="choose_study_arm" displayName="Study Arm" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         Choose study arm(s) you want to include in your search. 
+                ]]>
+            </description>
+        </group>
+ 
         <group name="choose_case_control" displayName="Case/Control" displayType="ShowHide">
             <description>
                 <![CDATA[

@@ -688,6 +688,7 @@ prop=tblPrefix
 prop=paramSuffix
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
        <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.geographic_loc"/> 
        <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_village_characteristics"/>
