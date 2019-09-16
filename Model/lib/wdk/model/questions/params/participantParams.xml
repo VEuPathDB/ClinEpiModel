@@ -286,6 +286,9 @@ You can restrict visits returned based on participants by selecting characterist
         <group name="part_household_characteristics" displayName="Household" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
+        <group name="part_village_characteristics" displayName="Village" displayType="ShowHide">
+            <description>Village where participants live who are enrolled in this study.</description> 
+        </group>
         <group name="geographic_loc" displayName="Geographic Region" displayType="ShowHide">
             <description></description> <!-- no need for a descrip.  too obvious -->
         </group>
@@ -384,6 +387,14 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
         
+        <group name="choose_study_arm" displayName="Study Arm" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         Choose study arm(s) you want to include in your search. 
+                ]]>
+            </description>
+        </group>
+ 
         <group name="choose_case_control" displayName="Case/Control" displayType="ShowHide">
             <description>
                 <![CDATA[
