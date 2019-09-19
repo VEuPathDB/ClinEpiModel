@@ -126,7 +126,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       String subProjectName = getPropValue("subProjectName");
       //      String datasetName = getDatasetName();
-      String includeProjects = getPropValueAsBoolean("isPublic") ? "ClinEpiDB," + subProjectName : subProjectName;
+      String includeProjects = getPropValueAsBoolean("isPublic") ? "AllClinEpiDB,ClinEpiDB," + subProjectName : "AllClinEpiDB," + subProjectName;
       setPropValue("includeProjects", includeProjects);
 
 
