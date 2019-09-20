@@ -691,7 +691,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
     private void injectProjectAvailability() {
         String presenterId = getPropValue("presenterId");
         String subProjectName = getPropValue("subProjectName");
-        String projectAvailability = "UNION select '" + presenterId + "' as dataset_presenter_id, 'projectAvailability' as property, '[\"" + subProjectName +  "\"" + (getPropValueAsBoolean("isPublic") ? ",\"ClinEpiDB\"" : "") + "]' as value from dual";
+        String projectAvailability = "UNION select '" + presenterId + "' as dataset_presenter_id, 'projectAvailability' as property, '[\"" + subProjectName +  "\",\"AllClinEpiDB\"" + (getPropValueAsBoolean("isPublic") ? ",\"ClinEpiDB\"" : "") + "]' as value from dual";
         setPropValue("projectAvailabilitySql",projectAvailability);
         injectTemplate("injectProjectAvailability");
     }
