@@ -3658,7 +3658,7 @@ select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)
 from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448' )
-     where ontology_term_name not in ('GAZ_00000448')
+     where ontology_term_name not in (${householdFilterExcludedIdsQuoted},'GAZ_00000448')
      order by display_order, display_name
          ]]>
     </sql>
