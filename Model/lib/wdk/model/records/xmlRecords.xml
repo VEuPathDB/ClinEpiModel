@@ -86,7 +86,7 @@
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
     <!-- External Links Record -->
     <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-    <xmlRecordClass includeProjects="ClinEpiDB,Gates"
+    <xmlRecordClass includeProjects="AllClinEpiDB,ClinEpiDB,Gates"
           name="ExternalLinksRecord"
           type="ExternalLinks"
           idPrefix="EL."
