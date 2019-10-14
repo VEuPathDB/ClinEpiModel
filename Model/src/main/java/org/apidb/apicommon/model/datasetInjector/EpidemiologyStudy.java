@@ -209,9 +209,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("householdRecordTableQueries");
           
           // Household SourceId Question
-          injectTemplate("householdSourceIdQuestion");
-          injectTemplate("householdSourceIdQuery");
-          injectTemplate("householdSourceIdParam");
+          //          injectTemplate("householdSourceIdQuestion");
+          //          injectTemplate("householdSourceIdQuery");
+          //          injectTemplate("householdSourceIdParam");
 
           injectTemplate("householdResultParam");
 
@@ -279,9 +279,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("participantRecordTableQueries");
 
           // Participant SourceId Question
-          injectTemplate("participantSourceIdQuestion");
-          injectTemplate("participantSourceIdQuery");
-          injectTemplate("participantSourceIdParam");
+          //injectTemplate("participantSourceIdQuestion");
+          //injectTemplate("participantSourceIdQuery");
+          //injectTemplate("participantSourceIdParam");
 
           injectTemplate("participantResultParam");
 
@@ -361,9 +361,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("observationRecordTableQueries");
 
           // Observation: SourceId Question
-          injectTemplate("observationSourceIdQuestion");
-          injectTemplate("observationSourceIdQuery");
-          injectTemplate("observationSourceIdParam");
+          //injectTemplate("observationSourceIdQuestion");
+          //injectTemplate("observationSourceIdQuery");
+          //injectTemplate("observationSourceIdParam");
 
           injectTemplate("observationResultParam");
 
