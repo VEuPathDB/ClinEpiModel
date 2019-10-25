@@ -756,6 +756,33 @@ and core.EUPATH_0010049 = pa.EUPATH_0010049
 >templateTextEnd<
 
 [templateStart]
+name=participantSurveyQuerySCORENoVillage
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
+prop=hasStudyArmParameter
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
+       <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.geographic_loc"/> 
+       <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
+where obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
 name=participantSurveyQueryPerch
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=hasStudyArmParameter
