@@ -1067,7 +1067,7 @@ from ApidbTuning.${tblPrefix}Ontology o
      UNION
      select distinct ontology_term_source_id as ontology_term_name, 'EUPATH_0000096' as parent_ontology_term_name, nvl(display_name,ontology_term_name) as display_name, description, units,type,is_range,precision, 0.5 as display_order
      from ApidbTuning.${tblPrefix}Ontology 
-     where ontology_term_source_id = 'EUPATH_0021095'
+     where ontology_term_source_id in ('EUPATH_0021095','EUPATH_0021094')
      )
      where ontology_term_name != 'EUPATH_0000095'
      order by display_order, display_name
