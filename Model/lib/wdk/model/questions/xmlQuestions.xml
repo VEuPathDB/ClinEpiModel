@@ -22,6 +22,17 @@
                   xmlDataURL="ClinEpiDB/news.xml">
     </xmlQuestion>
 
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- NewsRss -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+    <xmlQuestion name="NewsRss"
+                  displayName="ClinEpiDB News"
+                  recordClassRef="XmlRecordClasses.NewsRecord"
+                  xmlDataURL="ClinEpiDB/news.xml">
+    </xmlQuestion>
+
+
   <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
   <!-- TUTORIALS -->
   <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
