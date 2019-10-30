@@ -5088,3 +5088,74 @@ from ApidbTuning.${tblPrefix}ObservationMD
     </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=participantFilterParamQueriesUMSP
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
+prop=observationMultiFilterIdsQuoted
+prop=observationFilterExcludedIdsQuoted
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+   <sqlQuery name="DateRegionOntology_${paramSuffix}" isCacheable="true">
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+      <![CDATA[
+select * from (
+select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, 2 as display_order
+from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448'
+UNION
+select ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, display_name, description, units,type,is_range,precision, 1 as display_order
+from ApidbTuning.${tblPrefix}Ontology 
+     where ontology_term_source_id =  'EUPATH_0000091'
+)
+     where ontology_term_name not in ('GAZ_00000448')
+     order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
+      <column name="ontology_term_name"/>
+      <column name="parent_ontology_term_name"/>
+      <column name="display_name"/>
+      <column name="description"/>
+      <column name="type"/>
+      <column name="units"/>
+      <column name="precision"/>
+      <column name="is_range"/>
+      <sql>
+         <![CDATA[
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name,
+CASE WHEN o.ontology_term_source_id in ('EUPATH_0000609') THEN 'EUPATH_0000738' ELSE o.parent_ontology_term_source_id END as parent_ontology_term_name, 
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
+CASE WHEN o.ontology_term_source_id in (${observationMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
+o.is_range,o.precision,CASE WHEN o.ontology_term_source_id = 'EUPATH_0000609' THEN 0.1 ELSE o.display_order END as display_order
+from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id in ('EUPATH_0000738','EUPATH_0000609')
+UNION
+select distinct ontology_term_source_id as ontology_term_name,
+'EUPATH_0000738' as parent_ontology_term_name, 
+nvl(display_name,ontology_term_name) as display_name,description, units, type,
+is_range,precision,0.05 as display_order
+from ApidbTuning.${tblPrefix}Ontology
+where ontology_term_source_id = 'PATO_0000047'
+     )
+     where ontology_term_name not in (${observationFilterExcludedIdsQuoted})
+     order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+>templateTextEnd<
+

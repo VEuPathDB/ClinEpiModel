@@ -659,9 +659,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
             for (Map.Entry<String, String[]> entry : observationQuestionTemplateNamesToScopes().entrySet()) {
                 String questionName = entry.getKey();
                 if(questionName.startsWith("ObservationsByMetadata")){
-                    cardQuestions = cardQuestions + ", \"observations\": \"ClinicalVisitQuestions." + presenterId + "ObservationsByMetadata\"";
+                    cardQuestions = cardQuestions + (hasParticipantQuestion ? ", " : "") + "\"observations\": \"ClinicalVisitQuestions." + presenterId + "ObservationsByMetadata\"";
                 }else{
-                    cardQuestions = cardQuestions + ", \"observations\": \"ClinicalVisitQuestions." + questionName + "\"";
+                        cardQuestions = cardQuestions + (hasParticipantQuestion ? ", " : "") + "\"observations\": \"ClinicalVisitQuestions." + questionName + "\"";
                 }
             }
         }
@@ -669,9 +669,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
             for (Map.Entry<String, String[]> entry : householdQuestionTemplateNamesToScopes().entrySet()) {
                 String questionName = entry.getKey();
                 if(questionName.startsWith("HouseholdsByMetadata")){
-                    cardQuestions = cardQuestions + ", \"households\": \"HouseholdQuestions." + presenterId + "HouseholdsByMetadata\"";
+                    cardQuestions = cardQuestions + (hasParticipantQuestion && hasObservationQuestion ? ", " : "") + "\"households\": \"HouseholdQuestions." + presenterId + "HouseholdsByMetadata\"";
                 }else{
-                    cardQuestions = cardQuestions + ", \"households\": \"HouseholdQuestions." + questionName + "\"";
+                    cardQuestions = cardQuestions + (hasParticipantQuestion && hasObservationQuestion ? ", " : "") + "\"households\": \"HouseholdQuestions." + questionName + "\"";
                 }
             }
         }
