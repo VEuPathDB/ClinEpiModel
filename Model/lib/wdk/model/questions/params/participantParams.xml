@@ -435,6 +435,14 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
+        <group name="date_region" displayName="Date and Region" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         Limit the search based on observation date and geographic region
+                ]]>
+            </description>
+        </group>
+
     </groupSet>
 
 </wdkModel>

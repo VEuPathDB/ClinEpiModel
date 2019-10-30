@@ -1157,3 +1157,101 @@ from ApidbTuning.${tblPrefix}ObservationMD
     </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=observationFilterParamsUMSP
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+       <filterParam name="date_region_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.DateRegionOntology_${paramSuffix}"
+                       metadataQueryRef="ClinicalVisitVQ.DateRegionMetaData_${paramSuffix}"
+                       backgroundQueryRef="ClinicalVisitVQ.DateRegionMetaData_${paramSuffix}"
+                       countPredictsAnswerCount="true"
+                       prompt="Observations"
+                       trimMetadataTerms="true"
+                       dependedParamRef="">
+         <help>
+              Select Observations based on their characteristics. 
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_${paramSuffix}" 
+                    metadataQueryRef="ClinicalVisitVQ.VisitMetaData_${paramSuffix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    backgroundQueryRef="ClinicalVisitVQ.VisitMetaDataBkg_${paramSuffix}"
+                    countPredictsAnswerCount="true"
+                    prompt="Observations"
+                    trimMetadataTerms="true"
+                    dependedParamRef="clinicalVisitParams.date_region_${paramSuffix}">
+      <help>
+        Select observations based on their observation characteristics. 
+      </help>
+    </filterParam>
+>templateTextEnd<
+
+[templateStart]
+name=observationFilterParamQueriesUMSP
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+   <sqlQuery name="DateRegionMetaData_${paramSuffix}" isCacheable="false">
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select ho.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+where ho.household_id = h.household_id
+UNION
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}ObservationMD
+where ontology_term_name = 'EUPATH_0000091'
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="clinicalVisitParams.date_region_${paramSuffix}" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}ObservationMD
+where observation_id in (\$\$date_region_${paramSuffix}\$\$)
+UNION ALL
+select po.observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
+where p.participant_id = po.participant_id
+and po.observation_id in (\$\$date_region_${paramSuffix}\$\$)
+          ]]>
+    </sql>
+    </sqlQuery>    
+
+    <sqlQuery name="VisitMetaDataBkg_${paramSuffix}" isCacheable="false">
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}ObservationMD
+UNION ALL
+select po.observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
+where p.participant_id = po.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>    
+>templateTextEnd<
+

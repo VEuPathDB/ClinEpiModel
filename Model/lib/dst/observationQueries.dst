@@ -294,6 +294,28 @@ where pan_id in (\$\$visits_${paramSuffix}\$\$)
 >templateTextEnd<
 
 [templateStart]
+name=observationMetadataQueryUMSP
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="clinicalVisitParams.date_region_${paramSuffix}" groupRef="metaDataGroups.date_region"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Observations 
+where pan_id in (\$\$visits_${paramSuffix}\$\$)
+           ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
 name=observationMetadataQueryPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
