@@ -1204,6 +1204,11 @@ prop=paramSuffix
       <column name="string_value"/>
       <sql>
          <![CDATA[
+/*
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}SurveyObservMD
+where ontology_term_name in ('ENVO_01000773','EUPATH_0000406','EUPATH_0040014','EUPATH_0000091')
+*/
 select ho.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
 where ho.household_id = h.household_id
@@ -1224,6 +1229,12 @@ where ontology_term_name = 'EUPATH_0000091'
          <column name="string_value"/>
          <sql>
            <![CDATA[
+/*
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}SurveyObservMD
+where ontology_term_name not in ('ENVO_01000773','EUPATH_0000406','EUPATH_0040014','EUPATH_0000091')
+and observation_id in (\$\$date_region_${paramSuffix}\$\$)
+*/
 select observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
 where observation_id in (\$\$date_region_${paramSuffix}\$\$)
@@ -1244,6 +1255,11 @@ and po.observation_id in (\$\$date_region_${paramSuffix}\$\$)
          <column name="string_value"/>
          <sql>
            <![CDATA[
+/*
+select observation_id as internal, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}SurveyObservMD
+where ontology_term_name not in ('ENVO_01000773','EUPATH_0000406','EUPATH_0040014','EUPATH_0000091')
+*/
 select observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
 UNION ALL
