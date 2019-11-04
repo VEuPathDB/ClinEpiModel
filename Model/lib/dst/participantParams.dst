@@ -1271,7 +1271,7 @@ prop=householdFilterDataTypeDisplayName
                     metadataQueryRef="ParticipantVQ.CaseControlMetaData_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.CaseControlMetaDataBkg_${paramSuffix}"
                     countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Households"
+                    filterDataTypeDisplayName="Participants"
                     prompt="Geographic region"
                     dependedParamRef="participantParams.study_arm_${paramSuffix}"
                     trimMetadataTerms="true">
@@ -1986,7 +1986,7 @@ where ontology_term_source_id = 'EUPATH_0000054'
       <column name="string_value"/>
       <sql>
         <![CDATA[
-  select m.household_id as filter_item_id,  io.participant_id as internal, m.ontology_term_name, m.string_value, m.number_value, m.date_value
+  select distinct m.household_id as filter_item_id,  io.participant_id as internal, m.ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO io
  where m.ontology_term_name = 'EUPATH_0000054'
  and io.household_id = m.household_id
@@ -4842,7 +4842,7 @@ from ApidbTuning.${tblPrefix}ObservationMD
 
 [templateStart]
 name=participantFilterParamQueriesUMSP
-anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
+anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=tblPrefix
