@@ -67,7 +67,7 @@ prop=observationRecordMicrosTable
 
 
 
-       <reporter name="tableTabular" displayName="Tab delimited (Excel) - Households and Samples" scopes="results"
+       <reporter name="tableTabular" displayName="Tab- or comma-delimited (openable in Excel) - Households and Samples" scopes="results"
                 implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
               <!-- huge page size to force no paging  -->
               <property name="page_size">1000000</property>

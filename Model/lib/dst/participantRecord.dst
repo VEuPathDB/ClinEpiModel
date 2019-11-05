@@ -99,13 +99,13 @@ BEGIN MALED
       <!-- =============================================================== -->
 
 
-      <reporter name="attributesTabular" displayName="Tab delimited (Excel) - choose Participant columns to make a custom table" scopes="results"
+      <reporter name="attributesTabular" displayName="Tab- or comma-delimited (openable in Excel)- choose Participant columns to make a custom table" scopes="results"
                 implementation="org.gusdb.wdk.model.report.reporter.AttributesTabularReporter">
         <property name="page_size">500</property>
       </reporter>
 
 
-      <reporter name="tableTabular" displayName="Tab delimited (Excel) - Households and Observations and Samples" scopes="results"
+      <reporter name="tableTabular" displayName="Tab- or comma-delimited (openable in Excel)- Households and Observations and Samples" scopes="results"
                 implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
               <!-- huge page size to force no paging  -->
               <property name="page_size">1000000</property>
