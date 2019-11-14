@@ -159,6 +159,26 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	}	
       }
 
+      //multiFilter ids from legacy studies where not part of ontology
+      String householdMultiFilterIdsQuoted = addQuotes(getPropValue("householdMultiFilterIds"));
+      if(householdMultiFilterIdsQuoted == null || householdMultiFilterIdsQuoted.equals("''")) {
+          householdMultiFilterIdsQuoted = "'NA'";
+      }
+      setPropValue("householdMultiFilterIdsQuoted", householdMultiFilterIdsQuoted);
+
+      String participantMultiFilterIdsQuoted = addQuotes(getPropValue("participantMultiFilterIds"));
+      if(participantMultiFilterIdsQuoted == null || participantMultiFilterIdsQuoted.equals("''")) {
+          participantMultiFilterIdsQuoted  = "'NA'";
+      }
+      setPropValue("participantMultiFilterIdsQuoted", participantMultiFilterIdsQuoted);
+
+      String observationMultiFilterIdsQuoted = addQuotes(getPropValue("observationMultiFilterIds"));
+      if(observationMultiFilterIdsQuoted == null || observationMultiFilterIdsQuoted.equals("''")) {
+          observationMultiFilterIdsQuoted  = "'NA'";
+      }
+      setPropValue("observationMultiFilterIdsQuoted", observationMultiFilterIdsQuoted);
+      
+
       String localhost = modelProp.getProperty("LOCALHOST") + modelProp.getProperty("LEGACY_WEBAPP_BASE_URL");
 
       //inject shiny data loading
@@ -460,11 +480,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
-      String householdMultiFilterIdsQuoted = addQuotes(getPropValue("householdMultiFilterIds"));
       String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
-      String participantMultiFilterIdsQuoted = addQuotes(getPropValue("participantMultiFilterIds"));
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
-      String observationMultiFilterIdsQuoted = addQuotes(getPropValue("observationMultiFilterIds"));
       String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
 
       //set properties needed for householdObservations
@@ -481,26 +498,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
           boolean injectParams = getPropValueAsBoolean("injectParams");
           
-          if(householdMultiFilterIdsQuoted == null || householdMultiFilterIdsQuoted.equals("''")) {
-              householdMultiFilterIdsQuoted = "'NA'";
-          }
-          setPropValue("householdMultiFilterIdsQuoted", householdMultiFilterIdsQuoted);
           if(householdFilterExcludedIdsQuoted == null || householdFilterExcludedIdsQuoted.equals("''")) {
               householdFilterExcludedIdsQuoted  = "'NA'";
           }
           setPropValue("householdFilterExcludedIdsQuoted", householdFilterExcludedIdsQuoted);
-          if(participantMultiFilterIdsQuoted == null || participantMultiFilterIdsQuoted.equals("''")) {
-              participantMultiFilterIdsQuoted  = "'NA'";
-          }
-          setPropValue("participantMultiFilterIdsQuoted", participantMultiFilterIdsQuoted);
           if(participantFilterExcludedIdsQuoted == null || participantFilterExcludedIdsQuoted.equals("''")) {
               participantFilterExcludedIdsQuoted  = "'NA'";
           }
           setPropValue("participantFilterExcludedIdsQuoted", participantFilterExcludedIdsQuoted);
-          if(observationMultiFilterIdsQuoted == null || observationMultiFilterIdsQuoted.equals("''")) {
-              observationMultiFilterIdsQuoted  = "'NA'";
-          }
-          setPropValue("observationMultiFilterIdsQuoted", observationMultiFilterIdsQuoted);
           if(observationFilterExcludedIdsQuoted == null || observationFilterExcludedIdsQuoted.equals("''")) {
               observationFilterExcludedIdsQuoted  = "'NA'";
           }

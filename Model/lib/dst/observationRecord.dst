@@ -205,6 +205,9 @@ name=observationRecordAttributeQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=datasetName
 prop=observationRecordAttributesListFull
+prop=householdMultiFilterIdsQuoted
+prop=participantMultiFilterIdsQuoted
+prop=observationMultiFilterIdsQuoted
 prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
@@ -256,19 +259,21 @@ select count(*) from apidbtuning.${tblPrefix}Observations
 
 	   <sql>
             <![CDATA[
-select distinct meta.display_name, meta.name, meta.help,
+select CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${observationMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name, 
+meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
                    decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
                    decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
-                            null as reporter_properties
-from (
-    select o.display_name, m.ontology_term_name as name, o.description as help, o.type 
-from ApidbTuning.${tblPrefix}ObservationMD m, ApidbTuning.${tblPrefix}Ontology o 
-where  m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+                    null as reporter_properties
+from(
+    select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type 
+from ApidbTuning.${tblPrefix}ObservationMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p 
+where m.Ontology_Term_Name = O.Ontology_Term_Source_Id
 and m.observation_id = m.sample_id
-group by m.ontology_term_name, o.type, o.description, o.display_name
-    ) meta
+and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
+group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
+                            )meta
   ]]>
 
 		</sql>
@@ -308,52 +313,19 @@ group by m.ontology_term_name, o.type, o.description, o.display_name
 
            <sql>
             <![CDATA[
-/*
-with whole as (
-    select distinct CASE when meta.display_name  = t1.display_name and meta.name=t1.ontology_term_source_id then concat(concat(t1.parent_ontology_term_name, ' >> '), meta.display_name) 
-    ELSE meta.display_name end as display_name, meta.name,meta.help,
-                   decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
-                   decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
-                   decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
-                   decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
-                            null as reporter_properties
-        from  (select distinct o.display_name as display_name, o.ontology_term_source_id as name, o.description as help, o.type
-                from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-                where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
-                and c.owner = 'APIDBTUNING'
-                and c.table_name = s.table_name
-                and upper(o.ontology_term_source_id) = c.column_name)meta,
-
-               (select distinct o.display_name, o.ONTOLOGY_TERM_source_id, o.parent_ontology_term_name
-                from ApidbTuning.${tblPrefix}Ontology o, (select distinct display_name, count(display_name) as ct from(
-                                        select distinct o.display_name as display_name, o.ontology_term_source_id as name
-                                        from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-                                            where s.synonym_name = upper('${tblPrefix}PARTICIPANTS')
-                                            and c.owner = 'APIDBTUNING'
-                                            and c.table_name = s.table_name
-                                            and upper(o.ontology_term_source_id) = c.column_name )
-                                    group by display_name) par
-                            where o.display_name  = par.display_name and par.ct > 1)t1
-)
-
-select * from whole where display_name like '%>>%'
-UNION
-select * from whole where whole.name not in  (select name from whole where display_name like '%>>%')
-
-UNION
-*/
-select distinct meta.display_name
- , meta.name, meta.help,
+select distinct CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${participantMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name, 
+meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
                    decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
                    decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
                             null as reporter_properties
 from (
-select o.display_name, m.ontology_term_name as name, o.description as help, o.type 
-from ApidbTuning.${tblPrefix}ParticipantMD m, ApidbTuning.${tblPrefix}Ontology o 
+    select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type 
+from ApidbTuning.${tblPrefix}ParticipantMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p 
 where  m.Ontology_Term_Name = O.Ontology_Term_Source_Id
-group by m.ontology_term_name, o.type, o.description, o.display_name
+and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
+group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
     ) meta
 UNION
  select 'Participant ID' as display_name, 'participant_id' as name, '' as help, '' as reporter_name,
@@ -404,27 +376,22 @@ UNION
 
            <sql>
             <![CDATA[
-
-with hasHHObser as(
-     select count(*) as ct
-     from apidbtuning.${tblPrefix}PANIO
-     where input_pan_type_source_id = 'PCO_0000024'
-     and output_pan_type_source_id = 'PCO_0000024'
-     )
-
-select meta.display_name, meta.name, meta.help,
+select CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${householdMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name, 
+meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
                    decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
                    decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation, null as reporter_properties
 from ( 
-select o.display_name, m.ontology_term_name as name, o.description as help, o.type 
-from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}Ontology o 
+select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type 
+from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p  
 where m.household_id = m.Household_Observation_Id
 and m.Ontology_Term_Name = O.Ontology_Term_Source_Id
-group by m.ontology_term_name, o.type, o.description, o.display_name
+and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
+group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id, p.display_name,p.type
 UNION
-select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
+select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type,
+'' as parent_name, '' as parent_display_name, '' as parent_type from dual
 where (select count(*) from apidbtuning.${tblPrefix}Households) >0	
 
 ) meta
