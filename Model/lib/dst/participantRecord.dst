@@ -357,6 +357,7 @@ select count(*) from apidbtuning.${tblPrefix}Participants
 
            <sql>
             <![CDATA[
+select * from (
 select distinct CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${participantMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name, 
 meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
@@ -371,6 +372,7 @@ where  m.Ontology_Term_Name = O.Ontology_Term_Source_Id
 and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
 group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
 ) meta
+)order by display_name
   ]]>
 
                 </sql>
@@ -412,6 +414,7 @@ group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_
 
            <sql>
             <![CDATA[
+select * from (
 select CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${householdMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name, 
 meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
@@ -431,6 +434,7 @@ select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as
 '' as parent_name, '' as parent_display_name, '' as parent_type from dual
 	where (select count(*) from ApidbTuning.${tblPrefix}Households) > 0
       )meta
+)order by display_name
             ]]>
               </sql>
 
@@ -471,6 +475,7 @@ select pa.name as source_id, '@PROJECT_ID@' as project_id, ob.*
 
            <sql>
             <![CDATA[
+select * from (
 select CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${observationMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name, 
 meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
@@ -491,6 +496,7 @@ and m.observation_id = m.sample_id
 and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
 group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
                             )meta
+)order by display_name
       ]]>
               </sql>
 
