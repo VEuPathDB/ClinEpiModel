@@ -415,45 +415,27 @@ group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_
            <sql>
             <![CDATA[
 
-with hasHHObser as(
-     select count(*) as ct
-     from apidbtuning.${tblPrefix}PANIO
-     where input_pan_type_source_id = 'PCO_0000024'
-     and output_pan_type_source_id = 'PCO_0000024'
-     )
-
-select meta.display_name, meta.name, meta.help,
+select * from (
+select CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${householdMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name,
+meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
                    decode(meta.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
                    decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
-                    null as reporter_properties
+                    null as reporter_properties        
 from (
-
-     select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}Households')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
-            and (o.ontology_term_source_id = 'OBI_0001627' or o.ontology_term_source_id = 'EUPATH_0000407' or o.ontology_term_source_id = 'EUPATH_0000054')
-            and (select ct from hasHHObser) >0
-
-     UNION
-
-      select distinct o.display_name as display_name, o.ontology_term_source_id as name,o.description as help, o.type
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}Households')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
-            and (select ct from hasHHObser) = 0
-
-     UNION
-
-     select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
-            where (select count(*) from apidbtuning.${tblPrefix}Households) >0
+    select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type
+from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
+where m.household_id = m.Household_Observation_Id
+and m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
+group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id, p.display_name,p.type
+UNION
+select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type,
+'' as parent_name, '' as parent_display_name, '' as parent_type from dual
+        where (select count(*) from ApidbTuning.${tblPrefix}Households) > 0
       )meta
+)order by display_name
 
             ]]>
               </sql>
