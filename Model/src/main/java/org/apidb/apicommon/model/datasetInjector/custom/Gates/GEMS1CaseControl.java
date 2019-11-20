@@ -1,8 +1,9 @@
 package org.apidb.apicommon.model.datasetInjector.custom.Gates;
 
-import org.apidb.apicommon.model.datasetInjector.BasicEpiStudy;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import org.apidb.apicommon.model.datasetInjector.BasicEpiStudy;
 
 public class GEMS1CaseControl extends BasicEpiStudy {
 
