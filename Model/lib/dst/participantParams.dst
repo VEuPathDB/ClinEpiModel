@@ -3183,16 +3183,6 @@ prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
 >templateTextStart<
-        <flatVocabParam name="study_arm_${paramSuffix}"
-               prompt="Study Arm"
-               multiPick="false"
-               quote="true"
-               visible="true"
-               dependedParamRef=""
-               queryRef="ParticipantVQ.StudyArm_${paramSuffix}">
-      <help>You may choose to limit your search to a specific study arm.</help>
-    </flatVocabParam>
-
        <filterParam name="study_arm_filter_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.StudyArmOntology_${paramSuffix}"
                     metadataQueryRef="ParticipantVQ.StudyArmMetaData_${paramSuffix}"
@@ -3214,7 +3204,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Villages"
                     prompt="Geographic region"
-                    dependedParamRef="participantParams.study_arm_${paramSuffix},participantParams.study_arm_filter_${paramSuffix}"
+                    dependedParamRef="participantParams.study_arm_filter_${paramSuffix}"
                     trimMetadataTerms="true">
          <help>
            Select participants based on their geographic region. 
@@ -3291,23 +3281,6 @@ prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
-        <sqlQuery name="StudyArm_${paramSuffix}">
-          <column name="display" />
-          <column name="internal" />
-          <column name="term" />
-          <sql>
-         <![CDATA[
-SELECT * from (
-SELECT 'Any Study Arm' as display, 'AnY' as term, 'AnY' as internal, 1 as ordernum from dual
-UNION
-select distinct initcap(string_value) as display, string_value as term, string_value as internal, 2 as ordernum
-from apidbtuning.${tblPrefix}ParticipantMD
-where ontology_term_name = 'EUPATH_0015457')
-order by ordernum,display
-            ]]>
-            </sql>
-        </sqlQuery>
-
    <sqlQuery name="StudyArmOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
      <column name="parent_ontology_term_name"/>
@@ -3373,7 +3346,6 @@ from ApidbTuning.${tblPrefix}Ontology o
 
     <sqlQuery name="RegionMetaData_${paramSuffix}" isCacheable="false">
       <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" />  
-      <paramRef ref="participantParams.study_arm_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="filter_item_id"/>
@@ -3389,11 +3361,6 @@ where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and h.household_id = hp.household_id 
 and hp.participant_id in (\$\$study_arm_filter_${paramSuffix}\$\$)
-and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
-       or hp.participant_id in (select participant_id
-       from ApidbTuning.${tblPrefix}ParticipantMD
-       where ontology_term_name = 'EUPATH_0015457'
-       and string_value = \$\$study_arm_${paramSuffix}\$\$))
         ]]>
       </sql>
     </sqlQuery>
