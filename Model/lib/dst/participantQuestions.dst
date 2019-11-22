@@ -318,6 +318,7 @@ name=ParticipantsByRelativeVisits_prism2
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=participantAttributesListFull
 prop=tblPrefix
 prop=paramSuffix
 prop=participantQuestionName
@@ -329,10 +330,8 @@ prop=participantQuestionName
               queryRef="ParticipantId.ParticipantsMetadata_${paramSuffix}" 
               includeProjects="${includeProjects}"
               recordClassRef="${presenterId}ParticipantRecordClasses.${presenterId}ParticipantRecordClass" >
-        <attributesList 
-            summary="visits_per_year_obs,time_of_obs,ave_anoph"        
-            sorting="time_of_obs desc,visits_per_year_obs desc"
-        /> 
+
+              ${participantAttributesListFull}        
 
   <dynamicAttributes>
     <columnAttribute name="ave_anoph" displayName="Avg Female Anopheles" help="Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search" align="center"> 

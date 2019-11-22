@@ -27,9 +27,6 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
 
         super.injectTemplates();
 
-        //String householdSourceIdsIncludedInLightTrapAttributes = getPropValue("householdSourceIdsIncludedInLightTrapAttributes");
-        //System.err.println("householdSourceIdsIncludedInLightTrapAttributes="+householdSourceIdsIncludedInLightTrapAttributes);
-
         String lightTrapAttList = getPropValue("lightTrapAttributesList");
         if(lightTrapAttList != null && !lightTrapAttList.equals("")) {
             setPropValue("lightTrapAttributesListFull","<attributesList summary=\"" + lightTrapAttList + "\" />");
@@ -204,8 +201,7 @@ public abstract class EpidemiologyStudyWithLightTraps extends EpidemiologyStudy 
   public String[][] getPropertiesDeclaration() {
         String[][] exprDeclaration = super.getPropertiesDeclaration();
         
-        String [][] declaration = {{"householdSourceIdsIncludedInLightTrapAttributes", ""},
-                                   {"lightTrapRecordOverview", ""},
+        String [][] declaration = {{"lightTrapRecordOverview", ""},
                                    {"lightTrapAttributesList", ""},
                                    {"lightTrapRecordAttributesList", ""},
                                    {"lightTrapSourceIdsForHouseholdsLightTrapTable", ""},
