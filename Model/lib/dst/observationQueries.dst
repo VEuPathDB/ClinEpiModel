@@ -534,3 +534,37 @@ group by name
      </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=observationSurveyQueryPROVIDE
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="min_days_between"/>
+       <column name="num_matching_visits"/> 
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Observations 
+where pan_id in (\$\$samples_${paramSuffix}\$\$)
+/*
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Observations 
+where pan_id in (\$\$visits_${paramSuffix}\$\$)
+and ((select count(*) from (\$\$samples_${paramSuffix}\$\$)) = 35598
+     or pan_id in (\$\$samples_${paramSuffix}\$\$)
+     )
+*/
+           ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
