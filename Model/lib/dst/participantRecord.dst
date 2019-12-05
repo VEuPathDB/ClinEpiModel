@@ -18,6 +18,7 @@ prop=!hasObservationRecord
 prop=hasObservationRecord
 prop=participantRecordSamplesTable
 prop=participantRecordMicrosTable
+prop=participantRecordObservationsTable
 
  
 >templateTextStart<
@@ -164,26 +165,6 @@ BEGIN MALED
 
 
 	
-         <table name="Observations"
-                 displayName="Observations"
-                 queryRef="${presenterId}ParticipantTables.Observations"
-                 attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
-            <columnAttribute name="source_id" internal="true"/>
-            <columnAttribute name="project_id" internal="true"/>
-            <columnAttribute name="link" internal="true"/>
-
-            <columnAttribute name="name" internal="${hasObservationRecord}"/>
-            <linkAttribute name="db_link" displayName="Date of Observation" internal="${!hasObservationRecord}" inReportMaker="false">
-                 <displayText>
-                    <![CDATA[
-                    $$name$$
-                    ]]>
-                 </displayText>
-                 <url>$$link$$</url>
-            </linkAttribute>
-          </table>
-
-
 
          <table name="ObservationsDownload"
                  displayName="Observations"
@@ -223,6 +204,7 @@ BEGIN MALED
 
 
      ${participantRecordSamplesTable}
+     ${participantRecordObservationsTable}
      ${participantRecordMicrosTable}
 
     </recordClass>
@@ -259,6 +241,34 @@ prop=!hasObservationRecord
             <columnAttribute name="sample_id" displayName="Sample ID"/>
 
         </table>
+>templateTextEnd<
+
+[templateStart] 
+name=participantRecordObservationsTable
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
+prop=presenterId
+prop=hasObservationRecord
+prop=!hasObservationRecord
+>templateTextStart<
+        <table name="Observations"
+               displayName="Observations"
+               queryRef="${presenterId}ParticipantTables.Observations"
+               attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
+            <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
+            <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
+            <columnAttribute name="link" internal="true"/>
+
+            <columnAttribute name="name" internal="${hasObservationRecord}"/>
+            <linkAttribute name="db_link" displayName="Date of Observation" internal="${!hasObservationRecord}" inReportMaker="false">
+                 <displayText>
+                    <![CDATA[
+                    \$\$name\$\$
+                    ]]>
+                 </displayText>
+                 <url>\$\$link\$\$</url>
+            </linkAttribute>
+          </table>
+
 >templateTextEnd<
 
 
@@ -533,6 +543,8 @@ prop=includeProjects
 prop=participantRecordSamplesTableQuery
 prop=participantRecordSamplesMetaTableQuery
 prop=participantRecordMicrosTableQuery
+prop=participantRecordObservationsTableQuery
+prop=participantRecordObservationsMetaTableQuery
 
 >templateTextStart<
     <querySet name="${presenterId}ParticipantTables" queryType="table" includeProjects="${includeProjects}" 
@@ -573,23 +585,9 @@ WHERE o.dataset_name = '&&datasetName&&'
             </sql>
         </sqlQuery>
 
-      <sqlQuery name="ObservationsColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-
-          <sql>
-            <![CDATA[
-                     select pt.property_source_id as name
-                          , pt.property as display_name
-                     from apidbtuning.${tblPrefix}PropertyType pt, ${observationSourceIdsForParticipantsObservationsTableSubquery} ids
-                     where pt.property_source_id = ids.property_source_id
-                     order by ids.order_num
-            ]]>
-          </sql>
-        </sqlQuery>
-
 
         ${participantRecordSamplesMetaTableQuery}
+        ${participantRecordObservationsMetaTableQuery}
 
 
 
@@ -806,43 +804,9 @@ select pa.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_
 
 
 
-      <sqlQuery name="Observations"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
-            <column name="source_id"/>
-            <column name="project_id"/>
-
-
-           <column name="link"/>
-           <column name="name"/>
-
-        <sqlParamValue name="observationSourceIds"><![CDATA[${observationSourceIdsForParticipantsObservationsTable}]]></sqlParamValue>
-         <sqlParamValue name="orderBy"><![CDATA[${observationSourceIdsToOrderParticipantsObservationsTable}]]></sqlParamValue>
-<!--
-MALED
-         <sqlParamValue name="observationSourceIds"><![CDATA[EUPATH_0000579,BFO_0000015]]></sqlParamValue>
-         <sqlParamValue name="orderBy"><![CDATA[EUPATH_0000579]]></sqlParamValue>
-
-
-ICEMR
-
-         <sqlParamValue name="observationSourceIds"><![CDATA[EUPATH_0000091,EUPATH_0000113,EUPATH_0000311,EUPATH_0000338,EUPATH_0000100,EUPATH_0000110,EUPATH_0000092,EUPATH_0000040]]></sqlParamValue>
-         <sqlParamValue name="orderBy"><![CDATA[EUPATH_0000091]]></sqlParamValue>
--->
-            <sql>
-            <![CDATA[
-select pa.name as source_id,
-        '@PROJECT_ID@' as project_id, &&observationSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/${presenterId}_observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
-              from apidbtuning.${tblPrefix}Observations cv
-              , apidbtuning.${tblPrefix}Participants pa
-              , apidbtuning.${tblPrefix}PANIO io
-              where cv.PAN_ID = io.OUTPUT_PAN_ID
-              and io.INPUT_PAN_ID = pa.PAN_ID
-              order by &&orderBy&&
-            ]]>
-            </sql>
-        </sqlQuery>
 
        ${participantRecordSamplesTableQuery}
+       ${participantRecordObservationsTableQuery}
 
 
        ${participantRecordMicrosTableQuery}
@@ -878,7 +842,7 @@ prop=presenterId
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
                    '@WEBAPP_BASE_URL@/record/\${presenterId}_observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id, cv.name as obsName
-              from (select pan_id, name from apidbtuning.\${tblPrefix}Observations) cv
+	from (select pan_id, pan_name AS name from apidbtuning.\${tblPrefix}PanRecord WHERE lower(pan_type)='observation') cv
               , apidbtuning.\${tblPrefix}Participants pa
               , apidbtuning.\${tblPrefix}samples sa
               , apidbtuning.\${tblPrefix}PANIO io
@@ -917,7 +881,66 @@ prop=paramSuffix
 >templateTextEnd<
 
 
+[templateStart] 
+name=participantRecordObservationsTableQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
+prop=observationSourceIdsForParticipantsObservationsTable
+prop=observationSourceIdsToOrderParticipantsObservationsTable
+prop=tblPrefix
+prop=paramSuffix
+prop=presenterId
+>templateTextStart<
 
+      <sqlQuery name="Observations"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.ObservationsColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+
+           <column name="link"/>
+           <column name="name"/>
+
+        <sqlParamValue name="observationSourceIds"><![CDATA[${observationSourceIdsForParticipantsObservationsTable}]]></sqlParamValue>
+         <sqlParamValue name="orderBy"><![CDATA[${observationSourceIdsToOrderParticipantsObservationsTable}]]></sqlParamValue>
+
+            <sql>
+            <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id,  &&observationSourceIds&&, 
+                   '@WEBAPP_BASE_URL@/record/${presenterId}_observation/'||cv.name||'/@PROJECT_ID@' as link, cv.name
+              from apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}Participants pa
+              , apidbtuning.${tblPrefix}PANIO io
+              where cv.PAN_ID = io.OUTPUT_PAN_ID
+              and io.INPUT_PAN_ID = pa.PAN_ID
+              order by &&orderBy&&
+            ]]>
+            </sql>
+        </sqlQuery>
+
+>templateTextEnd<
+
+[templateStart] 
+name=participantRecordObservationsMetaTableQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
+prop=observationSourceIdsForParticipantsObservationsTableSubquery
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+
+      <sqlQuery name="ObservationsColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+                     select pt.property_source_id as name
+                          , pt.property as display_name
+                     from apidbtuning.${tblPrefix}PropertyType pt, ${observationSourceIdsForParticipantsObservationsTableSubquery} ids
+                     where pt.property_source_id = ids.property_source_id
+                     order by ids.order_num
+            ]]>
+          </sql>
+        </sqlQuery>
+
+>templateTextEnd<
 
 
 [templateStart] 
