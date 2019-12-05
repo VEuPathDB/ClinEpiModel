@@ -719,7 +719,7 @@ select t1.source_id, t1.project_id, t1.Observation_Id, t1.Household_Id as Househ
             <![CDATA[
 SELECT pa.name as source_id, '@PROJECT_ID@' as project_id, cv.name as observation_source_id, cv.name as Observation_Id, sp.name as Sample_Id, '' as Household_Id, sp.*
 FROM    apidbtuning.${tblPrefix}Participants pa
-              ,apidbtuning.${tblPrefix}Observations cv
+	,(select pan_id, pan_name AS name from apidbtuning.${tblPrefix}PanRecord WHERE lower(pan_type)='observation') cv
                ,apidbtuning.${tblPrefix}Samples sp
               , apidbtuning.${tblPrefix}PANIO io
               ,apidbtuning.${tblPrefix}PANIO io2
@@ -733,7 +733,7 @@ UNION
 
 SELECT pa.name as source_id, '@PROJECT_ID@' as project_id, cv.name as observation_source_id, cv.name as Observation_Id, sp.name as Sample_Id, hh.name as Household_Id, sp.*
 FROM    apidbtuning.${tblPrefix}Participants pa
-              ,apidbtuning.${tblPrefix}Observations cv
+	,(select pan_id, pan_name AS name from apidbtuning.${tblPrefix}PanRecord WHERE lower(pan_type)='observation') cv
                ,apidbtuning.${tblPrefix}Samples sp
                ,apidbtuning.${tblPrefix}Households hh
               , apidbtuning.${tblPrefix}PANIO io
