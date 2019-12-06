@@ -232,9 +232,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 
 
-	  Boolean hasObserTableInSQL  = false;
-	  if(observationSourceIdsForParticipantsObservationsTable != null && !observationSourceIdsForParticipantsObservationsTable.equals("") ){
-              hasObserTableInSQL = true;
+          //directly set the boolean
+	  Boolean hasObserTableInSQL  = true;
+	  if(observationSourceIdsForParticipantsObservationsTable == null || observationSourceIdsForParticipantsObservationsTable.equals("") ){
+              hasObserTableInSQL = false;
 	  }
 	  
 
