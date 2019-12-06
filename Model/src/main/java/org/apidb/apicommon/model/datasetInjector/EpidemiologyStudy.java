@@ -195,7 +195,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
-      boolean hasObserTableInSQL = getPropValueAsBoolean("hasObserTableInSQL");
+      //boolean hasObserTableInSQL = getPropValueAsBoolean("hasObserTableInSQL");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
@@ -245,12 +245,19 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 
       if(hasParticipants) {
-	  // String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
+	   String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
           String participantSourceIdsExcludedFromParticipantAttributes = getPropValue("participantSourceIdsExcludedFromParticipantAttributes");
 
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
           //setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
 
+
+
+	  Boolean hasObserTableInSQL  = false;
+	  if(observationSourceIdsForParticipantsObservationsTable != null && !observationSourceIdsForParticipantsObservationsTable.equals("") ){
+	      setPropValue("hasObserTableInSQL", "true");
+	  }
+	  
 
 	  //ObservationTable results
           setPropValue("participantRecordObservationsTable", "");
@@ -258,7 +265,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantRecordObservationsTableQuery", "");
  
           if(hasObserTableInSQL) {
-              String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
               setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
 
           setPropValue("participantRecordObservationsTable", getTemplateInstanceText("participantRecordObservationsTable"));
@@ -725,7 +731,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
-      boolean hasObserTableInSQL = getPropValueAsBoolean("ObserTableInSQL");
+      //    boolean hasObserTableInSQL = getPropValueAsBoolean("ObserTableInSQL");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
