@@ -228,7 +228,28 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           String participantSourceIdsExcludedFromParticipantAttributes = getPropValue("participantSourceIdsExcludedFromParticipantAttributes");
 
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
-          setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
+	  // setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
+
+
+
+	  Boolean hasObserTableInSQL  = false;
+	  if(observationSourceIdsForParticipantsObservationsTable != null && !observationSourceIdsForParticipantsObservationsTable.equals("") ){
+              hasObserTableInSQL = true;
+          }
+          //ObservationTable results          
+          setPropValue("participantRecordObservationsTable", "");
+          setPropValue("participantRecordObservationsMetaTableQuery", "");
+          setPropValue("participantRecordObservationsTableQuery", "");
+
+          if(hasObserTableInSQL) {
+	      //String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
+	      setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
+	      setPropValue("participantRecordObservationsTable", getTemplateInstanceText("participantRecordObservationsTable"));
+	      setPropValue("participantRecordObservationsMetaTableQuery", getTemplateInstanceText("participantRecordObservationsMetaTableQuery"));
+	      setPropValue("participantRecordObservationsTableQuery", getTemplateInstanceText("participantRecordObservationsTableQuery"));
+
+          }
+
 
 	  //Samples Test results
           setPropValue("participantRecordSamplesTable", "");
