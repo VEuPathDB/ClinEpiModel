@@ -248,6 +248,29 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	      setPropValue("participantRecordObservationsMetaTableQuery", getTemplateInstanceText("participantRecordObservationsMetaTableQuery"));
 	      setPropValue("participantRecordObservationsTableQuery", getTemplateInstanceText("participantRecordObservationsTableQuery"));
 
+          //setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
+
+
+
+          //directly set the boolean
+	  Boolean hasObserTableInSQL  = true;
+	  if(observationSourceIdsForParticipantsObservationsTable == null || observationSourceIdsForParticipantsObservationsTable.equals("") ){
+              hasObserTableInSQL = false;
+	  }
+	  
+
+	  //ObservationTable results
+          setPropValue("participantRecordObservationsTable", "");
+          setPropValue("participantRecordObservationsMetaTableQuery", "");
+          setPropValue("participantRecordObservationsTableQuery", "");
+ 
+          if(hasObserTableInSQL) {
+              setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
+
+          setPropValue("participantRecordObservationsTable", getTemplateInstanceText("participantRecordObservationsTable"));
+          setPropValue("participantRecordObservationsMetaTableQuery", getTemplateInstanceText("participantRecordObservationsMetaTableQuery"));
+          setPropValue("participantRecordObservationsTableQuery", getTemplateInstanceText("participantRecordObservationsTableQuery"));
+>>>>>>> 8b9144ac8977fe1841769c75446ded8b78412f57
           }
 
 
