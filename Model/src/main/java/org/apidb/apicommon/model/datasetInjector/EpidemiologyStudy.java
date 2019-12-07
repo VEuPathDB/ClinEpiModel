@@ -224,30 +224,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 
       if(hasParticipants) {
-          String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
+	   String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
           String participantSourceIdsExcludedFromParticipantAttributes = getPropValue("participantSourceIdsExcludedFromParticipantAttributes");
 
           setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
-	  // setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
-
-
-
-	  Boolean hasObserTableInSQL  = false;
-	  if(observationSourceIdsForParticipantsObservationsTable != null && !observationSourceIdsForParticipantsObservationsTable.equals("") ){
-              hasObserTableInSQL = true;
-          }
-          //ObservationTable results          
-          setPropValue("participantRecordObservationsTable", "");
-          setPropValue("participantRecordObservationsMetaTableQuery", "");
-          setPropValue("participantRecordObservationsTableQuery", "");
-
-          if(hasObserTableInSQL) {
-	      //String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
-	      setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
-	      setPropValue("participantRecordObservationsTable", getTemplateInstanceText("participantRecordObservationsTable"));
-	      setPropValue("participantRecordObservationsMetaTableQuery", getTemplateInstanceText("participantRecordObservationsMetaTableQuery"));
-	      setPropValue("participantRecordObservationsTableQuery", getTemplateInstanceText("participantRecordObservationsTableQuery"));
-
           //setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
 
 
@@ -270,7 +250,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantRecordObservationsTable", getTemplateInstanceText("participantRecordObservationsTable"));
           setPropValue("participantRecordObservationsMetaTableQuery", getTemplateInstanceText("participantRecordObservationsMetaTableQuery"));
           setPropValue("participantRecordObservationsTableQuery", getTemplateInstanceText("participantRecordObservationsTableQuery"));
->>>>>>> 8b9144ac8977fe1841769c75446ded8b78412f57
           }
 
 
@@ -483,7 +462,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       //inject the metadata queries and params
       injectMetadataQueries();
-  }
+      } 
 
     public void injectMetadataQueries() {
       String studyType = getPropValue("studyType");
