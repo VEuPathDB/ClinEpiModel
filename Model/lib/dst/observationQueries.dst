@@ -568,3 +568,76 @@ and ((select count(*) from (\$\$samples_${paramSuffix}\$\$)) = 35598
      </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=observationMetadataQueryPROVIDE2
+anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
+          isCacheable="true">
+       <paramRef ref="clinicalVisitParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.num_relative_events" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.relative_visits_${paramSuffix}" groupRef="metaDataGroups.relative_events"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="min_days_between"/>
+       <column name="num_matching_visits"/> 
+       <sql>
+           <![CDATA[
+with vis as (
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+from ApidbTuning.${tblPrefix}ObservationMD md
+where md.observation_id in (\$\$visits_${paramSuffix}\$\$)
+and md.ontology_term_name = '${timeSourceId}'
+),
+relvis as (
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+from ApidbTuning.${tblPrefix}ObservationMD md
+where \$\$use_relative_visits\$\$ = 1
+and md.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
+and md.ontology_term_name = '${timeSourceId}'
+),
+visits as (
+select * from vis
+\$\$dateOperator_fv\$\$
+select vis.input_pan_id, vis.pan_id,vis.${timeSourceId} from vis, relvis rv
+where \$\$use_relative_visits\$\$ = 1
+and vis.input_pan_id = rv.input_pan_id
+and vis.pan_id != rv.pan_id
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
+group by vis.pan_id, vis.input_pan_id,vis.${timeSourceId}
+having count(*) >= \$\$num_relative_events.min\$\$ and count(*) <= \$\$num_relative_events.max\$\$
+)
+select name as source_id,'@PROJECT_ID@' as project_id
+, CASE WHEN '\$\$dateOperator_fv\$\$' = 'MINUS' THEN null ELSE min(days_between) END as min_days_between,CASE WHEN '\$\$dateOperator_fv\$\$' = 'MINUS' THEN null ELSE count(*) end as num_matching_visits
+from (
+select visits.pan_id,o.name,visits.input_pan_id as parent_id,visits.${timeSourceId}, abs(inter.${timeSourceId} - visits.${timeSourceId}) as days_between
+from (
+select vis.pan_id, vis.input_pan_id,rv.${timeSourceId}
+from vis, relvis rv
+where vis.input_pan_id = rv.input_pan_id
+and vis.pan_id != rv.pan_id
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
+) inter, visits, ApidbTuning.${tblPrefix}Observations o
+where visits.pan_id = o.pan_id
+and visits.pan_id = inter.pan_id(+)
+)
+group by name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
