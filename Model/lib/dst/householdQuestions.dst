@@ -67,13 +67,14 @@ prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=paramSuffix
+prop=studyAbbreviation
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
              includeProjects="${includeProjects}"
               searchCategory="Household"
-              displayName="Select a Set of Households (PRISM ICEMR)"
-              shortDisplayName="Household Details"
+              displayName="Select a Set of Households (${studyAbbreviation})"
+              shortDisplayName="${studyAbbreviation}"
               queryRef="HouseholdId.HouseholdsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 
@@ -140,13 +141,14 @@ prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=paramSuffix
+prop=studyAbbreviation
 prop=householdQuestionName
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
              includeProjects="${includeProjects}"
               searchCategory="Household"
-              displayName="Select a Set of Households (PRISM2 ICEMR)"
-              shortDisplayName="Household Details"
+              displayName="Select a Set of Households (${studyAbbreviation})"
+              shortDisplayName="${studyAbbreviation}"
               queryRef="HouseholdId.HouseholdsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}HouseholdRecordClasses.${presenterId}HouseholdRecordClass">
 

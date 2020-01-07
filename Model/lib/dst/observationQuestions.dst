@@ -38,7 +38,7 @@ prop=studyAbbreviation
         </summary>
          <description>
             <![CDATA[
-            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
+            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in this study to find Observations with clinically interesting patterns.
             More here...
             ]]>
 </description>
@@ -116,7 +116,7 @@ prop=studyAbbreviation
         </summary>
          <description>
             <![CDATA[
-            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
+            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the this study to find Observations with clinically interesting patterns.
             More here...
             ]]>
 </description>
@@ -158,12 +158,13 @@ prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=paramSuffix
+prop=studyAbbreviation
 prop=observationQuestionName
 >templateTextStart<
    <question name="${observationQuestionName}" newBuild="2"
               searchCategory="Clinical Observation"
-              displayName="Select a Set of Clinical Observations (PRISM)"
-              shortDisplayName="Clinical Observations"
+              displayName="Select a Set of Observations (${studyAbbreviation})"
+              shortDisplayName="${studyAbbreviation}"
               queryRef="ClinicalVisitId.ObservationsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" 
               includeProjects="${includeProjects}"> 
@@ -191,13 +192,13 @@ prop=observationQuestionName
 
         <summary>
             <![CDATA[
-            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
+            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the this study to find Observations with clinically interesting patterns.
             More here...
             ]]>
         </summary>
          <description>
             <![CDATA[
-            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
+            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the this study to find Observations with clinically interesting patterns.
             More here...
             ]]>
 </description>
@@ -236,12 +237,13 @@ prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=paramSuffix
+prop=studyAbbreviation
 prop=observationQuestionName
 >templateTextStart<
    <question name="${observationQuestionName}" newBuild="2"
               searchCategory="Clinical Observation"
-              displayName="Select a Set of Clinical Observations (PRISM2)"
-              shortDisplayName="Clinical Observations"
+              displayName="Select a Set of Observations (${studyAbbreviation})"
+              shortDisplayName="${studyAbbreviation}"
               queryRef="ClinicalVisitId.ObservationsByMetadata_${paramSuffix}" 
               recordClassRef="${presenterId}ObservationRecordClasses.${presenterId}ObservationRecordClass" 
               includeProjects="${includeProjects}"> 
@@ -355,7 +357,7 @@ prop=observationAttributesListFull
         </summary>
          <description>
             <![CDATA[
-            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the PRISM study to find Observations with clinically interesting patterns.
+            In this search, you will build a set of Observations and you can further restrict the observations returned based on the relationship of two different selected observations.  You can use the wealth of data in the this study to find Observations with clinically interesting patterns.
             More here...
             ]]>
 </description>

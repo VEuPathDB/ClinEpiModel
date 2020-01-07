@@ -14,13 +14,14 @@ prop=includeProjects
 prop=presenterId
 prop=tblPrefix
 prop=paramSuffix
+prop=studyAbbreviation
 prop=lightTrapQuestionName
 >templateTextStart<
     	<question name="${lightTrapQuestionName}" newBuild="22"
     		searchCategory="Lighttraps"
                 includeProjects="${includeProjects}"
-    		displayName="Select a Set of Entomology Collections"
-    		shortDisplayName="Light Traps"
+                displayName="Select a Set of Entomology Collections (${studyAbbreviation})"
+                shortDisplayName="${studyAbbreviation}"
     		queryRef="LightTrapId.LightTrapsByMetadata_${paramSuffix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
@@ -65,7 +66,7 @@ prop=studyAbbreviation
     		searchCategory="Lighttraps"
                 includeProjects="${includeProjects}"
     		displayName="Select a Set of Entomology Collections (${studyAbbreviation})"
-    		shortDisplayName="Light Traps"
+                shortDisplayName="${studyAbbreviation}"
     		queryRef="LightTrapId.LightTrapsByMetadata_${paramSuffix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
