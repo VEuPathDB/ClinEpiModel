@@ -649,7 +649,7 @@ prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="clinicalVisitParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_intervention"/> 
+       <paramRef ref="clinicalVisitParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
        <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>

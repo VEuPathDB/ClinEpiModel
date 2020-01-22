@@ -5495,7 +5495,7 @@ prop=householdFilterDataTypeDisplayName
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
                     metadataQueryRef="ParticipantVQ.HouseholdMetaData_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${paramSuffix}"
-                    countPredictsAnswerCount="true"
+                    countPredictsAnswerCount="false"
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef="participantParams.study_arm_filter_${paramSuffix}"
@@ -5509,7 +5509,7 @@ prop=householdFilterDataTypeDisplayName
                     ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
                     metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
-                    countPredictsAnswerCount="true"
+                    countPredictsAnswerCount="false"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
                     trimMetadataTerms="true"
@@ -5576,7 +5576,7 @@ nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units
 CASE WHEN o.ontology_term_source_id in (${participantMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range, o.precision, o.display_order
 from ApidbTuning.${tblPrefix}Ontology o
-     where o.ontology_term_source_id in ('EUPATH_0035014') )
+     where o.ontology_term_source_id in ('EUPATH_0035014','EUPATH_0035092') )
      order by display_order, display_name
          ]]>
     </sql>
@@ -5586,15 +5586,23 @@ from ApidbTuning.${tblPrefix}Ontology o
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
+      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  h.household_id as internal, hp.participant_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
+select  distinct h.household_id as filter_item_id, hp.participant_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
 where h.ontology_term_name in ('EUPATH_0035014')
 and h.household_id = hp.household_id
+and hp.participant_id = po.participant_id
+UNION ALL
+select  distinct hp.household_id as filter_item_id, po.participant_id as record_id, o.observation_id as internal, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
+where o.ontology_term_name in ('EUPATH_0035092')
+and hp.participant_id = po.participant_id 
+and o.observation_id = po.observation_id
           ]]>
     </sql>
     </sqlQuery>
@@ -5636,10 +5644,11 @@ from ApidbTuning.${tblPrefix}Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, hp.participant_id as record_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
-where h.household_id in (\$\$study_arm_filter_${paramSuffix}\$\$)
-and h.household_id = hp.household_id 
+select  distinct h.household_id as filter_item_id, hp.participant_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
+where po.observation_id in (\$\$study_arm_filter_${paramSuffix}\$\$)
+and hp.participant_id = po.participant_id 
+and h.household_id = hp.household_id
           ]]>
     </sql>
     </sqlQuery>
@@ -5654,9 +5663,10 @@ and h.household_id = hp.household_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, hp.participant_id as record_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
-where h.household_id = hp.household_id 
+select  distinct h.household_id as filter_item_id, hp.participant_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
+where hp.participant_id = po.participant_id 
+and h.household_id = hp.household_id
           ]]>
     </sql>
     </sqlQuery>
@@ -5688,17 +5698,20 @@ from ApidbTuning.${tblPrefix}Ontology o
    </sqlQuery>
 
    <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
-     <paramRef ref="participantParams.households_${paramSuffix}" />  
-     <column name="ontology_term_name"/>
+      <paramRef ref="participantParams.households_${paramSuffix}" />  
+      <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.${tblPrefix}ParticipantMD
-where participant_id in (\$\$households_${paramSuffix}\$\$)
+select  p.participant_id as filter_item_id, p.participant_id as record_id, po.observation_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
+where po.observation_id in (\$\$households_${paramSuffix}\$\$)
+and po.participant_id = p.participant_id
           ]]>
     </sql>
     </sqlQuery>
@@ -5706,13 +5719,16 @@ where participant_id in (\$\$households_${paramSuffix}\$\$)
     <sqlQuery name="ParticipantMetaDataBkgd_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  participant_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.${tblPrefix}ParticipantMD
+select  p.participant_id as filter_item_id, p.participant_id as record_id, po.observation_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
+where po.participant_id = p.participant_id
           ]]>
     </sql>
     </sqlQuery>
@@ -5758,7 +5774,7 @@ from ApidbTuning.${tblPrefix}Ontology o
            <![CDATA[
 select  observation_id as filter_item_id, participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
-where participant_id in (\$\$participants_${paramSuffix}\$\$)
+where observation_id in (\$\$participants_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>    

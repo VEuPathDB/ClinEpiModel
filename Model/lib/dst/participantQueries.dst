@@ -844,7 +844,7 @@ prop=paramSuffix
 prop=hasStudyArmParameter
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_intervention"/> 
+       <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
