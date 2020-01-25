@@ -1720,15 +1720,17 @@ prop=paramSuffix
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct h.household_id as filter_item_id, ho.observation_id as record_id, ho.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h,  ApidbTuning.${tblPrefix}HouseObsIO ho
+select  distinct h.household_id as filter_item_id, po.observation_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
 where h.ontology_term_name in ('EUPATH_0035014')
-and h.household_id = ho.household_id
+and h.household_id = hp.household_id
+and hp.participant_id = po.participant_id
 UNION ALL
-select  distinct ho.household_id as filter_item_id, o.participant_id as record_id, o.observation_id as internal, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HouseObsIO ho
+select  distinct hp.household_id as filter_item_id, o.observation_id as record_id, o.observation_id as internal, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
 where o.ontology_term_name in ('EUPATH_0035092')
-and o.observation_id = ho.observation_id
+and hp.participant_id = po.participant_id 
+and o.observation_id = po.observation_id
           ]]>
     </sql>
     </sqlQuery>
@@ -1744,10 +1746,11 @@ and o.observation_id = ho.observation_id
      <column name="string_value"/>
      <sql>
        <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, ho.observation_id as record_id, ho.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
-where ho.observation_id in (\$\$study_arm_filter_${paramSuffix}\$\$)
-and h.household_id = ho.household_id
+select  distinct h.household_id as filter_item_id, po.observation_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
+where po.observation_id in (\$\$study_arm_filter_${paramSuffix}\$\$)
+and hp.participant_id = po.participant_id 
+and h.household_id = hp.household_id
        ]]>
      </sql>
    </sqlQuery>
@@ -1762,9 +1765,10 @@ and h.household_id = ho.household_id
      <column name="string_value"/>
      <sql>
        <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, ho.observation_id as record_id, ho.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
-where h.household_id = ho.household_id
+select  distinct h.household_id as filter_item_id, po.observation_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
+where hp.participant_id = po.participant_id 
+and h.household_id = hp.household_id
        ]]>
      </sql>
    </sqlQuery>
@@ -1780,10 +1784,10 @@ where h.household_id = ho.household_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select hp.observation_id as internal, hp.observation_id as record_id, p.participant_id as filter_item_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
-where hp.observation_id in (\$\$households_${paramSuffix}\$\$)
-and hp.participant_id = p.participant_id
+select  p.participant_id as filter_item_id, po.observation_id as record_id, po.observation_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
+where po.observation_id in (\$\$households_${paramSuffix}\$\$)
+and po.participant_id = p.participant_id
           ]]>
     </sql>
     </sqlQuery>
@@ -1798,9 +1802,9 @@ and hp.participant_id = p.participant_id
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select hp.observation_id as internal, hp.observation_id as record_id, p.participant_id as filter_item_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
-where hp.participant_id = p.participant_id
+select  p.participant_id as filter_item_id, po.observation_id as record_id, po.observation_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
+where po.participant_id = p.participant_id
           ]]>
     </sql>
     </sqlQuery>
