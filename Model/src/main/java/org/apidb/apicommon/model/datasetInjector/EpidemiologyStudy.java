@@ -931,6 +931,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"hasStudyArmParameter", ""},
                                  {"hasHouseholdObservations", ""},
                                  {"keepRegionInHouseholdFilter", ""},
+                                 //control of whether to trim the ontology when single leaf or sub-node
+                                 {"trimHouseholdMetadataTerms", ""},
+                                 {"trimParticipantMetadataTerms", ""},
+                                 {"trimObservationMetadataTerms", ""},
                                  {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
                                  {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties
                                  {"queryBaseTemplate", ""},            //so need set of templates for each record with question

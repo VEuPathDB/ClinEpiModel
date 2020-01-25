@@ -12,6 +12,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="geographic_region_${paramSuffix}" 
                        metadataQueryRef="HouseholdVQ.RegionMetaData_${paramSuffix}"
@@ -35,7 +38,7 @@ prop=householdFilterDataTypeDisplayName
                        filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                        prompt="Households"
                        dependedParamRef="householdParams.geographic_region_${paramSuffix},householdParams.householdOrObservation"
-                       trimMetadataTerms="true">
+                       trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -48,7 +51,7 @@ prop=householdFilterDataTypeDisplayName
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimParticipantMetadataTerms}"
                       dependedParamRef="householdParams.households_${paramSuffix},householdParams.householdOrObservation">
          <help>
               Select participants based on their characteristics. 
@@ -62,7 +65,7 @@ prop=householdFilterDataTypeDisplayName
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Observations"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimObservationMetadataTerms}"
                       dependedParamRef="householdParams.participants_${paramSuffix},householdParams.householdOrObservation">
          <help>
               Select observations based on their characteristics. 
@@ -76,6 +79,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
     <filterParam name="households_${paramSuffix}" 
                        metadataQueryRef="HouseholdVQ.HouseholdMetaData_${paramSuffix}"
@@ -85,7 +91,7 @@ prop=householdFilterDataTypeDisplayName
                        filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                        prompt="Households"
                        dependedParamRef="householdParams.householdOrObservation"
-                       trimMetadataTerms="true">
+                       trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -98,7 +104,7 @@ prop=householdFilterDataTypeDisplayName
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimParticipantMetadataTerms}"
                       dependedParamRef="householdParams.households_${paramSuffix},householdParams.householdOrObservation">
          <help>
               Select participants based on their characteristics. 
@@ -112,7 +118,7 @@ prop=householdFilterDataTypeDisplayName
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Observations"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimObservationMetadataTerms}"
                       dependedParamRef="householdParams.participants_${paramSuffix},householdParams.householdOrObservation">
          <help>
               Select observations based on their characteristics. 
@@ -125,6 +131,9 @@ name=householdFilterParamsParticipant
 anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="participants_${paramSuffix}" 
                       metadataQueryRef="HouseholdVQ.ParticipantMetaData_${paramSuffix}"
@@ -133,7 +142,7 @@ prop=paramSuffix
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimParticipantMetadataTerms}"
                       dependedParamRef="householdParams.householdOrObservation">
          <help>
               Select participants based on their characteristics. 
@@ -147,7 +156,7 @@ prop=paramSuffix
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Observations"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimObservationMetadataTerms}"
                       dependedParamRef="householdParams.participants_${paramSuffix},householdParams.householdOrObservation">
          <help>
               Select observations based on their characteristics. 
@@ -463,6 +472,9 @@ name=householdFilterParamsPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
     <filterParam name="households_prism" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_prism"
@@ -470,7 +482,7 @@ prop=paramSuffix
                     backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_prism"
                     prompt="Households"
                     countPredictsAnswerCount="true"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}"
                     dependedParamRef="householdParams.geographic_region_prism,householdParams.date_range">
       <help>
         Select participants based on their characteristics. 
@@ -497,7 +509,7 @@ prop=paramSuffix
                       backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_prism"
                       prompt="Participants"
                       countPredictsAnswerCount="true"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimParticipantMetadataTerms}"
                       dependedParamRef="householdParams.households_prism">
          <help>
               Select participants based on their characteristics. 
@@ -626,6 +638,9 @@ name=householdFilterParamsPRISM2
 anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
     <filterParam name="households_${paramSuffix}" 
                     ontologyQueryRef="HouseholdVQ.HouseholdOntology_${paramSuffix}"
@@ -633,7 +648,7 @@ prop=paramSuffix
                     backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_${paramSuffix}"
                     prompt="Households"
                     countPredictsAnswerCount="true"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}"
                     dependedParamRef="householdParams.date_range">
       <help>
         Select participants based on their characteristics. 
@@ -646,7 +661,7 @@ prop=paramSuffix
                       backgroundQueryRef="HouseholdVQ.ParticipantMetaDataBkgd_${paramSuffix}"
                       prompt="Participants"
                       countPredictsAnswerCount="true"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimParticipantMetadataTerms}"
                       dependedParamRef="householdParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 

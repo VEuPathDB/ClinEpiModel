@@ -12,6 +12,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
         <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
@@ -45,7 +48,7 @@ prop=householdFilterDataTypeDisplayName
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef="participantParams.geographic_region_${paramSuffix}"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -58,7 +61,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -71,7 +74,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -83,7 +86,7 @@ prop=householdFilterDataTypeDisplayName
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
          <help>
            Select related observations based on their characteristics. 
@@ -378,6 +381,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
         <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
@@ -397,7 +403,7 @@ prop=householdFilterDataTypeDisplayName
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef="participantParams.study_arm_${paramSuffix}"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -410,7 +416,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -423,7 +429,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -435,7 +441,7 @@ prop=householdFilterDataTypeDisplayName
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
          <help>
            Select related observations based on their characteristics. 
@@ -749,6 +755,9 @@ name=participantFilterParamsParticipant
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
         <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
@@ -767,7 +776,7 @@ prop=paramSuffix
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.study_arm_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -780,7 +789,7 @@ prop=paramSuffix
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -792,7 +801,7 @@ prop=paramSuffix
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
          <help>
            Select related observations based on their characteristics. 
@@ -969,6 +978,9 @@ name=participantFilterParamsWithTreatment
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="participants_${paramSuffix}" 
                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
@@ -977,7 +989,7 @@ prop=paramSuffix
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimParticipantMetadataTerms}"
                       dependedParamRef="">
          <help>
               Select participants based on their characteristics. 
@@ -990,7 +1002,7 @@ prop=paramSuffix
                        backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                        countPredictsAnswerCount="true"
                        prompt="Observations"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimObservationMetadataTerms}"
                        dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -1003,7 +1015,7 @@ prop=paramSuffix
                        backgroundQueryRef="ParticipantVQ.TreatmentMetaDataBkgd_${paramSuffix}"
                        countPredictsAnswerCount="true"
                        prompt="Observations"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimObservationMetadataTerms}"
                        dependedParamRef="participantParams.visits_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -1015,7 +1027,7 @@ prop=paramSuffix
                     backgroundQueryRef="ParticipantVQ.RelVisitMetaData_${paramSuffix}"
                     ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
       <help>
         Select related observations based on their characteristics. 
@@ -1255,6 +1267,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
         <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
@@ -1275,6 +1290,7 @@ prop=householdFilterDataTypeDisplayName
                     prompt="Geographic region"
                     dependedParamRef="participantParams.study_arm_${paramSuffix}"
                     trimMetadataTerms="true">
+
          <help>
            Select participants based on whether they are cases or controls. 
          </help>
@@ -1300,7 +1316,7 @@ prop=householdFilterDataTypeDisplayName
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                        prompt="Household"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimHouseholdMetadataTerms}"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.geographic_region_${paramSuffix}">
          <help>
@@ -1314,7 +1330,7 @@ prop=householdFilterDataTypeDisplayName
                        backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="${trimParticipantMetadataTerms}"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.household_${paramSuffix}">
          <help>
@@ -1328,7 +1344,7 @@ prop=householdFilterDataTypeDisplayName
                        backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Observations"
                        prompt="Observations"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimObservationMetadataTerms}"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.participant_${paramSuffix}">
          <help>
@@ -1342,7 +1358,7 @@ prop=householdFilterDataTypeDisplayName
                        backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Observations"
                        prompt="Related Case or Control"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimObservationMetadataTerms}"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.case_control_filter_${paramSuffix}">
          <help>
@@ -1695,6 +1711,9 @@ name=participantFilterParamsPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="geographic_region_prism" 
                        ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
@@ -1730,7 +1749,7 @@ prop=paramSuffix
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_prism"
                     countPredictsAnswerCount="true"
                     prompt="Participants"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.visits_visitage_metadata_prism,clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region_prism">
       <help>
         Select participants based on their characteristics. 
@@ -1746,7 +1765,7 @@ prop=paramSuffix
                     countPredictsAnswerCount="true"
                     prompt="Households"
                     dependedParamRef="clinicalVisitParams.visit_date,participantParams.participants_prism"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
@@ -1758,7 +1777,7 @@ prop=paramSuffix
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.visits_visitage_metadata_prism,participantParams.households_prism,clinicalVisitParams.visit_date">
       <help>
         Select participants based on their visit characteristics. 
@@ -1771,7 +1790,7 @@ prop=paramSuffix
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_prism"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
       <help>
         Select participants based on their visit characteristics. 
@@ -1785,6 +1804,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="geographic_region_${paramSuffix}" 
                        ontologyQueryRef="ParticipantVQ.RegionOntology_${paramSuffix}"
@@ -1820,7 +1842,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     prompt="Participants"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.visits_visitage_metadata_${paramSuffix},clinicalVisitParams.visit_date,participantParams.duration_observation,participantParams.geographic_region_${paramSuffix}">
       <help>
         Select participants based on their characteristics. 
@@ -1836,7 +1858,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     prompt="Households"
                     dependedParamRef="clinicalVisitParams.visit_date,participantParams.participants_${paramSuffix}"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
@@ -1848,7 +1870,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.visits_visitage_metadata_${paramSuffix},participantParams.households_${paramSuffix},clinicalVisitParams.visit_date">
       <help>
         Select participants based on their visit characteristics. 
@@ -1861,7 +1883,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
       <help>
         Select participants based on their visit characteristics. 
@@ -1875,6 +1897,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
     <filterParam name="visits_visitage_metadata_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.VisitAgeOntology_${paramSuffix}"
@@ -1896,7 +1921,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     prompt="Participants"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.visits_visitage_metadata_${paramSuffix},clinicalVisitParams.visit_date,participantParams.duration_observation">
       <help>
         Select participants based on their characteristics. 
@@ -1912,7 +1937,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     prompt="Households"
                     dependedParamRef="clinicalVisitParams.visit_date,participantParams.participants_${paramSuffix}"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
@@ -1924,7 +1949,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.visits_visitage_metadata_${paramSuffix},participantParams.households_${paramSuffix},clinicalVisitParams.visit_date">
       <help>
         Select participants based on their visit characteristics. 
@@ -1937,7 +1962,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
       <help>
         Select participants based on their visit characteristics. 
@@ -2888,6 +2913,9 @@ name=participantFilterParamsMALED
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="geographic_region_maled" 
                        metadataQueryRef="ParticipantVQ.RegionMetaData_maled"
@@ -2911,7 +2939,7 @@ prop=paramSuffix
                     countPredictsAnswerCount="true"
                     prompt="Household Observations"
                     dependedParamRef="participantParams.geographic_region_maled"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
       <help>
         Select participants based on the characteristics of the household where they live. 
       </help>
@@ -2924,7 +2952,7 @@ prop=paramSuffix
                       countPredictsAnswerCount="true"
                       filterDataTypeDisplayName="Participants"
                       prompt="Personal characteristics"
-                      trimMetadataTerms="true"
+                      trimMetadataTerms="${trimParticipantMetadataTerms}"
                       dependedParamRef="participantParams.households_maled">
          <help>
               Select participants based on their characteristics. 
@@ -2937,7 +2965,7 @@ prop=paramSuffix
                        backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_maled"
                        countPredictsAnswerCount="false"
                        prompt="Observations"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimObservationMetadataTerms}"
                        dependedParamRef="participantParams.participants_maled">
          <help>
            Select participants based on their visit characteristics. 
@@ -3182,6 +3210,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="study_arm_filter_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.StudyArmOntology_${paramSuffix}"
@@ -3219,7 +3250,7 @@ prop=householdFilterDataTypeDisplayName
                     filterDataTypeDisplayName="Village observations"
                     prompt="Villages"
                     dependedParamRef="participantParams.geographic_region_${paramSuffix}"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -3232,7 +3263,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -3245,7 +3276,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Samples"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     sortLeavesBeforeBranches="false"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
@@ -3258,7 +3289,7 @@ prop=householdFilterDataTypeDisplayName
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
          <help>
            Select related observations based on their characteristics. 
@@ -3576,6 +3607,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="study_arm_filter_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.StudyArmOntology_${paramSuffix}"
@@ -3612,7 +3646,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.geographic_region_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -3625,7 +3659,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Samples"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     sortLeavesBeforeBranches="false"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
@@ -3638,7 +3672,7 @@ prop=householdFilterDataTypeDisplayName
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
          <help>
            Select related observations based on their characteristics. 
@@ -3889,6 +3923,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
         <flatVocabParam name="study_arm_${paramSuffix}"
                prompt="Study Arm"
@@ -3934,7 +3971,7 @@ prop=householdFilterDataTypeDisplayName
                        backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                        prompt="Household"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimHouseholdMetadataTerms}"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.geographic_region_${paramSuffix}">
          <help>
@@ -3948,7 +3985,7 @@ prop=householdFilterDataTypeDisplayName
                        backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Participants"
                        prompt="Participant"
-                       trimMetadataTerms="false"
+                       trimMetadataTerms="${trimParticipantMetadataTerms}"
                        countPredictsAnswerCount="true"
                        dependedParamRef="participantParams.household_${paramSuffix}">
          <help>
@@ -3962,7 +3999,7 @@ prop=householdFilterDataTypeDisplayName
                        backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Observations"
                        prompt="Observations"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimObservationMetadataTerms}"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.participant_${paramSuffix}">
          <help>
@@ -3976,7 +4013,7 @@ prop=householdFilterDataTypeDisplayName
                        backgroundQueryRef="ParticipantVQ.ObservationMetaDataBkg_${paramSuffix}"
                        filterDataTypeDisplayName="Observations"
                        prompt="Related Case or Control"
-                       trimMetadataTerms="true"
+                       trimMetadataTerms="${trimObservationMetadataTerms}"
                        countPredictsAnswerCount="false"
                        dependedParamRef="participantParams.case_control_filter_${paramSuffix}">
          <help>
@@ -4330,6 +4367,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
         <flatVocabParam name="case_control_${paramSuffix}"
                prompt="Study Arm"
@@ -4387,7 +4427,7 @@ prop=householdFilterDataTypeDisplayName
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef="participantParams.geographic_region_${paramSuffix}"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -4400,7 +4440,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -4413,7 +4453,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -4425,7 +4465,7 @@ prop=householdFilterDataTypeDisplayName
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
          <help>
            Select related observations based on their characteristics. 
@@ -4851,6 +4891,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="households_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
@@ -4860,7 +4903,7 @@ prop=householdFilterDataTypeDisplayName
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef=""
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on their geographic region. 
          </help>
@@ -4873,7 +4916,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -4886,7 +4929,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -4899,7 +4942,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.SampleMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     prompt="Samples"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.visits_${paramSuffix}">
          <help>
            Select participants based on their sample characteristics. 
@@ -5165,6 +5208,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="study_arm_filter_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.StudyArmOntology_${paramSuffix}"
@@ -5188,7 +5234,7 @@ prop=householdFilterDataTypeDisplayName
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef="participantParams.study_arm_filter_${paramSuffix}"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on the characteristics of their household. 
          </help>
@@ -5201,7 +5247,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="true"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.households_${paramSuffix},participantParams.study_arm_filter_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -5214,7 +5260,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -5226,7 +5272,7 @@ prop=householdFilterDataTypeDisplayName
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
          <help>
            Select related observations based on their characteristics. 
@@ -5476,6 +5522,9 @@ anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
        <filterParam name="study_arm_filter_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.StudyArmOntology_${paramSuffix}"
@@ -5499,7 +5548,7 @@ prop=householdFilterDataTypeDisplayName
                     filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
                     prompt="Households"
                     dependedParamRef="participantParams.study_arm_filter_${paramSuffix}"
-                    trimMetadataTerms="true">
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
          <help>
            Select participants based on the characteristics of their household. 
          </help>
@@ -5512,7 +5561,7 @@ prop=householdFilterDataTypeDisplayName
                     countPredictsAnswerCount="false"
                     filterDataTypeDisplayName="Participants"
                     prompt="Personal characteristics"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimParticipantMetadataTerms}"
                     dependedParamRef="participantParams.households_${paramSuffix}">
          <help>
               Select participants based on their characteristics. 
@@ -5525,7 +5574,7 @@ prop=householdFilterDataTypeDisplayName
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     countPredictsAnswerCount="false"
                     prompt="Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="participantParams.participants_${paramSuffix}">
          <help>
            Select participants based on their visit characteristics. 
@@ -5537,7 +5586,7 @@ prop=householdFilterDataTypeDisplayName
                     metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
                     prompt="Related Observations"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="">
          <help>
            Select related observations based on their characteristics. 

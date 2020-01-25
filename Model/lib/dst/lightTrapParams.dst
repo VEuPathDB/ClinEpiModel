@@ -17,6 +17,9 @@ ${injectedTemplateFull}
 [templateStart]
 name=lightTrapFilterParamsPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
     <filterParam name="geographic_region_prism" 
                     ontologyQueryRef="ParticipantVQ.RegionOntology_prism"
@@ -38,7 +41,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_prism"
                     prompt="Households"
                     countPredictsAnswerCount="true"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}"
                     dependedParamRef="lightTrapParams.geographic_region_prism,householdParams.date_range">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
@@ -226,6 +229,9 @@ name=lightTrapFilterParamsPRISM2
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
      <filterParam name="households_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
@@ -233,7 +239,7 @@ prop=paramSuffix
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_${paramSuffix}"
                     prompt="Households"
                     countPredictsAnswerCount="true"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}"
                     dependedParamRef="householdParams.date_range">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
@@ -400,6 +406,9 @@ name=lightTrapFilterParamsMalawi
 anchorFile=ClinEpiModel/Model/lib/dst/lightTrapParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
 >templateTextStart<
     <filterParam name="geographic_region_${paramSuffix}" 
                     ontologyQueryRef="ParticipantVQ.GeographicRegionOntology_${paramSuffix}" 
@@ -421,7 +430,7 @@ prop=paramSuffix
                     backgroundQueryRef="lightTrapVQ.HouseholdMetaDataBkgd_${paramSuffix}"
                     prompt="Households"
                     countPredictsAnswerCount="true"
-                    trimMetadataTerms="true"
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}"
                     dependedParamRef="lightTrapParams.geographic_region_${paramSuffix}">
       <help>
         Select light trap collections based on the characteristics of the household where collection was performed. 
