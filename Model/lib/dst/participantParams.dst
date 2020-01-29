@@ -3893,7 +3893,7 @@ from ApidbTuning.${tblPrefix}Ontology o
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as record_id, participant_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
 where participant_id in (\$\$participants_${paramSuffix}\$\$)
           ]]>
@@ -3910,7 +3910,7 @@ where participant_id in (\$\$participants_${paramSuffix}\$\$)
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as record_id, participant_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
           ]]>
     </sql>
