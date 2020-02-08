@@ -25,5 +25,22 @@
 
       <!-- TEMPLATE_ANCHOR participantsByObservationsQuery -->                   
 
+     <sqlQuery name="ExploreStudyByParticipants" isCacheable="true">
+       <paramRef ref="participantParams.explore_study_id" groupRef="metaDataGroups.explore_study"/> 
+       <paramRef ref="participantParams.explore_study_n" groupRef="metaDataGroups.explore_study"/> 
+       <paramRef ref="participantParams.explore_study_filter" groupRef="metaDataGroups.explore_study"/> 
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.$$explore_study_id$$ObservationMD obs, ApidbTuning.$$explore_study_id$$Participants pa
+where obs.observation_id in ($$explore_study_filter$$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+
   </querySet>
 </wdkModel>

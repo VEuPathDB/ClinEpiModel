@@ -152,6 +152,49 @@
       <help>Choose what to do as you compare cases and controls.  Do you want to keep or remove participants with cases and controls that match your selected criteria. </help>
     </flatVocabParam>
 
+<!-- Params to explore studies -->
+        <flatVocabParam name="explore_study_id"
+               prompt="Choose Study to Explore"
+               multiPick="false"
+               quote="false"
+               visible="true"
+               dependedParamRef=""
+               queryRef="ParticipantVQ.ExploreStudyId">
+      <help>Choose which study you would like to explore</help>
+    </flatVocabParam>
+
+       <enumParam name="explore_study_n"
+                prompt="Choose N"
+                multiPick="false"
+                quote="false"
+                visible="true">
+       <help>Choose the N or entity type you want to explore</help>
+         <enumList>
+           <enumValue default="true">
+             <term>Participant</term>
+             <internal>participant_id</internal>
+           </enumValue>
+           <enumValue>
+             <term>Observation</term>
+             <internal>observation_id</internal>
+           </enumValue>  
+         </enumList>
+       </enumParam>
+
+       <filterParam name="explore_study_filter" 
+                    ontologyQueryRef="ParticipantVQ.ExploreStudyOntology"
+                    metadataQueryRef="ParticipantVQ.ExploreStudyMetadata"
+                    backgroundQueryRef="ParticipantVQ.ExploreStudyMetadata"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Participants"
+                    prompt="Explore Study"
+                    dependedParamRef="participantParams.explore_study_id,participantParams.explore_study_n"
+                    trimMetadataTerms="true">
+         <help>
+           Choose variables to explore this study. 
+         </help>
+       </filterParam>
+
         <flatVocabParam name="study_type"
                prompt="Choose the study type"
                multiPick="false"
@@ -217,6 +260,71 @@
             ]]>
             </sql>
         </sqlQuery>
+
+     <sqlQuery name="ExploreStudyId">
+          <column name="display" />
+          <column name="internal" />
+          <column name="term" />
+          <sql>
+            <![CDATA[
+                     select display_name as display, name as term, replace(dataset_presenter_id,'S_','') as internal
+                     from apidbtuning.datasetpresenter
+                     order by display_name
+            ]]>
+            </sql>
+        </sqlQuery>
+
+   <sqlQuery name="ExploreStudyOntology" isCacheable="true">
+     <paramRef ref="participantParams.explore_study_id" />  
+     <column name="ontology_term_name"/>
+     <column name="parent_ontology_term_name"/>
+     <column name="display_name"/>
+     <column name="description"/>
+     <column name="type"/>
+     <column name="units"/>
+     <column name="precision"/>
+     <column name="is_range"/>
+    <sql>
+      <![CDATA[
+               select * from (
+               select distinct o.ontology_term_source_id as ontology_term_name, parent_ontology_term_source_id as parent_ontology_term_name,
+               nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
+               o.type, o.is_range, o.precision, o.display_order
+               from ApidbTuning.$$explore_study_id$$Ontology o
+               )
+               order by display_order, display_name
+         ]]>
+    </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ExploreStudyMetadata" isCacheable="false">
+     <paramRef ref="participantParams.explore_study_id" />  
+     <paramRef ref="participantParams.explore_study_n" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+select $$explore_study_n$$ as internal, ontology_term_name, string_value, number_value, date_value
+from (
+select  distinct h.household_id, hp.participant_id, po.observation_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.$$explore_study_id$$HouseholdMD h, ApidbTuning.$$explore_study_id$$HousePartIO hp, ApidbTuning.$$explore_study_id$$PartObsIO po
+where h.household_id = hp.household_id
+and hp.participant_id = po.participant_id
+UNION ALL
+select  distinct p.household_id, p.participant_id, po.observation_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.$$explore_study_id$$ParticipantMD p, ApidbTuning.$$explore_study_id$$PartObsIO po
+where p.participant_id = po.participant_id
+UNION ALL
+select  distinct o.household_id, o.participant_id, o.observation_id, o.ontology_term_name, o.string_value, o.number_value, o.date_value
+from ApidbTuning.$$explore_study_id$$ObservationMD o
+)
+          ]]>
+    </sql>
+    </sqlQuery>
+
 
      <sqlQuery name="StudyType">
           <paramRef ref="participantParams.tbl_prefix" />  
@@ -447,6 +555,14 @@ You can further restrict the participants returned in your search by setting a r
             <description>
                 <![CDATA[
                          Limit the search based on observation date and geographic region
+                ]]>
+            </description>
+        </group>
+
+        <group name="explore_study" displayName="Study Explorer" displayType="ShowHide">
+            <description>
+                <![CDATA[
+                         Explore this study by selecting variables, settng values and visualizing relationships.
                 ]]>
             </description>
         </group>

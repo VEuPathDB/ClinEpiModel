@@ -11,6 +11,34 @@
 
       <!-- TEMPLATE_ANCHOR participantsByDataset -->
 
+        <question name="ExploreStudies" newBuild="1" includeProjects="AllClinEpiDB"
+              searchCategory="Participant"
+              displayName="Explore Studies"
+              shortDisplayName="Exp Studies"
+              queryRef="ParticipantId.ExploreStudyByParticipants"
+              recordClassRef="DS_221d2bcac4ParticipantRecordClasses.DS_221d2bcac4ParticipantRecordClass" >
+
+	<dynamicAttributes>
+	</dynamicAttributes>
+          
+
+        <summary>
+            <![CDATA[
+Select the study and the N you want to explore then click on variabiles to explore the study.
+            ]]>
+        </summary>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+
+      </question>
 
   </questionSet>
 </wdkModel>
