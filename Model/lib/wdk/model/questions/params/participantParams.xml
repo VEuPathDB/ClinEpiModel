@@ -170,6 +170,10 @@
                 visible="true">
        <help>Choose the N or entity type you want to explore</help>
          <enumList>
+           <enumValue>
+             <term>Household</term>
+             <internal>household_id</internal>
+           </enumValue>
            <enumValue default="true">
              <term>Participant</term>
              <internal>participant_id</internal>
@@ -186,7 +190,7 @@
                     metadataQueryRef="ParticipantVQ.ExploreStudyMetadata"
                     backgroundQueryRef="ParticipantVQ.ExploreStudyMetadata"
                     countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Participants"
+                    filterDataTypeDisplayName="Rows"
                     prompt="Explore Study"
                     dependedParamRef="participantParams.explore_study_id,participantParams.explore_study_n"
                     trimMetadataTerms="true">
