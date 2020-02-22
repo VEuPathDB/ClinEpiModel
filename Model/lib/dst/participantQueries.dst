@@ -818,7 +818,7 @@ group by pa.name
 >templateTextEnd<
 
 [templateStart]
-name=participantSurveyQueryPROVIDE
+name=participantMetadataQueryPROVIDE
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
 prop=paramSuffix
@@ -835,7 +835,17 @@ prop=hasStudyArmParameter
            <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
-where obs.observation_id in (\$\$samples_${paramSuffix}\$\$)
+where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$visits_${paramSuffix}\$\$) and sample_id != observation_id) =
+(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$samples_${paramSuffix}\$\$) and sample_id != observation_id)
+and obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+UNION
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
+where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$visits_${paramSuffix}\$\$) and sample_id != observation_id) !=
+(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$samples_${paramSuffix}\$\$) and sample_id != observation_id)
+and obs.observation_id in (\$\$samples_${paramSuffix}\$\$)
 and pa.pan_id = obs.participant_id
 group by pa.name
                 ]]>   

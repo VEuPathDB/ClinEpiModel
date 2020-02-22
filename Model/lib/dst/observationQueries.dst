@@ -535,7 +535,7 @@ group by name
 >templateTextEnd<
 
 [templateStart]
-name=observationSurveyQueryPROVIDE
+name=observationMetadataQueryPROVIDE
 anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
@@ -546,6 +546,7 @@ prop=timeSourceId
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" visible="false" groupRef="metaDataGroups.part_sample_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="min_days_between"/>
@@ -554,15 +555,15 @@ prop=timeSourceId
            <![CDATA[
 select distinct name as source_id,'@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Observations 
-where pan_id in (\$\$samples_${paramSuffix}\$\$)
-/*
+where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$visits_${paramSuffix}\$\$) and sample_id != observation_id) =
+(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$samples_${paramSuffix}\$\$) and sample_id != observation_id)
+and pan_id in (\$\$visits_${paramSuffix}\$\$)
+UNION
 select distinct name as source_id,'@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Observations 
-where pan_id in (\$\$visits_${paramSuffix}\$\$)
-and ((select count(*) from (\$\$samples_${paramSuffix}\$\$)) = 35598
-     or pan_id in (\$\$samples_${paramSuffix}\$\$)
-     )
-*/
+where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$visits_${paramSuffix}\$\$) and sample_id != observation_id) !=
+(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$samples_${paramSuffix}\$\$) and sample_id != observation_id)
+and pan_id in (\$\$samples_${paramSuffix}\$\$)
            ]]>   
         </sql>
      </sqlQuery>

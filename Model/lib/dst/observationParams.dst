@@ -1330,7 +1330,7 @@ prop=trimObservationMetadataTerms
                     ontologyQueryRef="ParticipantVQ.SampleOntology_${paramSuffix}"
                     metadataQueryRef="ClinicalVisitVQ.SampleMetaData_${paramSuffix}"
                     backgroundQueryRef="ClinicalVisitVQ.SampleMetaDataBkgd_${paramSuffix}"
-                    countPredictsAnswerCount="true"
+                    countPredictsAnswerCount="false"
                     prompt="Samples"
                     trimMetadataTerms="${trimObservationMetadataTerms}"
                     dependedParamRef="clinicalVisitParams.visits_${paramSuffix}">
@@ -1357,8 +1357,9 @@ prop=paramSuffix
      <sql>
        <![CDATA[
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho, ApidbTuning.${tblPrefix}Observations o
                 where ho.household_id = h.household_id
+                and ho.observation_id = o.pan_id
        ]]>
      </sql>
    </sqlQuery>
@@ -1374,9 +1375,10 @@ prop=paramSuffix
       <sql>
          <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp, ApidbTuning.${tblPrefix}Observations o
 where p.household_id in (\$\$households_${paramSuffix}\$\$)
 and hp.participant_id = p.participant_id
+                      and hp.observation_id = o.pan_id
           ]]>
     </sql>
     </sqlQuery>
@@ -1391,8 +1393,9 @@ and hp.participant_id = p.participant_id
       <sql>
         <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp, ApidbTuning.${tblPrefix}Observations o
 where hp.participant_id = p.participant_id
+                      and hp.observation_id = o.pan_id
           ]]>
     </sql>
     </sqlQuery>
@@ -1407,9 +1410,10 @@ where hp.participant_id = p.participant_id
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.${tblPrefix}ObservationMD
-where participant_id in (\$\$participants_${paramSuffix}\$\$)
+select obs.observation_id as internal, obs.observation_id as filter_item_id, obs.ontology_term_name, obs.string_value, obs.number_value, obs.date_value
+from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Observations o
+where obs.participant_id in (\$\$participants_${paramSuffix}\$\$)
+                      and obs.observation_id = o.pan_id
           ]]>
     </sql>
     </sqlQuery>
