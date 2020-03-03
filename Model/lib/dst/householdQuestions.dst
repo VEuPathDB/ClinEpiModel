@@ -15,6 +15,7 @@ prop=householdAttributesListFull
 prop=studyAbbreviation
 prop=tblPrefix
 prop=paramSuffix
+prop=summary
 >templateTextStart<
    <question name="${presenterId}HouseholdsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Household"
@@ -36,8 +37,7 @@ prop=paramSuffix
             
 
         <summary>
-            <![CDATA[ 
-           Find households based on household and participant details.
+            <![CDATA[ ${summary} 
             ]]>
         </summary>
 
@@ -69,6 +69,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
 prop=householdQuestionName
+prop=summary
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
              includeProjects="${includeProjects}"
@@ -110,8 +111,7 @@ f                   <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id
             
 
         <summary>
-            <![CDATA[ 
-           Find households based on household and participant details.
+            <![CDATA[  ${summary}
             ]]>
         </summary>
 
@@ -143,6 +143,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
 prop=householdQuestionName
+prop=summary
 >templateTextStart<
    <question name="${householdQuestionName}" newBuild="1"
              includeProjects="${includeProjects}"
@@ -184,8 +185,7 @@ f                   <img src="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id
             
 
         <summary>
-            <![CDATA[ 
-           Find households based on household and participant details.
+            <![CDATA[ ${summary}
             ]]>
         </summary>
 

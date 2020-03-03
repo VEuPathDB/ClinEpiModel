@@ -16,6 +16,7 @@ prop=observationAttributesListFull
 prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
+prop=summary
 >templateTextStart<
     <question name="${presenterId}ObservationsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
@@ -31,9 +32,7 @@ prop=studyAbbreviation
           
 
         <summary>
-            <![CDATA[
-            In this search, you will build a set of Observations.  You can use the wealth of data in the India ICEMR longitudinal study to find Observations with clinically interesting patterns.
-            More here...
+            <![CDATA[ ${summary}
             ]]>
         </summary>
          <description>
@@ -82,6 +81,7 @@ prop=observationAttributesListFull
 prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
+prop=summary
 >templateTextStart<
     <question name="${presenterId}ObservationsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
@@ -109,9 +109,7 @@ prop=studyAbbreviation
           
 
         <summary>
-            <![CDATA[
-            In this search, you will build a set of Observations.  You can use the wealth of data in the India ICEMR longitudinal study to find Observations with clinically interesting patterns.
-            More here...
+            <![CDATA[ ${summary}
             ]]>
         </summary>
          <description>

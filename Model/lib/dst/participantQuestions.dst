@@ -133,6 +133,7 @@ prop=participantAttributesListFull
 prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
+prop=summary
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -148,8 +149,7 @@ prop=studyAbbreviation
           
 
         <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            <![CDATA[ ${summary}
             ]]>
         </summary>
 
@@ -175,6 +175,7 @@ prop=participantAttributesListFull
 prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
+prop=summary
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -190,8 +191,7 @@ prop=studyAbbreviation
           
 
         <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            <![CDATA[ ${summary}
             ]]>
         </summary>
 
@@ -229,6 +229,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
 prop=participantQuestionName
+prop=summary
 >templateTextStart<
     <question name="${participantQuestionName}" newBuild="1"
               searchCategory="Participant"
@@ -281,8 +282,7 @@ prop=participantQuestionName
         </stepAnalysisRef>
 
         <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            <![CDATA[ ${summary}
             ]]>
         </summary>
 
@@ -324,6 +324,7 @@ prop=tblPrefix
 prop=studyAbbreviation
 prop=paramSuffix
 prop=participantQuestionName
+prop=summary
 >templateTextStart<
     <question name="${participantQuestionName}" newBuild="1"
               searchCategory="Participant"
@@ -374,8 +375,7 @@ prop=participantQuestionName
         </stepAnalysisRef>
 
         <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            <![CDATA[ ${summary}
             ]]>
         </summary>
 
@@ -417,6 +417,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=participantQuestionName
 prop=participantAttributesListFull
+prop=summary
 >templateTextStart<
         <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -445,8 +446,7 @@ prop=participantAttributesListFull
           
 
         <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            <![CDATA[ ${summary}
             ]]>
         </summary>
 
@@ -486,6 +486,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=participantQuestionName
 prop=participantAttributesListFull
+prop=summary
 >templateTextStart<
       <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -497,8 +498,7 @@ prop=participantAttributesListFull
         ${participantAttributesListFull}        
 
         <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            <![CDATA[ ${summary}
             ]]>
         </summary>
 
