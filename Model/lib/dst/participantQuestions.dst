@@ -71,6 +71,7 @@ prop=participantAttributesListFull
 prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
+prop=summary
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -92,8 +93,7 @@ prop=studyAbbreviation
           
 
         <summary>
-            <![CDATA[
-Use the filters above to select a set of Participants or to explore the data.  Start on the left, and skip filters that are not of interest.  Once you have selected a set, click the blue button to view or analyze it. 
+            <![CDATA[ ${summary}
             ]]>
         </summary>
 
