@@ -504,6 +504,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+      String regionFilterExcludedIdsQuoted = addQuotes(getPropValue("regionFilterExcludedIds"));
       String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
       String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
@@ -522,6 +523,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
           boolean injectParams = getPropValueAsBoolean("injectParams");
           
+          if(regionFilterExcludedIdsQuoted == null || regionFilterExcludedIdsQuoted.equals("''")) {
+              regionFilterExcludedIdsQuoted  = "'NA'";
+          }
+          setPropValue("regionFilterExcludedIdsQuoted", regionFilterExcludedIdsQuoted);
           if(householdFilterExcludedIdsQuoted == null || householdFilterExcludedIdsQuoted.equals("''")) {
               householdFilterExcludedIdsQuoted  = "'NA'";
           }
@@ -916,6 +921,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"requestEmailBody", ""},
                                  {"requestNeedsApproval", ""},
                                  //properties for injecting metadata queries
+                                 {"regionFilterExcludedIds", ""},
                                  {"householdMultiFilterIds", ""},
                                  {"householdFilterExcludedIds", ""},
                                  {"participantMultiFilterIds", ""},

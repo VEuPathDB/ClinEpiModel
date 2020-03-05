@@ -100,6 +100,7 @@ name=participantFilterParamQueriesRegion
 anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=regionFilterExcludedIdsQuoted
 prop=householdMultiFilterIdsQuoted
 prop=householdFilterExcludedIdsQuoted
 prop=participantMultiFilterIdsQuoted
@@ -143,6 +144,7 @@ from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448' )
      where ontology_term_name not in ('GAZ_00000448')
+     and ontology_term_name not in (${regionFilterExcludedIdsQuoted})
      order by display_order, display_name
          ]]>
     </sql>
@@ -164,6 +166,7 @@ where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.$
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
 and h.household_id = hp.household_id 
+     and h.ontology_term_name not in (${regionFilterExcludedIdsQuoted})
 and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        or hp.participant_id in (select participant_id
        from ApidbTuning.${tblPrefix}ParticipantMD
@@ -187,6 +190,7 @@ from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO 
 where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     and h.ontology_term_name not in (${regionFilterExcludedIdsQuoted})
 and h.household_id = hp.household_id 
         ]]>
       </sql>
@@ -237,6 +241,7 @@ select  distinct h.household_observation_id as filter_item_id, hp.participant_id
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
 where hp.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
 and h.household_id = hp.household_id 
+     and h.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
      ${rmRegionSqlCommentStart}
      and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
@@ -258,6 +263,7 @@ and h.household_id = hp.household_id
 select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
 where h.household_id = hp.household_id 
+     and h.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
      ${rmRegionSqlCommentStart}
      and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id

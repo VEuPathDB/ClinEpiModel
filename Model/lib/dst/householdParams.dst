@@ -177,6 +177,8 @@ name=householdFilterParamQueriesRegion
 anchorFile=ClinEpiModel/Model/lib/dst/householdParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=regionFilterExcludedIdsQuoted
+prop=householdFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
@@ -193,6 +195,7 @@ from ApidbTuning.${tblPrefix}HouseholdMD
 where ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     and ontology_term_name not in (${regionFilterExcludedIdsQuoted})
         ]]>
       </sql>
     </sqlQuery>
@@ -211,6 +214,7 @@ where ontology_term_name in (select ontology_term_source_id from ApidbTuning.${t
 select  distinct \$\$householdOrObservation\$\$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}HouseholdMD
 where household_id in (\$\$geographic_region_${paramSuffix}\$\$)
+     and ontology_term_name not in (${householdFilterExcludedIdsQuoted})
      ${rmRegionSqlCommentStart}
      and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
@@ -232,8 +236,9 @@ where household_id in (\$\$geographic_region_${paramSuffix}\$\$)
          <![CDATA[
 select  distinct \$\$householdOrObservation\$\$ as internal, household_observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}HouseholdMD
+     where ontology_term_name not in (${householdFilterExcludedIdsQuoted})
      ${rmRegionSqlCommentStart}
-     where ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}

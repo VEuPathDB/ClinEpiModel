@@ -21,7 +21,7 @@ prop=trimObservationMetadataTerms
                     backgroundQueryRef="ClinicalVisitVQ.RegionMetaData_${paramSuffix}"
                     ontologyQueryRef="ParticipantVQ.RegionOntology_${paramSuffix}"
                     countPredictsAnswerCount="true"
-                    prompt="Participant"
+                    prompt="Households"
                     dependedParamRef=""
                     trimMetadataTerms="true">
       <help>
@@ -209,6 +209,8 @@ name=observationFilterParamQueriesRegion
 anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=regionFilterExcludedIdsQuoted
+prop=householdFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
 >templateTextStart<
@@ -226,6 +228,7 @@ from ApidbTuning.${tblPrefix}HouseholdMD p, ApidbTuning.${tblPrefix}HouseObsIO h
 where p.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     and p.ontology_term_name not in (${regionFilterExcludedIdsQuoted})
 and ho.household_id = p.household_id
         ]]>
       </sql>
@@ -246,6 +249,7 @@ and ho.household_id = p.household_id
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
                 where h.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
                 and ho.household_id = h.household_id
+     and h.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
      ${rmRegionSqlCommentStart}
      and h.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
@@ -268,6 +272,7 @@ and ho.household_id = p.household_id
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
                 where ho.household_id = h.household_id
+     and h.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
      ${rmRegionSqlCommentStart}
      and h.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
