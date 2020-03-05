@@ -909,6 +909,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"participantSourceIdsExcludedFromParticipantAttributes", ""},
                                  {"observationSourceIdsForParticipantsObservationsTable", ""},
                                  {"observationSourceIdsToOrderParticipantsObservationsTable", ""},
+                                 //study summary for study search ... also includes studyCategories
+                                 {"studyCountries", ""},
+                                 {"studyDesignType", ""},
+                                 {"studyYearStart", ""},
+                                 {"studyYearEnd", ""},
+                                 {"studyTargetPopulation", ""},
                                  //attributes to be added to the record for the studies.jason replacement
                                  {"studyCategories", ""},
                                  {"studyAccess", ""},
