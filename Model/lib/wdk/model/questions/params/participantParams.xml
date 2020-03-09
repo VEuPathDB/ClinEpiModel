@@ -413,7 +413,7 @@ You can restrict the observations returned in your search by selecting character
         <group name="event_characteristics" displayName="Observation" displayType="ShowHide">
             <description>
                 <![CDATA[Filter based on observation variables (anthropometric measurements, clinical symptoms, 
-                survey results, lab results, <i>etc.</i>). Longitudinal studies with data collected at different timepoints 
+                survey results, lab results, etc.). Longitudinal studies with data collected at different timepoints 
                 may require a multi-step strategy to return all data of interest.
                 ]]>
             </description>
@@ -421,7 +421,7 @@ You can restrict the observations returned in your search by selecting character
        <group name="part_visit_characteristics" displayName="Observation" displayType="ShowHide">
             <description>
                 <![CDATA[Filter based on observation variables (anthropometric measurements, clinical symptoms, 
-                survey results, lab results, <i>etc.</i>). Longitudinal studies with data collected at different timepoints 
+                survey results, lab results, etc.). Longitudinal studies with data collected at different timepoints 
                 may require a multi-step strategy to return all data of interest.
                 ]]>
             </description>
@@ -429,7 +429,7 @@ You can restrict the observations returned in your search by selecting character
         <group name="observ_visit_characteristics" displayName="Observation" displayType="ShowHide">
             <description>
                 <![CDATA[Filter based on observation variables (anthropometric measurements, clinical symptoms, 
-                survey results, lab results, <i>etc.</i>). Longitudinal studies with data collected at different timepoints 
+                survey results, lab results, etc.). Longitudinal studies with data collected at different timepoints 
                 may require a multi-step strategy to return all data of interest.
                 ]]>
             </description>
@@ -437,7 +437,7 @@ You can restrict the observations returned in your search by selecting character
        <group name="part_event_characteristics" displayName="Observation" displayType="ShowHide">
             <description>
                 <![CDATA[Filter based on observation variables (anthropometric measurements, clinical symptoms, 
-                survey results, lab results, <i>etc.</i>). Longitudinal studies with data collected at different timepoints 
+                survey results, lab results, etc.). Longitudinal studies with data collected at different timepoints 
                 may require a multi-step strategy to return all data of interest.
                 ]]>
             </description>
