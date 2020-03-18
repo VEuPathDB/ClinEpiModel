@@ -496,6 +496,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("rmRegionSqlCommentStart","");
           setPropValue("rmRegionSqlCommentEnd","");
       }
+      Boolean hideRegionVariablesKeepDataInHousehold = getPropValueAsBoolean("hideRegionVariablesKeepDataInHousehold");
+      if(firstWizardStep.equals("Household") || !hideRegionVariablesKeepDataInHousehold){
+          setPropValue("hideRegionVarsSqlCommentStart","/*");
+          setPropValue("hideRegionVarsSqlCommentEnd","*/");
+      }else{
+          setPropValue("hideRegionVarsSqlCommentStart","");
+          setPropValue("hideRegionVarsSqlCommentEnd","");
+      }
       
       boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
       boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
@@ -943,6 +951,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"hasStudyArmParameter", ""},
                                  {"hasHouseholdObservations", ""},
                                  {"keepRegionInHouseholdFilter", ""},
+                                 {"hideRegionVariablesKeepDataInHousehold", ""},
                                  //control of whether to trim the ontology when single leaf or sub-node
                                  {"trimHouseholdMetadataTerms", ""},
                                  {"trimParticipantMetadataTerms", ""},

@@ -109,6 +109,8 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 >templateTextStart<
         <sqlQuery name="StudyArm_${paramSuffix}">
           <column name="display" />
@@ -222,6 +224,11 @@ from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}
+     ${hideRegionVarsSqlCommentStart}
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${hideRegionVarsSqlCommentEnd}
      order by display_order, display_name
      ]]>
     </sql>
@@ -565,7 +572,10 @@ prop=participantMultiFilterIdsQuoted
 prop=participantFilterExcludedIdsQuoted
 prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
+prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 >templateTextStart<
         <sqlQuery name="StudyArm_${paramSuffix}">
           <column name="display" />
@@ -605,6 +615,16 @@ from ApidbTuning.${tblPrefix}Ontology o
      START WITH o.ontology_term_source_id =  'PCO_0000024'
      )
      where ontology_term_name not in (${householdFilterExcludedIdsQuoted})
+     ${rmRegionSqlCommentStart}
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
+     ${hideRegionVarsSqlCommentStart}
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${hideRegionVarsSqlCommentEnd}
      order by display_order, display_name
      ]]>
     </sql>
@@ -628,6 +648,11 @@ and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        from ApidbTuning.${tblPrefix}ParticipantMD
        where ontology_term_name = 'EUPATH_0015457'
        and string_value = \$\$study_arm_${paramSuffix}\$\$))
+     ${rmRegionSqlCommentStart}
+     and h.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
           ]]>
     </sql>
     </sqlQuery>
@@ -644,6 +669,11 @@ and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
 select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
 where h.household_id = hp.household_id 
+     ${rmRegionSqlCommentStart}
+     and h.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
           ]]>
     </sql>
     </sqlQuery>
@@ -1396,6 +1426,8 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 prop=microbiomeOntologyQueryFull
 prop=participantMicrobiomeMetadataQueryFull
 prop=participantMicrobiomeMetadataBkgQueryFull
@@ -1551,6 +1583,16 @@ from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id = 'PCO_0000024'
 ) where ontology_term_name not in (${householdFilterExcludedIdsQuoted})
+     ${rmRegionSqlCommentStart}
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
+     ${hideRegionVarsSqlCommentStart}
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${hideRegionVarsSqlCommentEnd}
 order by display_order, display_name
       </sql>
     </sqlQuery>
@@ -1571,6 +1613,11 @@ from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO 
 where hp.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
 and m.household_id = hp.household_id 
 and m.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
+     ${rmRegionSqlCommentStart}
+     and m.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
          ]]>
       </sql>    
     </sqlQuery>
@@ -1590,6 +1637,11 @@ select hp.participant_id as internal,  m.household_observation_id as filter_item
 from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
 where m.household_id = hp.household_id 
 and m.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
+     ${rmRegionSqlCommentStart}
+     and m.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
          ]]>
       </sql>    
     </sqlQuery>
@@ -2001,6 +2053,8 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="RegionOntology_prism" isCacheable="true">
      <column name="ontology_term_name"/>
@@ -2329,6 +2383,8 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="RegionOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
@@ -2505,6 +2561,11 @@ from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}
+     ${hideRegionVarsSqlCommentStart}
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${hideRegionVarsSqlCommentEnd}
      order by display_order, display_name
     </sql>
     </sqlQuery>
@@ -2527,6 +2588,11 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}MetaData m, part
  where part.household_id = m.pan_id
+     ${rmRegionSqlCommentStart}
+     and m.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
           ]]>
     </sql>    
 
@@ -2548,6 +2614,11 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}MetaData m, part
  where part.household_id = m.pan_id
+     ${rmRegionSqlCommentStart}
+     and m.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
           ]]>
       </sql>    
     </sqlQuery>
@@ -3004,6 +3075,8 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="HouseholdOntology_maled" isCacheable="true">
      <column name="ontology_term_name"/>
@@ -3329,6 +3402,8 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="StudyArmOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
@@ -3459,6 +3534,11 @@ from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}
+     ${hideRegionVarsSqlCommentStart}
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${hideRegionVarsSqlCommentEnd}
      order by display_order, display_name
      ]]>
     </sql>
@@ -3712,6 +3792,8 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="StudyArmOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
@@ -4505,6 +4587,8 @@ prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
 prop=rmRegionSqlCommentStart
 prop=rmRegionSqlCommentEnd
+prop=hideRegionVarsSqlCommentStart
+prop=hideRegionVarsSqlCommentEnd
 >templateTextStart<
         <sqlQuery name="StudyArm_${paramSuffix}">
           <column name="display" />
@@ -4676,6 +4760,11 @@ from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}
+     ${hideRegionVarsSqlCommentStart}
+     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${hideRegionVarsSqlCommentEnd}
      order by display_order, display_name
      ]]>
     </sql>
@@ -4980,7 +5069,6 @@ prop=participantMultiFilterIdsQuoted
 prop=participantFilterExcludedIdsQuoted
 prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
-prop=rmRegionSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="HouseholdOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
@@ -5310,7 +5398,6 @@ prop=participantMultiFilterIdsQuoted
 prop=participantFilterExcludedIdsQuoted
 prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
-prop=rmRegionSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="StudyArmOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
@@ -5624,7 +5711,6 @@ prop=participantMultiFilterIdsQuoted
 prop=participantFilterExcludedIdsQuoted
 prop=observationMultiFilterIdsQuoted
 prop=observationFilterExcludedIdsQuoted
-prop=rmRegionSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="StudyArmOntology_${paramSuffix}" isCacheable="true">
      <column name="ontology_term_name"/>
