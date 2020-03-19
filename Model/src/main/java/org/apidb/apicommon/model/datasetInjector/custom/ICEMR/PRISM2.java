@@ -15,7 +15,7 @@ public class PRISM2 extends BasicEpiStudyWithLightTraps {
     @Override
     protected Map<String,String[]> participantQuestionTemplateNamesToScopes() {
       Map<String,String[]> map = new HashMap<String,String[]>();
-      map.put("ParticipantsByRelativeVisits_prism2", new String[] {"menu", "webservice"});
+      map.put("ParticipantsByMetadata_prism2", new String[] {"menu", "webservice"});
 
       return(map);
     }

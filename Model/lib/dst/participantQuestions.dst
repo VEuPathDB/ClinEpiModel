@@ -315,7 +315,7 @@ prop=summary
 >templateTextEnd<
 
 [templateStart]
-name=ParticipantsByRelativeVisits_prism2
+name=ParticipantsByMetadata_prism2
 anchorFile=ClinEpiModel/Model/lib/dst/participantQuestions.dst
 prop=includeProjects
 prop=presenterId
@@ -323,10 +323,9 @@ prop=participantAttributesListFull
 prop=tblPrefix
 prop=studyAbbreviation
 prop=paramSuffix
-prop=participantQuestionName
 prop=summary
 >templateTextStart<
-    <question name="${participantQuestionName}" newBuild="1"
+    <question name="${presenterId}ParticipantsByMetadata" newBuild="1"
               searchCategory="Participant"
               displayName="Select a Set of Participants (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
