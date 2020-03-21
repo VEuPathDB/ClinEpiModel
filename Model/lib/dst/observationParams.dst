@@ -50,7 +50,7 @@ prop=trimObservationMetadataTerms
                        countPredictsAnswerCount="true"
                        prompt="Participants"
                        trimMetadataTerms="${trimParticipantMetadataTerms}"
-                       dependedParamRef="clinicalVisitParams.households_${paramSuffix}">
+                       dependedParamRef="clinicalVisitParams.households_${paramSuffix},clinicalVisitParams.geographic_region_${paramSuffix}">
          <help>
               Select participants based on their characteristics.
          </help>
@@ -284,6 +284,7 @@ and ho.household_id = p.household_id
 
    <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
      <paramRef ref="clinicalVisitParams.households_${paramSuffix}" />  
+     <paramRef ref="clinicalVisitParams.geographic_region_${paramSuffix}" />  
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
@@ -294,7 +295,14 @@ and ho.household_id = p.household_id
          <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
 from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
-where p.household_id in (\$\$households_${paramSuffix}\$\$)
+where \$\$households_${paramSuffix}.filters_present\$\$ = 1
+and p.household_id in (\$\$households_${paramSuffix}\$\$)
+and hp.participant_id = p.participant_id
+UNION ALL
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
+where \$\$households_${paramSuffix}.filters_present\$\$ = 0
+and p.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
 and hp.participant_id = p.participant_id
           ]]>
     </sql>
