@@ -775,14 +775,12 @@ prop=paramSuffix
            <![CDATA[
 select distinct pa.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Participants pa
-where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where participant_id in (\$\$participants_${paramSuffix}\$\$)) =
-(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where participant_id in (\$\$visits_${paramSuffix}\$\$))
+where \$\$visits_${paramSuffix}.filters_present\$\$ = 0
 and pa.pan_id in (\$\$participants_${paramSuffix}\$\$)
 UNION
 select distinct pa.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Participants pa
-where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where participant_id in (\$\$participants_${paramSuffix}\$\$)) !=
-(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where participant_id in (\$\$visits_${paramSuffix}\$\$))
+where \$\$visits_${paramSuffix}.filters_present\$\$ = 1
 and pa.pan_id in (\$\$visits_${paramSuffix}\$\$)
                 ]]>   
         </sql>
@@ -835,16 +833,14 @@ prop=hasStudyArmParameter
            <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
-where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$visits_${paramSuffix}\$\$) and sample_id != observation_id) =
-(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$samples_${paramSuffix}\$\$) and sample_id != observation_id)
+where \$\$samples_${paramSuffix}.filters_present\$\$ = 0
 and obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and pa.pan_id = obs.participant_id
 group by pa.name
 UNION
 select pa.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
-where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$visits_${paramSuffix}\$\$) and sample_id != observation_id) !=
-(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$samples_${paramSuffix}\$\$) and sample_id != observation_id)
+where \$\$samples_${paramSuffix}.filters_present\$\$ = 1
 and obs.observation_id in (\$\$samples_${paramSuffix}\$\$)
 and pa.pan_id = obs.participant_id
 group by pa.name

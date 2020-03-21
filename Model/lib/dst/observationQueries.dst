@@ -555,14 +555,12 @@ prop=timeSourceId
            <![CDATA[
 select distinct name as source_id,'@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Observations 
-where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$visits_${paramSuffix}\$\$) and sample_id != observation_id) =
-(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$samples_${paramSuffix}\$\$) and sample_id != observation_id)
+where \$\$samples_${paramSuffix}.filters_present\$\$ = 0
 and pan_id in (\$\$visits_${paramSuffix}\$\$)
 UNION
 select distinct name as source_id,'@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}Observations 
-where (select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$visits_${paramSuffix}\$\$) and sample_id != observation_id) !=
-(select count(distinct observation_id) from ApidbTuning.${tblPrefix}ObservationMD where observation_id in (\$\$samples_${paramSuffix}\$\$) and sample_id != observation_id)
+where \$\$samples_${paramSuffix}.filters_present\$\$ = 1
 and pan_id in (\$\$samples_${paramSuffix}\$\$)
            ]]>   
         </sql>
