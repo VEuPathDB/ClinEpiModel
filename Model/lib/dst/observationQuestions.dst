@@ -299,7 +299,7 @@ prop=observationQuestionName
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_prism"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
             }
           </value>
         </propertyList>
