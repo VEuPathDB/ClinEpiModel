@@ -229,16 +229,18 @@ prop=observationQuestionName
 >templateTextEnd<
 
 [templateStart]
-name=ClinicalVisitsByRelativeVisits_prism2
+name=ObservationsByMetadata_prism2
 anchorFile=ClinEpiModel/Model/lib/dst/observationQuestions.dst
 prop=includeProjects
 prop=presenterId
+prop=observationQuestionName
+prop=observationAttributesListFull
 prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
-prop=observationQuestionName
+prop=summary
 >templateTextStart<
-   <question name="${observationQuestionName}" newBuild="2"
+   <question name="${presenterId}ObservationsByMetadata" newBuild="2"
               searchCategory="Clinical Observation"
               displayName="Select a Set of Observations (${studyAbbreviation})"
               shortDisplayName="${studyAbbreviation}"
@@ -247,9 +249,7 @@ prop=observationQuestionName
               includeProjects="${includeProjects}"> 
 
 
-        <attributesList 
-            summary="EUPATH_0000311,EUPATH_0000091,EUPATH_0000113,num_matching_visits,min_days_between"
-        /> 
+        ${observationAttributesListFull}
 
         <dynamicAttributes>
 	  <columnAttribute name="min_days_between" displayName="Min days between observations" help="Reports the minimum days between any matching observations and the observation returned" align="center">
