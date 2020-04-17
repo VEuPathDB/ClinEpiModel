@@ -198,7 +198,7 @@ prop=demo_plot_ct_value
 <textAttribute name="${demo_plot_ct_value_compact}" displayName="Ct value summary"  truncateTo="100000">
               <text>
               <![CDATA[
-                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0044001&yAxis=EUPATH_0044004&h=250&w=450&thumb=1" type="image/svg+xml" style="height:250px; width:450px;"/>
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&datasetId=${presenterId}&fmt=svg&template=1&contXAxis=EUPATH_0044001&sampleInfo=EUPATH_0044004&h=250&w=450&thumb=1" type="image/svg+xml" style="height:250px; width:450px;"/>
 ]]>
               </text>
             </textAttribute>
@@ -206,7 +206,7 @@ prop=demo_plot_ct_value
             <textAttribute name="${demo_plot_ct_value}" displayName="Ct value observations graph">
               <text>
               <![CDATA[
-                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0044001&yAxis=EUPATH_0044004&w=800&h=350&datasetId=${presenterId}" type="image/svg+xml" style="height:350px; width:800px;"/>
+                  <object data="/cgi-bin/dataPlotter.pl?project_id=@PROJECT_ID@&id=\$\$source_id\$\$&type=Participant&fmt=svg&template=1&contXAxis=EUPATH_0044001&sampleInfo=EUPATH_0044004&w=800&h=350&datasetId=${presenterId}" type="image/svg+xml" style="height:350px; width:800px;"/>
 ]]>
               </text>
             </textAttribute>
