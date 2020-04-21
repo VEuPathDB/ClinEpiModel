@@ -379,6 +379,7 @@ from (
     select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type 
 from ApidbTuning.${tblPrefix}ParticipantMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p 
 where  m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+and m.ontology_term_name not in (${participantSourceIdsExcludedFromParticipantAttributesQuote})
 and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
 group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
 ) meta
@@ -533,6 +534,7 @@ prop=participantRecordAttributesListFull
 prop=participantGraphAttributes
 prop=participantGraphAttributeNames
 prop=participantSourceIdsExcludedFromParticipantAttributes
+prop=participantSourceIdsExcludedFromParticipantAttributesQuote
 prop=observationSourceIdsForParticipantsObservationsTable
 prop=observationSourceIdsForParticipantsObservationsTableSubquery
 prop=observationSourceIdsToOrderParticipantsObservationsTable
@@ -561,6 +563,7 @@ prop=participantRecordObservationsMetaTableQuery
          <sqlParamValue name="datasetName"><![CDATA[${datasetName}]]></sqlParamValue>
             <sql>
             <![CDATA[
+select * from (
 SELECT pan_name  AS source_id,
   '@PROJECT_ID@' AS project_id,
   nvl(property_source_id, 'root')      AS parent_source_id,
@@ -580,7 +583,8 @@ SELECT pa.name                AS source_id,
   0 as is_leaf
 FROM apidbtuning.${tblPrefix}Ontology o,
   apidbtuning.${tblPrefix}Participants pa
-WHERE o.dataset_name = '&&datasetName&&'
+WHERE o.dataset_name = '&&datasetName&&')
+where unique_id not in (${participantSourceIdsExcludedFromParticipantAttributesQuote})
             ]]>
             </sql>
         </sqlQuery>

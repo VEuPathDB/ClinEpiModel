@@ -248,7 +248,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	   String observationSourceIdsForParticipantsObservationsTable  = getPropValue("observationSourceIdsForParticipantsObservationsTable");
           String participantSourceIdsExcludedFromParticipantAttributes = getPropValue("participantSourceIdsExcludedFromParticipantAttributes");
 
-          setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
+          if(participantSourceIdsExcludedFromParticipantAttributes == null || participantSourceIdsExcludedFromParticipantAttributes.equals("") ){
+            setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes("none"));          
+          } else {
+            setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
+          }
           //setPropValue("observationSourceIdsForParticipantsObservationsTableSubquery", propertySourceIdSubquery(observationSourceIdsForParticipantsObservationsTable));
 
 
