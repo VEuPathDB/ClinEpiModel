@@ -16,6 +16,8 @@ prop=presenterId
 prop=includeProjects
 prop=!hasObservationRecord
 prop=hasObservationRecord
+prop=!hasSampleRecord
+prop=hasSampleRecord
 prop=participantRecordSamplesTable
 prop=participantRecordMicrosTable
 prop=participantRecordObservationsTable
@@ -219,6 +221,8 @@ anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=presenterId
 prop=hasObservationRecord
 prop=!hasObservationRecord
+prop=hasSampleRecord
+prop=!hasSampleRecord
 >templateTextStart<
         <table name="Samples"
                displayName="Samples Collected From Participant"
@@ -227,8 +231,10 @@ prop=!hasObservationRecord
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="link" internal="true"/>
+            <columnAttribute name="sam_link" internal="true"/>
 
             <columnAttribute name="obsName" internal="\${hasObservationRecord}"/>
+
             <linkAttribute name="obsLink" displayName="Observation" internal="\${!hasObservationRecord}" inReportMaker="false">
                  <displayText>
                     <![CDATA[
@@ -238,7 +244,23 @@ prop=!hasObservationRecord
                  <url>\$\$link\$\$</url>
             </linkAttribute>
 
-            <columnAttribute name="sample_id" displayName="Sample ID"/>
+      <!--      <columnAttribute name="sample_id" displayName="Sample ID"/> -->
+
+
+
+
+            <columnAttribute name="sample_id" internal="\${hasSampleRecord}"/>
+
+            <linkAttribute name="samLink" displayName="Sample ID" internal="\${!hasSampleRecord}" inReportMaker="false">
+                 <displayText>
+                    <![CDATA[
+                    \$\$sample_id\$\$
+                    ]]>
+                 </displayText>
+                 <url>\$\$sam_link\$\$</url>
+            </linkAttribute>
+
+
 
         </table>
 >templateTextEnd<
@@ -834,6 +856,7 @@ prop=presenterId
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="link"/>
+            <column name="sam_link"/>
             <column name="obsName"/>
             <column name="sample_id"/>
 
@@ -845,7 +868,7 @@ prop=presenterId
                  <![CDATA[
 select pa.name as source_id,
         '@PROJECT_ID@' as project_id, &&sampleSourceIds&&, 
-                   '@WEBAPP_BASE_URL@/record/\${presenterId}_observation/'||cv.name||'/@PROJECT_ID@' as link, sa.name as sample_id, cv.name as obsName
+                   '@WEBAPP_BASE_URL@/record/\${presenterId}_observation/'||cv.name||'/@PROJECT_ID@' as link, '@WEBAPP_BASE_URL@/record/\${presenterId}_sample/'||sa.name||'/@PROJECT_ID@' as sam_link, sa.name as sample_id, cv.name as obsName
 	from (select pan_id, pan_name AS name from apidbtuning.\${tblPrefix}PanRecord WHERE lower(pan_type)='observation') cv
               , apidbtuning.\${tblPrefix}Participants pa
               , apidbtuning.\${tblPrefix}samples sa

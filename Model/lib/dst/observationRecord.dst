@@ -11,6 +11,8 @@ prop=presenterId
 prop=includeProjects
 prop=observationRecordSamplesTable
 prop=observationRecordMicrosTable
+prop=!hasSampleRecord
+prop=hasSampleRecord
 
 >templateTextStart<
 
@@ -166,6 +168,8 @@ prop=observationRecordMicrosTable
 name=observationRecordSamplesTable
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=presenterId
+prop=hasSampleRecord
+prop=!hasSampleRecord
 
 >templateTextStart<
 	<table name="Samples"
@@ -174,7 +178,20 @@ prop=presenterId
 	    attributeMetaQueryRef="\${presenterId}ObservationTables.SamplesColumnAttributes">
             <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
-            <columnAttribute name="sample_id" displayName="Sample ID"/>
+	    <columnAttribute name="sam_link" internal="true"/>
+           
+	    <columnAttribute name="sample_id" internal="\${hasSampleRecord}"/>
+	   
+            <linkAttribute name="samLink" displayName="Sample ID" internal="\${!hasSampleRecord}" inReportMaker="false">
+                 <displayText>
+                    <![CDATA[
+                    \$\$sample_id\$\$
+                    ]]>
+                 </displayText>
+                 <url>\$\$sam_link\$\$</url>
+            </linkAttribute>
+
+
         </table>
 >templateTextEnd<
 
@@ -628,15 +645,16 @@ prop=presenterId
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="sample_id"/>
-
-            <sqlParamValue name="sampleSourceIds"><![CDATA[\${sampleSourceIdsForParticipantsSamplesTable}]]></sqlParamValue>
+	    <column name="sam_link"/>
+            
+	    <sqlParamValue name="sampleSourceIds"><![CDATA[\${sampleSourceIdsForParticipantsSamplesTable}]]></sqlParamValue>
             <sqlParamValue name="orderBy"><![CDATA[\${sampleSourceIdsToOrderParticipantsSamplesTable}]]></sqlParamValue>
 
             <sql>
 
                  <![CDATA[
 select cv.name as source_id,
-        '@PROJECT_ID@' as project_id, sa.&&sampleSourceIds&&, sa.name as sample_id   
+        '@PROJECT_ID@' as project_id, sa.&&sampleSourceIds&&, '@WEBAPP_BASE_URL@/record/\${presenterId}_sample/'||sa.name||'/@PROJECT_ID@' as sam_link, sa.name as sample_id   
               from apidbtuning.\${tblPrefix}Observations cv
               , apidbtuning.\${tblPrefix}samples sa
               , apidbtuning.\${tblPrefix}PANIO io

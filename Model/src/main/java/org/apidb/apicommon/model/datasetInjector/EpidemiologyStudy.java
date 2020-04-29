@@ -97,6 +97,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
     public static final String OBSERVATION_RECORD_CLASS_PREFIX = "Observation";
     public static final String PARTICIPANT_RECORD_CLASS_PREFIX = "Participant";
     public static final String HOUSEHOLD_RECORD_CLASS_PREFIX = "Household";
+    public static final String SAMPLE_RECORD_CLASS_PREFIX = "Sample";
 
   @Override
   public void injectTemplates() {
@@ -195,12 +196,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
+      boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       //boolean hasObserTableInSQL = getPropValueAsBoolean("hasObserTableInSQL");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
+      setPropValue("!hasSampleRecord", Boolean.toString(!hasSampleRecord));
 
       // TODO: how to handle optional tables??  probably just do these in a subclass?
 
@@ -426,6 +429,30 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       }
 
+
+
+      if(hasSampleRecord){
+	  
+	  String sampleAttList = getPropValue("sampleAttributesList");
+          if(sampleAttList != null && !sampleAttList.equals("")) {
+	      setPropValue("sampleAttributesListFull","<attributesList summary=\"" + sampleAttList + "\" />");
+	  }else{
+	      setPropValue("sampleAttributesListFull","");
+	  }
+          String sampleRecordAttList = getPropValue("sampleRecordAttributesList");
+          if(sampleRecordAttList != null && !sampleRecordAttList.equals("")) {
+	      setPropValue("sampleRecordAttributesListFull","<attributesList summary=\"" + sampleRecordAttList + "\" />");
+	  }else{
+	      setPropValue("sampleRecordAttributesListFull","");
+	  }
+	  
+	  
+	  injectTemplate("sampleRecord");
+          injectTemplate("sampleRecordAttributeQueries");
+          injectTemplate("sampleRecordTableQueries");
+	  
+      }
+
       // Household->Participant and Participant->Household
       if(hasHouseholds && hasParticipants) {
           injectTemplate("householdsByParticipantQuestion");
@@ -472,6 +499,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
       String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
       String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
+      String sampleRecordClass = makeRecordClassName(SAMPLE_RECORD_CLASS_PREFIX);
 
       // Add meta attribute queries to categories / individuals
       injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdTables.HouseholdMembersColumnAttributes",null);
@@ -516,6 +544,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+      boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       String regionFilterExcludedIdsQuoted = addQuotes(getPropValue("regionFilterExcludedIds"));
       String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
@@ -690,6 +719,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
         boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
         boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+        boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
         String cardQuestions = "";
         if(hasParticipantQuestion && hasParticipants){
             for (Map.Entry<String, String[]> entry : participantQuestionTemplateNamesToScopes().entrySet()) {
@@ -749,6 +779,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
+      boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       //    boolean hasObserTableInSQL = getPropValueAsBoolean("ObserTableInSQL");
       boolean hasMicros = getPropValueAsBoolean("hasMicros");
       boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
@@ -760,6 +791,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String householdRecordClass = makeRecordClassName(HOUSEHOLD_RECORD_CLASS_PREFIX);
       String participantRecordClass = makeRecordClassName(PARTICIPANT_RECORD_CLASS_PREFIX);
       String observationRecordClass = makeRecordClassName(OBSERVATION_RECORD_CLASS_PREFIX);
+      String sampleRecordClass = makeRecordClassName(SAMPLE_RECORD_CLASS_PREFIX);
       
       if(hasHouseholds) {
           addWdkReference(householdRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
@@ -884,6 +916,24 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           }
       }
 
+
+
+      if(hasSampleRecord){
+	  
+	  addWdkReference(sampleRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
+	  addWdkReference(sampleRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
+	  
+	  //addWdkReference(sampleRecordClass, "question", "SampleQuestions." + presenterId + "SamplesBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
+	  
+	  //addWdkReference(sampleRecordClass, "table", "ParticipantsDownload", new String[]{"download"}, CATEGORY_IRI, 0);
+	  //addWdkReference(sampleRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+	  //addWdkReference(sampleRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
+	  
+	  
+      }
+      
+
+
       if(hasHouseholds && hasParticipants) {
           addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByHouseholds", new String[]{"webservice"}, CATEGORY_IRI, 0); 
           addWdkReference(householdRecordClass, "question", "HouseholdQuestions." + presenterId + "HouseholdsByParticipants", new String[]{"webservice"}, CATEGORY_IRI, 0); 
@@ -905,8 +955,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 				 {"hasHouseholdRecord", ""},
                                  {"hasObservationRecord", ""},
                                  {"hasParticipantRecord", ""},
+                                 {"hasSampleRecord", ""},
 
-                                {"householdAttributesList", ""},
+				 {"householdAttributesList", ""},
                                  {"householdRecordAttributesList", ""},
                                  {"householdSourceIdsForHouseholdMemberTable", ""},
                                  {"householdRecordOverview", ""},
@@ -914,6 +965,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"observationAttributesList", ""},
                                  {"observationRecordAttributesList", ""},
                                  {"observationRecordOverview", ""},
+
+
+                                 {"sampleAttributesList", ""},
+                                 {"sampleRecordAttributesList", ""},
+                                 {"sampleRecordOverview", ""},
 
                                  {"participantAttributesList", ""},
                                  {"participantRecordAttributesList", ""},
