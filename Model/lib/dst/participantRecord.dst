@@ -122,17 +122,6 @@ BEGIN MALED
       <!--  Text Attributes  ++++++++-->
       <!-- =================================================================== -->
 
-<!--
- <textAttribute name="record_overview" displayName="Overview">
-
-             <text>
-                  <![CDATA[
-                  Participant <i>$$source_id$$</i> from Household <a href="@WEBAPP_BASE_URL@/record/${presenterId}_household/$$EUPATH_0000094$$/@PROJECT_ID@">$$EUPATH_0000094$$</a> in subcounty $$EUPATH_0000054$$.
-                  ]]>
-             </text>
-          </textAttribute>
--->
-
  <textAttribute name="record_overview" displayName="Overview">
 
              <text>
@@ -461,6 +450,7 @@ from (
 from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
 where m.household_id = m.Household_Observation_Id
 and m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+and m.Ontology_Term_Name != 'EUPATH_0000094'
 and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
 group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id, p.display_name,p.type
 UNION
