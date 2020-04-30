@@ -511,7 +511,10 @@ prop=lightTrapSourceIdsToOrderHouseholdsLightTrapTable
 
             <sql>
             <![CDATA[
-            select EUPATH_0000094 as source_id, '@PROJECT_ID@' as project_id, &&lightTrapSourceIds&& from apidbtuning.${tblPrefix}LightTraps order by &&orderBySourceIds&&
+            select h.name as source_id, '@PROJECT_ID@' as project_id , &&lightTrapSourceIds&& 
+            from apidbtuning.${tblPrefix}LightTraps lt, apidbtuning.${tblPrefix}households h, apidbtuning.${tblPrefix}HouseEntoIO io
+            where lt.pan_id = io.entomology_id
+            order by &&orderBySourceIds&&
             ]]>
             </sql>
         </sqlQuery>
