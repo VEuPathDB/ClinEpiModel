@@ -26,7 +26,7 @@ prop=summary
     		queryRef="LightTrapId.LightTrapsByMetadata_${paramSuffix}"
     		recordClassRef="${presenterId}LightTrapRecordClasses.${presenterId}LightTrapRecordClass">
 
-          <attributesList summary="household_id,EUPATH_0000054,EUPATH_0000217,EUPATH_0000218" />
+          <attributesList summary="household_id,EUPATH_0000217,EUPATH_0000218" />
  
           <dynamicAttributes>
           </dynamicAttributes>
