@@ -201,6 +201,8 @@ prop=!hasSampleRecord
 name=observationRecordMicrosTable
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
 prop=presenterId
+prop=hasSampleRecord
+prop=!hasSampleRecord
 
 >templateTextStart<
         <table name="MicrosInObser"
@@ -208,10 +210,24 @@ prop=presenterId
                queryRef="\${presenterId}ObservationTables.MicrosInObser">
                <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
                <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
-               <columnAttribute name="sample_id" displayName="Sample ID"/>
+               <columnAttribute name="sample_id" internal="\${hasSampleRecord}"/>
+	       <columnAttribute name="sam_link" internal="true"/>
+
+            <linkAttribute name="samLink" displayName="Sample ID" internal="\${!hasSampleRecord}" inReportMaker="false">
+                 <displayText>
+                    <![CDATA[
+                    \$\$sample_id\$\$
+                    ]]>
+                 </displayText>
+                 <url>\$\$sam_link\$\$</url>
+            </linkAttribute>
+
                <columnAttribute name="property" displayName="Stool Microbiology Test"/>
                <columnAttribute name="string_value" displayName="Result"/>
                <columnAttribute name="property_source_id" inReportMaker="false" internal="true"/>
+
+	       
+
 
         </table>
 >templateTextEnd<
@@ -713,7 +729,7 @@ prop=microSourceIdsForObservationsMicrosQuote
             <column name="property"/>
             <column name="string_value"/>
 	    <column name="property_source_id"/>
-
+	    <column name="sam_link"/>
 	    
 	   <sqlParamValue name="microSourceIds"><![CDATA[\${microSourceIdsForObservationsMicrosQuote}]]></sqlParamValue>
 
@@ -728,7 +744,7 @@ with microtest as(
     connect by prior ONTOLOGY_TERM_SOURCE_ID=PARENT_ONTOLOGY_TERM_SOURCE_ID
 )
 SELECT  ob.name as source_id, me.pan_name as sample_id, me.property, me.string_value, me.property_source_id,
-	'@PROJECT_ID@' as project_id
+	'@PROJECT_ID@' as project_id, '@WEBAPP_BASE_URL@/record/\${presenterId}_sample/'||me.pan_name||'/@PROJECT_ID@' as sam_link
 FROM (SELECT pan_id, name FROM apidbtuning.\${tblPrefix}Observations) ob,
      apidbtuning.\${tblPrefix}panio io,
      apidbtuning.\${tblPrefix}metadata me,
