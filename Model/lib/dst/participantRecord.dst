@@ -287,6 +287,9 @@ prop=!hasObservationRecord
 name=participantRecordMicrosTable
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/participantRecord.xml
 prop=presenterId
+prop=hasSampleRecord
+prop=!hasSampleRecord
+
 
 >templateTextStart<
         <table name="Micros"
@@ -294,11 +297,27 @@ prop=presenterId
                queryRef="\${presenterId}ParticipantTables.Micros">
 	       <columnAttribute name="source_id" inReportMaker="false" internal="true"/>
                <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
-	       <columnAttribute name="sample_id" displayName="Sample ID"/>
+	       <columnAttribute name="sample_id" internal="\${hasSampleRecord}"/>
+	       <columnAttribute name="sam_link" internal="true"/>
+
+            <linkAttribute name="samLink" displayName="Sample ID" internal="\${!hasSampleRecord}" inReportMaker="false">
+                 <displayText>
+                    <![CDATA[
+                    \$\$sample_id\$\$
+                    ]]>
+                 </displayText>
+                 <url>\$\$sam_link\$\$</url>
+            </linkAttribute>
+
 	       <columnAttribute name="observation_type" displayName="Observation Type"/>
 	       <columnAttribute name="property" displayName="Stool Microbiology Test"/>
 	       <columnAttribute name="string_value" displayName="Result"/>
 	       <columnAttribute name="property_source_id" inReportMaker="false" internal="true"/>
+
+
+
+	   
+
 
         </table>
 >templateTextEnd<
@@ -973,6 +992,7 @@ prop=microSourceIdsForParticipantsMicrosQuote
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="sample_id"/>
+	    <column name="sam_link"/>
 	    <column name="observation_type"/>
             <column name="property"/>
             <column name="string_value"/>
@@ -988,8 +1008,7 @@ with microtest as(
     SELECT ONTOLOGY_TERM_NAME,ONTOLOGY_TERM_SOURCE_ID, CONNECT_BY_ISLEAF  as "isleaf"                                    
                FROM  APIDBTUNING.\${tblPrefix}ONTOLOGY                                                                                              WHERE CONNECT_BY_ISLEAF=1                                                                                                           start with ONTOLOGY_TERM_SOURCE_ID in (&&microSourceIds&&)                                                                         connect by prior ONTOLOGY_TERM_SOURCE_ID=PARENT_ONTOLOGY_TERM_SOURCE_ID  
 )
-SELECT pa.name as source_id, me.pan_name as sample_id, ob.BFO_0000015 as observation_type, me.property, me.string_value, me.property_source_id,'@PROJECT_ID@' as project_id                                                                                                
-FROM ( SELECT pan_id, name,BFO_0000015 FROM apidbtuning.\${tblPrefix}Observations) ob, apidbtuning.\${tblPrefix}Participants pa 
+SELECT pa.name as source_id, me.pan_name as sample_id, ob.BFO_0000015 as observation_type, me.property, me.string_value, me.property_source_id,'@PROJECT_ID@' as project_id, '@WEBAPP_BASE_URL@/record/\${presenterId}_sample/'||me.pan_name||'/@PROJECT_ID@' as sam_link FROM ( SELECT pan_id, name,BFO_0000015 FROM apidbtuning.\${tblPrefix}Observations) ob, apidbtuning.\${tblPrefix}Participants pa 
 , apidbtuning.\${tblPrefix}PANIO io                                                                                                , apidbtuning.\${tblPrefix}metadata me                                                                                             , apidbtuning.\${tblPrefix}PANIO io2
 , microtest
  WHERE ob.PAN_ID = io.OUTPUT_PAN_ID                                                                                                   AND io.INPUT_PAN_ID = pa.PAN_ID                                                                                                    AND me.pan_id = io2.output_pan_id                                                                                                  AND io2.INPUT_PAN_ID = ob.PAN_ID 
