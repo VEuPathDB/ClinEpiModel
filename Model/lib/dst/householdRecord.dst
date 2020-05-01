@@ -544,7 +544,7 @@ prop=presenterId
 >templateTextStart<
 
 	  <table name="LightTraps"
-                 displayName="Mosquitoe Light Trap Collections"
+                 displayName="Mosquito Light Trap Collections"
                  queryRef="${presenterId}HouseholdTables.LightTraps"
                  attributeMetaQueryRef="${presenterId}HouseholdTables.LightTrapColumnAttributes">
             <columnAttribute name="source_id"  inReportMaker="false" internal="true"/>
