@@ -471,6 +471,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("observationsByParticipantsQuery");
       }
 
+      // Samples->Participants xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      //if(hasParticipants && hasSampleRecord) {
+      //   injectTemplate("samplesByParticipantsQuestion");
+      //   injectTemplate("samplesByParticipantsQuery");
+      //}
+
 
       // Add categories for all of the model references
       for (ModelReference modelReference : getModelReferences()) {
@@ -512,6 +518,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.ObservationAttributesMeta","ObservationNode");
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ParticipantAttributesMeta","ParticipantNode");
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.HouseholdAttributesMeta","HouseholdNode");
+
+
+      injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.ParticipantAttributesMeta","ParticipantNode");
+      injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.HouseholdAttributesMeta","HouseholdNode");
+      injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.ObservationAttributesMeta","ObservationNode");
+      injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.SampleAttributesMeta","SampleNode");
+
 
       //inject the metadata queries and params
       injectMetadataQueries();
