@@ -128,6 +128,16 @@ prop=includeProjects
           </table>
 
 
+           <table name="ParticipantsDownload"
+                 displayName="Participants"
+                 queryRef="${presenterId}SampleTables.ParticipantsDownload"
+                 attributeMetaQueryRef="${presenterId}SampleTables.ParticipantsDownloadColumnAttributes">
+            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="Observation_Id"/>
+            <columnAttribute name="Participant_Id"/>
+          </table>
+
 
     </recordClass>
     </recordClassSet>
@@ -417,6 +427,45 @@ select ss.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation
 
 
 
+
+	<sqlQuery name="ParticipantsDownloadColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Participants')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+	 <sqlQuery name="ParticipantsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}SampleTables.ParticipantsDownloadColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="name"/>
+	    <column name="Observation_Id"/>
+	    <column name="Participant_Id"/>
+            <sql>
+            <![CDATA[
+	    select ss.name as source_id,'@PROJECT_ID@' as project_id, pa.name as Participant_Id, cv.name as Observation_Id, pa.*
+	    from apidbtuning.${tblPrefix}Participants pa,  apidbtuning.${tblPrefix}Observations cv
+              , apidbtuning.${tblPrefix}Samples ss
+              , apidbtuning.${tblPrefix}PANIO io,
+              apidbtuning.${tblPrefix}PANIO io2
+            where ss.PAN_ID = io.OUTPUT_PAN_ID
+            and io.INPUT_PAN_ID = cv.PAN_ID
+            and cv.PAN_ID = io2.OUTPUT_PAN_ID
+            and io2.INPUT_PAN_ID = pa.PAN_ID
+            ]]>
+
+            </sql>
+        </sqlQuery>
 
 
   </querySet>
