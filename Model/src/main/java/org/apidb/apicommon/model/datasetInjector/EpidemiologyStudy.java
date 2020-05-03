@@ -522,7 +522,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.ParticipantAttributesMeta","ParticipantNode");
       injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.HouseholdAttributesMeta","HouseholdNode");
-      //      injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.ObservationAttributesMeta","ObservationNode");
+      injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.ObservationAttributesMeta","ObservationNode");
       injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.SampleAttributesMeta","SampleNode");
 
 
@@ -939,7 +939,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  //addWdkReference(sampleRecordClass, "question", "SampleQuestions." + presenterId + "SamplesBySourceID", new String[]{"menu","webservice"}, CATEGORY_IRI, 0); 
 	  
 	  //addWdkReference(sampleRecordClass, "table", "ParticipantsDownload", new String[]{"download"}, CATEGORY_IRI, 0);
-	  //addWdkReference(sampleRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
+	  addWdkReference(sampleRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
 	  //addWdkReference(sampleRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0);
 	  
 	  
