@@ -138,6 +138,17 @@ prop=includeProjects
             <columnAttribute name="Participant_Id"/>
           </table>
 
+           <table name="HouseholdsDownload"
+                 displayName="Households"
+                 queryRef="${presenterId}SampleTables.HouseholdsDownload"
+                 attributeMetaQueryRef="${presenterId}SampleTables.HouseholdsDownloadColumnAttributes">
+            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="Observation_Id"/>
+            <columnAttribute name="Participant_Id"/>
+            <columnAttribute name="Household_Id"/>
+          </table>
+
 
     </recordClass>
     </recordClassSet>
@@ -466,6 +477,48 @@ select ss.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation
 
             </sql>
         </sqlQuery>
+
+
+
+	<sqlQuery name="HouseholdsDownloadColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Households')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+	 <sqlQuery name="HouseholdsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}SampleTables.HouseholdsDownloadColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+            <column name="name"/>
+	    <column name="Observation_Id"/>
+	    <column name="Participant_Id"/>
+	    <column name="Household_Id"/>
+            <sql>
+            <![CDATA[
+	   select ss.name as source_id,'@PROJECT_ID@' as project_id, hh.name as Household_Id, pa.name as Participant_Id, cv.name as Observation_Id, hh.*
+        from apidbtuning.${tblPrefix}Households hh,  apidbtuning.${tblPrefix}Participants pa,  apidbtuning.${tblPrefix}Observations cv, apidbtuning.${tblPrefix}Samples ss, apidbtuning.${tblPrefix}PANIO io, apidbtuning.${tblPrefix}PANIO io2, apidbtuning.${tblPrefix}PANIO io3
+	where ss.PAN_ID = io.OUTPUT_PAN_ID
+        and io.INPUT_PAN_ID = cv.PAN_ID
+        and cv.PAN_ID = io2.OUTPUT_PAN_ID
+        and io2.INPUT_PAN_ID = pa.PAN_ID
+        and pa.PAN_ID = io3.OUTPUT_PAN_ID
+        and io3.INPUT_PAN_ID = hh.PAN_ID
+            ]]>
+
+            </sql>
+        </sqlQuery>
+
 
 
   </querySet>
