@@ -208,6 +208,7 @@ select count(*) from apidbtuning.${tblPrefix}Households
                      and c.owner = 'APIDBTUNING'
                      and c.table_name = s.table_name
                      and upper(o.ontology_term_source_id) = c.column_name
+                     and o.ontology_term_source_id != 'EUPATH_0000094'
                      and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
                      ) meta
                      )order by display_name
