@@ -198,8 +198,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       //boolean hasObserTableInSQL = getPropValueAsBoolean("hasObserTableInSQL");
-      boolean hasMicros = getPropValueAsBoolean("hasMicros");
-      boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
+      boolean hasMicrosTableInPartiPage = getPropValueAsBoolean("hasMicrosTableInPartiPage");
+      boolean hasMicrosTableInObserPage = getPropValueAsBoolean("hasMicrosTableInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
@@ -302,7 +302,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantRecordMicrosTableQuery", "");
 	  setPropValue("microSourceIdsForParticipantsMicrosQuote","");
 	  
-          if(hasMicros) {
+          if(hasMicrosTableInPartiPage) {
 	    
 	  String microSourceIdsForParticipantsMicrosTable  = getPropValue("microSourceIdsForParticipantsMicrosTable");
           setPropValue("participantRecordMicrosTable", getTemplateInstanceText("participantRecordMicrosTable"));
@@ -385,7 +385,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("observationRecordMicrosTableQuery", "");
 	  setPropValue("microSourceIdsForObservationsMicrosQuote","");
 	  
-          if(hasMicrosInObserPage) {
+          if(hasMicrosTableInObserPage) {
 	    
 	  String microSourceIdsForObservationsMicrosTable  = getPropValue("microSourceIdsForObservationsMicrosTable");
           setPropValue("observationRecordMicrosTable", getTemplateInstanceText("observationRecordMicrosTable"));
@@ -471,11 +471,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("observationsByParticipantsQuery");
       }
 
-      // Samples->Participants xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-      //if(hasParticipants && hasSampleRecord) {
-      //   injectTemplate("samplesByParticipantsQuestion");
-      //   injectTemplate("samplesByParticipantsQuery");
-      //}
+      // Samples->Participants
+      if(hasParticipants && hasSampleRecord) {
+         injectTemplate("samplesByParticipantsQuestion");
+         injectTemplate("samplesByParticipantsQuery");
+      }
 
 
       // Add categories for all of the model references
@@ -794,8 +794,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasSamples = getPropValueAsBoolean("hasSamples");
       boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       //    boolean hasObserTableInSQL = getPropValueAsBoolean("ObserTableInSQL");
-      boolean hasMicros = getPropValueAsBoolean("hasMicros");
-      boolean hasMicrosInObserPage = getPropValueAsBoolean("hasMicrosInObserPage");
+      boolean hasMicrosTableInPartiPage = getPropValueAsBoolean("hasMicrosTableInPartiPage");
+      boolean hasMicrosTableInObserPage = getPropValueAsBoolean("hasMicrosTableInObserPage");
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
       //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
@@ -881,7 +881,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               addWdkReference(participantRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
           }
 	  
-	  if(hasMicros) {
+	  if(hasMicrosTableInPartiPage) {
               addWdkReference(participantRecordClass, "table", "Micros", new String[]{"record"}, CATEGORY_IRI, 0);
           }
 
@@ -924,7 +924,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
           }
 	  
-          if(hasMicrosInObserPage) {
+          if(hasMicrosTableInObserPage) {
               addWdkReference(observationRecordClass, "table", "MicrosInObser", new String[]{"record"}, CATEGORY_IRI, 0);
           }
       }
