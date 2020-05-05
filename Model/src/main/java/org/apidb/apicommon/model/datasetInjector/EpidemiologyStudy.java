@@ -195,7 +195,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
-      boolean hasSamples = getPropValueAsBoolean("hasSamples");
+      boolean hasSampleDataCollected = getPropValueAsBoolean("hasSampleDataCollected");
       boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       //boolean hasObserTableInSQL = getPropValueAsBoolean("hasObserTableInSQL");
       boolean hasMicrosTableInPartiPage = getPropValueAsBoolean("hasMicrosTableInPartiPage");
@@ -286,7 +286,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantRecordSamplesMetaTableQuery", "");
           setPropValue("participantRecordSamplesTableQuery", "");
  
-          if(hasSamples) {
+          if(hasSampleDataCollected) {
               String sampleSourceIdsForParticipantsSamplesTable  = getPropValue("sampleSourceIdsForParticipantsSamplesTable");
               setPropValue("sampleSourceIdsForParticipantsSamplesTableSubquery", propertySourceIdSubquery(sampleSourceIdsForParticipantsSamplesTable));
 
@@ -365,7 +365,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("observationRecordSamplesMetaTableQuery", "");
           setPropValue("observationRecordSamplesTableQuery", "");
  
-          if(hasSamples) {
+          if(hasSampleDataCollected) {
            
 	      String sampleSourceIdsForParticipantsSamplesTable  = getPropValue("sampleSourceIdsForParticipantsSamplesTable");
               //System.err.println("sampleSourceIdsForParticipantsSamplesTable="+sampleSourceIdsForParticipantsSamplesTable);
@@ -791,7 +791,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
-      boolean hasSamples = getPropValueAsBoolean("hasSamples");
+      boolean hasSampleDataCollected = getPropValueAsBoolean("hasSampleDataCollected");
       boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       //    boolean hasObserTableInSQL = getPropValueAsBoolean("ObserTableInSQL");
       boolean hasMicrosTableInPartiPage = getPropValueAsBoolean("hasMicrosTableInPartiPage");
@@ -877,7 +877,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  addWdkReference(participantRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
 	  }
 
-          if(hasSamples) {
+          if(hasSampleDataCollected) {
               addWdkReference(participantRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
           }
 	  
@@ -920,7 +920,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	      addWdkReference(observationRecordClass, "table", "HouseholdsDownload", new String[]{"download"}, CATEGORY_IRI,0);
           }
 	  
-	  if(hasSamples) {
+	  if(hasSampleDataCollected) {
               addWdkReference(observationRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
           }
 	  
