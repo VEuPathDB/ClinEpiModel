@@ -287,8 +287,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("participantRecordSamplesTableQuery", "");
  
           if(hasSampleDataCollected) {
-              String sampleSourceIdsForParticipantsSamplesTable  = getPropValue("sampleSourceIdsForParticipantsSamplesTable");
-              setPropValue("sampleSourceIdsForParticipantsSamplesTableSubquery", propertySourceIdSubquery(sampleSourceIdsForParticipantsSamplesTable));
+              String sampleSourceIdsForSampleTable  = getPropValue("sampleSourceIdsForSampleTable");
+              setPropValue("sampleSourceIdsForSampleTableSubquery", propertySourceIdSubquery(sampleSourceIdsForSampleTable));
 
           setPropValue("participantRecordSamplesTable", getTemplateInstanceText("participantRecordSamplesTable"));
           setPropValue("participantRecordSamplesMetaTableQuery", getTemplateInstanceText("participantRecordSamplesMetaTableQuery"));
@@ -367,10 +367,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
  
           if(hasSampleDataCollected) {
            
-	      String sampleSourceIdsForParticipantsSamplesTable  = getPropValue("sampleSourceIdsForParticipantsSamplesTable");
-              //System.err.println("sampleSourceIdsForParticipantsSamplesTable="+sampleSourceIdsForParticipantsSamplesTable);
+	      String sampleSourceIdsForSampleTable  = getPropValue("sampleSourceIdsForSampleTable");
+              //System.err.println("sampleSourceIdsForSampleTable="+sampleSourceIdsForSampleTable);
 
-	      setPropValue("sampleSourceIdsForParticipantsSamplesTableSubquery", propertySourceIdSubquery(sampleSourceIdsForParticipantsSamplesTable));
+	      setPropValue("sampleSourceIdsForSampleTableSubquery", propertySourceIdSubquery(sampleSourceIdsForSampleTable));
 
 	      setPropValue("observationRecordSamplesTable", getTemplateInstanceText("observationRecordSamplesTable"));
 	      setPropValue("observationRecordSamplesMetaTableQuery", getTemplateInstanceText("observationRecordSamplesMetaTableQuery"));

@@ -647,8 +647,8 @@ select ob.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_
 [templateStart]
 name=observationRecordSamplesTableQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
-prop=sampleSourceIdsForParticipantsSamplesTable
-prop=sampleSourceIdsToOrderParticipantsSamplesTable
+prop=sampleSourceIdsForSampleTable
+prop=sampleSourceIdsToOrderSampleTable
 
 prop=tblPrefix
 prop=paramSuffix
@@ -663,8 +663,8 @@ prop=presenterId
             <column name="sample_id"/>
 	    <column name="sam_link"/>
             
-	    <sqlParamValue name="sampleSourceIds"><![CDATA[\${sampleSourceIdsForParticipantsSamplesTable}]]></sqlParamValue>
-            <sqlParamValue name="orderBy"><![CDATA[\${sampleSourceIdsToOrderParticipantsSamplesTable}]]></sqlParamValue>
+	    <sqlParamValue name="sampleSourceIds"><![CDATA[\${sampleSourceIdsForSampleTable}]]></sqlParamValue>
+            <sqlParamValue name="orderBy"><![CDATA[\${sampleSourceIdsToOrderSampleTable}]]></sqlParamValue>
 
             <sql>
 
@@ -689,7 +689,7 @@ select cv.name as source_id,
 [templateStart]
 name=observationRecordSamplesMetaTableQuery
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/observationRecord.xml
-prop=sampleSourceIdsForParticipantsSamplesTableSubquery
+prop=sampleSourceIdsForSampleTableSubquery
 prop=tblPrefix
 prop=paramSuffix
 
@@ -702,7 +702,7 @@ prop=paramSuffix
             <![CDATA[
                      select pt.property_source_id as name
                           , pt.property as display_name
-                     from apidbtuning.\${tblPrefix}PropertyType pt, \${sampleSourceIdsForParticipantsSamplesTableSubquery} ids
+                     from apidbtuning.\${tblPrefix}PropertyType pt, \${sampleSourceIdsForSampleTableSubquery} ids
                      where pt.property_source_id = ids.property_source_id
                      order by ids.order_num
             ]]>
