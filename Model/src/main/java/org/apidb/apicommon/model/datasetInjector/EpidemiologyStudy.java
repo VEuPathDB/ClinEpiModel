@@ -304,9 +304,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  
           if(hasMicrosTableInPartiPage) {
 	    
-	  String microSourceIdsForParticipantsMicrosTable  = getPropValue("microSourceIdsForParticipantsMicrosTable");
+	  String microSourceIdsForMicroTable  = getPropValue("microSourceIdsForMicroTable");
           setPropValue("participantRecordMicrosTable", getTemplateInstanceText("participantRecordMicrosTable"));
-	  setPropValue("microSourceIdsForParticipantsMicrosQuote", addQuotes(microSourceIdsForParticipantsMicrosTable));
+	  setPropValue("microSourceIdsForParticipantsMicrosQuote", addQuotes(microSourceIdsForMicroTable));
 	  setPropValue("participantRecordMicrosTableQuery", getTemplateInstanceText("participantRecordMicrosTableQuery"));
  	  }
 
@@ -387,9 +387,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  
           if(hasMicrosTableInObserPage) {
 	    
-	  String microSourceIdsForObservationsMicrosTable  = getPropValue("microSourceIdsForObservationsMicrosTable");
+	  String microSourceIdsForMicroTable  = getPropValue("microSourceIdsForMicroTable");
           setPropValue("observationRecordMicrosTable", getTemplateInstanceText("observationRecordMicrosTable"));
-	  setPropValue("microSourceIdsForObservationsMicrosQuote", addQuotes(microSourceIdsForObservationsMicrosTable));
+	  setPropValue("microSourceIdsForObservationsMicrosQuote", addQuotes(microSourceIdsForMicroTable));
 	  setPropValue("observationRecordMicrosTableQuery", getTemplateInstanceText("observationRecordMicrosTableQuery"));
  
 	  }
