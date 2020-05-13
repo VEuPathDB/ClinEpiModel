@@ -17,6 +17,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
     protected abstract Map<String,String[]> householdQuestionTemplateNamesToScopes();
     protected abstract Map<String,String[]> participantQuestionTemplateNamesToScopes();
     protected abstract Map<String,String[]> observationQuestionTemplateNamesToScopes();
+    protected abstract Map<String,String[]> sampleQuestionTemplateNamesToScopes();
 
     protected abstract String participantGraphAttributesTemplateName();  
     protected abstract Map<String,String[]> participantGraphAttributesToScopes();
@@ -195,6 +196,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
+      boolean hasSamples = getPropValueAsBoolean("hasSampleRecord");
       boolean hasSampleDataCollected = getPropValueAsBoolean("hasSampleDataCollected");
       boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       //boolean hasObserTableInSQL = getPropValueAsBoolean("hasObserTableInSQL");
@@ -451,6 +453,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("sampleRecordAttributeQueries");
           injectTemplate("sampleRecordTableQueries");
 	  
+          injectTemplate("sampleResultParam");
+
+          for(String key : sampleQuestionTemplateNamesToScopes().keySet()) {
+              setPropValue("sampleQuestionName", key);
+              setPropValue("sampleQuestionFull", getTemplateInstanceText(key));
+              injectTemplate("samplesByDataset");
+          }
+	  
       }
 
       // Household->Participant and Participant->Household
@@ -471,10 +481,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("observationsByParticipantsQuery");
       }
 
-      // Samples->Participants
-      if(hasParticipants && hasSampleRecord) {
-         injectTemplate("samplesByParticipantsQuestion");
-         injectTemplate("samplesByParticipantsQuery");
+      // Samples->Observations and Observations->Samples
+      if(hasObservations && hasSampleRecord) {
+         injectTemplate("samplesByObservationsQuestion");
+         injectTemplate("samplesByObservationsQuery");
+         injectTemplate("observationsBySamplesQuestion");
+         injectTemplate("observationsBySamplesQuery");
       }
 
 
@@ -553,11 +565,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
       boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
       boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
+      boolean hasSampleQuestion = getPropValueAsBoolean("hasSampleQuestion");
       // boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
-      boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
+      boolean hasSamples = getPropValueAsBoolean("hasSampleRecord");
       String regionFilterExcludedIdsQuoted = addQuotes(getPropValue("regionFilterExcludedIds"));
       String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
@@ -678,7 +691,34 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       }
 
-      //and households
+      //Samples
+      if(hasSampleQuestion && hasSamples){
+          //Inject the metadata query
+          String queryBaseTemplate = getPropValue("queryBaseTemplate");
+          // always use default template for samples
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleQuery" + firstWizardStep));
+          injectTemplate("sampleMetadataQuery");
+          
+          //Inject the filter params .... note these use the ontology queries from particiants filters
+          boolean injectParams = getPropValueAsBoolean("injectParams");
+          String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
+          //always use default
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParams" + firstWizardStep));
+          if(injectParams){
+              injectTemplate("sampleFilterParams");
+          }
+
+          //and the filter param queries
+          String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
+          //only default
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParamQueries" + firstWizardStep));
+          if(injectParams){
+              injectTemplate("sampleFilterParamQueries");
+          }
+
+      }
+
+      //Households
       if(hasHouseholdQuestion && hasHouseholds){
           //Inject the metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
@@ -728,11 +768,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
         boolean hasHouseholdQuestion = getPropValueAsBoolean("hasHouseholdQuestion");
         boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
         boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
+        boolean hasSampleQuestion = getPropValueAsBoolean("hasSampleQuestion");
 	//boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
         boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
         boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
         boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
-        boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
+        boolean hasSamples = getPropValueAsBoolean("hasSampleRecord");
         String cardQuestions = "";
         if(hasParticipantQuestion && hasParticipants){
             for (Map.Entry<String, String[]> entry : participantQuestionTemplateNamesToScopes().entrySet()) {
@@ -758,9 +799,19 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
             for (Map.Entry<String, String[]> entry : householdQuestionTemplateNamesToScopes().entrySet()) {
                 String questionName = entry.getKey();
                 if(questionName.startsWith("HouseholdsByMetadata")){
-                    cardQuestions = cardQuestions + (hasParticipantQuestion && hasObservationQuestion ? ", " : "") + "\"households\": \"HouseholdQuestions." + presenterId + "HouseholdsByMetadata\"";
+                    cardQuestions = cardQuestions + (hasParticipantQuestion || hasObservationQuestion ? ", " : "") + "\"households\": \"HouseholdQuestions." + presenterId + "HouseholdsByMetadata\"";
                 }else{
-                    cardQuestions = cardQuestions + (hasParticipantQuestion && hasObservationQuestion ? ", " : "") + "\"households\": \"HouseholdQuestions." + questionName + "\"";
+                    cardQuestions = cardQuestions + (hasParticipantQuestion || hasObservationQuestion ? ", " : "") + "\"households\": \"HouseholdQuestions." + questionName + "\"";
+                }
+            }
+        }
+        if(hasSampleQuestion && hasSamples){
+            for (Map.Entry<String, String[]> entry : sampleQuestionTemplateNamesToScopes().entrySet()) {
+                String questionName = entry.getKey();
+                if(questionName.startsWith("SamplesByMetadata")){
+                    cardQuestions = cardQuestions + (hasParticipantQuestion || hasObservationQuestion || hasHouseholdQuestion ? ", " : "") + "\"samples\": \"SampleQuestions." + presenterId + "SamplesByMetadata\"";
+                }else{
+                        cardQuestions = cardQuestions + (hasParticipantQuestion || hasObservationQuestion || hasHouseholdQuestion ? ", " : "") + "\"observations\": \"ClinicalVisitQuestions." + questionName + "\"";
                 }
             }
         }
@@ -956,6 +1007,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsByObservations", new String[]{"webservice"}, CATEGORY_IRI, 0); 
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationsByParticipants", new String[]{"webservice"}, CATEGORY_IRI, 0); 
       }
+
+      if(hasParticipants && hasSampleRecord) {
+          addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySamples", new String[]{"webservice"}, CATEGORY_IRI, 0); 
+          addWdkReference(observationRecordClass, "question", "SampleQuestions." + presenterId + "SamplesByParticipants", new String[]{"webservice"}, CATEGORY_IRI, 0); 
+      }
   }
 
 
@@ -978,7 +1034,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"observationAttributesList", ""},
                                  {"observationRecordAttributesList", ""},
                                  {"observationRecordOverview", ""},
-
 
                                  {"sampleAttributesList", ""},
                                  {"sampleRecordAttributesList", ""},
@@ -1020,6 +1075,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"hasParticipantQuestion", ""},
                                  {"hasHouseholdQuestion", ""},
                                  {"hasObservationQuestion", ""},
+                                 {"hasSampleQuestion", ""},
                                  {"firstWizardStep", ""},
                                  {"hasStudyArmParameter", ""},
                                  {"hasHouseholdObservations", ""},

@@ -1,0 +1,13 @@
+<wdkModel>
+
+  <questionSet name="SampleQuestions" displayName="Search for Samples">
+
+    <!-- TEMPLATE_ANCHOR sampleSourceIdQuestion -->
+
+    <!-- TEMPLATE_ANCHOR samplesByObservationsQuestion -->
+
+    <!-- TEMPLATE_ANCHOR samplesByDataset -->
+
+  </questionSet>
+
+</wdkModel>

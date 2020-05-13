@@ -59,9 +59,9 @@
 
     <!-- Sample record -->
     <import file="model/records/sampleRecord.xml"/>
-<!--    <import file="model/questions/queries/sampleQueries.xml"/> -->
-<!--    <import file="model/questions/sampleQuestions.xml"/> -->
-<!--    <import file="model/questions/params/sampleParams.xml"/> -->
+    <import file="model/questions/queries/sampleQueries.xml"/>
+    <import file="model/questions/sampleQuestions.xml"/>
+    <import file="model/questions/params/sampleParams.xml"/>
 
   <defaultColumnToolBundle ref="standard" />
 

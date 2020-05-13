@@ -1,0 +1,24 @@
+<wdkModel>
+
+  <!-- notes
+
+  -->
+
+  <querySet name="SampleId" queryType="id" isCacheable="false" excludeProjects="TrichDB">
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!-- Source id  -->
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+    <!-- TEMPLATE_ANCHOR sampleSourceIdQuery -->
+
+    <!-- TEMPLATE_ANCHOR sampleMetadataQuery -->
+
+     <!-- Transform -->
+     
+      <!-- TEMPLATE_ANCHOR samplesByObservationsQuery -->
+          
+  </querySet>
+</wdkModel>
+

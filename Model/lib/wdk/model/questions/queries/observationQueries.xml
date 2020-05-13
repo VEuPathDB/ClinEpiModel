@@ -19,6 +19,8 @@
      
       <!-- TEMPLATE_ANCHOR observationsByParticipantsQuery -->
           
+      <!-- TEMPLATE_ANCHOR observationsBySamplesQuery -->
+          
   </querySet>
 </wdkModel>
 

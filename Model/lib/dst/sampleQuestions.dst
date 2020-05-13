@@ -1,0 +1,56 @@
+[templateStart]
+name=samplesByDataset
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/sampleQuestions.xml
+prop=sampleQuestionFull
+>templateTextStart<
+${sampleQuestionFull}
+>templateTextEnd<
+
+[templateStart]
+name=SamplesByMetadata
+anchorFile=ClinEpiModel/Model/lib/dst/sampleQuestions.dst
+prop=includeProjects
+prop=presenterId
+prop=sampleQuestionName
+prop=sampleAttributesListFull
+prop=tblPrefix
+prop=paramSuffix
+prop=studyAbbreviation
+prop=summary
+>templateTextStart<
+    <question name="${presenterId}SamplesByMetadata" newBuild="1" includeProjects="${includeProjects}"
+              searchCategory="Sample"
+              displayName="Select a Set of Samples (${studyAbbreviation})"
+              shortDisplayName="${studyAbbreviation}"
+              queryRef="SampleId.SamplesByMetadata_${paramSuffix}" 
+              recordClassRef="${presenterId}SampleRecordClasses.${presenterId}SampleRecordClass" >
+
+        ${sampleAttributesListFull}
+
+        <dynamicAttributes>
+	</dynamicAttributes>
+          
+
+        <summary>
+            <![CDATA[ ${summary}
+            ]]>
+        </summary>
+         <description>
+            <![CDATA[
+            In this search, you will build a set of Samples.  You can use the wealth of data in this study to find samples with clinically interesting characteristics.
+            More here...
+            ]]>
+</description>
+
+        <propertyList name="organism">
+           <value>H. sapien</value>
+        </propertyList>
+        <propertyList name="websiteProperties">
+          <value>useWizard</value>
+          <value>hideOperation</value>
+          <value>hideTitle</value>
+          <value>hideAttrDescr</value>
+        </propertyList>
+
+    </question>
+>templateTextEnd<

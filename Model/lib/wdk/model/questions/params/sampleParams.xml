@@ -1,0 +1,23 @@
+<wdkModel>
+
+  <paramSet name="sampleParams">
+    
+    <!-- TEMPLATE_ANCHOR sampleSourceIdParam -->
+
+    <!-- TEMPLATE_ANCHOR sampleFilterParams -->
+
+    <!-- TEMPLATE_ANCHOR sampleResultParam -->
+
+  </paramSet>
+
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+    <!--  Vocab queries-->  
+    <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+ <querySet name="SampleVQ" queryType="vocab" isCacheable="true">
+
+    <!-- TEMPLATE_ANCHOR sampleFilterParamQueries -->
+
+  </querySet>    
+
+</wdkModel>
