@@ -198,14 +198,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSamples = getPropValueAsBoolean("hasSampleRecord");
       boolean hasSampleDataCollected = getPropValueAsBoolean("hasSampleDataCollected");
-      boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
       //boolean hasObserTableInSQL = getPropValueAsBoolean("hasObserTableInSQL");
       boolean hasMicrosTableInPartiPage = getPropValueAsBoolean("hasMicrosTableInPartiPage");
       boolean hasMicrosTableInObserPage = getPropValueAsBoolean("hasMicrosTableInObserPage");
       //boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
 
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
-      setPropValue("!hasSampleRecord", Boolean.toString(!hasSampleRecord));
+      setPropValue("!hasSampleRecord", Boolean.toString(!hasSamples));
 
       // TODO: how to handle optional tables??  probably just do these in a subclass?
 
@@ -433,7 +432,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 
 
-      if(hasSampleRecord){
+      if(hasSamples){
 	  
 	  String sampleAttList = getPropValue("sampleAttributesList");
           if(sampleAttList != null && !sampleAttList.equals("")) {
@@ -482,13 +481,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       }
 
       // Samples->Observations and Observations->Samples
-      if(hasObservations && hasSampleRecord) {
+      if(hasObservations && hasSamples) {
          injectTemplate("samplesByObservationsQuestion");
          injectTemplate("samplesByObservationsQuery");
          injectTemplate("observationsBySamplesQuestion");
          injectTemplate("observationsBySamplesQuery");
       }
-
 
       // Add categories for all of the model references
       for (ModelReference modelReference : getModelReferences()) {
@@ -843,7 +841,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
       boolean hasObservations = getPropValueAsBoolean("hasObservationRecord");
       boolean hasSampleDataCollected = getPropValueAsBoolean("hasSampleDataCollected");
-      boolean hasSampleRecord = getPropValueAsBoolean("hasSampleRecord");
+      boolean hasSamples = getPropValueAsBoolean("hasSampleRecord");
       //    boolean hasObserTableInSQL = getPropValueAsBoolean("ObserTableInSQL");
       boolean hasMicrosTableInPartiPage = getPropValueAsBoolean("hasMicrosTableInPartiPage");
       boolean hasMicrosTableInObserPage = getPropValueAsBoolean("hasMicrosTableInObserPage");
@@ -982,7 +980,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 
 
-      if(hasSampleRecord){
+      if(hasSamples){
 	  
 	  addWdkReference(sampleRecordClass, "table", "Characteristics", new String[]{"record"}, CATEGORY_IRI, 0);
 	  addWdkReference(sampleRecordClass, "attribute", "record_overview", new String[]{"record-internal"}, CATEGORY_IRI, 0);
@@ -1008,7 +1006,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           addWdkReference(observationRecordClass, "question", "ObservationQuestions." + presenterId + "ObservationsByParticipants", new String[]{"webservice"}, CATEGORY_IRI, 0); 
       }
 
-      if(hasParticipants && hasSampleRecord) {
+      if(hasParticipants && hasSamples) {
           addWdkReference(participantRecordClass, "question", "ParticipantQuestions." + presenterId + "ParticipantsBySamples", new String[]{"webservice"}, CATEGORY_IRI, 0); 
           addWdkReference(observationRecordClass, "question", "SampleQuestions." + presenterId + "SamplesByParticipants", new String[]{"webservice"}, CATEGORY_IRI, 0); 
       }
