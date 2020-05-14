@@ -488,6 +488,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
          injectTemplate("observationsBySamplesQuery");
       }
 
+
+      // Participants->Samples
+      if(hasParticipants && hasSamples) {
+         injectTemplate("samplesByParticipantsQuestion");
+         injectTemplate("samplesByParticipantsQuery");
+      }
+
       // Add categories for all of the model references
       for (ModelReference modelReference : getModelReferences()) {
           String categoryIri = modelReference.getCategoryIri();

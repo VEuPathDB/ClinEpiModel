@@ -18,6 +18,8 @@
      <!-- Transform -->
      
       <!-- TEMPLATE_ANCHOR samplesByObservationsQuery -->
+     
+      <!-- TEMPLATE_ANCHOR samplesByParticipantsQuery -->
           
   </querySet>
 </wdkModel>

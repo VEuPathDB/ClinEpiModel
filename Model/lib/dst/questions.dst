@@ -839,6 +839,90 @@ prop=includeProjects
 >templateTextEnd<
 
 
+
+
+[templateStart] 
+name=samplesByParticipantsQuestion
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/sampleQuestions.xml
+prop=datasetName
+prop=tblPrefix
+prop=paramSuffix
+prop=presenterId
+prop=includeProjects
+>templateTextStart<
+      <question name="${presenterId}SamplesByParticipants"
+              displayName="Transform to Samples"
+              shortDisplayName="participants->samples"
+              queryRef="SampleId.${presenterId}SamplesByParticipantIds" 
+              recordClassRef="${presenterId}SampleRecordClasses.${presenterId}SampleRecordClass"
+              noSummaryOnSingleRecord="true"
+              includeProjects="${includeProjects}">
+	  
+	  <attributesList
+	  summary="participant"
+	  sorting="participant DESC"/>
+	  
+	  <dynamicAttributes>
+		<columnAttribute name="participant" displayName="Pariticpants Transformed" help="Participants samples are associated with" align="center">
+      	  	<reporter name="histogram" displayName="Histogram" scopes=""
+          	implementation="org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter">
+          	<description>Display the histogram of the values of this attribute</description>
+      	  	</reporter>
+		</columnAttribute>
+	</dynamicAttributes>
+      
+      <summary>
+	Find samples by participant ID's
+      </summary>
+      <description>
+      Find samples by participant ID's
+      </description>
+
+  </question>
+>templateTextEnd<
+
+
+[templateStart] 
+name=samplesByParticipantsQuery
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/queries/sampleQueries.xml
+prop=datasetName
+prop=tblPrefix
+prop=paramSuffix
+prop=presenterId
+prop=includeProjects
+
+
+>templateTextStart<
+     <sqlQuery name="${presenterId}SamplesByParticipantIds" doNotTest="true" displayName="ID"
+               isCacheable="true" includeProjects="${includeProjects}">
+       <paramRef ref="participantParams.${presenterId}participant_result"/>
+       <column name="project_id"/>
+       <column name="source_id"/>     
+       <column name="participant"/>
+       <column name="wdk_weight"/>
+
+        <sql>
+          <![CDATA[
+ SELECT   ss.name as source_id , '@PROJECT_ID@' as project_id, pa.name as participant, wdk_weight
+ FROM ($$${presenterId}participant_result$$) source_set, ApidbTuning.${tblPrefix}PANIO io, ApidbTuning.${tblPrefix}PANIO io2, 
+      ApidbTuning.${tblPrefix}Sampless ss, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Participants pa
+              WHERE source_set.source_id = pa.name 
+              AND pa.pan_id = io.input_pan_id
+              AND io.output_pan_id = cva.pan_id
+              AND cva.pan_id = io2.input_pan_id
+              AND io2.output_pan_id = ss.pan_id
+               ]]>   
+       </sql>
+    </sqlQuery>                
+>templateTextEnd<
+
+
+
+
+
+
+
+
 [templateStart] 
 name=lightTrapSourceIdQuestion
 anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/lightTrapQuestions.xml
