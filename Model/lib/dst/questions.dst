@@ -771,7 +771,7 @@ prop=includeProjects
 
 [templateStart] 
 name=observationsBySamplesQuestion
-anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/sampleQuestions.xml
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/observationQuestions.xml
 prop=datasetName
 prop=tblPrefix
 prop=paramSuffix
@@ -822,12 +822,12 @@ prop=includeProjects
        <paramRef ref="sampleParams.${presenterId}sample_result"/>
        <column name="project_id"/>
        <column name="source_id"/>     
-       <column name="sample"/>
+       <column name="samples"/>
        <column name="wdk_weight"/>
 
         <sql>
           <![CDATA[
- SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, listagg (sa.name, ',') WITHIN GROUP (order by sa.name ) as samples, wdk_weight
+ SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, listagg (sa.name, ',') WITHIN GROUP (order by sa.name ) as samples, avg(wdk_weight) as wdk_weight
               FROM ($$${presenterId}sample_result$$) source_set, ApidbTuning.${tblPrefix}ObsSampleIO io, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Samples sa
               WHERE source_set.source_id = sa.name 
               AND sa.pan_id = io.sample_id
