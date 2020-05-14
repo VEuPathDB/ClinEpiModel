@@ -395,11 +395,12 @@ where \$\$households_${paramSuffix}.filters_present\$\$ = 1
 and p.household_id in (\$\$households_${paramSuffix}\$\$)
 and hp.participant_id = p.participant_id
 UNION ALL
-select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
+select p.participant_id as internal, ps.sample_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp, ApidbTuning.${tblPrefix}ObsSampleIO ps
 where \$\$households_${paramSuffix}.filters_present\$\$ = 0
 and p.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
 and hp.participant_id = p.participant_id
+and ps.observation_id = hp.observation_id
           ]]>
     </sql>
     </sqlQuery>

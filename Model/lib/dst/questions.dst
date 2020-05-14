@@ -620,9 +620,9 @@ prop=includeProjects
             <![CDATA[
 SELECT   sa.name as source_id , '@PROJECT_ID@' as project_id, oa.name as observation, wdk_weight
               FROM ($$${presenterId}clinical_visit_result$$) source_set, ApidbTuning.${tblPrefix}ObsSampleIO io, ApidbTuning.${tblPrefix}Observations oa, ApidbTuning.${tblPrefix}Samples sa
-              WHERE source_set.source_id = sa.name 
-              AND sa.pan_id = io.sample_id
-              AND io.observation_id = oa.pan_id
+              WHERE source_set.source_id = oa.name 
+              AND oa.pan_id = io.observation_id
+              AND io.sample_id = sa.pan_id
              ]]>
         </sql>
     </sqlQuery>
