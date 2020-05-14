@@ -19,7 +19,7 @@ prop=includeProjects
                              urlName="${presenterId}_sample"
                              shortDisplayName="Sample"
                              displayName="${studyAbbreviation} Sample"
-                             iconName="fa fa-stethoscope"
+                             iconName="ebrc-sampleDetails_light"
                              allRecordsQueryRef="${presenterId}SampleAttributes.AllSamples"
                              includeProjects="${includeProjects}">
 
@@ -576,3 +576,4 @@ select ss.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation
   </querySet>
 
 >templateTextEnd<
+
