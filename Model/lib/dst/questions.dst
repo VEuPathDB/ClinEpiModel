@@ -788,13 +788,15 @@ prop=includeProjects
 
 
       <attributesList
-	 summary="samples"
-	 sorting="samples DESC"
+	 summary="samples, sample_ct"
+	 sorting="sample_ct DESC"
 	
 	 />
 
       <dynamicAttributes>
-	<columnAttribute name="samples" displayName="Samples Transformed" help="Clinical observations based on samples collected" align="center">
+	<columnAttribute name="samples" displayName="Samples Transformed" help="Input samples matching this observation" align="center">
+	  </columnAttribute>
+	<columnAttribute name="sample_ct" displayName="# Samples Transformed" help="Number of input samples for this observation" align="center">
 	  </columnAttribute>
 	</dynamicAttributes>
       
@@ -823,11 +825,13 @@ prop=includeProjects
        <column name="project_id"/>
        <column name="source_id"/>     
        <column name="samples"/>
+       <column name="sample_ct"/>
        <column name="wdk_weight"/>
 
         <sql>
           <![CDATA[
- SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, listagg (sa.name, ',') WITHIN GROUP (order by sa.name ) as samples, avg(wdk_weight) as wdk_weight
+ SELECT   cva.name as source_id , '@PROJECT_ID@' as project_id, listagg (sa.name, ', ') WITHIN GROUP (order by sa.name ) as samples,
+          count(*) as sample_ct, avg(wdk_weight) as wdk_weight
               FROM ($$${presenterId}sample_result$$) source_set, ApidbTuning.${tblPrefix}ObsSampleIO io, ApidbTuning.${tblPrefix}Observations cva, ApidbTuning.${tblPrefix}Samples sa
               WHERE source_set.source_id = sa.name 
               AND sa.pan_id = io.sample_id
