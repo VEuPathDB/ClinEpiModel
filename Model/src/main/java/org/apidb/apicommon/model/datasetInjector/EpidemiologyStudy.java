@@ -180,6 +180,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       }
       setPropValue("observationMultiFilterIdsQuoted", observationMultiFilterIdsQuoted);
       
+      String sampleMultiFilterIdsQuoted = addQuotes(getPropValue("sampleMultiFilterIds"));
+      if(sampleMultiFilterIdsQuoted == null || sampleMultiFilterIdsQuoted.equals("''")) {
+          sampleMultiFilterIdsQuoted  = "'NA'";
+      }
+      setPropValue("sampleMultiFilterIdsQuoted", sampleMultiFilterIdsQuoted);
+
 
       String localhost = modelProp.getProperty("LOCALHOST") + modelProp.getProperty("LEGACY_WEBAPP_BASE_URL");
 
@@ -435,6 +441,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       if(hasSamples){
 	  
 	  String sampleAttList = getPropValue("sampleAttributesList");
+          String sampleSourceIdsExcludedFromSampleAttributes = getPropValue("sampleSourceIdsExcludedFromSampleAttributes");
+
           if(sampleAttList != null && !sampleAttList.equals("")) {
 	      setPropValue("sampleAttributesListFull","<attributesList summary=\"" + sampleAttList + "\" />");
 	  }else{
@@ -447,6 +455,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	      setPropValue("sampleRecordAttributesListFull","");
 	  }
 	  
+
+          if(sampleSourceIdsExcludedFromSampleAttributes == null || sampleSourceIdsExcludedFromSampleAttributes.equals("") ){
+            setPropValue("sampleSourceIdsExcludedFromSampleAttributesQuote", addQuotes("none"));          
+          } else {
+            setPropValue("sampleSourceIdsExcludedFromSampleAttributesQuote", addQuotes(sampleSourceIdsExcludedFromSampleAttributes));
+          }
+
 	  
 	  injectTemplate("sampleRecord");
           injectTemplate("sampleRecordAttributeQueries");
@@ -1043,6 +1058,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"sampleAttributesList", ""},
                                  {"sampleRecordAttributesList", ""},
                                  {"sampleRecordOverview", ""},
+                                 {"sampleSourceIdsExcludedFromSampleAttributes", ""},
 
                                  {"participantAttributesList", ""},
                                  {"participantRecordAttributesList", ""},
@@ -1075,6 +1091,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"participantFilterExcludedIds", ""},
                                  {"observationMultiFilterIds", ""},
                                  {"observationFilterExcludedIds", ""},
+                                 {"sampleMultiFilterIds", ""},
                                  {"studyAbbreviation", ""},
                                  {"studyType", ""},
                                  {"hasParticipantQuestion", ""},
