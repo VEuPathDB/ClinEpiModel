@@ -70,7 +70,7 @@ prop=includeProjects
 
 
 
-      <reporter name="tableTabular" displayName="Tab- or comma-delimited (openable in Excel)- Households and Participants and Observations" scopes="results"
+      <reporter name="tableTabular" displayName="Tab- or comma-delimited (openable in Excel)- Household Observations" scopes="results"
                 implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
               <!-- huge page size to force no paging  -->
               <property name="page_size">1000000</property>
@@ -119,35 +119,12 @@ prop=includeProjects
 
 
 
-         <table name="ObservationsDownload"
-                 displayName="Observations"
-                 queryRef="${presenterId}SampleTables.ObservationsDownload"
-                 attributeMetaQueryRef="${presenterId}SampleTables.ObservationsDownloadColumnAttributes">
+           <table name="HouseholdObservationDownload"
+                 displayName="Household Observations"
+                 queryRef="${presenterId}SampleTables.HouseholdObservationDownload"
+                 attributeMetaQueryRef="${presenterId}SampleTables.HouseholdObservationDownloadColumnAttributes">
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
-            <columnAttribute name="name" internal="true" inReportMaker="false"/>
-	    <columnAttribute name="Observation_Id"/>
-          </table>
-
-
-           <table name="ParticipantsDownload"
-                 displayName="Participants"
-                 queryRef="${presenterId}SampleTables.ParticipantsDownload"
-                 attributeMetaQueryRef="${presenterId}SampleTables.ParticipantsDownloadColumnAttributes">
-            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
-            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
-            <columnAttribute name="Observation_Id"/>
-            <columnAttribute name="Participant_Id"/>
-          </table>
-
-           <table name="HouseholdsDownload"
-                 displayName="Households"
-                 queryRef="${presenterId}SampleTables.HouseholdsDownload"
-                 attributeMetaQueryRef="${presenterId}SampleTables.HouseholdsDownloadColumnAttributes">
-            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
-            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
-            <columnAttribute name="Observation_Id"/>
-            <columnAttribute name="Participant_Id"/>
             <columnAttribute name="Household_Id"/>
           </table>
 
@@ -466,87 +443,7 @@ WHERE o.dataset_name = '&&datasetName&&'
 
 
 
-      <sqlQuery name="ObservationsDownloadColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-	  
-	  <sql>
-            <![CDATA[
-            select distinct o.display_name as display_name, o.ontology_term_source_id as name
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}OBSERVATIONS')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
-            ]]>
-          </sql>
-        </sqlQuery>
-
-
-
-	 <sqlQuery name="ObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}SampleTables.ObservationsDownloadColumnAttributes">
-            <column name="source_id"/>
-            <column name="project_id"/>
-            <column name="name"/>
-	    <column name="Observation_Id"/>
-            <sql>
-            <![CDATA[
-select ss.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation_Id, cv.*
-        from apidbtuning.${tblPrefix}Observations cv
-              , apidbtuning.${tblPrefix}Samples ss
-              , apidbtuning.${tblPrefix}PANIO io
-            where ss.PAN_ID = io.OUTPUT_PAN_ID
-            and io.INPUT_PAN_ID = cv.PAN_ID              
-            ]]>
-
-            </sql>
-        </sqlQuery>
-
-
-
-
-	<sqlQuery name="ParticipantsDownloadColumnAttributes"  isCacheable='false'>
-          <column name="name" />
-          <column name="display_name" />
-
-          <sql>
-            <![CDATA[
-            select distinct o.display_name as display_name, o.ontology_term_source_id as name
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}Participants')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
-            ]]>
-          </sql>
-        </sqlQuery>
-
-
-	 <sqlQuery name="ParticipantsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}SampleTables.ParticipantsDownloadColumnAttributes">
-            <column name="source_id"/>
-            <column name="project_id"/>
-            <column name="name"/>
-	    <column name="Observation_Id"/>
-	    <column name="Participant_Id"/>
-            <sql>
-            <![CDATA[
-	    select ss.name as source_id,'@PROJECT_ID@' as project_id, pa.name as Participant_Id, cv.name as Observation_Id, pa.*
-	    from apidbtuning.${tblPrefix}Participants pa,  apidbtuning.${tblPrefix}Observations cv
-              , apidbtuning.${tblPrefix}Samples ss
-              , apidbtuning.${tblPrefix}PANIO io,
-              apidbtuning.${tblPrefix}PANIO io2
-            where ss.PAN_ID = io.OUTPUT_PAN_ID
-            and io.INPUT_PAN_ID = cv.PAN_ID
-            and cv.PAN_ID = io2.OUTPUT_PAN_ID
-            and io2.INPUT_PAN_ID = pa.PAN_ID
-            ]]>
-
-            </sql>
-        </sqlQuery>
-
-
-
-	<sqlQuery name="HouseholdsDownloadColumnAttributes"  isCacheable='false'>
+	<sqlQuery name="HouseholdObservationDownloadColumnAttributes"  isCacheable='false'>
           <column name="name" />
           <column name="display_name" />
 
@@ -563,23 +460,22 @@ select ss.name as source_id,'@PROJECT_ID@' as project_id, cv.name as Observation
         </sqlQuery>
 
 
-	 <sqlQuery name="HouseholdsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}SampleTables.HouseholdsDownloadColumnAttributes">
+	 <sqlQuery name="HouseholdObservationDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}SampleTables.HouseholdObservationDownloadColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
             <column name="name"/>
-	    <column name="Observation_Id"/>
-	    <column name="Participant_Id"/>
 	    <column name="Household_Id"/>
             <sql>
             <![CDATA[
-	   select ss.name as source_id,'@PROJECT_ID@' as project_id, hh.name as Household_Id, pa.name as Participant_Id, cv.name as Observation_Id, hh.*
-        from apidbtuning.${tblPrefix}Households hh,  apidbtuning.${tblPrefix}Participants pa,  apidbtuning.${tblPrefix}Observations cv, apidbtuning.${tblPrefix}Samples ss, apidbtuning.${tblPrefix}PANIO io, apidbtuning.${tblPrefix}PANIO io2, apidbtuning.${tblPrefix}PANIO io3
-	where ss.PAN_ID = io.OUTPUT_PAN_ID
-        and io.INPUT_PAN_ID = cv.PAN_ID
-        and cv.PAN_ID = io2.OUTPUT_PAN_ID
-        and io2.INPUT_PAN_ID = pa.PAN_ID
-        and pa.PAN_ID = io3.OUTPUT_PAN_ID
-        and io3.INPUT_PAN_ID = hh.PAN_ID
+with HHob as(
+        select *
+        from apidbtuning.${tblPrefix}PANIO
+        where input_pan_type_source_id = 'PCO_0000024'
+        and output_pan_type_source_id = 'PCO_0000024'
+    )
+select ss.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_Id, hh.*
+    from apidbtuning.${tblPrefix}Households hh, HHob, apidbtuning.${tblPrefix}Samples ss
+    where  hh.pan_id =  HHob.output_pan_id
             ]]>
 
             </sql>
