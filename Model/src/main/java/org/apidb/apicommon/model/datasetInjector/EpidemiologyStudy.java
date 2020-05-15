@@ -442,6 +442,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  
 	  String sampleAttList = getPropValue("sampleAttributesList");
           String sampleSourceIdsExcludedFromSampleAttributes = getPropValue("sampleSourceIdsExcludedFromSampleAttributes");
+          String participantSourceIdsExcludedFromParticipantAttributes = getPropValue("participantSourceIdsExcludedFromParticipantAttributes");
+
 
           if(sampleAttList != null && !sampleAttList.equals("")) {
 	      setPropValue("sampleAttributesListFull","<attributesList summary=\"" + sampleAttList + "\" />");
@@ -461,6 +463,13 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           } else {
             setPropValue("sampleSourceIdsExcludedFromSampleAttributesQuote", addQuotes(sampleSourceIdsExcludedFromSampleAttributes));
           }
+
+          if(participantSourceIdsExcludedFromParticipantAttributes == null || participantSourceIdsExcludedFromParticipantAttributes.equals("") ){
+            setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes("none"));          
+          } else {
+            setPropValue("participantSourceIdsExcludedFromParticipantAttributesQuote", addQuotes(participantSourceIdsExcludedFromParticipantAttributes));
+          }
+
 
 	  
 	  injectTemplate("sampleRecord");
