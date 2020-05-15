@@ -398,6 +398,8 @@ from APIDBTUNING.${tblPrefix}Samples ss, APIDBTUNING.${tblPrefix}Observations ob
 
            <sql>
             <![CDATA[
+
+select * from (
 select meta.display_name, meta.name, meta.help,
         decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
         decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
@@ -417,6 +419,8 @@ select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as
 where (select count(*) from apidbtuning.${tblPrefix}Households) >0    
 
           ) meta
+
+)order by display_name
       ]]>
               </sql>
            </sqlQuery>
