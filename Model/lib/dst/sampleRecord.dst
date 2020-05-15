@@ -239,9 +239,10 @@ group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_
 <sqlQuery name="ObservationAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.ObservationAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
+	 <column name="observation_id"/>     
           <sql>
             <![CDATA[
-select ss.name as source_id, '@PROJECT_ID@' as project_id, ob.*
+select ob.name as observation_id, ss.name as source_id, '@PROJECT_ID@' as project_id, ob.*
 from APIDBTUNING.${tblPrefix}Samples ss, APIDBTUNING.${tblPrefix}Observations ob , Apidbtuning.${tblPrefix}PANIO io
 where  ss.PAN_ID = io.OUTPUT_PAN_ID
 and io.INPUT_PAN_ID = ob.PAN_ID
@@ -283,6 +284,12 @@ and m.observation_id = m.sample_id
 and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
 group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
                             )meta
+
+UNION
+ select 'Observation ID' as display_name, 'observation_id' as name, '' as help, '' as reporter_name,
+       '' as reporter_display, '' as reporter_description, '' as reporter_implementation, '' as reporter_properties from dual
+
+
 )order by display_name
 
 
@@ -298,9 +305,11 @@ group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_
 <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.ParticipantAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
+	 <column name="participant_id"/>
+
           <sql>
             <![CDATA[
-select ss.name as source_id, '@PROJECT_ID@' as project_id, pa.*
+select pa.name as participant_id, ss.name as source_id, '@PROJECT_ID@' as project_id, pa.*
 from APIDBTUNING.${tblPrefix}Samples ss, APIDBTUNING.${tblPrefix}Observations ob ,APIDBTUNING.${tblPrefix}Participants pa , Apidbtuning.${tblPrefix}PANIO io, Apidbtuning.${tblPrefix}PANIO io2
     where  ss.PAN_ID = io.OUTPUT_PAN_ID
     and io.INPUT_PAN_ID = ob.PAN_ID
@@ -342,6 +351,11 @@ and m.ontology_term_name not in (${participantSourceIdsExcludedFromParticipantAt
 and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
 group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
 ) meta
+
+UNION
+ select 'Participant ID' as display_name, 'participant_id' as name, '' as help, '' as reporter_name,
+       '' as reporter_display, '' as reporter_description, '' as reporter_implementation, '' as reporter_properties from dual
+
 )order by display_name
 
       ]]>
@@ -352,9 +366,11 @@ group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_
 <sqlQuery name="HouseholdAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.HouseholdAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
+         <column name="household_id"/>
+
           <sql>
             <![CDATA[
-select ss.name as source_id, '@PROJECT_ID@' as project_id, hh.*
+select hh.name as household_id,  ss.name as source_id, '@PROJECT_ID@' as project_id, hh.*
 from APIDBTUNING.${tblPrefix}Samples ss, APIDBTUNING.${tblPrefix}Observations ob ,APIDBTUNING.${tblPrefix}Participants pa , 
      APIDBTUNING.${tblPrefix}Households hh,
      Apidbtuning.${tblPrefix}PANIO io, Apidbtuning.${tblPrefix}PANIO io2, Apidbtuning.${tblPrefix}PANIO io3
@@ -394,6 +410,12 @@ select distinct o.display_name as display_name, o.ontology_term_source_id as nam
                 and c.owner = 'APIDBTUNING'
                 and c.table_name = s.table_name
                 and upper(o.ontology_term_source_id) = c.column_name
+
+UNION
+
+select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as type from dual
+where (select count(*) from apidbtuning.${tblPrefix}Households) >0    
+
           ) meta
       ]]>
               </sql>
