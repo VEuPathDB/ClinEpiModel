@@ -264,7 +264,7 @@ and io.INPUT_PAN_ID = ob.PAN_ID
             <![CDATA[
 
 select * from (
-select CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${observationMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name, 
+select CASE WHEN meta.parent_type = 'multifilter' or meta.parent_name in (${observationMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name,
 meta.name, meta.help,
                    decode(meta.type, 'string', 'histogram', 'number', 'histogram', null) as reporter_name,
                    decode(meta.type, 'string', 'Histogram', 'number', 'Histogram', null) as reporter_display,
@@ -272,19 +272,17 @@ meta.name, meta.help,
                    decode(meta.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
                     null as reporter_properties
 from(
-    select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type 
-from ApidbTuning.${tblPrefix}ObservationMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p 
-where '${studyType}' = 'Survey'
-and (select count(*) from (
-select participant_id,count(*)
-from apidbtuning.${tblPrefix}PartObsIO
-group by participant_id having count(*) > 1)) = 0
-and m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+    select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type
+from ApidbTuning.${tblPrefix}ObservationMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
+where 
+ 
+ m.Ontology_Term_Name = O.Ontology_Term_Source_Id
 and m.observation_id = m.sample_id
 and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
 group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
                             )meta
 )order by display_name
+
 
       ]]>
               </sql>
