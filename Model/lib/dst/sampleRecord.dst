@@ -310,11 +310,9 @@ UNION
           <sql>
             <![CDATA[
 select pa.name as participant_id, ss.name as source_id, '@PROJECT_ID@' as project_id, pa.*
-from APIDBTUNING.${tblPrefix}Samples ss, APIDBTUNING.${tblPrefix}Observations ob ,APIDBTUNING.${tblPrefix}Participants pa , Apidbtuning.${tblPrefix}PANIO io, Apidbtuning.${tblPrefix}PANIO io2
-    where  ss.PAN_ID = io.OUTPUT_PAN_ID
-    and io.INPUT_PAN_ID = ob.PAN_ID
-    and ob.PAN_ID = io2.OUTPUT_PAN_ID
-    and io2.INPUT_PAN_ID = pa.PAN_ID
+from APIDBTUNING.${tblPrefix}Samples ss,APIDBTUNING.${tblPrefix}Participants pa , Apidbtuning.${tblPrefix}PartSampleIO io
+    where  ss.PAN_ID = io.sample_id
+    and io.PARTICIPANT_ID = pa.PAN_ID
 
             ]]>
             </sql>
@@ -370,16 +368,14 @@ UNION
 
           <sql>
             <![CDATA[
+
+
 select hh.name as household_id,  ss.name as source_id, '@PROJECT_ID@' as project_id, hh.*
-from APIDBTUNING.${tblPrefix}Samples ss, APIDBTUNING.${tblPrefix}Observations ob ,APIDBTUNING.${tblPrefix}Participants pa , 
+from APIDBTUNING.${tblPrefix}Samples ss, 
      APIDBTUNING.${tblPrefix}Households hh,
-     Apidbtuning.${tblPrefix}PANIO io, Apidbtuning.${tblPrefix}PANIO io2, Apidbtuning.${tblPrefix}PANIO io3
-    where  ss.PAN_ID = io.OUTPUT_PAN_ID
-    and io.INPUT_PAN_ID = ob.PAN_ID
-    and ob.PAN_ID = io2.OUTPUT_PAN_ID
-    and io2.INPUT_PAN_ID = pa.PAN_ID
-    and pa.PAN_ID = io3.OUTPUT_PAN_ID
-    and io3.INPUT_PAN_ID = hh.PAN_ID
+     Apidbtuning.${tblPrefix}HouseSampleIO io
+    where  ss.PAN_ID = io.sample_id
+    and io.household_id = hh.PAN_ID
 
             ]]>
             </sql>
