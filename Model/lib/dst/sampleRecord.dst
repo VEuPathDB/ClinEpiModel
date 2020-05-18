@@ -20,7 +20,7 @@ prop=includeProjects
                              urlName="${presenterId}_sample"
                              shortDisplayName="Sample"
                              displayName="${studyAbbreviation} Sample"
-                             iconName="ebrc-sampleDetails_light"
+                             iconName="ebrc-icon-sampleDetails_light"
                              allRecordsQueryRef="${presenterId}SampleAttributes.AllSamples"
                              includeProjects="${includeProjects}">
 
