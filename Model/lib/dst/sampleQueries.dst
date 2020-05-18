@@ -17,7 +17,7 @@ prop=timeSourceId
        <paramRef ref="sampleParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="sampleParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="sampleParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
@@ -41,7 +41,7 @@ prop=timeSourceId
      <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
        <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="sampleParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="sampleParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
@@ -66,7 +66,7 @@ prop=timeSourceId
 >templateTextStart<
      <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="sampleParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
+       <paramRef ref="sampleParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>

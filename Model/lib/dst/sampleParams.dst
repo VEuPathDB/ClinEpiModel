@@ -57,10 +57,10 @@ prop=trimSampleMetadataTerms
          </help>
        </filterParam>
 
-       <filterParam name="visits_${paramSuffix}" 
-                    ontologyQueryRef="SampleVQ.VisitOntology_${paramSuffix}"
-                    metadataQueryRef="SampleVQ.VisitMetaData_${paramSuffix}"
-                    backgroundQueryRef="SampleVQ.VisitMetaDataBkg_${paramSuffix}"
+       <filterParam name="observations_${paramSuffix}" 
+                    ontologyQueryRef="SampleVQ.ObservationOntology_${paramSuffix}"
+                    metadataQueryRef="SampleVQ.ObservationMetaData_${paramSuffix}"
+                    backgroundQueryRef="SampleVQ.ObservationMetaDataBkg_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     prompt="Observations"
                     trimMetadataTerms="${trimObservationMetadataTerms}"
@@ -77,7 +77,7 @@ prop=trimSampleMetadataTerms
                     countPredictsAnswerCount="false"
                     prompt="Samples"
                     trimMetadataTerms="${trimObservationMetadataTerms}"
-                    dependedParamRef="sampleParams.visits_${paramSuffix}">
+                    dependedParamRef="sampleParams.observations_${paramSuffix}">
       <help>
         Select related observations based on their characteristics.
       </help>
@@ -122,10 +122,10 @@ prop=trimSampleMetadataTerms
          </help>
        </filterParam>
 
-       <filterParam name="visits_${paramSuffix}" 
-                    ontologyQueryRef="SampleVQ.VisitOntology_${paramSuffix}"
-                    metadataQueryRef="SampleVQ.VisitMetaData_${paramSuffix}"
-                    backgroundQueryRef="SampleVQ.VisitMetaDataBkg_${paramSuffix}"
+       <filterParam name="observations_${paramSuffix}" 
+                    ontologyQueryRef="SampleVQ.ObservationOntology_${paramSuffix}"
+                    metadataQueryRef="SampleVQ.ObservationMetaData_${paramSuffix}"
+                    backgroundQueryRef="SampleVQ.ObservationMetaDataBkg_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     prompt="Observations"
                     trimMetadataTerms="${trimObservationMetadataTerms}"
@@ -142,7 +142,7 @@ prop=trimSampleMetadataTerms
                     countPredictsAnswerCount="false"
                     prompt="Samples"
                     trimMetadataTerms="${trimObservationMetadataTerms}"
-                    dependedParamRef="sampleParams.visits_${paramSuffix}">
+                    dependedParamRef="sampleParams.observations_${paramSuffix}">
       <help>
         Select related observations based on their characteristics.
       </help>
@@ -173,10 +173,10 @@ prop=trimSampleMetadataTerms
          </help>
        </filterParam>
 
-       <filterParam name="visits_${paramSuffix}" 
-                    ontologyQueryRef="SampleVQ.VisitOntology_${paramSuffix}"
-                    metadataQueryRef="SampleVQ.VisitMetaData_${paramSuffix}"
-                    backgroundQueryRef="SampleVQ.VisitMetaDataBkg_${paramSuffix}"
+       <filterParam name="observations_${paramSuffix}" 
+                    ontologyQueryRef="SampleVQ.ObservationOntology_${paramSuffix}"
+                    metadataQueryRef="SampleVQ.ObservationMetaData_${paramSuffix}"
+                    backgroundQueryRef="SampleVQ.ObservationMetaDataBkg_${paramSuffix}"
                     countPredictsAnswerCount="true"
                     prompt="Observations"
                     trimMetadataTerms="${trimObservationMetadataTerms}"
@@ -193,7 +193,7 @@ prop=trimSampleMetadataTerms
                     countPredictsAnswerCount="false"
                     prompt="Samples"
                     trimMetadataTerms="${trimObservationMetadataTerms}"
-                    dependedParamRef="sampleParams.visits_${paramSuffix}">
+                    dependedParamRef="sampleParams.observations_${paramSuffix}">
       <help>
         Select related observations based on their characteristics.
       </help>
@@ -421,7 +421,7 @@ where hp.participant_id = p.participant_id
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
+    <sqlQuery name="ObservationOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -448,7 +448,7 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-    <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+    <sqlQuery name="ObservationMetaData_${paramSuffix}" isCacheable="false">
          <paramRef ref="sampleParams.participants_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -468,7 +468,7 @@ and io.observation_id = m.observation_id
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="VisitMetaDataBkg_${paramSuffix}" isCacheable="false">
+    <sqlQuery name="ObservationMetaDataBkg_${paramSuffix}" isCacheable="false">
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="filter_item_id"/>
@@ -514,7 +514,7 @@ from ApidbTuning.${tblPrefix}Ontology o
    </sqlQuery>
 
    <sqlQuery name="SampleMetaData_${paramSuffix}" isCacheable="false">
-      <paramRef ref="sampleParams.visits_${paramSuffix}" />  
+      <paramRef ref="sampleParams.observations_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -524,7 +524,7 @@ from ApidbTuning.${tblPrefix}Ontology o
         <![CDATA[
 select m.sample_id as internal, m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}SampleMD m
-where m.observation_id in (\$\$visits_${paramSuffix}\$\$)
+where m.observation_id in (\$\$observations_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>
@@ -666,7 +666,7 @@ where hp.participant_id = p.participant_id
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
+    <sqlQuery name="ObservationOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -693,7 +693,7 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-    <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+    <sqlQuery name="ObservationMetaData_${paramSuffix}" isCacheable="false">
          <paramRef ref="sampleParams.participants_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -713,7 +713,7 @@ and io.observation_id = m.observation_id
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="VisitMetaDataBkg_${paramSuffix}" isCacheable="false">
+    <sqlQuery name="ObservationMetaDataBkg_${paramSuffix}" isCacheable="false">
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="filter_item_id"/>
@@ -759,7 +759,7 @@ from ApidbTuning.${tblPrefix}Ontology o
    </sqlQuery>
 
    <sqlQuery name="SampleMetaData_${paramSuffix}" isCacheable="false">
-      <paramRef ref="sampleParams.visits_${paramSuffix}" />  
+      <paramRef ref="sampleParams.observations_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -769,7 +769,7 @@ from ApidbTuning.${tblPrefix}Ontology o
         <![CDATA[
 select m.sample_id as internal, m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}SampleMD m
-where m.observation_id in (\$\$visits_${paramSuffix}\$\$)
+where m.observation_id in (\$\$observations_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>
@@ -848,7 +848,7 @@ where hp.participant_id = p.participant_id
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
+    <sqlQuery name="ObservationOntology_${paramSuffix}" isCacheable="true">
       <column name="ontology_term_name"/>
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
@@ -875,7 +875,7 @@ from ApidbTuning.${tblPrefix}Ontology o
     </sql>
    </sqlQuery>
 
-    <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+    <sqlQuery name="ObservationMetaData_${paramSuffix}" isCacheable="false">
          <paramRef ref="sampleParams.participants_${paramSuffix}" />  
          <column name="ontology_term_name"/>
          <column name="internal"/>
@@ -895,7 +895,7 @@ and io.observation_id = m.observation_id
     </sql>
     </sqlQuery>
 
-    <sqlQuery name="VisitMetaDataBkg_${paramSuffix}" isCacheable="false">
+    <sqlQuery name="ObservationMetaDataBkg_${paramSuffix}" isCacheable="false">
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="filter_item_id"/>
@@ -941,7 +941,7 @@ from ApidbTuning.${tblPrefix}Ontology o
    </sqlQuery>
 
    <sqlQuery name="SampleMetaData_${paramSuffix}" isCacheable="false">
-      <paramRef ref="sampleParams.visits_${paramSuffix}" />  
+      <paramRef ref="sampleParams.observations_${paramSuffix}" />  
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="number_value"/>
@@ -951,7 +951,7 @@ from ApidbTuning.${tblPrefix}Ontology o
         <![CDATA[
 select m.sample_id as internal, m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}SampleMD m
-where m.observation_id in (\$\$visits_${paramSuffix}\$\$)
+where m.observation_id in (\$\$observations_${paramSuffix}\$\$)
           ]]>
     </sql>
     </sqlQuery>
