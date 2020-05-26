@@ -222,9 +222,9 @@ prop=!hasSampleRecord
             <columnAttribute name="link" internal="true"/>
             <columnAttribute name="sam_link" internal="true"/>
 
-            <columnAttribute name="obsName" internal="\${hasObservationRecord}"/>
+            <columnAttribute name="obsName" displayName="Observation ID"  internal="\${hasObservationRecord}"/>
 
-            <linkAttribute name="obsLink" displayName="Observation" internal="\${!hasObservationRecord}" inReportMaker="false">
+            <linkAttribute name="obsLink" displayName="Observation ID" internal="\${!hasObservationRecord}" inReportMaker="false">
                  <displayText>
                     <![CDATA[
                     \$\$obsName\$\$
@@ -238,7 +238,7 @@ prop=!hasSampleRecord
 
 
 
-            <columnAttribute name="sample_id" internal="\${hasSampleRecord}"/>
+            <columnAttribute name="sample_id" displayName="Sample ID"  internal="\${hasSampleRecord}"/>
 
             <linkAttribute name="samLink" displayName="Sample ID" internal="\${!hasSampleRecord}" inReportMaker="false">
                  <displayText>
