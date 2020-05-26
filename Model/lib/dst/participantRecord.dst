@@ -269,8 +269,8 @@ prop=!hasObservationRecord
             <columnAttribute name="project_id" inReportMaker="false" internal="true"/>
             <columnAttribute name="link" internal="true"/>
 
-            <columnAttribute name="name" internal="${hasObservationRecord}"/>
-            <linkAttribute name="db_link" displayName="Date of Observation" internal="${!hasObservationRecord}" inReportMaker="false">
+            <columnAttribute name="name" displayName="Observation ID"  internal="${hasObservationRecord}"/>
+            <linkAttribute name="db_link" displayName="Observation ID" internal="${!hasObservationRecord}" inReportMaker="false">
                  <displayText>
                     <![CDATA[
                     \$\$name\$\$
