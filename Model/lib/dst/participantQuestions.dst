@@ -15,6 +15,7 @@ prop=participantAttributesListFull
 prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
+prop=timepointUnits
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -54,7 +55,8 @@ Use the filters above to select a set of Participants or to explore the data.  S
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
@@ -72,6 +74,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
 prop=summary
+prop=timepointUnits
 >templateTextStart<
         <question name="${presenterId}ParticipantsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -116,7 +119,8 @@ prop=summary
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
@@ -230,6 +234,7 @@ prop=paramSuffix
 prop=studyAbbreviation
 prop=participantQuestionName
 prop=summary
+prop=timepointUnits
 >templateTextStart<
     <question name="${participantQuestionName}" newBuild="1"
               searchCategory="Participant"
@@ -295,7 +300,8 @@ prop=summary
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_prism"
+              "relativeVisitsParamName": "relative_visits_prism",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
@@ -324,6 +330,7 @@ prop=tblPrefix
 prop=studyAbbreviation
 prop=paramSuffix
 prop=summary
+prop=timepointUnits
 >templateTextStart<
     <question name="${presenterId}ParticipantsByMetadata" newBuild="1"
               searchCategory="Participant"
@@ -387,7 +394,8 @@ prop=summary
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
@@ -417,6 +425,7 @@ prop=paramSuffix
 prop=participantQuestionName
 prop=participantAttributesListFull
 prop=summary
+prop=timepointUnits
 >templateTextStart<
         <question name="${participantQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Participant"
@@ -468,7 +477,8 @@ prop=summary
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_maled"
+              "relativeVisitsParamName": "relative_visits_maled",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>

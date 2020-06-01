@@ -1118,7 +1118,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"trimObservationMetadataTerms", ""},
                                  {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
                                  {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties
-                                 {"queryBaseTemplate", ""},            //so need set of templates for each record with question
+                                 {"queryBaseTemplate", ""},            //also need set of templates for each record with question
+                                 {"timepointUnits", ""},
                                  {"timeSourceId", ""}
       };
 

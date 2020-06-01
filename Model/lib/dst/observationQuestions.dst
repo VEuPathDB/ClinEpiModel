@@ -17,6 +17,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
 prop=summary
+prop=timepointUnits
 >templateTextStart<
     <question name="${presenterId}ObservationsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
@@ -63,7 +64,8 @@ prop=summary
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
               "numRelativeEventsParamName": "num_relative_events",
-              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
@@ -82,6 +84,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
 prop=summary
+prop=timepointUnits
 >templateTextStart<
     <question name="${presenterId}ObservationsByMetadata" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
@@ -140,7 +143,8 @@ prop=summary
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
               "numRelativeEventsParamName": "num_relative_events",
-              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
@@ -158,6 +162,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
 prop=observationQuestionName
+prop=timepointUnits
 >templateTextStart<
    <question name="${observationQuestionName}" newBuild="2"
               searchCategory="Clinical Observation"
@@ -220,7 +225,8 @@ prop=observationQuestionName
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_prism"
+              "relativeVisitsParamName": "relative_visits_prism",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
@@ -239,6 +245,7 @@ prop=tblPrefix
 prop=paramSuffix
 prop=studyAbbreviation
 prop=summary
+prop=timepointUnits
 >templateTextStart<
    <question name="${presenterId}ObservationsByMetadata" newBuild="2"
               searchCategory="Clinical Observation"
@@ -299,7 +306,8 @@ prop=summary
               "dateOperatorParamName": "dateOperator_fv",
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
-              "relativeVisitsParamName": "relative_visits_${paramSuffix}"
+              "relativeVisitsParamName": "relative_visits_${paramSuffix}",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
@@ -321,6 +329,7 @@ prop=paramSuffix
 prop=presenterId
 prop=observationQuestionName
 prop=observationAttributesListFull
+prop=timepointUnits
 >templateTextStart<
     <question name="${observationQuestionName}" newBuild="1" includeProjects="${includeProjects}"
               searchCategory="Observation"
@@ -381,7 +390,8 @@ prop=observationAttributesListFull
               "daysBetweenParamName": "days_between",
               "dateDirectionParamName": "date_direction_fv",
               "numRelativeEventsParamName": "num_relative_events",
-              "relativeVisitsParamName": "relative_visits_maled"
+              "relativeVisitsParamName": "relative_visits_maled",
+              "timepointUnits": "${timepointUnits}" 
             }
           </value>
         </propertyList>
