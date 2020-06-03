@@ -39,10 +39,9 @@ prop=extraHouseholdTables
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
-
-      <reporter name="attributesTabular" displayName="%%attributesReporterDisplayName%%" scopes="results"
+      <reporter name="attributesTabular" displayName="Tab- or comma-delimited (openable in Excel)- choose Household and Household Observation columns to make a custom table" scopes="results"
                 implementation="org.gusdb.wdk.model.report.reporter.AttributesTabularReporter">
-        <property name="page_size">500</property>
+        <property name="page_size">1000</property>
       </reporter>
 
       <reporter name="tableTabular" displayName="Tab- or comma-delimited (openable in Excel) - Participants and Observations and Samples" scopes="results"
@@ -70,6 +69,8 @@ prop=extraHouseholdTables
 
 
          <attributeQueryRef ref="${presenterId}HouseholdAttributes.HouseholdAttributes" attributeMetaQueryRef="${presenterId}HouseholdAttributes.HouseholdAttributesMeta"/>
+
+
 
         <table name="Characteristics"
                displayName="Household Characteristics"
