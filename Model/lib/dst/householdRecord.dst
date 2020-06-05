@@ -39,12 +39,12 @@ prop=extraHouseholdTables
       <!--   Reporters -->  
       <!-- =============================================================== -->
 
-      <reporter name="attributesTabular" displayName="Tab- or comma-delimited (openable in Excel)- choose Household and Household Observation columns to make a custom table" scopes="results"
+      <reporter name="attributesTabular" displayName="Tab- or comma-delimited (openable in Excel)- choose Household columns to make a custom table" scopes="results"
                 implementation="org.gusdb.wdk.model.report.reporter.AttributesTabularReporter">
         <property name="page_size">1000</property>
       </reporter>
 
-      <reporter name="tableTabular" displayName="Tab- or comma-delimited (openable in Excel) - Participants and Observations and Samples" scopes="results"
+      <reporter name="tableTabular" displayName="Tab- or comma-delimited (openable in Excel) - Household Observations and Participants and Observations and Samples" scopes="results"
                 implementation="org.gusdb.wdk.model.report.reporter.TableTabularReporter">
               <!-- huge page size to force no paging  -->
               <property name="page_size">1000000</property>
@@ -101,6 +101,17 @@ prop=extraHouseholdTables
                  <url>@WEBAPP_BASE_URL@/record/${presenterId}_participant/$$participant$$/@PROJECT_ID@</url>
             </linkAttribute>
           </table>
+
+	  <table name="HouseholdObservationsDownload"
+                 displayName="Household Observations"
+                 queryRef="${presenterId}HouseholdTables.HouseholdObservationsDownload"
+                 attributeMetaQueryRef="${presenterId}HouseholdTables.HouseholdObservationsDownloadColumnAttributes">
+            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+	    <columnAttribute name="Household_Observation_Id" />
+
+          </table>
+
 
 	  <table name="ParticipantsDownload"
                  displayName="Participants"
@@ -211,7 +222,28 @@ select count(*) from apidbtuning.${tblPrefix}Households
                      and upper(o.ontology_term_source_id) = c.column_name
                      and o.ontology_term_source_id != 'EUPATH_0000094'
                      and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
-                     ) meta
+		     and o.ontology_term_source_id in (
+                        SELECT distinct PROPERTY_SOURCE_ID  FROM apidbtuning.${tblPrefix}METADATA WHERE CATEGORY='Household'
+                        AND PAN_ID IN (SELECT INPUT_PAN_ID FROM apidbtuning.${tblPrefix}PanIO 
+			    	      	WHERE input_pan_type_source_id='PCO_0000024' 
+					AND output_pan_type_source_id='PCO_0000024')
+					)
+                     
+		     UNION
+
+                      select o.display_name, o.ontology_term_source_id as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type
+                     from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
+                     where s.synonym_name = upper('${tblPrefix}HOUSEHOLDS')
+                     and c.owner = 'APIDBTUNING'
+                     and c.table_name = s.table_name
+                     and upper(o.ontology_term_source_id) = c.column_name
+                     and o.ontology_term_source_id != 'EUPATH_0000094'
+                     and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
+                     and (select count(*) from apidbtuning.${tblPrefix}PANIO 
+		     	 where input_pan_type_source_id = 'PCO_0000024' and output_pan_type_source_id = 'PCO_0000024'
+			 ) =0
+
+		     ) meta
                      )order by display_name
             ]]>
          </sql>
@@ -325,6 +357,64 @@ order by source_id
             ]]>
             </sql>
         </sqlQuery>
+
+
+	<sqlQuery name="HouseholdObservationsDownloadColumnAttributes"  isCacheable='false'>
+           <column name="name" />
+           <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+            select distinct o.display_name as display_name, o.ontology_term_source_id as name
+            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+            where s.synonym_name = upper('${tblPrefix}Households')
+            and c.owner = 'APIDBTUNING'
+            and c.table_name = s.table_name
+            and upper(o.ontology_term_source_id) = c.column_name
+	    and o.ontology_term_source_id in (
+                        SELECT distinct PROPERTY_SOURCE_ID  FROM apidbtuning.${tblPrefix}METADATA WHERE CATEGORY='Household'
+			AND PAN_ID IN (SELECT OUTPUT_PAN_ID FROM apidbtuning.${tblPrefix}PanIO
+                                        WHERE input_pan_type_source_id='PCO_0000024'
+                                        AND output_pan_type_source_id='PCO_0000024')
+                                        )
+					
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+        <sqlQuery name="HouseholdObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}HouseholdTables.HouseholdObservationsDownloadColumnAttributes">
+            <column name="source_id"/>
+            <column name="project_id"/>
+	    <column name="Household_Observation_Id"/>
+
+            <sql>
+            <![CDATA[
+
+with HHob as(
+        select *
+        from apidbtuning.${tblPrefix}PANIO
+        where input_pan_type_source_id = 'PCO_0000024'
+        and output_pan_type_source_id = 'PCO_0000024'
+    )
+
+select distinct test.name as Household_Observation_Id, test.*  from (
+select * from (
+select m.household_id as hh_pan, m.household_observation_id as ho_pan, hh.name as source_id, '@PROJECT_ID@' as project_id 
+from ApidbTuning.${tblPrefix}HouseholdMD m, apidbtuning.${tblPrefix}Households hh
+where hh.pan_id = m.household_id)
+
+LEFT JOIN apidbtuning.${tblPrefix}Households hh ON hh.pan_id = ho_pan
+
+) test, HHob
+where NAME not LIKE 'HH%'
+and (select count(*) from HHob ) >0
+
+  
+            ]]>
+            </sql>
+        </sqlQuery>
+
 
 
 	<sqlQuery name="ParticipantsDownloadColumnAttributes"  isCacheable='false'>
