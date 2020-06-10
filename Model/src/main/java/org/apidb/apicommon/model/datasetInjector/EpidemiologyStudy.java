@@ -1123,6 +1123,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties
                                  {"queryBaseTemplate", ""},            //also need set of templates for each record with question
                                  {"timepointUnits", ""},
+                                 {"timeColumnName", ""},
                                  {"timeSourceId", ""}
       };
 

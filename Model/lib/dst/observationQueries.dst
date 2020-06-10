@@ -12,6 +12,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
@@ -32,13 +33,13 @@ prop=timeSourceId
        <sql>
            <![CDATA[
 with vis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where md.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
 and md.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
@@ -85,6 +86,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
@@ -104,13 +106,13 @@ prop=timeSourceId
        <sql>
            <![CDATA[
 with vis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where md.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
 and md.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
@@ -157,6 +159,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
@@ -175,13 +178,13 @@ prop=timeSourceId
        <sql>
            <![CDATA[
 with vis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where md.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
 and md.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
@@ -228,6 +231,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
@@ -252,6 +256,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
@@ -277,6 +282,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
@@ -299,6 +305,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.date_region_${paramSuffix}" groupRef="metaDataGroups.date_region"/>
@@ -321,6 +328,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 prop=visitMinDate
 prop=visitMaxDate
 >templateTextStart<
@@ -395,6 +403,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 prop=visitMinDate
 prop=visitMaxDate
 >templateTextStart<
@@ -467,6 +476,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
        <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
@@ -487,13 +497,13 @@ prop=timeSourceId
        <sql>
            <![CDATA[
 with vis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as EUPATH_0000579
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as EUPATH_0000579
 from ApidbTuning.${tblPrefix}ObservationMD md
 where md.observation_id in (\$\$visits_maled\$\$)
 and md.ontology_term_name = 'EUPATH_0000579'
 ),
 relvis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as EUPATH_0000579
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as EUPATH_0000579
 from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
 and md.observation_id in (\$\$relative_visits_maled\$\$)
@@ -540,6 +550,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
@@ -573,6 +584,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
@@ -593,13 +605,13 @@ prop=timeSourceId
        <sql>
            <![CDATA[
 with vis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where md.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and md.ontology_term_name = '${timeSourceId}'
 ),
 relvis as (
-select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.number_value as ${timeSourceId}
+select distinct md.participant_id as input_pan_id,md.observation_id as pan_id,md.${timeColumnName} as ${timeSourceId}
 from ApidbTuning.${tblPrefix}ObservationMD md
 where \$\$use_relative_visits\$\$ = 1
 and md.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
@@ -646,6 +658,7 @@ anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
 prop=tblPrefix
 prop=paramSuffix
 prop=timeSourceId
+prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
