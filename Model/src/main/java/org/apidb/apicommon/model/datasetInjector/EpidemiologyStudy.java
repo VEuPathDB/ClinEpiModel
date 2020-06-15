@@ -1018,11 +1018,15 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  
 	  //addWdkReference(sampleRecordClass, "table", "ParticipantsDownload", new String[]{"download"}, CATEGORY_IRI, 0);
 	  //addWdkReference(sampleRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
-	  addWdkReference(sampleRecordClass, "table", "HouseholdObservationDownload", new String[]{"download"}, CATEGORY_IRI,0);
+	  //addWdkReference(sampleRecordClass, "table", "HouseholdObservationDownload", new String[]{"download"}, CATEGORY_IRI,0);
 	  
 	  
       }
       
+
+      if(hasHouseholdObservations) {
+	  addWdkReference(sampleRecordClass, "table", "HouseholdObservationDownload", new String[]{"download"}, CATEGORY_IRI,0);
+      }
 
 
       if(hasHouseholds && hasParticipants) {
