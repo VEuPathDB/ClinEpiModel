@@ -578,6 +578,7 @@ prop=participantRecordSamplesMetaTableQuery
 prop=participantRecordMicrosTableQuery
 prop=participantRecordObservationsTableQuery
 prop=participantRecordObservationsMetaTableQuery
+prop=sampleMultiFilterIdsQuoted
 
 >templateTextStart<
     <querySet name="${presenterId}ParticipantTables" queryType="table" includeProjects="${includeProjects}" 
@@ -736,12 +737,15 @@ select t1.source_id, t1.project_id, t1.Observation_Id, t1.Household_Id as Househ
 
           <sql>
             <![CDATA[
-            select distinct o.display_name as display_name, o.ontology_term_source_id as name
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}SAMPLES')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
+SELECT CASE WHEN meta.parent_type = 'multifilter'  or meta.parent_name in (${sampleMultiFilterIdsQuoted}) THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name,                                                                                                            
+meta.name
+FROM (
+    select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type
+    from ApidbTuning.${tblPrefix}SampleMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
+    where m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+    and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
+    group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
+                            )meta
             ]]>
           </sql>
         </sqlQuery>
