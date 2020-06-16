@@ -215,8 +215,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       // TODO: how to handle optional tables??  probably just do these in a subclass?
 
       if(hasHouseholds) {
-          String householdSourceIdsForHouseholdMemberTable = getPropValue("householdSourceIdsForHouseholdMemberTable");
-          setPropValue("householdSourceIdsForHouseholdMemberTableSubquery", propertySourceIdSubquery(householdSourceIdsForHouseholdMemberTable));
+	  // String householdSourceIdsForHouseholdMemberTable = getPropValue("householdSourceIdsForHouseholdMemberTable");
+          //setPropValue("householdSourceIdsForHouseholdMemberTableSubquery", propertySourceIdSubquery(householdSourceIdsForHouseholdMemberTable));
+
+	  String participantRecordAttributesList = getPropValue("participantRecordAttributesList");
+          setPropValue("participantRecordAttributesListSubquery", propertySourceIdSubquery(participantRecordAttributesList));
 
           setPropValue("extraHouseholdTables", this.extraHouseholdTables());
           setPropValue("extraHouseholdTableQueries", this.extraHouseholdTableQueries());
@@ -1064,7 +1067,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 				 {"householdAttributesList", ""},
                                  {"householdRecordAttributesList", ""},
-                                 {"householdSourceIdsForHouseholdMemberTable", ""},
+                                 //{"householdSourceIdsForHouseholdMemberTable", ""},
                                  {"householdRecordOverview", ""},
 
                                  {"observationAttributesList", ""},

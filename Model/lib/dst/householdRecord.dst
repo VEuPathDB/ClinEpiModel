@@ -5,7 +5,7 @@ prop=datasetName
 prop=studyAbbreviation
 prop=householdRecordOverview
 prop=householdRecordAttributesListFull
-prop=householdSourceIdsForHouseholdMemberTable
+prop=participantRecordAttributesList
 prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
@@ -158,8 +158,8 @@ name=householdRecordAttributeQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/householdRecord.xml
 prop=datasetName
 prop=householdRecordAttributesListFull
-prop=householdSourceIdsForHouseholdMemberTable
 prop=householdMultiFilterIdsQuoted
+prop=participantRecordAttributesList
 prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
@@ -262,8 +262,8 @@ name=householdRecordTableQueries
 anchorFile=ClinEpiModel/Model/lib/wdk/model/records/householdRecord.xml
 prop=datasetName
 prop=householdRecordAttributesListFull
-prop=householdSourceIdsForHouseholdMemberTable
-prop=householdSourceIdsForHouseholdMemberTableSubquery
+prop=participantRecordAttributesList
+prop=participantRecordAttributesListSubquery
 prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
@@ -285,7 +285,7 @@ prop=extraHouseholdTableQueries
             <![CDATA[
                      select pt.property_source_id as name
                           , pt.property as display_name 
-                     from apidbtuning.${tblPrefix}PropertyType pt, ${householdSourceIdsForHouseholdMemberTableSubquery} ids
+                     from apidbtuning.${tblPrefix}PropertyType pt, ${participantRecordAttributesListSubquery} ids
                      where pt.property_source_id = ids.property_source_id
                      order by ids.order_num
             ]]>
@@ -339,7 +339,7 @@ WHERE o.dataset_name = '&&datasetName&&'
 maled
             <sqlParamValue name="householdMemberColumns"><![CDATA[ PATO_0000047, EUPATH_0000741, EUPATH_0000657, EUPATH_0000660, EUPATH_0000744, EUPATH_0000742 ]]></sqlParamValue>
 -->
-            <sqlParamValue name="householdMemberColumns"><![CDATA[ ${householdSourceIdsForHouseholdMemberTable}  ]]></sqlParamValue>
+            <sqlParamValue name="householdMemberColumns"><![CDATA[ ${participantRecordAttributesList}  ]]></sqlParamValue>
 
             <sql>
             <![CDATA[
@@ -582,8 +582,8 @@ name=householdRecordLightTrapTableQueries
 anchorFile=ClinEpiModel/Model/lib/dst/householdRecord.dst
 prop=datasetName
 prop=householdRecordAttributesListFull
-prop=householdSourceIdsForHouseholdMemberTable
-prop=householdSourceIdsForHouseholdMemberTableSubquery
+prop=participantRecordAttributesList
+prop=participantRecordAttributesListSubquery
 prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
