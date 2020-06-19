@@ -134,7 +134,6 @@ order by ordernum,display
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
      <column name="description"/>
-     <column name="variable"/>
      <column name="type"/>
      <column name="units"/>
      <column name="precision"/>
@@ -142,7 +141,7 @@ order by ordernum,display
     <sql>
       <![CDATA[
 select * from (
-select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.variable, o.units,o.type,o.is_range,o.precision, o.display_order
+select o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, o.display_name, o.description, o.units,o.type,o.is_range,o.precision, o.display_order
 from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448' )
@@ -204,7 +203,6 @@ and h.household_id = hp.household_id
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
      <column name="description"/>
-     <column name="variable"/>
      <column name="type"/>
      <column name="units"/>
      <column name="precision"/>
@@ -213,7 +211,7 @@ and h.household_id = hp.household_id
          <![CDATA[
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.variable, o.units,
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
 CASE WHEN o.ontology_term_source_id in (${householdMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range,o.precision, o.display_order
 from ApidbTuning.${tblPrefix}Ontology o
@@ -287,7 +285,6 @@ where h.household_id = hp.household_id
      <column name="parent_ontology_term_name"/>
      <column name="display_name"/>
      <column name="description"/>
-     <column name="variable"/>
      <column name="type"/>
      <column name="units"/>
      <column name="precision"/>
@@ -296,7 +293,7 @@ where h.household_id = hp.household_id
          <![CDATA[
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.variable, o.units,
+nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.units,
 CASE WHEN o.ontology_term_source_id in (${participantMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range, o.precision, o.display_order
 from ApidbTuning.${tblPrefix}Ontology o
@@ -352,7 +349,6 @@ from ApidbTuning.${tblPrefix}ParticipantMD
       <column name="parent_ontology_term_name"/>
       <column name="display_name"/>
       <column name="description"/>
-      <column name="variable"/>
       <column name="type"/>
       <column name="units"/>
       <column name="precision"/>
@@ -362,7 +358,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD
 select * from (
 select distinct o.ontology_term_source_id as ontology_term_name,
 CASE WHEN o.ontology_term_source_id = 'EUPATH_0000609' THEN 'EUPATH_0000738' ELSE o.parent_ontology_term_source_id END as parent_ontology_term_name, 
-nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.variable, o.units,
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.units,
 CASE WHEN o.ontology_term_source_id in (${observationMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
 o.is_range,o.precision,CASE WHEN o.ontology_term_source_id = 'EUPATH_0000609' THEN 0.1 ELSE o.display_order END as display_order
 from ApidbTuning.${tblPrefix}Ontology o
