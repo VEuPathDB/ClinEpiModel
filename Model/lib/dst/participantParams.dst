@@ -2889,8 +2889,8 @@ from ApidbTuning.${tblPrefix}Ontology o
      START WITH o.ontology_term_source_id in ('PCO_0000024','ENVO_01000744')
      ) 
  union
- select 'average_anopheles' as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, 'Average Female Anopheles Collected' as display_name, 'Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search' as description, null as variable_name, null as units, 'number' as type, 1 as is_range, null as variable_name
- null as precision, null as display_order from dual)
+ select 'average_anopheles' as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name, 'Average Female Anopheles Collected' as display_name, 'Average number of female Anopheles mosquitoes collected per house per night using CDC light traps set up once a month during the dates of this search' as description,
+ null as variable_name, null as units, 'number' as type, 1 as is_range, null as precision, null as display_order from dual)
  where ontology_term_name not in (${householdFilterExcludedIdsQuoted})
  order by display_order, display_name
     </sql>
