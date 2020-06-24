@@ -544,6 +544,12 @@ You can further restrict the participants returned in your search by setting a r
             </description>
         </group>
 
+    <!--************************************************************-->
+    <!-- Anchor for participants filter params -->
+    <!--************************************************************-->
+
+    <!-- TEMPLATE_ANCHOR participantParamGroups -->
+
     </groupSet>
 
 </wdkModel>

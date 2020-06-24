@@ -15,7 +15,7 @@ prop=timeSourceId
 >templateTextStart<
      <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="sampleParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="sampleParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
@@ -39,7 +39,7 @@ prop=paramSuffix
 prop=timeSourceId
 >templateTextStart<
      <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="sampleParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>

@@ -17,7 +17,7 @@ prop=timeColumnName
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
@@ -90,7 +90,7 @@ prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
@@ -235,7 +235,7 @@ prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <column name="source_id"/>
@@ -259,7 +259,7 @@ prop=timeSourceId
 prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <column name="source_id"/>
@@ -338,7 +338,7 @@ prop=visitMaxDate
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="clinicalVisitParams.visits_visitage_metadata_prism" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="clinicalVisitParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_prism" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.visits_prism" groupRef="metaDataGroups.observ_visit_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
@@ -412,7 +412,7 @@ prop=visitMaxDate
        <paramRef ref="participantParams.duration_observation" groupRef="metaDataGroups.daterange"/>  
        <paramRef ref="clinicalVisitParams.visits_visitage_metadata_${paramSuffix}" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.observ_visit_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
@@ -480,7 +480,7 @@ prop=timeColumnName
 >templateTextStart<
        <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
@@ -553,7 +553,7 @@ prop=timeSourceId
 prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
@@ -589,7 +589,7 @@ prop=timeColumnName
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}"
           isCacheable="true">
        <paramRef ref="clinicalVisitParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
@@ -662,7 +662,7 @@ prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="clinicalVisitParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics"/>
        <column name="source_id"/>

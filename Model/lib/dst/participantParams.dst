@@ -6026,3 +6026,17 @@ from ApidbTuning.${tblPrefix}ObservationMD
     </sqlQuery>
 >templateTextEnd<
 
+[templateStart]
+name=participantParamGroups
+anchorFile=ClinEpiModel/Model/lib/wdk/model/questions/params/participantParams.xml
+prop=tblPrefix
+prop=paramSuffix
+prop=householdStepName
+prop=householdStepDescription
+>templateTextStart<
+        <group name="part_household_characteristics_${paramSuffix}" displayName="${householdStepName}" displayType="ShowHide">
+            <description>
+                <![CDATA[ ${householdStepDescription} ]]>
+            </description>
+        </group>
+>templateTextEnd<

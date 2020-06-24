@@ -19,7 +19,7 @@ prop=visitMaxDate
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="lightTrapParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.households_prism" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="lightTrapParams.lighttraps_prism" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
@@ -44,7 +44,7 @@ prop=visitMaxDate
 >templateTextStart<
     <sqlQuery name="LightTrapsByMetadata_${paramSuffix}" isCacheable="true"> 
        <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="lightTrapParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="lightTrapParams.lighttraps_${paramSuffix}" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
@@ -69,7 +69,7 @@ prop=visitMaxDate
 >templateTextStart<
     <sqlQuery name="LightTrapsByMetadata_${paramSuffix}" isCacheable="true"> 
        <paramRef ref="lightTrapParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="lightTrapParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="lightTrapParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="lightTrapParams.lighttraps_${paramSuffix}" groupRef="metaDataGroups.lighttrap_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>

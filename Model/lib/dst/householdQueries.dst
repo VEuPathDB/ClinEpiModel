@@ -15,8 +15,8 @@ prop=householdOrObservationIsVisible
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="householdParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
@@ -48,8 +48,8 @@ prop=paramSuffix
 prop=householdOrObservationIsVisible
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics"/>
-       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
        <column name="source_id"/>
@@ -115,7 +115,7 @@ prop=visitMaxDate
        <paramRef ref="participantParams.tbl_prefix" visible="false" default="${tblPrefix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.geographic_region_prism" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="householdParams.households_prism" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.households_prism" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="householdParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>
@@ -152,7 +152,7 @@ prop=visitMaxDate
 >templateTextStart<
     <sqlQuery name="HouseholdsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="householdParams.date_range" minDate="${visitMinDate}" maxDate="${visitMaxDate}" groupRef="metaDataGroups.household_daterange"/>
-       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics"/>
+       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <column name="source_id"/>
        <column name="project_id"/>

@@ -607,10 +607,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
       if(hasHouseholdObservations){
           setPropValue("householdOrObservationIsVisible", "true");
-          setPropValue("householdFilterDataTypeDisplayName", "Household Observations");
+          setPropValue("householdFilterDataTypeDisplayName", getPropValue("householdStepName")+" Observations");
       }else{
           setPropValue("householdOrObservationIsVisible", "false");
-          setPropValue("householdFilterDataTypeDisplayName", "Households");
+          setPropValue("householdFilterDataTypeDisplayName", getPropValue("householdStepName")+"s");
       }
 
       //Inject the filter param queries for participants if any questions generated
@@ -646,6 +646,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           }
           if(injectParams){
               injectTemplate("participantFilterParamQueries");
+              //Inject the household param group ... note all studies injected uniformly based on presenter properties
+              injectTemplate("participantParamGroups");
           }
       }
 
@@ -1129,6 +1131,8 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"filterParamBaseTemplate", ""},      //Note these BaseTemplates will have participant etc. 
                                  {"filterParamQueryBaseTemplate", ""}, //prepended as determined by hasxxxQuestion properties
                                  {"queryBaseTemplate", ""},            //also need set of templates for each record with question
+                                 {"householdStepName", ""},
+                                 {"householdStepDescription", ""},
                                  {"timepointUnits", ""},
                                  {"timeColumnName", ""},
                                  {"timeSourceId", ""}
