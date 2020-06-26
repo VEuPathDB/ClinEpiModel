@@ -593,6 +593,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasParticipantQuestion = getPropValueAsBoolean("hasParticipantQuestion");
       boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
       boolean hasSampleQuestion = getPropValueAsBoolean("hasSampleQuestion");
+      boolean hasStudyDetailsStep = getPropValueAsBoolean("hasStudyDetailsStep");
       // boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
@@ -602,6 +603,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
       String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
+      String studyDetailsOntologyIdsQuoted = addQuotes(getPropValue("studyDetailsOntologyIds"));
 
       //set properties needed for householdObservations
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
@@ -612,6 +614,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("householdOrObservationIsVisible", "false");
           setPropValue("householdFilterDataTypeDisplayName", getPropValue("householdStepName")+"s");
       }
+
+      //set property for name of observation and region filters
+      setPropValue("observationFilterDataTypeDisplayName", getPropValue("observationStepName")+"s");
+      String householdStepName = getPropValue("householdStepName");
+      setPropValue("regionFilterDataTypeDisplayName", householdStepName.contains("Region") ? "Participants" : householdStepName + "s");
 
       //Inject the filter param queries for participants if any questions generated
       if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
@@ -633,13 +640,17 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               observationFilterExcludedIdsQuoted  = "'NA'";
           }
           setPropValue("observationFilterExcludedIdsQuoted", observationFilterExcludedIdsQuoted);
+          if(studyDetailsOntologyIdsQuoted == null || studyDetailsOntologyIdsQuoted.equals("''")) {
+              studyDetailsOntologyIdsQuoted = "'NA'";
+          }
+          setPropValue("studyDetailsOntologyIdsQuoted", studyDetailsOntologyIdsQuoted);
           //determine if a special template is used
           String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
           if(filterParamQueryBaseTemplate.equals("default")){
               if(studyType.equals("CaseControl")){
                   setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + studyType + firstWizardStep));
               }else{
-                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + firstWizardStep));
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
               }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamQueryBaseTemplate));
@@ -660,7 +671,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               if(studyType.equals("CaseControl")){
                   setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + studyType + firstWizardStep));
               }else{
-                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + firstWizardStep));
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
               }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamBaseTemplate));
@@ -672,7 +683,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //Inject the particiant metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
           if(queryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + studyType + "Query" + firstWizardStep));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + studyType + "Query" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + queryBaseTemplate));
           }
@@ -1087,12 +1098,6 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"participantSourceIdsExcludedFromParticipantAttributes", ""},
                                  {"observationSourceIdsForParticipantsObservationsTable", ""},
                                  {"observationSourceIdsToOrderParticipantsObservationsTable", ""},
-                                 //study summary for study search ... also includes studyCategories
-                                 {"studyCountries", ""},
-                                 {"studyDesignType", ""},
-                                 {"studyYearStart", ""},
-                                 {"studyYearEnd", ""},
-                                 {"studyTargetPopulation", ""},
                                  //attributes to be added to the record for the studies.jason replacement
                                  {"studyCategories", ""},
                                  {"studyAccess", ""},
@@ -1133,6 +1138,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"queryBaseTemplate", ""},            //also need set of templates for each record with question
                                  {"householdStepName", ""},
                                  {"householdStepDescription", ""},
+                                 {"observationStepName", ""},
+                                 {"observationStepDescription", ""},
+                                 {"hasStudyDetailsStep", ""},
+                                 {"studyDetailsStepName", ""},
+                                 {"studyDetailsStepDescription", ""},
+                                 {"studyDetailsOntologyIds", ""},
                                  {"timepointUnits", ""},
                                  {"timeColumnName", ""},
                                  {"timeSourceId", ""}

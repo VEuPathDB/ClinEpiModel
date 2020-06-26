@@ -18,7 +18,7 @@ prop=householdOrObservationIsVisible
        <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="part_count"/>
@@ -51,7 +51,7 @@ prop=householdOrObservationIsVisible
        <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="part_count"/>
@@ -82,7 +82,7 @@ prop=paramSuffix
     <sqlQuery name="HouseholdsByMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="householdParams.householdOrObservation" visible="false" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <column name="source_id"/>
        <column name="project_id"/>
        <column name="part_count"/>

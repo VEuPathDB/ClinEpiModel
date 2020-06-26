@@ -21,7 +21,7 @@ prop=timeColumnName
        <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
@@ -72,7 +72,7 @@ prop=hasStudyArmParameter
        <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/> 
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
@@ -122,7 +122,7 @@ prop=hasStudyArmParameter
           isCacheable="true">
        <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.part_characteristics"/> 
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
@@ -171,7 +171,60 @@ prop=paramSuffix
        <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
+where obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantSurveyQueryRegionSD
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
+prop=hasStudyArmParameter
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="participantParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/> 
+       <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+         <sql>
+           <![CDATA[
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
+where obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
+and pa.pan_id = obs.participant_id
+group by pa.name
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=participantSurveyQueryHouseholdSD
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
+prop=hasStudyArmParameter
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="participantParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/> 
+       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
@@ -197,7 +250,7 @@ prop=hasStudyArmParameter
        <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/> 
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
@@ -222,7 +275,7 @@ prop=hasStudyArmParameter
      <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.part_characteristics"/> 
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>
@@ -250,7 +303,7 @@ prop=paramSuffix
        <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.household_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.participant_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.event_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.event_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.use_rel_case_control" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.keep_remove" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.relative_event_${paramSuffix}" groupRef="metaDataGroups.relative_case_control"/>
@@ -294,7 +347,7 @@ prop=timeColumnName
 >templateTextStart<
      <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.treatment_${paramSuffix}" groupRef="metaDataGroups.treatment"/> 
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
@@ -351,8 +404,8 @@ prop=visitMaxDate
        <paramRef ref="participantParams.visits_visitage_metadata_prism" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_prism" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.households_prism" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
-       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.part_visit_characteristics"/> 
-       <paramRef ref="participantParams.visits_prism" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/> 
+       <paramRef ref="participantParams.visits_prism" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
@@ -438,8 +491,8 @@ prop=visitMaxDate
        <paramRef ref="participantParams.visits_visitage_metadata_${paramSuffix}" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
-       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.part_visit_characteristics"/> 
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/> 
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
@@ -511,8 +564,8 @@ prop=visitMaxDate
        <paramRef ref="participantParams.visits_visitage_metadata_${paramSuffix}" groupRef="metaDataGroups.daterange"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
-       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.part_visit_characteristics"/> 
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_visit_characteristics"/>
+       <paramRef ref="participantParams.visits_per_year" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/> 
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_visits"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_visits"/>
@@ -592,7 +645,7 @@ prop=paramSuffix
        <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
        <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
@@ -637,84 +690,6 @@ and count(*) <= \$\$visit_count.max\$\$
 >templateTextEnd<
 
 [templateStart]
-name=participantSurveyQuerySCORE
-anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
-prop=hasStudyArmParameter
-prop=tblPrefix
-prop=paramSuffix
->templateTextStart<
-     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
-       <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_village_characteristics"/>
-       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-         <sql>
-           <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
-where obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
-and pa.pan_id = obs.participant_id
-group by pa.name
-                ]]>   
-        </sql>
-     </sqlQuery>
->templateTextEnd<
-
-[templateStart]
-name=participantMetadataQueryPROVIDE2
-anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
-prop=tblPrefix
-prop=paramSuffix
-prop=timeSourceId
-prop=timeColumnName
-prop=hasStudyArmParameter
->templateTextStart<
-     <sqlQuery name="ParticipantsMetadata_${paramSuffix}"
-          isCacheable="true">
-       <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
-       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
-       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
-       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
-       <paramRef ref="participantParams.relative_visits_${paramSuffix}" groupRef="metaDataGroups.relative_events"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-       <column name="visit_count"/>
-         <sql>
-           <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count
-from (select distinct participant_id,observation_id,${timeColumnName} from ApidbTuning.${tblPrefix}ObservationMD
-      where observation_id in (\$\$visits_${paramSuffix}\$\$)
-      and ontology_term_name = '${timeSourceId}'
-\$\$dateOperator_fv\$\$
- select distinct vis.participant_id,vis.observation_id,vis.${timeColumnName}
- from ApidbTuning.${tblPrefix}ObservationMD vis, ApidbTuning.${tblPrefix}ObservationMD rv
- where vis.observation_id in (\$\$visits_${paramSuffix}\$\$)
- and vis.ontology_term_name = '${timeSourceId}'
-and \$\$use_relative_visits\$\$ = 1
-and rv.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
-and rv.ontology_term_name = '${timeSourceId}'
-and vis.participant_id = rv.participant_id
-and vis.observation_id != rv.observation_id
-and vis.${timeColumnName} \$\$date_direction_fv\$\$ rv.${timeColumnName}  
-and abs(rv.${timeColumnName} - vis.${timeColumnName}) >= \$\$days_between.min\$\$
-and abs(rv.${timeColumnName} - vis.${timeColumnName}) <= \$\$days_between.max\$\$
-group by vis.participant_id,vis.observation_id,vis.${timeColumnName}
-) main, ApidbTuning.${tblPrefix}Participants pa
-where pa.pan_id = main.participant_id
-group by pa.name 
-                ]]>   
-        </sql>
-     </sqlQuery>
->templateTextEnd<
-
-[templateStart]
 name=participantMetadataQueryMalawi
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=hasStudyArmParameter
@@ -727,7 +702,7 @@ prop=paramSuffix
        <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
        <paramRef ref="participantParams.household_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.participant_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.event_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.event_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.use_rel_case_control" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.keep_remove" groupRef="metaDataGroups.relative_case_control"/>
        <paramRef ref="participantParams.relative_event_${paramSuffix}" groupRef="metaDataGroups.relative_case_control"/>
@@ -762,99 +737,6 @@ and core.EUPATH_0010049 = pa.EUPATH_0010049
 >templateTextEnd<
 
 [templateStart]
-name=participantSurveyQuerySCORENoVillage
-anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
-prop=hasStudyArmParameter
-prop=tblPrefix
-prop=paramSuffix
->templateTextStart<
-     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
-       <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
-       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.part_sample_characteristics"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-         <sql>
-           <![CDATA[
-select distinct pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.${tblPrefix}Participants pa
-where \$\$visits_${paramSuffix}.filters_present\$\$ = 0
-and pa.pan_id in (\$\$participants_${paramSuffix}\$\$)
-UNION
-select distinct pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.${tblPrefix}Participants pa
-where \$\$visits_${paramSuffix}.filters_present\$\$ = 1
-and pa.pan_id in (\$\$visits_${paramSuffix}\$\$)
-                ]]>   
-        </sql>
-     </sqlQuery>
->templateTextEnd<
-
-[templateStart]
-name=participantSurveyQueryPerch
-anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
-prop=hasStudyArmParameter
-prop=tblPrefix
-prop=paramSuffix
->templateTextStart<
-     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="participantParams.case_control_filter_${paramSuffix}" groupRef="metaDataGroups.choose_case_control"/> 
-       <paramRef ref="participantParams.study_arm_${paramSuffix}" visible="${hasStudyArmParameter}" groupRef="metaDataGroups.choose_case_control"/> 
-       <paramRef ref="participantParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
-       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
-       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-         <sql>
-           <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
-where obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
-and pa.pan_id = obs.participant_id
-group by pa.name
-                ]]>   
-        </sql>
-     </sqlQuery>
->templateTextEnd<
-
-[templateStart]
-name=participantMetadataQueryPROVIDE
-anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
-prop=tblPrefix
-prop=paramSuffix
-prop=hasStudyArmParameter
->templateTextStart<
-     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
-       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
-       <paramRef ref="participantParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-         <sql>
-           <![CDATA[
-select pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
-where \$\$samples_${paramSuffix}.filters_present\$\$ = 0
-and obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
-and pa.pan_id = obs.participant_id
-group by pa.name
-UNION
-select pa.name as source_id, '@PROJECT_ID@' as project_id
-from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
-where \$\$samples_${paramSuffix}.filters_present\$\$ = 1
-and obs.observation_id in (\$\$samples_${paramSuffix}\$\$)
-and pa.pan_id = obs.participant_id
-group by pa.name
-                ]]>   
-        </sql>
-     </sqlQuery>
->templateTextEnd<
-
-[templateStart]
 name=participantMetadataQueryWASHB
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=tblPrefix
@@ -865,7 +747,7 @@ prop=hasStudyArmParameter
        <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
        <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
        <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.part_event_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
        <column name="source_id"/>
        <column name="project_id"/>
          <sql>

@@ -57,7 +57,7 @@ prop=timepointUnits
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
-              "observationsGroupName": "event_characteristics",
+              "observationsGroupName": "event_characteristics_${paramSuffix}",
               "relatedObservationsGroupName": "relative_events",
               "useRelativeObservationsParamName": "use_relative_visits",
               "dateOperatorParamName": "dateOperator_fv",
@@ -136,7 +136,7 @@ prop=timepointUnits
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
-              "observationsGroupName": "event_characteristics",
+              "observationsGroupName": "event_characteristics_${paramSuffix}",
               "relatedObservationsGroupName": "relative_events",
               "useRelativeObservationsParamName": "use_relative_visits",
               "dateOperatorParamName": "dateOperator_fv",
@@ -219,7 +219,7 @@ prop=timepointUnits
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
-              "observationsGroupName": "observ_visit_characteristics",
+              "observationsGroupName": "event_characteristics_${paramSuffix}",
               "relatedObservationsGroupName": "relative_visits",
               "useRelativeObservationsParamName": "use_relative_visits",
               "dateOperatorParamName": "dateOperator_fv",
@@ -300,7 +300,7 @@ prop=timepointUnits
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
-              "observationsGroupName": "observ_visit_characteristics",
+              "observationsGroupName": "event_characteristics_${paramSuffix}",
               "relatedObservationsGroupName": "relative_visits",
               "useRelativeObservationsParamName": "use_relative_visits",
               "dateOperatorParamName": "dateOperator_fv",
@@ -383,7 +383,7 @@ prop=timepointUnits
         <propertyList name="relatedObservationsLayoutSettings">
           <value>
             {
-              "observationsGroupName": "event_characteristics",
+              "observationsGroupName": "event_characteristics_${paramSuffix}",
               "relatedObservationsGroupName": "relative_events",
               "useRelativeObservationsParamName": "use_relative_visits",
               "dateOperatorParamName": "dateOperator_fv",
