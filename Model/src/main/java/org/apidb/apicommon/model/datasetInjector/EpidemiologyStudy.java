@@ -607,18 +607,19 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
       //set properties needed for householdObservations
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
+      String tmpHouseholdStepName = getPropValue("householdStepName");
+      String householdStepName = tmpHouseholdStepName.contains("Region") ? "Participants" : tmpHouseholdStepName + "s";
       if(hasHouseholdObservations){
           setPropValue("householdOrObservationIsVisible", "true");
           setPropValue("householdFilterDataTypeDisplayName", getPropValue("householdStepName")+" Observations");
       }else{
           setPropValue("householdOrObservationIsVisible", "false");
-          setPropValue("householdFilterDataTypeDisplayName", getPropValue("householdStepName")+"s");
+          setPropValue("householdFilterDataTypeDisplayName", householdStepName);
       }
 
       //set property for name of observation and region filters
       setPropValue("observationFilterDataTypeDisplayName", getPropValue("observationStepName")+"s");
-      String householdStepName = getPropValue("householdStepName");
-      setPropValue("regionFilterDataTypeDisplayName", householdStepName.contains("Region") ? "Participants" : householdStepName + "s");
+      setPropValue("regionFilterDataTypeDisplayName", householdStepName);
 
       //Inject the filter param queries for participants if any questions generated
       if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
