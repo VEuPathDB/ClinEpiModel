@@ -737,14 +737,14 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //Inject the metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
           // always use default template for samples
-          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleQuery" + firstWizardStep));
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleQuery" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
           injectTemplate("sampleMetadataQuery");
           
           //Inject the filter params .... note these use the ontology queries from particiants filters
           boolean injectParams = getPropValueAsBoolean("injectParams");
           String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
           //always use default
-          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParams" + firstWizardStep));
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
           if(injectParams){
               injectTemplate("sampleFilterParams");
           }
@@ -752,7 +752,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //and the filter param queries
           String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
           //only default
-          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParamQueries" + firstWizardStep));
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
           if(injectParams){
               injectTemplate("sampleFilterParamQueries");
           }
