@@ -59,7 +59,7 @@ public class BasicEpiStudy extends EpidemiologyStudy {
       Map<String,String[]> map = new HashMap<String,String[]>();
       boolean hasSampleQuestion = getPropValueAsBoolean("hasSampleQuestion");
       boolean hasSamples = getPropValueAsBoolean("hasSampleRecord");
-      String studyType = getPropValue("studyType");
+      //String studyType = getPropValue("studyType");
       if(hasSampleQuestion && hasSamples){
           //          if(studyType.equals("Longitudinal")){
           //              map.put("SamplesByMetadata" + studyType, new String[] {"menu", "webservice"});
