@@ -697,7 +697,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //Inject the metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
           if(queryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + studyType + "Query" + firstWizardStep));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + studyType + "Query" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + queryBaseTemplate));
           }
@@ -707,7 +707,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           boolean injectParams = getPropValueAsBoolean("injectParams");
           String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
           if(filterParamBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParams" + firstWizardStep));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamBaseTemplate));
           }
@@ -721,7 +721,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               if(studyType.equals("CaseControl")){
                   setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + studyType + firstWizardStep));
               }else{
-                  setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + firstWizardStep));
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
               }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamQueryBaseTemplate));
