@@ -1509,6 +1509,7 @@ prop=rmRegionSqlCommentEnd
    <sqlQuery name="StudyDetailsMetaData_${paramSuffix}" isCacheable="false">
      <column name="ontology_term_name"/>
       <column name="internal"/>
+      <column name="record_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
