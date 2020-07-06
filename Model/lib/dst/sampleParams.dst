@@ -231,7 +231,7 @@ prop=trimSampleMetadataTerms
                        countPredictsAnswerCount="true"
                        prompt="Participants"
                        trimMetadataTerms="${trimParticipantMetadataTerms}"
-                       dependedParamRef="sampleParams.households_${paramSuffix},sampleParams.sample_details_filter_${paramSuffix}">
+                       dependedParamRef="sampleParams.households_${paramSuffix},sampleParams.study_details_filter_${paramSuffix}">
          <help>
               Select participants based on their characteristics.
          </help>
@@ -299,7 +299,7 @@ prop=trimSampleMetadataTerms
                        countPredictsAnswerCount="true"
                        prompt="Participants"
                        trimMetadataTerms="${trimParticipantMetadataTerms}"
-                       dependedParamRef="sampleParams.study_details_filter_${paramSuffix}"
+                       dependedParamRef="sampleParams.study_details_filter_${paramSuffix}">
          <help>
               Select participants based on their characteristics.
          </help>
@@ -1197,13 +1197,12 @@ prop=rmRegionSqlCommentEnd
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
-      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  m.household_id as internal, m.participant_id as filter_item_id, io.sample_id as record_id,
+select  m.participant_id as internal, io.sample_id as record_id,
         m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}ParticipantMD m, ApidbTuning.${tblPrefix}PartSampleIO io
 where m.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
@@ -1261,30 +1260,30 @@ from ApidbTuning.${tblPrefix}Ontology o
        <![CDATA[
                 select  hp.participant_id as internal, h.household_observation_id as filter_item_id, ho.sample_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseSampleIO ho, ApidbTuning.${tblPrefix}HousePartIO hp
-                where hp.participant_id in (\$\$study_details_filter_${paramSuffix}\$\$)
+                where ho.household_id = h.household_id
                 and hp.household_id = h.household_id
-                and ho.household_id = h.household_id
-                and h.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
-                ${rmRegionSqlCommentStart}
-                and h.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
-                CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-                START WITH o.ontology_term_source_id =  'GAZ_00000448')
-                ${rmRegionSqlCommentEnd}
-       ]]>
-     </sql>
-   </sqlQuery>
+                and hp.participant_id in (\$\$study_details_filter_${paramSuffix}\$\$)
+     and h.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
+     ${rmRegionSqlCommentStart}
+     and h.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+     ${rmRegionSqlCommentEnd}
+          ]]>
+    </sql>
+    </sqlQuery>
 
-    <sqlQuery name="HouseholdMetaDataBkgd_${paramSuffix}" isCacheable="false">
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-                select  h.participant_id as internal, h.household_observation_id as filter_item_id, ho.sample_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+   <sqlQuery name="HouseholdMetaDataBkgd_${paramSuffix}" isCacheable="false">
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="filter_item_id"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+                select  hp.participant_id as internal, h.household_observation_id as filter_item_id, ho.sample_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseSampleIO ho, ApidbTuning.${tblPrefix}HousePartIO hp
                 where ho.household_id = h.household_id
                 and hp.household_id = h.household_id
@@ -1511,13 +1510,12 @@ prop=rmRegionSqlCommentEnd
      <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
-      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  m.household_id as internal, m.participant_id as filter_item_id, io.sample_id as record_id,
+select  m.participant_id as internal, io.sample_id as record_id,
         m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}ParticipantMD m, ApidbTuning.${tblPrefix}PartSampleIO io
 where m.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
@@ -1566,6 +1564,12 @@ select p.participant_id as internal, ps.sample_id as record_id, p.ontology_term_
 from ApidbTuning.${tblPrefix}ParticipantMD p,  ApidbTuning.${tblPrefix}PartSampleIO ps
 where p.participant_id in (\$\$study_details_filter_${paramSuffix}\$\$)
 and p.participant_id = ps.participant_id
+UNION ALL
+select hp.participant_id as internal, hs.sample_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h,  ApidbTuning.${tblPrefix}HouseSampleIO hs, ApidbTuning.${tblPrefix}HousePartIO hp
+where hp.participant_id in (\$\$study_details_filter_${paramSuffix}\$\$)
+and hp.household_id = h.household_id
+and h.household_id = hs.household_id
           ]]>
     </sql>
     </sqlQuery>
@@ -1579,9 +1583,14 @@ and p.participant_id = ps.participant_id
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select p.participant_id as internal, hp.sample_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartSampleIO hp
-where hp.participant_id = p.participant_id
+select p.participant_id as internal, ps.sample_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p,  ApidbTuning.${tblPrefix}PartSampleIO ps
+where p.participant_id = ps.participant_id
+UNION ALL
+select hp.participant_id as internal, hs.sample_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h,  ApidbTuning.${tblPrefix}HouseSampleIO hs, ApidbTuning.${tblPrefix}HousePartIO hp
+where hp.household_id = h.household_id
+and h.household_id = hs.household_id
           ]]>
     </sql>
     </sqlQuery>
