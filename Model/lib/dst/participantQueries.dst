@@ -384,8 +384,15 @@ prop=paramSuffix
            <![CDATA[
 select pa.name as source_id, '@PROJECT_ID@' as project_id
 from ApidbTuning.${tblPrefix}ObservationMD obs, ApidbTuning.${tblPrefix}Participants pa
-where obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
+where \$\$visits_${paramSuffix}.filters_present\$\$ = 1
+and obs.observation_id in (\$\$visits_${paramSuffix}\$\$)
 and pa.pan_id = obs.participant_id
+group by pa.name
+UNION ALL
+select pa.name as source_id, '@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Participants pa
+where \$\$visits_${paramSuffix}.filters_present\$\$ = 0
+and pa.pan_id in (\$\$participants_${paramSuffix}\$\$)
 group by pa.name
                 ]]>   
         </sql>

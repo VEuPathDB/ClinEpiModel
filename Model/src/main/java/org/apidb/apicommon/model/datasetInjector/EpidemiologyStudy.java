@@ -741,21 +741,16 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           injectTemplate("sampleMetadataQuery");
           
           //Inject the filter params .... note these use the ontology queries from participants filters
-          boolean injectParams = getPropValueAsBoolean("injectParams");
           //String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
           //always use default
           setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
-          if(injectParams){
-              injectTemplate("sampleFilterParams");
-          }
+          injectTemplate("sampleFilterParams");
 
           //and the filter param queries
           //String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
           //only default
           setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
-          if(injectParams){
-              injectTemplate("sampleFilterParamQueries");
-          }
+          injectTemplate("sampleFilterParamQueries");
 
       }
 
