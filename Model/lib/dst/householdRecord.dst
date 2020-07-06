@@ -528,12 +528,29 @@ select t1.source_id, t1.project_id, t1.participant_source_id, t1.Participant_Id,
 
           <sql>
             <![CDATA[
-            select distinct o.display_name as display_name, o.ontology_term_source_id as name
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}SAMPLES')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
+with allData as (              
+select o.display_name, m.ontology_term_name as name, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type
+from ApidbTuning.${tblPrefix}SampleMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
+where  m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
+group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
+),
+duplicateData as (
+    select display_name,COUNT(display_name) from  allData GROUP BY display_name HAVING COUNT(display_name) > 1
+)
+
+select * from (
+    select distinct CASE when allData.display_name = duplicateData.display_name or allData.parent_type = 'multifilter' then concat(concat(allData.parent_display_name, ' >> '), allData.display_name)
+        ELSE allData.display_name end as display_name, allData.name from allData, duplicateData)
+
+where display_name like '%>>%'
+
+
+UNION
+
+select allData.display_name, allData.name from allData
+    where allData.display_name not in  (select display_name from duplicateData ) 
+
             ]]>
           </sql>
         </sqlQuery>
