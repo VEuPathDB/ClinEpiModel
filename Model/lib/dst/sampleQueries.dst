@@ -107,6 +107,147 @@ where pan_id in (\$\$samples_${paramSuffix}\$\$)
 >templateTextEnd<
 
 [templateStart]
+name=sampleQueryRegionSDnoObs
+anchorFile=ClinEpiModel/Model/lib/dst/sampleQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="sampleParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/>
+       <paramRef ref="sampleParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Samples 
+where pan_id in (\$\$samples_${paramSuffix}\$\$)
+           ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=sampleQueryHouseholdSDnoObs
+anchorFile=ClinEpiModel/Model/lib/dst/sampleQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="sampleParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/>
+       <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Samples 
+where pan_id in (\$\$samples_${paramSuffix}\$\$)
+           ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=sampleQueryParticipantSDnoObs
+anchorFile=ClinEpiModel/Model/lib/dst/sampleQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="sampleParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/>
+       <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Samples 
+where pan_id in (\$\$samples_${paramSuffix}\$\$)
+           ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=sampleQueryRegionnoObs
+anchorFile=ClinEpiModel/Model/lib/dst/sampleQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="sampleParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Samples 
+where pan_id in (\$\$samples_${paramSuffix}\$\$)
+           ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=sampleQueryHouseholdnoObs
+anchorFile=ClinEpiModel/Model/lib/dst/sampleQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="sampleParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Samples 
+where pan_id in (\$\$samples_${paramSuffix}\$\$)
+           ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=sampleQueryParticipantnoObs
+anchorFile=ClinEpiModel/Model/lib/dst/sampleQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+>templateTextStart<
+     <sqlQuery name="SamplesByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="sampleParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="sampleParams.samples_${paramSuffix}" groupRef="metaDataGroups.part_sample_characteristics"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <sql>
+           <![CDATA[
+select distinct name as source_id,'@PROJECT_ID@' as project_id
+from ApidbTuning.${tblPrefix}Samples 
+where pan_id in (\$\$samples_${paramSuffix}\$\$)
+           ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
 name=sampleQueryHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/sampleQueries.dst
 prop=tblPrefix

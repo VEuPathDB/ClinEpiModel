@@ -433,10 +433,12 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               setPropValue("observationQuestionFull", getTemplateInstanceText(key));
               injectTemplate("observationsByDataset");
           }
-	  
-	  
-
-
+          // set the properties that comment out the observation attributes meta from sample record
+          setPropValue("noObsSampleAttsCommentStart","");
+          setPropValue("noObsSampleAttsCommentEnd","");
+      }else{
+          setPropValue("noObsSampleAttsCommentStart","<!--");
+          setPropValue("noObsSampleAttsCommentEnd","-->");
       }
 
 
@@ -737,19 +739,19 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //Inject the metadata query
           //String queryBaseTemplate = getPropValue("queryBaseTemplate");
           // always use default template for samples
-          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleQuery" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleQuery" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasObservations ? "" : "noObs")));
           injectTemplate("sampleMetadataQuery");
           
           //Inject the filter params .... note these use the ontology queries from participants filters
           //String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
           //always use default
-          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasObservations ? "" : "noObs")));
           injectTemplate("sampleFilterParams");
 
           //and the filter param queries
           //String filterParamQueryBaseTemplate = getPropValue("filterParamQueryBaseTemplate");
           //only default
-          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+          setPropValue("injectedTemplateFull",getTemplateInstanceText("sampleFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasObservations ? "" : "noObs")));
           injectTemplate("sampleFilterParamQueries");
 
       }

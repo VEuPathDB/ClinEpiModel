@@ -10,6 +10,8 @@ prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
 prop=includeProjects
+prop=noObsSampleAttsCommentStart
+prop=noObsSampleAttsCommentEnd
 
 
 >templateTextStart<
@@ -97,9 +99,9 @@ prop=includeProjects
       <!-- =================================================================== -->
 
       <attributeQueryRef ref="${presenterId}SampleAttributes.SampleAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.SampleAttributesMeta"/>
-      
+${noObsSampleAttsCommentStart}
       <attributeQueryRef ref="${presenterId}SampleAttributes.ObservationAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.ObservationAttributesMeta"/>
-
+${noObsSampleAttsCommentEnd}
       <attributeQueryRef ref="${presenterId}SampleAttributes.ParticipantAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.ParticipantAttributesMeta"/>
 
       <attributeQueryRef ref="${presenterId}SampleAttributes.HouseholdAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.HouseholdAttributesMeta"/>
@@ -151,6 +153,8 @@ prop=tblPrefix
 prop=paramSuffix
 prop=presenterId
 prop=includeProjects
+prop=noObsSampleAttsCommentStart
+prop=noObsSampleAttsCommentEnd
 
 
 
@@ -253,6 +257,7 @@ select allData.display_name, allData.name,  allData.help, otherData.reporter_nam
 
 
 
+${noObsSampleAttsCommentStart}
 <sqlQuery name="ObservationAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.ObservationAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
@@ -314,9 +319,7 @@ UNION
               </sql>
 
            </sqlQuery>
-
-
-
+${noObsSampleAttsCommentEnd}
 
 
 <sqlQuery name="ParticipantAttributes" attributeMetaQueryRef="${presenterId}SampleAttributes.ParticipantAttributesMeta">
