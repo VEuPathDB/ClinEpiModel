@@ -793,13 +793,12 @@ from ApidbTuning.${tblPrefix}Ontology o
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
-         <column name="filter_item_id"/>
          <column name="number_value"/>
          <column name="date_value"/>
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
 where participant_id in (\$\$participants_${paramSuffix}\$\$)
           ]]>
@@ -810,13 +809,12 @@ where participant_id in (\$\$participants_${paramSuffix}\$\$)
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
-      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
           ]]>
     </sql>
@@ -1127,13 +1125,12 @@ from ApidbTuning.${tblPrefix}Ontology o
          <column name="ontology_term_name"/>
          <column name="internal"/>
          <column name="record_id"/>
-         <column name="filter_item_id"/>
          <column name="number_value"/>
          <column name="date_value"/>
          <column name="string_value"/>
          <sql>
            <![CDATA[
-select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
 where participant_id in (\$\$participants_${paramSuffix}\$\$)
           ]]>
@@ -1144,13 +1141,12 @@ where participant_id in (\$\$participants_${paramSuffix}\$\$)
       <column name="ontology_term_name"/>
       <column name="internal"/>
       <column name="record_id"/>
-      <column name="filter_item_id"/>
       <column name="number_value"/>
       <column name="date_value"/>
       <column name="string_value"/>
       <sql>
         <![CDATA[
-select  participant_id as record_id, observation_id as internal, sample_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+select  participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
 from ApidbTuning.${tblPrefix}ObservationMD
           ]]>
     </sql>
