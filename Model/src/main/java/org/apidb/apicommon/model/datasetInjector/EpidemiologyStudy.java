@@ -596,6 +596,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasObservationQuestion = getPropValueAsBoolean("hasObservationQuestion");
       boolean hasSampleQuestion = getPropValueAsBoolean("hasSampleQuestion");
       boolean hasStudyDetailsStep = getPropValueAsBoolean("hasStudyDetailsStep");
+      boolean hasCommunityStep = getPropValueAsBoolean("hasCommunityStep");
       // boolean hasHouseholdDataCollection = getPropValueAsBoolean("hasHouseholdDataCollection");
       boolean hasHouseholds = getPropValueAsBoolean("hasHouseholdRecord");
       boolean hasParticipants = getPropValueAsBoolean("hasParticipantRecord");
@@ -603,6 +604,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasSamples = getPropValueAsBoolean("hasSampleRecord");
       String regionFilterExcludedIdsQuoted = addQuotes(getPropValue("regionFilterExcludedIds"));
       String householdFilterExcludedIdsQuoted = addQuotes(getPropValue("householdFilterExcludedIds"));
+      String communityFilterExcludedIdsQuoted = addQuotes(getPropValue("communityFilterExcludedIds"));
       String participantFilterExcludedIdsQuoted = addQuotes(getPropValue("participantFilterExcludedIds"));
       String observationFilterExcludedIdsQuoted = addQuotes(getPropValue("observationFilterExcludedIds"));
       String studyDetailsOntologyIdsQuoted = addQuotes(getPropValue("studyDetailsOntologyIds"));
@@ -619,18 +621,23 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           setPropValue("householdFilterDataTypeDisplayName", householdStepName);
       }
 
-      //set property for name of observation and region filters
+      //set property for name of community, observation and region filters
       setPropValue("observationFilterDataTypeDisplayName", getPropValue("observationStepName")+"s");
       setPropValue("regionFilterDataTypeDisplayName", householdStepName);
+      setPropValue("communityFilterDataTypeDisplayName", getPropValue("communityStepName")+"s");
 
       //Inject the filter param queries for participants if any questions generated
-      if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
+      if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion || hasSampleQuestion){
           boolean injectParams = getPropValueAsBoolean("injectParams");
           
           if(regionFilterExcludedIdsQuoted == null || regionFilterExcludedIdsQuoted.equals("''")) {
               regionFilterExcludedIdsQuoted  = "'NA'";
           }
           setPropValue("regionFilterExcludedIdsQuoted", regionFilterExcludedIdsQuoted);
+          if(communityFilterExcludedIdsQuoted == null || communityFilterExcludedIdsQuoted.equals("''")) {
+              communityFilterExcludedIdsQuoted  = "'NA'";
+          }
+          setPropValue("communityFilterExcludedIdsQuoted", communityFilterExcludedIdsQuoted);
           if(householdFilterExcludedIdsQuoted == null || householdFilterExcludedIdsQuoted.equals("''")) {
               householdFilterExcludedIdsQuoted  = "'NA'";
           }
@@ -653,7 +660,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               if(studyType.equals("CaseControl")){
                   setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + studyType + firstWizardStep));
               }else{
-                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
               }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamQueryBaseTemplate));
@@ -674,7 +681,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               if(studyType.equals("CaseControl")){
                   setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + studyType + firstWizardStep));
               }else{
-                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("participantFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
               }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + filterParamBaseTemplate));
@@ -686,7 +693,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //Inject the particiant metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
           if(queryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + studyType + "Query" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + studyType + "Query" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("participant" + queryBaseTemplate));
           }
@@ -699,7 +706,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //Inject the metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
           if(queryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + studyType + "Query" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + studyType + "Query" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + queryBaseTemplate));
           }
@@ -709,7 +716,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           boolean injectParams = getPropValueAsBoolean("injectParams");
           String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
           if(filterParamBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamBaseTemplate));
           }
@@ -723,7 +730,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               if(studyType.equals("CaseControl")){
                   setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + studyType + firstWizardStep));
               }else{
-                  setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("observationFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
               }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("observation" + filterParamQueryBaseTemplate));
@@ -1142,6 +1149,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"studyDetailsStepName", ""},
                                  {"studyDetailsStepDescription", ""},
                                  {"studyDetailsOntologyIds", ""},
+                                 {"hasCommunityStep", ""},
+                                 {"communityStepName", ""},
+                                 {"communityStepDescription", ""},
+                                 {"communityFilterExcludedIds", ""},
                                  {"timepointUnits", ""},
                                  {"timeColumnName", ""},
                                  {"timeSourceId", ""}

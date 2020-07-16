@@ -377,6 +377,101 @@ prop=trimObservationMetadataTerms
 >templateTextEnd<
 
 [templateStart]
+name=observationFilterParamsHouseholdSDCom
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=householdFilterDataTypeDisplayName
+prop=communityFilterDataTypeDisplayName
+prop=observationFilterDataTypeDisplayName
+prop=trimHouseholdMetadataTerms
+prop=trimParticipantMetadataTerms
+prop=trimObservationMetadataTerms
+>templateTextStart<
+       <filterParam name="study_details_filter_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.StudyDetailsOntology_${paramSuffix}"
+                    metadataQueryRef="ClinicalVisitVQ.StudyDetailsMetaData_${paramSuffix}"
+                    backgroundQueryRef="ClinicalVisitVQ.StudyDetailsMetaData_${paramSuffix}"
+                    countPredictsAnswerCount="true"
+                    filterDataTypeDisplayName="Participants"
+                    prompt="Choose Study Arm"
+                    dependedParamRef=""
+                    trimMetadataTerms="true">
+         <help>
+           Select participants based on their study details. 
+         </help>
+       </filterParam>
+
+    <filterParam name="community_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.CommunityOntology_${paramSuffix}"
+                    metadataQueryRef="ClinicalVisitVQ.CommunityMetaData_${paramSuffix}"
+                    backgroundQueryRef="ClinicalVisitVQ.CommunityMetaDataBkg_${paramSuffix}"
+                    filterDataTypeDisplayName="${communityFilterDataTypeDisplayName}"
+                    countPredictsAnswerCount="true"
+                    prompt="Community"
+                    dependedParamRef="clinicalVisitParams.study_details_filter_${paramSuffix}"
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
+      <help>
+        Select observations based on the characteristics of the household where the participants live.
+      </help>
+    </filterParam>
+
+    <filterParam name="households_${paramSuffix}" 
+                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
+                    metadataQueryRef="ClinicalVisitVQ.HouseholdMetaData_${paramSuffix}"
+                    backgroundQueryRef="ClinicalVisitVQ.HouseholdMetaDataBkg_${paramSuffix}"
+                    filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
+                    countPredictsAnswerCount="true"
+                    prompt="Household Observations"
+                    dependedParamRef="clinicalVisitParams.community_${paramSuffix}"
+                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
+      <help>
+        Select observations based on the characteristics of the household where the participants live.
+      </help>
+    </filterParam>
+
+       <filterParam name="participants_${paramSuffix}" 
+                       ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
+                       metadataQueryRef="ClinicalVisitVQ.ParticipantMetaData_${paramSuffix}"
+                       backgroundQueryRef="ClinicalVisitVQ.ParticipantMetaDataBkgd_${paramSuffix}"
+                       countPredictsAnswerCount="true"
+                       prompt="Participants"
+                       trimMetadataTerms="${trimParticipantMetadataTerms}"
+                       dependedParamRef="clinicalVisitParams.households_${paramSuffix}">
+         <help>
+              Select participants based on their characteristics.
+         </help>
+       </filterParam>
+
+       <filterParam name="visits_${paramSuffix}" 
+                    metadataQueryRef="ClinicalVisitVQ.VisitMetaData_${paramSuffix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_${paramSuffix}"
+                    countPredictsAnswerCount="true"
+                    prompt="${observationFilterDataTypeDisplayName}"
+                    filterDataTypeDisplayName="${observationFilterDataTypeDisplayName}"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
+                    dependedParamRef="clinicalVisitParams.participants_${paramSuffix}">
+      <help>
+        Select observations based on their observation characteristics.
+      </help>
+    </filterParam>
+
+    <filterParam name="relative_visits_${paramSuffix}" 
+                    metadataQueryRef="ClinicalVisitVQ.RelVisitMetaData_${paramSuffix}"
+                    backgroundQueryRef="ClinicalVisitVQ.RelVisitMetaData_${paramSuffix}"
+                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
+                    countPredictsAnswerCount="false"
+                    prompt="Related Observations"
+                    trimMetadataTerms="${trimObservationMetadataTerms}"
+                    dependedParamRef="">
+      <help>
+        Select related observations based on their characteristics.
+      </help>
+    </filterParam>
+>templateTextEnd<
+
+[templateStart]
 name=observationFilterParamsParticipantSD
 anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
@@ -781,6 +876,12 @@ select p.household_id as internal, p.participant_id as filter_item_id, ho.observ
 from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO ho
 where p.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and ho.participant_id = p.participant_id
+UNION
+select  h.household_id as internal, hp.participant_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}HouseObsIO ho
+where h.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
+and hp.household_id = h.household_id
+and ho.household_id = h.household_id
         ]]>
       </sql>
     </sqlQuery>
@@ -972,6 +1073,12 @@ select p.household_id as internal, p.participant_id as filter_item_id, ho.observ
 from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO ho
 where p.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and ho.participant_id = p.participant_id
+UNION
+select  h.household_id as internal, hp.participant_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}HouseObsIO ho
+where h.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
+and hp.household_id = h.household_id
+and ho.household_id = h.household_id
         ]]>
       </sql>
     </sqlQuery>
@@ -1082,6 +1189,196 @@ from ApidbTuning.${tblPrefix}ObservationMD
 >templateTextEnd<
 
 [templateStart]
+name=observationFilterParamQueriesHouseholdSDCom
+anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=householdFilterExcludedIdsQuoted
+prop=studyDetailsOntologyIdsQuoted
+>templateTextStart<
+    <sqlQuery name="StudyDetailsMetaData_${paramSuffix}" isCacheable="false">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select p.household_id as internal, p.participant_id as filter_item_id, ho.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO ho
+where p.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
+and ho.participant_id = p.participant_id
+UNION
+select ch.household_id as internal, cp.participant_id as filter_item_id, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co, ApidbTuning.${tblPrefix}ComPartIO cp
+where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
+and cp.community_id = c.community_id
+and co.community_id = c.community_id
+and ch.community_id = c.community_id
+        ]]>
+      </sql>
+    </sqlQuery>
+
+   <sqlQuery name="CommunityMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.study_details_filter_${paramSuffix}" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="filter_item_id"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+select  distinct c.community_observation_id as filter_item_id, ch.household_id as internal, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}CommunityObsMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComComObsIO cc, ApidbTuning.${tblPrefix}ComObsIO co
+where ch.household_id in (\$\$study_details_filter_${paramSuffix}\$\$)
+and cc.community_id = ch.community_id
+and c.community_observation_id = cc.community_observation_id 
+and co.community_id = cc.community_id
+union all
+select  distinct c.community_id as filter_item_id, ch.household_id as internal, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co
+where ch.household_id in (\$\$study_details_filter_${paramSuffix}\$\$)
+and c.community_id = ch.community_id
+and co.community_id = c.community_id
+       ]]>
+     </sql>
+   </sqlQuery>
+
+   <sqlQuery name="CommunityMetaDataBkg_${paramSuffix}" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.study_details_filter_${paramSuffix}" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="filter_item_id"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+select  distinct c.community_observation_id as filter_item_id, ch.household_id as internal, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}CommunityObsMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComComObsIO cc, ApidbTuning.${tblPrefix}ComObsIO co
+where cc.community_id = ch.community_id
+and c.community_observation_id = cc.community_observation_id 
+and co.community_id = cc.community_id
+union all
+select  distinct c.community_id as filter_item_id, ch.household_id as internal, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co
+where c.community_id = ch.community_id
+and co.community_id = c.community_id
+       ]]>
+     </sql>
+   </sqlQuery>
+
+   <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.community_${paramSuffix}" />  
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="filter_item_id"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                where ho.household_id = h.household_id
+                and h.household_id in (\$\$community_${paramSuffix}\$\$)
+       ]]>
+     </sql>
+   </sqlQuery>
+
+   <sqlQuery name="HouseholdMetaDataBkg_${paramSuffix}" isCacheable="false">
+     <column name="ontology_term_name"/>
+     <column name="internal"/>
+     <column name="filter_item_id"/>
+     <column name="record_id"/>
+     <column name="number_value"/>
+     <column name="date_value"/>
+     <column name="string_value"/>
+     <sql>
+       <![CDATA[
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                where ho.household_id = h.household_id
+       ]]>
+     </sql>
+   </sqlQuery>
+
+   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
+     <paramRef ref="clinicalVisitParams.households_${paramSuffix}" />  
+     <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+         <![CDATA[
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
+where p.household_id in (\$\$households_${paramSuffix}\$\$)
+and hp.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="ParticipantMetaDataBkgd_${paramSuffix}" isCacheable="false">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="record_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
+where hp.participant_id = p.participant_id
+          ]]>
+    </sql>
+    </sqlQuery>
+
+    <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
+         <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" />  
+         <column name="ontology_term_name"/>
+         <column name="internal"/>
+         <column name="filter_item_id"/>
+         <column name="number_value"/>
+         <column name="date_value"/>
+         <column name="string_value"/>
+         <sql>
+           <![CDATA[
+select observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}ObservationMD
+where participant_id in (\$\$participants_${paramSuffix}\$\$)
+          ]]>
+    </sql>
+    </sqlQuery>
+
+
+
+   <sqlQuery name="RelVisitMetaData_${paramSuffix}" isCacheable="false">
+      <column name="ontology_term_name"/>
+      <column name="internal"/>
+      <column name="filter_item_id"/>
+      <column name="number_value"/>
+      <column name="date_value"/>
+      <column name="string_value"/>
+      <sql>
+        <![CDATA[
+select  observation_id as internal, observation_id as filter_item_id, ontology_term_name, string_value, number_value, date_value
+from ApidbTuning.${tblPrefix}ObservationMD
+          ]]>
+    </sql>
+    </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
 name=observationFilterParamQueriesParticipantSD
 anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=studyDetailsOntologyIdsQuoted
@@ -1101,6 +1398,12 @@ select p.participant_id as internal, ho.observation_id as record_id, p.ontology_
 from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO ho
 where p.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and ho.participant_id = p.participant_id
+UNION
+select  h.household_id as internal, hp.participant_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}HouseObsIO ho
+where h.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
+and hp.household_id = h.household_id
+and ho.household_id = h.household_id
         ]]>
       </sql>
     </sqlQuery>
