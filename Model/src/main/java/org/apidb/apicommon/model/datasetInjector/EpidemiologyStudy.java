@@ -627,7 +627,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       setPropValue("communityFilterDataTypeDisplayName", getPropValue("communityStepName")+"s");
 
       //Inject the filter param queries for participants if any questions generated
-      if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion || hasSampleQuestion){
+      if(hasParticipantQuestion || hasHouseholdQuestion || hasObservationQuestion){
           boolean injectParams = getPropValueAsBoolean("injectParams");
           
           if(regionFilterExcludedIdsQuoted == null || regionFilterExcludedIdsQuoted.equals("''")) {
