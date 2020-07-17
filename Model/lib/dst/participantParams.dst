@@ -250,16 +250,25 @@ from ApidbTuning.${tblPrefix}Ontology o
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+select h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
 where hp.participant_id in (\$\$geographic_region_${paramSuffix}\$\$)
-and h.household_id = hp.household_id 
-     and h.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
-     ${rmRegionSqlCommentStart}
-     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+and h.household_id = hp.household_id
+MINUS
+(select h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
+     where h.ontology_term_name in (${householdFilterExcludedIdsQuoted}) 
+     and h.household_id = hp.household_id
+${rmRegionSqlCommentStart}
+UNION    
+     select h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+     from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
+     where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
-     ${rmRegionSqlCommentEnd}
+     and h.household_id = hp.household_id
+${rmRegionSqlCommentEnd}
+)
           ]]>
     </sql>
     </sqlQuery>
@@ -273,15 +282,24 @@ and h.household_id = hp.household_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+select h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
-where h.household_id = hp.household_id 
-     and h.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
-     ${rmRegionSqlCommentStart}
-     and ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+where h.household_id = hp.household_id
+MINUS
+(select h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
+     where h.ontology_term_name in (${householdFilterExcludedIdsQuoted}) 
+     and h.household_id = hp.household_id
+${rmRegionSqlCommentStart}
+UNION    
+     select h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+     from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
+     where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
-     ${rmRegionSqlCommentEnd}
+     and h.household_id = hp.household_id
+${rmRegionSqlCommentEnd}
+)
           ]]>
     </sql>
     </sqlQuery>
