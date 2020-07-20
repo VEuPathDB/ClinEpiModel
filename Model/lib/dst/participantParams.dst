@@ -2283,6 +2283,10 @@ and ('AnY' = \$\$study_arm_${paramSuffix}\$\$
        where ontology_term_name = 'EUPATH_0015457'
        and string_value = \$\$study_arm_${paramSuffix}\$\$))
      ${rmRegionSqlCommentStart}
+UNION
+select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
+where h.household_id = hp.household_id 
      and h.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
@@ -2304,6 +2308,10 @@ select  distinct h.household_observation_id as filter_item_id, hp.participant_id
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
 where h.household_id = hp.household_id 
      ${rmRegionSqlCommentStart}
+UNION
+select  distinct h.household_observation_id as filter_item_id, hp.participant_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp
+where h.household_id = hp.household_id 
      and h.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
@@ -3257,12 +3265,24 @@ order by display_order, display_name
 from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
 where hp.household_id in (\$\$geographic_region_${paramSuffix}\$\$)
 and m.household_id = hp.household_id 
-and m.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
+MINUS
+(
+                  select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
+                  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
+where m.household_id = hp.household_id 
+and m.ontology_term_name in (${householdFilterExcludedIdsQuoted})
      ${rmRegionSqlCommentStart}
-     and m.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+UNION
+                  select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
+                  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
+where m.household_id = hp.household_id 
+     and m.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}
+)
          ]]>
       </sql>    
     </sqlQuery>
@@ -3277,16 +3297,28 @@ and m.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
       <column name="string_value"/>
       <sql>
          <![CDATA[
-select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
+                  select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
                   m.ontology_term_name, m.string_value, m.number_value, m.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
 where m.household_id = hp.household_id 
-and m.ontology_term_name not in (${householdFilterExcludedIdsQuoted})
+MINUS
+(
+                  select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
+                  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
+where m.household_id = hp.household_id 
+and m.ontology_term_name in (${householdFilterExcludedIdsQuoted})
      ${rmRegionSqlCommentStart}
-     and m.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+UNION
+                  select hp.participant_id as internal,  m.household_observation_id as filter_item_id,
+                  m.ontology_term_name, m.string_value, m.number_value, m.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}HousePartIO hp
+where m.household_id = hp.household_id 
+     and m.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}
+)
          ]]>
       </sql>    
     </sqlQuery>
@@ -4248,7 +4280,11 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
  from ApidbTuning.${tblPrefix}MetaData m, part
  where part.household_id = m.pan_id
      ${rmRegionSqlCommentStart}
-     and m.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+MINUS
+ select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m, part
+ where part.household_id = m.pan_id
+     and m.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}
@@ -4266,15 +4302,19 @@ with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id
       <column name="string_value"/>
       <sql>
          <![CDATA[
-  with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
-  from ApidbTuning.${tblPrefix}PANIO io
-   where io.output_pan_type_source_id = 'EUPATH_0000096'
+with part as ( select distinct io.input_pan_id as household_id, io.output_pan_id as part_id
+  from  ApidbTuning.${tblPrefix}PANIO io
+   where io.output_pan_id in (\$\$participants_${paramSuffix}\$\$)
        and io.input_pan_type_source_id = 'PCO_0000024' )
  select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
  from ApidbTuning.${tblPrefix}MetaData m, part
  where part.household_id = m.pan_id
      ${rmRegionSqlCommentStart}
-     and m.ontology_term_name not in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+MINUS
+ select distinct m.pan_id as filter_item_id, part.part_id as internal, m.property_source_id as ontology_term_name, m.string_value, m.number_value, m.date_value
+ from ApidbTuning.${tblPrefix}MetaData m, part
+ where part.household_id = m.pan_id
+     and m.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
      ${rmRegionSqlCommentEnd}
@@ -5484,340 +5524,6 @@ where ontology_term_source_id = 'PATO_0000047'
     </sql>
    </sqlQuery>
 
->templateTextEnd<
-
-[templateStart]
-name=participantFilterParamsWASHB
-anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
-prop=tblPrefix
-prop=paramSuffix
-prop=householdFilterDataTypeDisplayName
-prop=observationFilterDataTypeDisplayName
-prop=trimHouseholdMetadataTerms
-prop=trimParticipantMetadataTerms
-prop=trimObservationMetadataTerms
->templateTextStart<
-       <filterParam name="study_arm_filter_${paramSuffix}" 
-                    ontologyQueryRef="ParticipantVQ.StudyArmOntology_${paramSuffix}"
-                    metadataQueryRef="ParticipantVQ.StudyArmMetaData_${paramSuffix}"
-                    backgroundQueryRef="ParticipantVQ.StudyArmMetaData_${paramSuffix}"
-                    countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Households"
-                    prompt="Choose Study Arm"
-                    dependedParamRef=""
-                    trimMetadataTerms="true">
-         <help>
-           Select participants based on their geographic region. 
-         </help>
-       </filterParam>
-
-       <filterParam name="households_${paramSuffix}" 
-                    ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
-                    metadataQueryRef="ParticipantVQ.HouseholdMetaData_${paramSuffix}"
-                    backgroundQueryRef="ParticipantVQ.HouseholdMetaDataBkg_${paramSuffix}"
-                    countPredictsAnswerCount="false"
-                    filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
-                    prompt="Households"
-                    dependedParamRef="participantParams.study_arm_filter_${paramSuffix}"
-                    trimMetadataTerms="${trimHouseholdMetadataTerms}">
-         <help>
-           Select participants based on the characteristics of their household. 
-         </help>
-       </filterParam>
-
-       <filterParam name="participants_${paramSuffix}" 
-                    ontologyQueryRef="ParticipantVQ.ParticipantOntology_${paramSuffix}"
-                    metadataQueryRef="ParticipantVQ.ParticipantMetaData_${paramSuffix}"
-                    backgroundQueryRef="ParticipantVQ.ParticipantMetaDataBkgd_${paramSuffix}"
-                    countPredictsAnswerCount="false"
-                    filterDataTypeDisplayName="Participants"
-                    prompt="Personal characteristics"
-                    trimMetadataTerms="${trimParticipantMetadataTerms}"
-                    dependedParamRef="participantParams.households_${paramSuffix}">
-         <help>
-              Select participants based on their characteristics. 
-         </help>
-       </filterParam>
-
-       <filterParam name="visits_${paramSuffix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaData_${paramSuffix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
-                    countPredictsAnswerCount="false"
-                    prompt="Observations"
-                    trimMetadataTerms="${trimObservationMetadataTerms}"
-                    dependedParamRef="participantParams.participants_${paramSuffix}">
-         <help>
-           Select participants based on their visit characteristics. 
-         </help>
-       </filterParam>
- 
-       <filterParam name="relative_visits_${paramSuffix}" 
-                    ontologyQueryRef="ParticipantVQ.VisitOntology_${paramSuffix}"
-                    metadataQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
-                    backgroundQueryRef="ParticipantVQ.VisitMetaDataBkgd_${paramSuffix}"
-                    prompt="Related Observations"
-                    trimMetadataTerms="${trimObservationMetadataTerms}"
-                    dependedParamRef="">
-         <help>
-           Select related observations based on their characteristics. 
-         </help>
-       </filterParam>
-
->templateTextEnd<
-
-[templateStart]
-name=participantFilterParamQueriesWASHB
-anchorFile=ClinEpiModel/Model/lib/dst/participantParams.dst
-prop=tblPrefix
-prop=paramSuffix
-prop=householdMultiFilterIdsQuoted
-prop=householdFilterExcludedIdsQuoted
-prop=participantMultiFilterIdsQuoted
-prop=participantFilterExcludedIdsQuoted
-prop=observationMultiFilterIdsQuoted
-prop=observationFilterExcludedIdsQuoted
->templateTextStart<
-   <sqlQuery name="StudyArmOntology_${paramSuffix}" isCacheable="true">
-     <column name="ontology_term_name"/>
-     <column name="parent_ontology_term_name"/>
-     <column name="display_name"/>
-     <column name="description"/>
-     <column name="variable_name"/>
-     <column name="type"/>
-     <column name="units"/>
-     <column name="precision"/>
-     <column name="is_range"/>
-    <sql>
-         <![CDATA[
-select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.variable_name, o.units,
-CASE WHEN o.ontology_term_source_id in (${participantMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range, o.precision, o.display_order
-from ApidbTuning.${tblPrefix}Ontology o
-     where o.ontology_term_source_id in ('EUPATH_0035014','EUPATH_0035092','EUPATH_0035016') )
-     order by display_order, display_name
-         ]]>
-    </sql>
-   </sqlQuery>
-
-   <sqlQuery name="StudyArmMetaData_${paramSuffix}" isCacheable="false">
-     <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, hp.participant_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
-where h.ontology_term_name in ('EUPATH_0035014','EUPATH_0035016')
-and h.household_id = hp.household_id
-and hp.participant_id = po.participant_id
-UNION ALL
-select  distinct h.household_observation_id as filter_item_id, po.participant_id as record_id, o.observation_id as internal, o.ontology_term_name, o.string_value, o.number_value, o.date_value
-from ApidbTuning.${tblPrefix}ObservationMD o, ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
-where o.ontology_term_name in ('EUPATH_0035092')
-and hp.participant_id = po.participant_id 
-and o.observation_id = po.observation_id
-and hp.household_id = h.household_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-   <sqlQuery name="HouseholdOntology_${paramSuffix}" isCacheable="true">
-     <column name="ontology_term_name"/>
-     <column name="parent_ontology_term_name"/>
-     <column name="display_name"/>
-     <column name="description"/>
-     <column name="variable_name"/>
-     <column name="type"/>
-     <column name="units"/>
-     <column name="precision"/>
-     <column name="is_range"/>
-    <sql>
-         <![CDATA[
-select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.variable_name, o.units,
-CASE WHEN o.ontology_term_source_id in (${householdMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range,o.precision, o.display_order
-from ApidbTuning.${tblPrefix}Ontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id =  'PCO_0000024'
-     )
-     where ontology_term_name not in (${householdFilterExcludedIdsQuoted})
-     order by display_order, display_name
-     ]]>
-    </sql>
-   </sqlQuery>
-
-   <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
-      <paramRef ref="participantParams.study_arm_filter_${paramSuffix}" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, hp.participant_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
-where po.observation_id in (\$\$study_arm_filter_${paramSuffix}\$\$)
-and hp.participant_id = po.participant_id 
-and h.household_id = hp.household_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-   <sqlQuery name="HouseholdMetaDataBkg_${paramSuffix}" isCacheable="false">
-     <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  distinct h.household_observation_id as filter_item_id, hp.participant_id as record_id, po.observation_id as internal, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}PartObsIO po
-where hp.participant_id = po.participant_id 
-and h.household_id = hp.household_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-   <sqlQuery name="ParticipantOntology_${paramSuffix}" isCacheable="true">
-     <column name="ontology_term_name"/>
-     <column name="parent_ontology_term_name"/>
-     <column name="display_name"/>
-     <column name="description"/>
-     <column name="variable_name"/>
-     <column name="type"/>
-     <column name="units"/>
-     <column name="precision"/>
-     <column name="is_range"/>
-    <sql>
-         <![CDATA[
-select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.variable_name, o.units,
-CASE WHEN o.ontology_term_source_id in (${participantMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range, o.precision, o.display_order
-from ApidbTuning.${tblPrefix}Ontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id =  'EUPATH_0000096'
-     )
-     where ontology_term_name not in (${participantFilterExcludedIdsQuoted})
-     order by display_order, display_name
-         ]]>
-    </sql>
-   </sqlQuery>
-
-   <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
-      <paramRef ref="participantParams.households_${paramSuffix}" />  
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  p.participant_id as filter_item_id, p.participant_id as record_id, po.observation_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
-where po.observation_id in (\$\$households_${paramSuffix}\$\$)
-and po.participant_id = p.participant_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    <sqlQuery name="ParticipantMetaDataBkgd_${paramSuffix}" isCacheable="false">
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="filter_item_id"/>
-      <column name="record_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-         <![CDATA[
-select  p.participant_id as filter_item_id, p.participant_id as record_id, po.observation_id as internal, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO po
-where po.participant_id = p.participant_id
-          ]]>
-    </sql>
-    </sqlQuery>
-
-    
-    <sqlQuery name="VisitOntology_${paramSuffix}" isCacheable="true">
-      <column name="ontology_term_name"/>
-      <column name="parent_ontology_term_name"/>
-      <column name="display_name"/>
-      <column name="description"/>
-      <column name="variable_name"/>
-      <column name="type"/>
-      <column name="units"/>
-      <column name="precision"/>
-      <column name="is_range"/>
-      <sql>
-         <![CDATA[
-select * from (
-select distinct o.ontology_term_source_id as ontology_term_name, 
-CASE WHEN o.ontology_term_source_id = 'EUPATH_0000609' THEN 'EUPATH_0000738' ELSE o.parent_ontology_term_source_id END as parent_ontology_term_name, 
-nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.variable_name, o.units,
-CASE WHEN o.ontology_term_source_id in (${observationMultiFilterIdsQuoted}) AND o.type is null THEN 'multiFilter' ELSE o.type END as type,
-o.is_range,o.precision,CASE WHEN o.ontology_term_source_id = 'EUPATH_0000609' THEN 0.1 ELSE o.display_order END as display_order
-from ApidbTuning.${tblPrefix}Ontology o
-     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
-     START WITH o.ontology_term_source_id in ('EUPATH_0000738','EUPATH_0000609')
-     )
-     where ontology_term_name not in (${observationFilterExcludedIdsQuoted})
-     order by display_order, display_name
-         ]]>
-    </sql>
-   </sqlQuery>
-
-       <sqlQuery name="VisitMetaData_${paramSuffix}" isCacheable="false">
-         <paramRef ref="participantParams.participants_${paramSuffix}" />  
-         <column name="ontology_term_name"/>
-         <column name="internal"/>
-         <column name="record_id"/>
-         <column name="filter_item_id"/>
-         <column name="number_value"/>
-         <column name="date_value"/>
-         <column name="string_value"/>
-         <sql>
-           <![CDATA[
-select  observation_id as filter_item_id, participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.${tblPrefix}ObservationMD
-where observation_id in (\$\$participants_${paramSuffix}\$\$)
-          ]]>
-    </sql>
-    </sqlQuery>    
-
-    <sqlQuery name="VisitMetaDataBkgd_${paramSuffix}" isCacheable="false">
-      <column name="ontology_term_name"/>
-      <column name="internal"/>
-      <column name="record_id"/>
-      <column name="filter_item_id"/>
-      <column name="number_value"/>
-      <column name="date_value"/>
-      <column name="string_value"/>
-      <sql>
-        <![CDATA[
-select  observation_id as filter_item_id, participant_id as record_id, observation_id as internal, ontology_term_name, string_value, number_value, date_value
-from ApidbTuning.${tblPrefix}ObservationMD
-          ]]>
-    </sql>
-    </sqlQuery>
 >templateTextEnd<
 
 [templateStart]

@@ -871,30 +871,3 @@ group by name
      </sqlQuery>
 >templateTextEnd<
 
-[templateStart]
-name=observationMetadataQueryWASHB
-anchorFile=ClinEpiModel/Model/lib/dst/observationQueries.dst
-prop=tblPrefix
-prop=paramSuffix
-prop=timeSourceId
-prop=timeColumnName
->templateTextStart<
-     <sqlQuery name="ObservationsByMetadata_${paramSuffix}" isCacheable="true">
-       <paramRef ref="clinicalVisitParams.study_arm_filter_${paramSuffix}" groupRef="metaDataGroups.choose_study_arm"/> 
-       <paramRef ref="clinicalVisitParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
-       <paramRef ref="clinicalVisitParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
-       <paramRef ref="clinicalVisitParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
-       <column name="source_id"/>
-       <column name="project_id"/>
-       <column name="min_days_between"/>
-       <column name="num_matching_visits"/> 
-       <sql>
-           <![CDATA[
-select distinct name as source_id,'@PROJECT_ID@' as project_id
-from ApidbTuning.${tblPrefix}Observations 
-where pan_id in (\$\$visits_${paramSuffix}\$\$)
-           ]]>   
-        </sql>
-     </sqlQuery>
->templateTextEnd<
-
