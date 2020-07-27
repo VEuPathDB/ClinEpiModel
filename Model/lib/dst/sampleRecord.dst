@@ -216,7 +216,7 @@ select count(*) from apidbtuning.${tblPrefix}Samples
             <![CDATA[
 
 select * from (
-with allData as (              
+with allData as (
 select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type
 from ApidbTuning.${tblPrefix}SampleMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
 where  m.Ontology_Term_Name = O.Ontology_Term_Source_Id
@@ -233,21 +233,33 @@ select name,
     decode(allData.type, 'string', 'Display a histogram of the values', 'number', 'Display a histogram of the values',null) as reporter_description,
     decode(allData.type, 'string', 'org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', 'number','org.gusdb.wdk.model.report.reporter.HistogramAttributeReporter', null) as reporter_implementation,
     null as reporter_properties
-from allData 
+from allData
 )
 
 select * from (
     select distinct CASE when allData.display_name = duplicateData.display_name or allData.parent_type = 'multifilter' then concat(concat(allData.parent_display_name, ' >> '), allData.display_name)
         ELSE allData.display_name end as display_name, allData.name,  allData.help, otherData.reporter_name, otherData.reporter_display, otherData.reporter_description, otherData.reporter_implementation, otherdata.reporter_properties
     from allData, duplicateData , otherData
-    where otherData.name  = allData.name)
+    where otherData.name  = allData.name
+    and (select count(*) from duplicateData ) != 0)
 where display_name like '%>>%'
+
+
 
 UNION
 
-select allData.display_name, allData.name,  allData.help, otherData.reporter_name,  otherData.reporter_display, otherData.reporter_description, otherData.reporter_implementation, otherdata.reporter_properties from allData, duplicateData, otherData 
-    where allData.display_name not in  (select display_name from duplicateData ) 
+select allData.display_name, allData.name,  allData.help, otherData.reporter_name,  otherData.reporter_display, otherData.reporter_description, otherData.reporter_implementation, otherdata.reporter_properties 
+from allData, duplicateData, otherData
+    where allData.display_name not in  (select display_name from duplicateData )
     and otherData.name  = allData.name
+    and (select count(*) from duplicateData ) != 0
+    
+UNION
+
+select allData.display_name, allData.name,  allData.help, otherData.reporter_name,  otherData.reporter_display, otherData.reporter_description, otherData.reporter_implementation, otherdata.reporter_properties 
+from allData, otherData
+    where otherData.name  = allData.name
+     and (select count(distinct display_name) from allData) = (select count(display_name) from allData)
 )order by display_name
 
   ]]>
