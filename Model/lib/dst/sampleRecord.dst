@@ -224,13 +224,7 @@ with meta as (
     group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
 ),
 t1 as (
-select display_name, count(display_name) from (
-    select o.display_name
-    from ApidbTuning.${tblPrefix}SampleMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
-    where  m.Ontology_Term_Name = O.Ontology_Term_Source_Id
-    and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
-    group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
-    ) group by display_name having count(display_name)>1
+select display_name, count(display_name) from meta group by display_name having count(display_name)>1
 )
 
 select CASE WHEN meta.parent_type = 'multifilter' or meta.display_name in (select display_name from t1)
@@ -414,10 +408,12 @@ from APIDBTUNING.${tblPrefix}Samples ss,
 select * from (
 with meta as (
 select o.display_name, m.ontology_term_name as name, o.description as help, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type
-from ApidbTuning.${tblPrefix}householdMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
-where  m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
+where m.household_id = m.Household_Observation_Id
+and m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+and m.Ontology_Term_Name != 'EUPATH_0000094'
 and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
-group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id,p.display_name,p.type
+group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id, p.display_name,p.type
 ), t1 as (
 select display_name, count(display_name) from meta group by display_name having count(display_name)>1
 )
@@ -435,13 +431,10 @@ select 'Household ID' as display_name, 'household_id' as name, '' as help, '' as
 where (select count(*) from apidbtuning.${tblPrefix}Households) >0
 )order by display_name
 
+
       ]]>
               </sql>
            </sqlQuery>
-
-
-
-
 
 
       </querySet>
