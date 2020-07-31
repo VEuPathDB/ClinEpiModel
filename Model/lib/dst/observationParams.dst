@@ -1439,7 +1439,7 @@ from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO 
 where p.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and ho.participant_id = p.participant_id
 UNION
-select  h.household_id as internal, hp.participant_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+select  hp.participant_id as internal, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HousePartIO hp, ApidbTuning.${tblPrefix}HouseObsIO ho
 where h.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and hp.household_id = h.household_id
