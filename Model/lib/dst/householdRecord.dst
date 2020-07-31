@@ -350,18 +350,27 @@ order by source_id
 
           <sql>
             <![CDATA[
-            select distinct o.display_name as display_name, o.ontology_term_source_id as name
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}Households')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
-	    and o.ontology_term_source_id in (
+
+with meta as (
+select o.display_name, m.ontology_term_name as name, o.type, p.ontology_term_source_id as parent_name, p.display_name as parent_display_name, p.type as parent_type
+from ApidbTuning.${tblPrefix}HouseholdMD m, ApidbTuning.${tblPrefix}Ontology o, ApidbTuning.${tblPrefix}Ontology p
+where m.Ontology_Term_Name = O.Ontology_Term_Source_Id
+and o.parent_ontology_term_source_id = p.ontology_term_source_id(+)
+and o.ontology_term_source_id in (
                         SELECT distinct PROPERTY_SOURCE_ID  FROM apidbtuning.${tblPrefix}METADATA WHERE CATEGORY='Household'
-			AND PAN_ID IN (SELECT OUTPUT_PAN_ID FROM apidbtuning.${tblPrefix}PanIO
+                        AND PAN_ID IN (SELECT OUTPUT_PAN_ID FROM apidbtuning.${tblPrefix}PanIO
                                         WHERE input_pan_type_source_id='PCO_0000024'
                                         AND output_pan_type_source_id='PCO_0000024')
                                         )
+group by m.ontology_term_name, o.type, o.description, o.display_name,p.ontology_term_source_id, p.display_name,p.type
+), 
+t1 as (
+select display_name, count(display_name) from meta group by display_name having count(display_name)>1
+)
+
+select distinct CASE WHEN meta.parent_type = 'multifilter' or meta.display_name in (select display_name from t1)
+THEN meta.parent_display_name || ' >> ' || meta.display_name ELSE meta.display_name END as display_name, meta.name
+from meta
 					
             ]]>
           </sql>
