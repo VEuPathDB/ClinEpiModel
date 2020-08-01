@@ -142,10 +142,10 @@ prop=hasSampleRecord
 
 
 
- <table name="HouseholdsDownload"
-                 displayName="Households"
-                 queryRef="${presenterId}ObservationTables.HouseholdsDownload"
-                 attributeMetaQueryRef="${presenterId}ObservationTables.HouseholdsDownloadColumnAttributes">
+ <table name="HouseholdObservationsDownload"
+                 displayName="Household Observations"
+                 queryRef="${presenterId}ObservationTables.HouseholdObservationsDownload"
+                 attributeMetaQueryRef="${presenterId}ObservationTables.HouseholdObservationsDownloadColumnAttributes">
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
 	    <columnAttribute name="Participant_Id"/>
@@ -599,7 +599,7 @@ from apidbtuning.${tblPrefix}Households hh
 
 
 
-<sqlQuery name="HouseholdsDownloadColumnAttributes"  isCacheable='false'>
+<sqlQuery name="HouseholdObservationsDownloadColumnAttributes"  isCacheable='false'>
           <column name="name" />
           <column name="display_name" />
 
@@ -617,7 +617,7 @@ from apidbtuning.${tblPrefix}Households hh
 
 
 
- <sqlQuery name="HouseholdsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ObservationTables.HouseholdsDownloadColumnAttributes">
+ <sqlQuery name="HouseholdObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ObservationTables.HouseholdObservationsDownloadColumnAttributes">
             <column name="source_id"/>
             <column name="project_id"/>
 	    <column name="Participant_Id"/>
