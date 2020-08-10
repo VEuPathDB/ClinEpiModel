@@ -722,6 +722,10 @@ name=observationFilterParamQueriesHousehold
 anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 prop=paramSuffix
+prop=regionFilterExcludedIdsQuoted
+prop=householdFilterExcludedIdsQuoted
+prop=rmRegionSqlCommentStart
+prop=rmRegionSqlCommentEnd
 >templateTextStart<
    <sqlQuery name="HouseholdMetaData_${paramSuffix}" isCacheable="false">
      <column name="ontology_term_name"/>
@@ -736,6 +740,22 @@ prop=paramSuffix
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
                 where ho.household_id = h.household_id
+MINUS
+(
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                where h.ontology_term_name in (${householdFilterExcludedIdsQuoted})
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentStart}
+UNION
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+     where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentEnd}
+)
        ]]>
      </sql>
    </sqlQuery>
@@ -1098,6 +1118,8 @@ prop=tblPrefix
 prop=paramSuffix
 prop=householdFilterExcludedIdsQuoted
 prop=studyDetailsOntologyIdsQuoted
+prop=rmRegionSqlCommentStart
+prop=rmRegionSqlCommentEnd
 >templateTextStart<
     <sqlQuery name="StudyDetailsMetaData_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
@@ -1138,6 +1160,22 @@ and ho.household_id = h.household_id
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
                 where ho.household_id = h.household_id
                 and h.household_id in (\$\$study_details_filter_${paramSuffix}\$\$)
+MINUS
+(
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                where h.ontology_term_name in (${householdFilterExcludedIdsQuoted})
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentStart}
+UNION
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+     where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentEnd}
+)
        ]]>
      </sql>
    </sqlQuery>
@@ -1155,6 +1193,22 @@ and ho.household_id = h.household_id
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
                 where ho.household_id = h.household_id
+MINUS
+(
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                where h.ontology_term_name in (${householdFilterExcludedIdsQuoted})
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentStart}
+UNION
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+     where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentEnd}
+)
        ]]>
      </sql>
    </sqlQuery>
@@ -1233,8 +1287,11 @@ name=observationFilterParamQueriesHouseholdSDCom
 anchorFile=ClinEpiModel/Model/lib/dst/observationParams.dst
 prop=tblPrefix
 prop=paramSuffix
-prop=householdFilterExcludedIdsQuoted
 prop=studyDetailsOntologyIdsQuoted
+prop=regionFilterExcludedIdsQuoted
+prop=householdFilterExcludedIdsQuoted
+prop=rmRegionSqlCommentStart
+prop=rmRegionSqlCommentEnd
 >templateTextStart<
     <sqlQuery name="StudyDetailsMetaData_${paramSuffix}" isCacheable="false">
       <column name="ontology_term_name"/>
@@ -1328,6 +1385,22 @@ and co.community_id = c.community_id
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
                 where ho.household_id = h.household_id
                 and h.household_id in (\$\$community_${paramSuffix}\$\$)
+MINUS
+(
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                where h.ontology_term_name in (${householdFilterExcludedIdsQuoted})
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentStart}
+UNION
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+     where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentEnd}
+)
        ]]>
      </sql>
    </sqlQuery>
@@ -1345,6 +1418,22 @@ and co.community_id = c.community_id
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
                 from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
                 where ho.household_id = h.household_id
+MINUS
+(
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                where h.ontology_term_name in (${householdFilterExcludedIdsQuoted})
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentStart}
+UNION
+                select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+     where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
+     CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
+     START WITH o.ontology_term_source_id =  'GAZ_00000448')
+                and ho.household_id = h.household_id
+     ${rmRegionSqlCommentEnd}
+)
        ]]>
      </sql>
    </sqlQuery>
