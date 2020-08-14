@@ -12,6 +12,8 @@ prop=presenterId
 prop=includeProjects
 prop=noObsSampleAttsCommentStart
 prop=noObsSampleAttsCommentEnd
+prop=hasNoCommunityAttributesCommentStart
+prop=hasNoCommunityAttributesCommentEnd
 
 
 >templateTextStart<

@@ -212,6 +212,16 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       setPropValue("!hasObservationRecord", Boolean.toString(!hasObservations));
       setPropValue("!hasSampleRecord", Boolean.toString(!hasSamples));
 
+      //set comment for community attrubutes for downstream records.
+      boolean hasCommunityStep = getPropValueAsBoolean("hasCommunityStep");
+      if(hasCommunityStep){
+          setPropValue("hasNoCommunityAttributesCommentStart","");
+          setPropValue("hasNoCommunityAttributesCommentEnd","");
+      }else{
+          setPropValue("hasNoCommunityAttributesCommentStart","<!--");
+          setPropValue("hasNoCommunityAttributesCommentEnd","-->");
+      }
+
       // TODO: how to handle optional tables??  probably just do these in a subclass?
 
       if(hasHouseholds) {
@@ -559,6 +569,10 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.ObservationAttributesMeta","ObservationNode");
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.ParticipantAttributesMeta","ParticipantNode");
       injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.HouseholdAttributesMeta","HouseholdNode");
+      if(hasCommunityStep){
+          injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.CommunityAttributesMeta","CommunityNode");
+          injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.CommunityAttributesMeta","CommunityNode");
+      }
 
 
       injectAttributeMetaQuery(sampleRecordClass, presenterId + "SampleAttributes.ParticipantAttributesMeta","ParticipantNode");
