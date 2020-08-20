@@ -782,7 +782,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //Inject the metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
           if(queryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdMetadataQuery" + firstWizardStep));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdMetadataQuery" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + queryBaseTemplate));
           }
@@ -792,7 +792,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
           boolean injectParams = getPropValueAsBoolean("injectParams");
           if(filterParamBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParams" + firstWizardStep));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamBaseTemplate));
           }
@@ -806,7 +806,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               if(studyType.equals("CaseControl")){
                   setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + studyType + firstWizardStep));
               }else{
-                  setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + firstWizardStep));
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
               }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamQueryBaseTemplate));

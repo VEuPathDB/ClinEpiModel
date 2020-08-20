@@ -104,6 +104,106 @@ group by da.pan_id,da.name
 >templateTextEnd<
 
 [templateStart]
+name=householdMetadataQueryRegionSD
+anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=householdOrObservationIsVisible
+>templateTextStart<
+    <sqlQuery name="HouseholdsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="householdParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/> 
+       <paramRef ref="householdParams.geographic_region_${paramSuffix}" groupRef="metaDataGroups.geographic_loc"/>
+       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD) h
+where io.participant_id in (\$\$observations_${paramSuffix}\$\$)
+and io.household_id = h.household_id
+and h.\$\$householdOrObservation\$\$ in (\$\$households_${paramSuffix}\$\$)
+and da.pan_id = h.\$\$householdOrObservation\$\$ 
+group by da.pan_id,da.name
+) dwpct
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=householdMetadataQueryHouseholdSD
+anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=householdOrObservationIsVisible
+>templateTextStart<
+    <sqlQuery name="HouseholdsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="householdParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/> 
+       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD) h
+where io.participant_id in (\$\$observations_${paramSuffix}\$\$)
+and io.household_id = h.household_id
+and h.\$\$householdOrObservation\$\$ in (\$\$households_${paramSuffix}\$\$)
+and da.pan_id = h.\$\$householdOrObservation\$\$ 
+group by da.pan_id,da.name
+) dwpct
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
+name=householdMetadataQueryParticipantSD
+anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+>templateTextStart<
+    <sqlQuery name="HouseholdsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="householdParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/> 
+       <paramRef ref="householdParams.householdOrObservation" visible="false" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, 
+(select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD) h
+where io.participant_id in (\$\$observations_${paramSuffix}\$\$)
+and io.household_id = h.household_id
+and da.pan_id = h.\$\$householdOrObservation\$\$ 
+group by da.pan_id,da.name
+) dwpct
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
 name=householdMetadataQueryPRISM
 anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
 prop=tblPrefix
