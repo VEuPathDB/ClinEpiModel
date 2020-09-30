@@ -400,6 +400,57 @@ group by pa.name
 >templateTextEnd<
 
 [templateStart]
+name=participantLongitudinalQueryHouseholdSDCom
+anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=timeSourceId
+prop=timeColumnName
+prop=hasStudyArmParameter
+>templateTextStart<
+     <sqlQuery name="ParticipantsMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="participantParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/> 
+       <paramRef ref="participantParams.community_${paramSuffix}" groupRef="metaDataGroups.community_${paramSuffix}"/>
+       <paramRef ref="participantParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="participantParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="participantParams.visits_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
+       <paramRef ref="clinicalVisitParams.use_relative_visits" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.days_between" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.date_direction_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="clinicalVisitParams.dateOperator_fv" groupRef="metaDataGroups.relative_events"/>
+       <paramRef ref="participantParams.relative_visits_${paramSuffix}" groupRef="metaDataGroups.relative_events"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="visit_count"/>
+         <sql>
+           <![CDATA[
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count
+from (select distinct participant_id,observation_id,${timeColumnName} from ApidbTuning.${tblPrefix}ObservationMD
+      where observation_id in (\$\$visits_${paramSuffix}\$\$)
+      and ontology_term_name = '${timeSourceId}'
+\$\$dateOperator_fv\$\$
+ select distinct vis.participant_id,vis.observation_id,vis.${timeColumnName}
+ from ApidbTuning.${tblPrefix}ObservationMD vis, ApidbTuning.${tblPrefix}ObservationMD rv
+ where vis.observation_id in (\$\$visits_${paramSuffix}\$\$)
+ and vis.ontology_term_name = '${timeSourceId}'
+and \$\$use_relative_visits\$\$ = 1
+and rv.observation_id in (\$\$relative_visits_${paramSuffix}\$\$)
+and rv.ontology_term_name = '${timeSourceId}'
+and vis.participant_id = rv.participant_id
+and vis.observation_id != rv.observation_id
+and vis.${timeColumnName} \$\$date_direction_fv\$\$ rv.${timeColumnName}  
+and abs(rv.${timeColumnName} - vis.${timeColumnName}) >= \$\$days_between.min\$\$
+and abs(rv.${timeColumnName} - vis.${timeColumnName}) <= \$\$days_between.max\$\$
+group by vis.participant_id,vis.observation_id,vis.${timeColumnName}
+) main, ApidbTuning.${tblPrefix}Participants pa
+where pa.pan_id = main.participant_id
+group by pa.name 
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+[templateStart]
 name=participantSurveyQueryHouseholdSDCom
 anchorFile=ClinEpiModel/Model/lib/dst/participantQueries.dst
 prop=hasStudyArmParameter

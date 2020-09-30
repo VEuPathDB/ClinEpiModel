@@ -572,6 +572,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       if(hasCommunityStep){
           injectAttributeMetaQuery(participantRecordClass, presenterId + "ParticipantAttributes.CommunityAttributesMeta","CommunityNode");
           injectAttributeMetaQuery(observationRecordClass, presenterId + "ObservationAttributes.CommunityAttributesMeta","CommunityNode");
+          injectAttributeMetaQuery(householdRecordClass, presenterId + "HouseholdAttributes.CommunityAttributesMeta","CommunityNode");
       }
 
 
@@ -782,7 +783,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           //Inject the metadata query
           String queryBaseTemplate = getPropValue("queryBaseTemplate");
           if(queryBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdMetadataQuery" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdMetadataQuery" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + queryBaseTemplate));
           }
@@ -792,7 +793,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           String filterParamBaseTemplate = getPropValue("filterParamBaseTemplate");
           boolean injectParams = getPropValueAsBoolean("injectParams");
           if(filterParamBaseTemplate.equals("default")){
-              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+              setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParams" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamBaseTemplate));
           }
@@ -806,7 +807,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
               if(studyType.equals("CaseControl")){
                   setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + studyType + firstWizardStep));
               }else{
-                  setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "")));
+                  setPropValue("injectedTemplateFull",getTemplateInstanceText("householdFilterParamQueries" + firstWizardStep + (hasStudyDetailsStep ? "SD" : "") + (hasCommunityStep ? "Com" : "")));
               }
           }else{
               setPropValue("injectedTemplateFull",getTemplateInstanceText("household" + filterParamQueryBaseTemplate));
