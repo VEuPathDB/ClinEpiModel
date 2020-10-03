@@ -1304,16 +1304,18 @@ prop=rmRegionSqlCommentEnd
       <sql>
         <![CDATA[
 select p.household_id as internal, p.participant_id as filter_item_id, ho.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO ho
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO ho, ApidbTuning.${tblPrefix}Observations o
 where p.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and ho.participant_id = p.participant_id
+and ho.observation_id = o.pan_id
 UNION
 select ch.household_id as internal, cp.participant_id as filter_item_id, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
-from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co, ApidbTuning.${tblPrefix}ComPartIO cp
+from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co, ApidbTuning.${tblPrefix}ComPartIO cp, ApidbTuning.${tblPrefix}Observations o
 where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and cp.community_id = c.community_id
 and co.community_id = c.community_id
 and ch.community_id = c.community_id
+and co.observation_id = o.pan_id
         ]]>
       </sql>
     </sqlQuery>
@@ -1330,17 +1332,19 @@ and ch.community_id = c.community_id
      <sql>
        <![CDATA[
 select  distinct c.community_observation_id as filter_item_id, ch.household_id as internal, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
-from ApidbTuning.${tblPrefix}CommunityObsMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComComObsIO cc, ApidbTuning.${tblPrefix}ComObsIO co
+from ApidbTuning.${tblPrefix}CommunityObsMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComComObsIO cc, ApidbTuning.${tblPrefix}ComObsIO co, ApidbTuning.${tblPrefix}Observations o
 where ch.household_id in (\$\$study_details_filter_${paramSuffix}\$\$)
 and cc.community_id = ch.community_id
 and c.community_observation_id = cc.community_observation_id 
 and co.community_id = cc.community_id
+and co.observation_id = o.pan_id
 union all
 select  distinct c.community_id as filter_item_id, ch.household_id as internal, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
-from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co
+from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co, ApidbTuning.${tblPrefix}Observations o
 where ch.household_id in (\$\$study_details_filter_${paramSuffix}\$\$)
 and c.community_id = ch.community_id
 and co.community_id = c.community_id
+and co.observation_id = o.pan_id
        ]]>
      </sql>
    </sqlQuery>
@@ -1357,15 +1361,17 @@ and co.community_id = c.community_id
      <sql>
        <![CDATA[
 select  distinct c.community_observation_id as filter_item_id, ch.household_id as internal, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
-from ApidbTuning.${tblPrefix}CommunityObsMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComComObsIO cc, ApidbTuning.${tblPrefix}ComObsIO co
+from ApidbTuning.${tblPrefix}CommunityObsMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComComObsIO cc, ApidbTuning.${tblPrefix}ComObsIO co, ApidbTuning.${tblPrefix}Observations o
 where cc.community_id = ch.community_id
 and c.community_observation_id = cc.community_observation_id 
 and co.community_id = cc.community_id
+and co.observation_id = o.pan_id
 union all
 select  distinct c.community_id as filter_item_id, ch.household_id as internal, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
-from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co
+from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co, ApidbTuning.${tblPrefix}Observations o
 where c.community_id = ch.community_id
 and co.community_id = c.community_id
+and co.observation_id = o.pan_id
        ]]>
      </sql>
    </sqlQuery>
@@ -1382,23 +1388,26 @@ and co.community_id = c.community_id
      <sql>
        <![CDATA[
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho, ApidbTuning.${tblPrefix}Observations o
                 where ho.household_id = h.household_id
                 and h.household_id in (\$\$community_${paramSuffix}\$\$)
+                and ho.observation_id = o.pan_id
 MINUS
 (
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho, ApidbTuning.${tblPrefix}Observations o
                 where h.ontology_term_name in (${householdFilterExcludedIdsQuoted})
                 and ho.household_id = h.household_id
+                and ho.observation_id = o.pan_id
      ${rmRegionSqlCommentStart}
 UNION
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho, ApidbTuning.${tblPrefix}Observations o
      where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
                 and ho.household_id = h.household_id
+                and ho.observation_id = o.pan_id
      ${rmRegionSqlCommentEnd}
 )
        ]]>
@@ -1416,26 +1425,29 @@ UNION
      <sql>
        <![CDATA[
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho, ApidbTuning.${tblPrefix}Observations o
                 where ho.household_id = h.household_id
+                and ho.observation_id = o.pan_id
 MINUS
 (
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho, ApidbTuning.${tblPrefix}Observations o
                 where h.ontology_term_name in (${householdFilterExcludedIdsQuoted})
                 and ho.household_id = h.household_id
+                and ho.observation_id = o.pan_id
      ${rmRegionSqlCommentStart}
 UNION
                 select  h.household_id as internal, h.household_observation_id as filter_item_id, ho.observation_id as record_id, h.ontology_term_name, h.string_value, h.number_value, h.date_value
-                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho
+                from ApidbTuning.${tblPrefix}HouseholdMD h, ApidbTuning.${tblPrefix}HouseObsIO ho, ApidbTuning.${tblPrefix}Observations o
      where h.ontology_term_name in (select ontology_term_source_id from ApidbTuning.${tblPrefix}Ontology o
      CONNECT BY o.parent_ontology_term_source_id = PRIOR o.ontology_term_source_id
      START WITH o.ontology_term_source_id =  'GAZ_00000448')
                 and ho.household_id = h.household_id
+                and ho.observation_id = o.pan_id
      ${rmRegionSqlCommentEnd}
 )
        ]]>
-     </sql>
+    </sql>
    </sqlQuery>
 
    <sqlQuery name="ParticipantMetaData_${paramSuffix}" isCacheable="false">
@@ -1449,9 +1461,10 @@ UNION
       <sql>
          <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp, ApidbTuning.${tblPrefix}Observations o
 where p.household_id in (\$\$households_${paramSuffix}\$\$)
 and hp.participant_id = p.participant_id
+and hp.observation_id = o.pan_id
           ]]>
     </sql>
     </sqlQuery>
@@ -1466,8 +1479,9 @@ and hp.participant_id = p.participant_id
       <sql>
         <![CDATA[
 select p.participant_id as internal, hp.observation_id as record_id, p.ontology_term_name, p.string_value, p.number_value, p.date_value
-from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp
+from ApidbTuning.${tblPrefix}ParticipantMD p, ApidbTuning.${tblPrefix}PartObsIO hp, ApidbTuning.${tblPrefix}Observations o
 where hp.participant_id = p.participant_id
+and hp.observation_id = o.pan_id
           ]]>
     </sql>
     </sqlQuery>

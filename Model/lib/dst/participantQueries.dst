@@ -425,8 +425,13 @@ prop=hasStudyArmParameter
          <sql>
            <![CDATA[
 select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count
-from (select distinct participant_id,observation_id,${timeColumnName} from ApidbTuning.${tblPrefix}ObservationMD
-      where observation_id in (\$\$visits_${paramSuffix}\$\$)
+from ( select distinct participant_id,observation_id,${timeColumnName} from ApidbTuning.${tblPrefix}ObservationMD
+      where \$\$visits_${paramSuffix}.filters_present\$\$ = 0
+      and participant_id in (\$\$participants_${paramSuffix}\$\$)
+      UNION All
+      select distinct participant_id,observation_id,${timeColumnName} from ApidbTuning.${tblPrefix}ObservationMD
+      where \$\$visits_${paramSuffix}.filters_present\$\$ = 1
+      and observation_id in (\$\$visits_${paramSuffix}\$\$)
       and ontology_term_name = '${timeSourceId}'
 \$\$dateOperator_fv\$\$
  select distinct vis.participant_id,vis.observation_id,vis.${timeColumnName}
