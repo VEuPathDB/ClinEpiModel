@@ -188,7 +188,7 @@ ${hasNoCommunityAttributesCommentEnd}
 
 
            <table name="HouseholdObservationsDownload"
-                 displayName="Household Observations"
+                 displayName="Household Observations (one row per participant; household data may be duplicated)"
                  queryRef="${presenterId}ParticipantTables.HouseholdObservationsDownload"
                  attributeMetaQueryRef="${presenterId}ParticipantTables.HouseholdObservationsDownloadColumnAttributes">
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
