@@ -219,7 +219,7 @@ select distinct m.pan_id as internal, property_source_id as ontology_term_name, 
         <![CDATA[
 select distinct m.pan_id as internal, property_source_id as ontology_term_name, string_value, number_value, date_value
  from ApidbTuning.${tblPrefix}MetaData m
- where m.category = 'Entomological measurements'
+ where m.category = 'Entomology'
         ]]>
       </sql>
     </sqlQuery>
