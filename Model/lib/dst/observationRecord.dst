@@ -134,29 +134,43 @@ ${hasNoCommunityAttributesCommentEnd}
         </table>
 
 
- <table name="SamplesDownload"
+	 <table name="SamplesDownload"
                  displayName="Samples"
                  queryRef="${presenterId}ObservationTables.SamplesDownload"
                  attributeMetaQueryRef="${presenterId}ObservationTables.SamplesDownloadColumnAttributes">
-            <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
-            <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
-	    <columnAttribute name="Sample_Id"/>
-	    <columnAttribute name="Participant_Id"/>
-	    <columnAttribute name="Household_Id"/>
+            	 <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            	 <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+	    	 <columnAttribute name="Sample_Id"/>
+	    	 <columnAttribute name="Participant_Id"/>
+	    	 <columnAttribute name="Household_Id"/>
           </table>
 
 
 
- <table name="HouseholdObservationsDownload"
+	   <table name="HouseholdObservationsDownload"
                  displayName="Household Observations (one row per observation per participant; household data may be duplicated)"
                  queryRef="${presenterId}ObservationTables.HouseholdObservationsDownload"
                  attributeMetaQueryRef="${presenterId}ObservationTables.HouseholdObservationsDownloadColumnAttributes">
+            	 <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
+            	 <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
+	    	 <columnAttribute name="Participant_Id"/>
+	    	 <columnAttribute name="Household_Observation_Id"/>
+
+          </table>
+
+
+	  <table name="CommunityObservationsDownload"
+                 displayName="Community Observations (one row per participant; community data may be duplicated)"
+                 queryRef="${presenterId}ObservationTables.CommunityObservationsDownload"
+                 attributeMetaQueryRef="${presenterId}ObservationTables.CommunityObservationsDownloadColumnAttributes">
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
 	    <columnAttribute name="Participant_Id"/>
-	    <columnAttribute name="Household_Observation_Id"/>
-
+            <columnAttribute name="Community_Observation_Id"/>
           </table>
+
+
+
 
 
 	${observationRecordSamplesTable}
@@ -729,9 +743,79 @@ select ob.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_
             </sql>
         </sqlQuery>
 
-	 
+
+
+
+ <sqlQuery name="CommunityObservationsDownloadColumnAttributes"  isCacheable='false'>
+          <column name="name" />
+          <column name="display_name" />
+
+          <sql>
+            <![CDATA[
+
+select distinct o.display_name as display_name, o.ontology_term_source_id as name
+ from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+ where s.synonym_name = upper('${tblPrefix}Communitys')
+ and c.owner = 'APIDBTUNING'
+ and c.table_name = s.table_name
+ and upper(o.ontology_term_source_id) = c.column_name
+ and o.ontology_term_source_id in
+                (
+                        SELECT distinct PROPERTY_SOURCE_ID  FROM apidbtuning.${tblPrefix}METADATA WHERE CATEGORY='Community'
+                        AND PAN_ID IN (SELECT OUTPUT_PAN_ID FROM apidbtuning.${tblPrefix}PanIO
+                                        WHERE input_pan_type_source_id='EUPATH_0035127'
+                                        AND output_pan_type_source_id='EUPATH_0035127')
+                )
+
+            ]]>
+          </sql>
+        </sqlQuery>
+
+
+
+
+ <sqlQuery name="CommunityObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ObservationTables.CommunityObservationsDownloadColumnAttributes">
+ 	    <column name="source_id"/>
+            <column name="project_id"/>
+	    <column name="Participant_Id"/>
+            <column name="Community_Observation_Id"/>
+            <sql>
+            <![CDATA[
+
+with ComObser as(
+        select *
+        from apidbtuning.${tblPrefix}PANIO
+        where input_pan_type_source_id = 'EUPATH_0035127'
+        and output_pan_type_source_id = 'EUPATH_0035127'
+    )
+select obs.name as source_id, '@PROJECT_ID@' as project_id, pa.name as Participant_Id , com.name as Community_Observation_Id, com.*
+from  apidbtuning.${tblPrefix}Communitys com, apidbtuning.${tblPrefix}Households hh, apidbtuning.${tblPrefix}Participants pa, apidbtuning.${tblPrefix}Observations obs,
+    apidbtuning.${tblPrefix}Panio io1,  apidbtuning.${tblPrefix}Panio io2, apidbtuning.${tblPrefix}Panio io3, ComObser
+   
+   where  com.pan_id = ComObser.output_pan_id
+   
+   and io1.input_pan_id  = ComObser.input_pan_id
+   and hh.pan_id  = io1.output_pan_id
+
+
+   and io2.input_pan_id = hh.pan_id
+   and pa.pan_id = io2.output_pan_id
+   
+   and io3.input_pan_id = pa.pan_id
+   and obs.pan_id = io3.output_pan_id
+
+
+            ]]>
+            </sql>
+        </sqlQuery>
+
+
+
 
 	 ${observationRecordMicrosTableQuery}
+
+
+
 
     </querySet>
 
