@@ -908,6 +908,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicrosTableInPartiPage = getPropValueAsBoolean("hasMicrosTableInPartiPage");
       boolean hasMicrosTableInObserPage = getPropValueAsBoolean("hasMicrosTableInObserPage");
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
+      boolean hasCommunityStep = getPropValueAsBoolean("hasCommunityStep");
       //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       String presenterId = getPropValue("presenterId");
@@ -929,6 +930,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  if(hasHouseholdObservations){
 	      addWdkReference(householdRecordClass, "table", "HouseholdObservationsDownload", new String[]{"download"}, CATEGORY_IRI, 0);
 	  }
+
 	  addWdkReference(householdRecordClass, "table", "ParticipantsDownload", new String[]{"download"}, CATEGORY_IRI, 0);
           
 	  addWdkReference(householdRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
@@ -989,6 +991,11 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
 	  if(hasHouseholdObservations){
 	  addWdkReference(participantRecordClass, "table", "HouseholdObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  }
+
+
+	  if(hasCommunityStep){
+	  addWdkReference(participantRecordClass, "table", "CommunityObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
 	  }
 
           if(hasSampleDataCollected) {
