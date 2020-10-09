@@ -193,7 +193,7 @@ ${hasNoCommunityAttributesCommentEnd}
                  attributeMetaQueryRef="${presenterId}ParticipantTables.HouseholdObservationsDownloadColumnAttributes">
             <columnAttribute name="source_id" internal="true" inReportMaker="false"/>
             <columnAttribute name="project_id" internal="true" inReportMaker="false"/>
-            <columnAttribute name="Household_Id"/>
+            <columnAttribute name="Household_Observation_Id"/>
           </table>
 
 
@@ -895,12 +895,21 @@ FROM    apidbtuning.${tblPrefix}Participants pa
 
           <sql>
             <![CDATA[
-            select distinct o.display_name as display_name, o.ontology_term_source_id as name
-            from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
-            where s.synonym_name = upper('${tblPrefix}Households')
-            and c.owner = 'APIDBTUNING'
-            and c.table_name = s.table_name
-            and upper(o.ontology_term_source_id) = c.column_name
+
+ select distinct o.display_name as display_name, o.ontology_term_source_id as name
+ from ALL_TAB_COLUMNS c, all_synonyms s, ApidbTuning.${tblPrefix}Ontology o
+ where s.synonym_name = upper('${tblPrefix}Households')
+ and c.owner = 'APIDBTUNING'
+ and c.table_name = s.table_name
+ and upper(o.ontology_term_source_id) = c.column_name
+ and o.ontology_term_source_id in 
+     		(
+                        SELECT distinct PROPERTY_SOURCE_ID  FROM apidbtuning.${tblPrefix}METADATA WHERE CATEGORY='Household'
+                        AND PAN_ID IN (SELECT OUTPUT_PAN_ID FROM apidbtuning.${tblPrefix}PanIO
+                                        WHERE input_pan_type_source_id='PCO_0000024'
+                                        AND output_pan_type_source_id='PCO_0000024')
+                )
+
             ]]>
           </sql>
         </sqlQuery>
@@ -909,7 +918,7 @@ FROM    apidbtuning.${tblPrefix}Participants pa
  <sqlQuery name="HouseholdObservationsDownload"  isCacheable='false' attributeMetaQueryRef="${presenterId}ParticipantTables.HouseholdObservationsDownloadColumnAttributes">
  	    <column name="source_id"/>
             <column name="project_id"/>
-            <column name="Household_Id"/>
+            <column name="Household_Observation_Id"/>
             <sql>
             <![CDATA[
 
@@ -919,7 +928,7 @@ with HHob as(
         where input_pan_type_source_id = 'PCO_0000024'
         and output_pan_type_source_id = 'PCO_0000024'
     )
-select pa.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_Id, hh.*
+select pa.name as source_id, '@PROJECT_ID@' as project_id, hh.name as Household_Observation_Id, hh.*
     from apidbtuning.${tblPrefix}Households hh, HHob, apidbtuning.${tblPrefix}Participants pa, apidbtuning.${tblPrefix}Panio io1
    where  hh.pan_id =  HHob.output_pan_id
    and pa.pan_id = io1.output_pan_id
