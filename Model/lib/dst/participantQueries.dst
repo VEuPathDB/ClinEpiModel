@@ -424,18 +424,24 @@ prop=hasStudyArmParameter
        <column name="visit_count"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count
-from ( select distinct participant_id,observation_id,${timeColumnName} from ApidbTuning.${tblPrefix}ObservationMD
+with visits as (
+select distinct po.participant_id,po.observation_id,m.${timeColumnName}, m.ontology_term_name
+from ApidbTuning.${tblPrefix}ObservationMD m, ApidbTuning.${tblPrefix}PartObsIO po
       where \$\$visits_${paramSuffix}.filters_present\$\$ = 0
-      and participant_id in (\$\$participants_${paramSuffix}\$\$)
+      and po.participant_id in (\$\$participants_${paramSuffix}\$\$)
+      and po.observation_id = m.observation_id(+)
+      and m.ontology_term_name(+) = '${timeSourceId}'
       UNION All
-      select distinct participant_id,observation_id,${timeColumnName} from ApidbTuning.${tblPrefix}ObservationMD
+      select distinct participant_id,observation_id,${timeColumnName}, ontology_term_name from ApidbTuning.Dc56b76b581ObservationMD
       where \$\$visits_${paramSuffix}.filters_present\$\$ = 1
       and observation_id in (\$\$visits_${paramSuffix}\$\$)
       and ontology_term_name = '${timeSourceId}'
+      )
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count
+from ( select * from visits
 \$\$dateOperator_fv\$\$
- select distinct vis.participant_id,vis.observation_id,vis.${timeColumnName}
- from ApidbTuning.${tblPrefix}ObservationMD vis, ApidbTuning.${tblPrefix}ObservationMD rv
+ select distinct vis.participant_id,vis.observation_id,vis.${timeColumnName}, vis.ontology_term_name
+ from visits vis, ApidbTuning.Dc56b76b581ObservationMD rv
  where vis.observation_id in (\$\$visits_${paramSuffix}\$\$)
  and vis.ontology_term_name = '${timeSourceId}'
 and \$\$use_relative_visits\$\$ = 1
@@ -446,8 +452,8 @@ and vis.observation_id != rv.observation_id
 and vis.${timeColumnName} \$\$date_direction_fv\$\$ rv.${timeColumnName}  
 and abs(rv.${timeColumnName} - vis.${timeColumnName}) >= \$\$days_between.min\$\$
 and abs(rv.${timeColumnName} - vis.${timeColumnName}) <= \$\$days_between.max\$\$
-group by vis.participant_id,vis.observation_id,vis.${timeColumnName}
-) main, ApidbTuning.${tblPrefix}Participants pa
+group by vis.participant_id,vis.observation_id,vis.${timeColumnName}, vis.ontology_term_name
+) main, ApidbTuning.Dc56b76b581Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
                 ]]>   
