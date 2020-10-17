@@ -1170,6 +1170,10 @@ select cp.household_id as internal, c.ontology_term_name, c.string_value, c.numb
 from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO cp 
 where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and c.community_id = cp.community_id
+UNION
+select c.household_id as internal, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD c
+where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
           ]]>
     </sql>
     </sqlQuery>

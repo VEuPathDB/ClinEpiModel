@@ -998,12 +998,15 @@ prop=hideRegionVarsSqlCommentEnd
      <column name="is_range"/>
     <sql>
          <![CDATA[
-select distinct o.ontology_term_source_id as ontology_term_name, cast(null as varchar2(1)) as parent_ontology_term_name,
-nvl(o.display_name,o.ontology_term_name) as display_name, o.description, o.variable_name, o.units,
-o.type, o.is_range, o.precision, o.display_order
+select * from (
+select distinct o.ontology_term_source_id as ontology_term_name, o.parent_ontology_term_source_id as parent_ontology_term_name,
+nvl(o.display_name,o.ontology_term_name) as display_name,o.description, o.variable_name, o.units, o.type,
+o.is_range,o.precision, o.display_order
 from ApidbTuning.${tblPrefix}Ontology o
-where ontology_term_source_id in (${studyDetailsOntologyIdsQuoted})
-order by display_order, display_name
+     CONNECT BY o.ontology_term_source_id = PRIOR o.parent_ontology_term_source_id
+     START WITH o.ontology_term_source_id in (${studyDetailsOntologyIdsQuoted}) 
+     )
+     order by display_order, display_name
          ]]>
     </sql>
    </sqlQuery>
@@ -1024,6 +1027,11 @@ select cp.participant_id as internal, c.ontology_term_name, c.string_value, c.nu
 from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComPartIO cp 
 where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and c.community_id = cp.community_id
+UNION
+select cp.participant_id as internal, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}HouseholdMD c, ApidbTuning.${tblPrefix}HousePartIO cp 
+where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
+and c.household_id = cp.household_id
           ]]>
     </sql>
     </sqlQuery>
