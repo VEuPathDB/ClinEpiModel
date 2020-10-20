@@ -432,7 +432,7 @@ from ApidbTuning.${tblPrefix}ObservationMD m, ApidbTuning.${tblPrefix}PartObsIO 
       and po.observation_id = m.observation_id(+)
       and m.ontology_term_name(+) = '${timeSourceId}'
       UNION All
-      select distinct participant_id,observation_id,${timeColumnName}, ontology_term_name from ApidbTuning.Dc56b76b581ObservationMD
+      select distinct participant_id,observation_id,${timeColumnName}, ontology_term_name from ApidbTuning.${tblPrefix}ObservationMD
       where \$\$visits_${paramSuffix}.filters_present\$\$ = 1
       and observation_id in (\$\$visits_${paramSuffix}\$\$)
       and ontology_term_name = '${timeSourceId}'
@@ -441,7 +441,7 @@ select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as 
 from ( select * from visits
 \$\$dateOperator_fv\$\$
  select distinct vis.participant_id,vis.observation_id,vis.${timeColumnName}, vis.ontology_term_name
- from visits vis, ApidbTuning.Dc56b76b581ObservationMD rv
+ from visits vis, ApidbTuning.${tblPrefix}ObservationMD rv
  where vis.observation_id in (\$\$visits_${paramSuffix}\$\$)
  and vis.ontology_term_name = '${timeSourceId}'
 and \$\$use_relative_visits\$\$ = 1
@@ -453,7 +453,7 @@ and vis.${timeColumnName} \$\$date_direction_fv\$\$ rv.${timeColumnName}
 and abs(rv.${timeColumnName} - vis.${timeColumnName}) >= \$\$days_between.min\$\$
 and abs(rv.${timeColumnName} - vis.${timeColumnName}) <= \$\$days_between.max\$\$
 group by vis.participant_id,vis.observation_id,vis.${timeColumnName}, vis.ontology_term_name
-) main, ApidbTuning.Dc56b76b581Participants pa
+) main, ApidbTuning.${tblPrefix}Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
                 ]]>   
