@@ -191,7 +191,7 @@ prop=householdOrObservationIsVisible
        <column name="part_count"/>
          <sql>
            <![CDATA[
-with hhobs as (select distinct household_id, household_observation_id from ApidbTuning.Dc56b76b581HouseholdMD)
+with hhobs as (select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD)
 select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
