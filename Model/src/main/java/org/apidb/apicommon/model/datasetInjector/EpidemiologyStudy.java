@@ -908,6 +908,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicrosTableInPartiPage = getPropValueAsBoolean("hasMicrosTableInPartiPage");
       boolean hasMicrosTableInObserPage = getPropValueAsBoolean("hasMicrosTableInObserPage");
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
+      boolean hasCommunityObservations = getPropValueAsBoolean("hasCommunityObservations");
       boolean hasCommunityStep = getPropValueAsBoolean("hasCommunityStep");
       //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
@@ -994,7 +995,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	  }
 
 
-	  if(hasCommunityStep){
+	  if(hasCommunityObservations){
 	  addWdkReference(participantRecordClass, "table", "CommunityObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
 	  }
 
@@ -1041,7 +1042,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 	      addWdkReference(observationRecordClass, "table", "HouseholdObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
           }
 	  
-	  if(hasCommunityStep){
+	  if(hasCommunityObservations){
 	  addWdkReference(observationRecordClass, "table", "CommunityObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
 	  }
 
@@ -1158,6 +1159,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
                                  {"firstWizardStep", ""},
                                  {"hasStudyArmParameter", ""},
                                  {"hasHouseholdObservations", ""},
+                                 {"hasCommunityObservations", ""},
                                  {"keepRegionInHouseholdFilter", ""},
                                  {"hideRegionVariablesKeepDataInHousehold", ""},
                                  //control of whether to trim the ontology when single leaf or sub-node
