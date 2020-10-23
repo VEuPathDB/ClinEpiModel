@@ -41,7 +41,8 @@ anchorFile=ClinEpiWebsite/View/lib/R/shiny/functions/longitudinal.tab
 prop=shinyLongitudinalObservationSourceIds
 prop=datasetName
 prop=shinyLongitudinalHouseholdSourceIds
+prop=shinyLongitudinalCommunitySourceIds
 
 >templateTextStart<
-"${datasetName}","${shinyLongitudinalObservationSourceIds}","${shinyLongitudinalHouseholdSourceIds}"
+"${datasetName}","${shinyLongitudinalObservationSourceIds}","${shinyLongitudinalHouseholdSourceIds}","${shinyLongitudinalCommunitySourceIds}"
 >templateTextEnd<
