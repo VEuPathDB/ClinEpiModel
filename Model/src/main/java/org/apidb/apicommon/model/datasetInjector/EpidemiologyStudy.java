@@ -990,8 +990,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
           }
 
 	  addWdkReference(participantRecordClass, "table", "ObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0);
-	  addWdkReference(participantRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0); 
-
+	  
 
 	  if(hasHouseholdObservations){
 	  addWdkReference(participantRecordClass, "table", "HouseholdObservationsDownload", new String[]{"download"}, CATEGORY_IRI,0); 
@@ -1004,7 +1003,9 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
 
           if(hasSampleDataCollected) {
               addWdkReference(participantRecordClass, "table", "Samples", new String[]{"record"}, CATEGORY_IRI, 0);
-          }
+	      addWdkReference(participantRecordClass, "table", "SamplesDownload", new String[]{"download"}, CATEGORY_IRI,0); 
+	  
+	  }
 	  
 	  if(hasMicrosTableInPartiPage) {
               addWdkReference(participantRecordClass, "table", "Micros", new String[]{"record"}, CATEGORY_IRI, 0);
