@@ -912,7 +912,7 @@ public abstract class EpidemiologyStudy extends DatasetInjector {
       boolean hasMicrosTableInObserPage = getPropValueAsBoolean("hasMicrosTableInObserPage");
       boolean hasHouseholdObservations = getPropValueAsBoolean("hasHouseholdObservations");
       boolean hasCommunityObservations = getPropValueAsBoolean("hasCommunityObservations");
-      boolean hasCommunityStep = getPropValueAsBoolean("hasCommunityStep");
+      //boolean hasCommunityStep = getPropValueAsBoolean("hasCommunityStep");
       //boolean hasTreatments = getPropValueAsBoolean("hasTreatments");
 
       String presenterId = getPropValue("presenterId");

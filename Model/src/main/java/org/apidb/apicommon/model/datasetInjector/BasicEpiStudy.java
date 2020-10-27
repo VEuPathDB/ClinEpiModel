@@ -1,8 +1,7 @@
 package org.apidb.apicommon.model.datasetInjector;
 
-import org.apidb.apicommon.model.datasetInjector.EpidemiologyStudy;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class BasicEpiStudy extends EpidemiologyStudy {
 
