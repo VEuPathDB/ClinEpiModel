@@ -478,7 +478,7 @@ ${hasNoCommunityAttributesCommentStart}
 <sqlQuery name="CommunityAttributes" attributeMetaQueryRef="${presenterId}ParticipantAttributes.CommunityAttributesMeta">
          <column name="source_id"/>
          <column name="project_id"/>
-         <column name="household_id"/>
+         <column name="community_id"/>
           <sql>
             <![CDATA[
         select c.name as community_id, obs.name as source_id, '@PROJECT_ID@' as project_id, c.*
