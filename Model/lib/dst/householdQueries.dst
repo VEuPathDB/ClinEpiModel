@@ -270,6 +270,54 @@ group by da.pan_id,da.name
 
 
 
+[templateStart]
+name=householdMetadataQueryWASHBKenya
+anchorFile=ClinEpiModel/Model/lib/dst/householdQueries.dst
+prop=tblPrefix
+prop=paramSuffix
+prop=householdOrObservationIsVisible
+>templateTextStart<
+    <sqlQuery name="HouseholdsByMetadata_${paramSuffix}" isCacheable="true">
+       <paramRef ref="householdParams.study_details_filter_${paramSuffix}" groupRef="metaDataGroups.study_details_${paramSuffix}"/>
+       <paramRef ref="householdParams.householdOrObservation" visible="${householdOrObservationIsVisible}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="householdParams.households_${paramSuffix}" groupRef="metaDataGroups.part_household_characteristics_${paramSuffix}"/>
+       <paramRef ref="householdParams.participants_${paramSuffix}" groupRef="metaDataGroups.part_characteristics"/>
+       <paramRef ref="householdParams.observations_${paramSuffix}" groupRef="metaDataGroups.event_characteristics_${paramSuffix}"/>
+       <column name="source_id"/>
+       <column name="project_id"/>
+       <column name="part_count"/>
+         <sql>
+           <![CDATA[
+with hhobs as (select distinct household_id, household_observation_id from ApidbTuning.${tblPrefix}HouseholdMD)
+select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
+from (
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, hhobs h
+where \$\$observations_${paramSuffix}\.filters_present\$\$ = 1
+and io.participant_id in (\$\$observations_${paramSuffix}\$\$)
+and io.household_id = h.household_id
+and h.\$\$householdOrObservation\$\$ in (\$\$households_${paramSuffix}\$\$)
+and da.pan_id = h.\$\$householdOrObservation\$\$ 
+group by da.pan_id,da.name
+UNION ALL
+select da.pan_id,da.name,count(*) as part_count
+from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, hhobs h
+where \$\$observations_${paramSuffix}\.filters_present\$\$ = 0
+and io.participant_id in (\$\$participants_${paramSuffix}\$\$)
+and io.household_id = h.household_id
+and h.\$\$householdOrObservation\$\$ in (\$\$households_${paramSuffix}\$\$)
+and da.pan_id = h.\$\$householdOrObservation\$\$ 
+group by da.pan_id,da.name
+) dwpct
+                ]]>   
+        </sql>
+     </sqlQuery>
+>templateTextEnd<
+
+
+
+
+
 
 [templateStart]
 name=householdMetadataQueryParticipantSD
