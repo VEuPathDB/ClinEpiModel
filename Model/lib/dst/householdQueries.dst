@@ -293,7 +293,7 @@ select dwpct.name as source_id, '@PROJECT_ID@' as project_id, dwpct.part_count
 from (
 select da.pan_id,da.name,count(*) as part_count
 from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, hhobs h
-where \$\$observations_${paramSuffix}\.filters_present\$\$ = 1
+where (\$\$observations_${paramSuffix}\.filters_present\$\$ = 1 or \$\$participants_${paramSuffix}\.filters_present\$\$ = 1)
 and io.participant_id in (\$\$observations_${paramSuffix}\$\$)
 and io.household_id = h.household_id
 and h.\$\$householdOrObservation\$\$ in (\$\$households_${paramSuffix}\$\$)
@@ -301,10 +301,8 @@ and da.pan_id = h.\$\$householdOrObservation\$\$
 group by da.pan_id,da.name
 UNION ALL
 select da.pan_id,da.name,count(*) as part_count
-from ApidbTuning.${tblPrefix}HousePartIO io, ApidbTuning.${tblPrefix}Households da, hhobs h
-where \$\$observations_${paramSuffix}\.filters_present\$\$ = 0
-and io.participant_id in (\$\$participants_${paramSuffix}\$\$)
-and io.household_id = h.household_id
+from ApidbTuning.${tblPrefix}Households da, hhobs h
+where (\$\$observations_${paramSuffix}\.filters_present\$\$ = 0 and \$\$participants_${paramSuffix}\.filters_present\$\$ = 0)
 and h.\$\$householdOrObservation\$\$ in (\$\$households_${paramSuffix}\$\$)
 and da.pan_id = h.\$\$householdOrObservation\$\$ 
 group by da.pan_id,da.name
