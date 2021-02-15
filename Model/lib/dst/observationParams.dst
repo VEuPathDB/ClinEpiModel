@@ -2175,27 +2175,9 @@ prop=rmRegionSqlCommentEnd
 
 select c.community_id as internal, c.community_id as filter_item_id, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
 from ApidbTuning.${tblPrefix}CommunityMD c
-LEFT OUTER JOIN ApidbTuning.${tblPrefix}ComHouseIO ch
-on c.community_id = ch.community_id
-LEFT OUTER JOIN ApidbTuning.${tblPrefix}ComPartIO cp
-on ch.community_id = cp.community_id
-LEFT OUTER JOIN  ApidbTuning.${tblPrefix}ComObsIO co
-on cp.community_id = co.community_id
-LEFT OUTER JOIN  ApidbTuning.${tblPrefix}Observations o
-on co.observation_id = o.pan_id
+LEFT OUTER JOIN ApidbTuning.${tblPrefix}ComObsIO co
+on c.community_id  = co.community_id
 and c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
-
-
-
-/*
-UNION
-
-select ch.community_id as internal, ch.community_id as filter_item_id, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
-from ApidbTuning.${tblPrefix}HouseholdMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co
-where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
-and ch.household_id = c.household_id
-and co.community_id  = ch.community_id
-*/
 
         ]]>
       </sql>
