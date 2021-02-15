@@ -1752,7 +1752,7 @@ prop=trimObservationMetadataTerms
                     metadataQueryRef="ClinicalVisitVQ.StudyDetailsMetaData_${paramSuffix}"
                     backgroundQueryRef="ClinicalVisitVQ.StudyDetailsMetaData_${paramSuffix}"
                     countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Clusters"
+                    filterDataTypeDisplayName="Compounds"
                     prompt="Choose Study Arm"
                     dependedParamRef=""
                     trimMetadataTerms="true">
@@ -2173,14 +2173,21 @@ prop=rmRegionSqlCommentEnd
       <sql>
         <![CDATA[
 
-select ch.community_id as internal, ch.community_id as filter_item_id, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
-from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO ch, ApidbTuning.${tblPrefix}ComObsIO co, ApidbTuning.${tblPrefix}ComPartIO cp, ApidbTuning.${tblPrefix}Observations o
-where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
-and cp.community_id = c.community_id
-and co.community_id = c.community_id
-and ch.community_id = c.community_id
-and co.observation_id = o.pan_id
+select c.community_id as internal, c.community_id as filter_item_id, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}CommunityMD c
+LEFT OUTER JOIN ApidbTuning.${tblPrefix}ComHouseIO ch
+on c.community_id = ch.community_id
+LEFT OUTER JOIN ApidbTuning.${tblPrefix}ComPartIO cp
+on ch.community_id = cp.community_id
+LEFT OUTER JOIN  ApidbTuning.${tblPrefix}ComObsIO co
+on cp.community_id = co.community_id
+LEFT OUTER JOIN  ApidbTuning.${tblPrefix}Observations o
+on co.observation_id = o.pan_id
+and c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 
+
+
+/*
 UNION
 
 select ch.community_id as internal, ch.community_id as filter_item_id, co.observation_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
@@ -2188,6 +2195,7 @@ from ApidbTuning.${tblPrefix}HouseholdMD c, ApidbTuning.${tblPrefix}ComHouseIO c
 where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
 and ch.household_id = c.household_id
 and co.community_id  = ch.community_id
+*/
 
         ]]>
       </sql>

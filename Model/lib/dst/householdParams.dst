@@ -509,7 +509,7 @@ prop=communityFilterDataTypeDisplayName
                     metadataQueryRef="HouseholdVQ.StudyDetailsMetaData_${paramSuffix}"
                     backgroundQueryRef="HouseholdVQ.StudyDetailsMetaData_${paramSuffix}"
                     countPredictsAnswerCount="true"
-                    filterDataTypeDisplayName="Clusters"
+                    filterDataTypeDisplayName="Compounds"
                     prompt="Choose Study Arm"
                     dependedParamRef=""
                     trimMetadataTerms="true">
@@ -611,10 +611,13 @@ from ApidbTuning.${tblPrefix}Ontology o
       <sql>
          <![CDATA[
 
-select distinct cp.community_id as internal, cp.household_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
-from ApidbTuning.${tblPrefix}CommunityMD c, ApidbTuning.${tblPrefix}ComHouseIO cp
-where c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
-and c.community_id  = cp.community_id
+select distinct c.community_id as internal, cp.household_id as record_id, c.ontology_term_name, c.string_value, c.number_value, c.date_value
+from ApidbTuning.${tblPrefix}CommunityMD c  
+LEFT OUTER JOIN ApidbTuning.${tblPrefix}ComHouseIO cp
+on c.community_id  = cp.community_id
+and c.ontology_term_name in (${studyDetailsOntologyIdsQuoted})
+
+
 
           ]]>
     </sql>
