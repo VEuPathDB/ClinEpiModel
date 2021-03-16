@@ -26,7 +26,7 @@
        <dateRangeParam name="visit_date"
                        prompt="Choose start and end dates "
                        minDate="2011-07-01"
-                       maxDate="2020-07-31">
+                       maxDate="2025-07-31">
          <help>"select the earliest and latest dates to include for identifying observations and computing mosquito counts."</help>
 
        </dateRangeParam>
