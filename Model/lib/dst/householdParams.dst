@@ -359,7 +359,7 @@ prop=communityFilterDataTypeDisplayName
        
     <filterParam name="households_${paramSuffix}" 
                        metadataQueryRef="HouseholdVQ.HouseholdMetaData_${paramSuffix}"
-                       backgroundQueryRef="HouseholdVQ.HouseholdMetaData_${paramSuffix}"
+                       backgroundQueryRef="HouseholdVQ.HouseholdMetaDataBkgd_${paramSuffix}"
                        ontologyQueryRef="ParticipantVQ.HouseholdOntology_${paramSuffix}"
                        countPredictsAnswerCount="true"
                        filterDataTypeDisplayName="${householdFilterDataTypeDisplayName}"
