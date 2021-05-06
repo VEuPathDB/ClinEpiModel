@@ -711,13 +711,12 @@ prop=timeColumnName
        <column name="visit_count"/>
          <sql>
            <![CDATA[
-select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count, 
-   round(avg(number_value),1) -1 as ave_age_visit
-from (select distinct io.participant_id,io.observation_id,nvl(o.${timeSourceId},0) as number_value from ApidbTuning.${tblPrefix}Observations o,ApidbTuning.${tblPrefix}PartObsIO io
+select pa.name, pa.name as source_id, '@PROJECT_ID@' as project_id, count(*) as visit_count
+from (select distinct io.participant_id,io.observation_id, ${timeSourceId} as number_value from ApidbTuning.${tblPrefix}Observations o,ApidbTuning.${tblPrefix}PartObsIO io
       where o.pan_id in (\$\$treatment_${paramSuffix}\$\$)
       and io.observation_id = o.pan_id
 \$\$dateOperator_fv\$\$
- select distinct visio.participant_id,visio.observation_id,nvl(vis.${timeSourceId},0)
+ select distinct visio.participant_id,visio.observation_id, vis.${timeSourceId}
  from ApidbTuning.${tblPrefix}Observations vis, ApidbTuning.${tblPrefix}PartObsIO visio, ApidbTuning.${tblPrefix}Observations rv, ApidbTuning.${tblPrefix}PartObsIO rvio
 where vis.pan_id in (\$\$treatment_${paramSuffix}\$\$)
       and visio.observation_id = vis.pan_id
@@ -726,10 +725,10 @@ and rv.pan_id in (\$\$relative_visits_${paramSuffix}\$\$)
 and rvio.observation_id = rv.pan_id
 and visio.participant_id = rvio.participant_id
 and visio.observation_id != rvio.observation_id
-and nvl(vis.${timeSourceId},0) \$\$date_direction_fv\$\$ nvl(rv.${timeSourceId},0)  
-and abs(nvl(rv.${timeSourceId},0) - nvl(vis.${timeSourceId},0)) >= \$\$days_between.min\$\$
-and abs(nvl(rv.${timeSourceId},0) - nvl(vis.${timeSourceId},0)) <= \$\$days_between.max\$\$
-group by visio.participant_id,visio.observation_id,nvl(vis.${timeSourceId},0)
+and vis.${timeSourceId} \$\$date_direction_fv\$\$ rv.${timeSourceId}  
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) >= \$\$days_between.min\$\$
+and abs(rv.${timeSourceId} - vis.${timeSourceId}) <= \$\$days_between.max\$\$
+group by visio.participant_id,visio.observation_id, vis.${timeSourceId} 
 ) main, ApidbTuning.${tblPrefix}Participants pa
 where pa.pan_id = main.participant_id
 group by pa.name 
