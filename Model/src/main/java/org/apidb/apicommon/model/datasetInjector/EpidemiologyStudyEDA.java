@@ -2,7 +2,7 @@ package org.apidb.apicommon.model.datasetInjector;
 
 import org.apidb.apicommon.datasetPresenter.DatasetInjector;
 
-public abstract class EpidemiologyStudyEDA extends DatasetInjector {
+public class EpidemiologyStudyEDA extends DatasetInjector {
 
   @Override
   public void injectTemplates() {
