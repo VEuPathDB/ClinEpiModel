@@ -11,7 +11,7 @@ public class EpidemiologyStudyEDA extends DatasetInjector {
           return;
       }
 
-  //    injectCardQuestions();
+      injectCardQuestions();
       injectProjectAvailability();
   }
 
