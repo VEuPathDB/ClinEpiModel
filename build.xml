@@ -15,24 +15,15 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
   <target name="ClinEpiModel-Installation" depends="CBIL-Installation,
-                                            ReFlow-Installation,
-                                            WDK-Installation,
-                                            EbrcModelCommon-Installation,
-                                            ClinEpiModel-MavenInstallation,
-                                            ClinEpiModel/Model-Installation">
+                                                    ReFlow-Installation,
+                                                    WDK-Installation,
+                                                    EbrcModelCommon-Installation,
+                                                    ClinEpiModel/Model-Installation">
 
-
-    <ant target="defaultProjectInstall">
+  	<ant target="defaultProjectInstall">
       <property name="project" value="ClinEpiModel" />
     </ant>
 
-  </target>
-
-  <target name="ClinEpiModel-MavenInstallation">
-    <ant target="mavenBuildProject">
-      <property name="project" value="ClinEpiModel" />
-    </ant>
-    <property name="alreadyBuilt" value="true" />
   </target>
 
 
@@ -52,18 +43,16 @@
 
   <!-- ooooooooooooooooooooooo  Install Components  ooooooooooooooooooooooo -->
 
-  <target name="ClinEpiModel/Model-Installation" depends="ProjectTree">
-
+  <target name="ClinEpiModel/Model-Installation">
     <ant target="defaultComponentInstall">
       <property name="project" value="ClinEpiModel" />
       <property name="component" value="Model" />
     </ant>
-
   </target>
 
   <!-- ooooooooooooooooooTemporary till TRICH is in Workflow  ooooooooooooooooooooooooo -->
 
-  <target name="ClinEpiModel/Datasources-Installation" depends="ProjectTree">
+  <target name="ClinEpiModel/Datasources-Installation">
     <property name="loadresources" value="${targetDir}/lib/xml" />
     <property name="cache" value="${targetDir}/config/.cache/datasources" />
     <property name="datasources" value="${targetDir}/lib/xml" />
@@ -90,34 +79,9 @@
         <include name="*-pubmed.xml" />
       </fileset>
     </copy>
-
     <ant target="buildInfo">
       <property name="component" value="updateResourcesWithPubmed" />
     </ant>
-
-  </target>
-
-
-  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-  <!-- oooooooooooooooooooooooooo  Distributable  ooooooooooooooooooooooooo -->
-  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
-  <target name="ClinEpiModel-Distributable" depends="ProjectTree">
-
-    <copy todir="${targetDir}">
-      <fileset dir="${projectsDir}">
-        <exclude name="**/CVS/*" />
-      </fileset>
-    </copy>
-  </target>
-
-
-  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-  <!-- oooooooooooooooooooooooooo  ProjectTree  ooooooooooooooooooooooooooo -->
-  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
-  <target name="ProjectTree" if="${checkout}">
-    <ant target="projectCheckOut" />
   </target>
 
 </project>
