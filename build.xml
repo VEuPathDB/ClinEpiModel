@@ -1,4 +1,4 @@
-<project name="ClinEpiModel" default="Installation" basedir=".">
+<project name="ClinEpiModel" basedir=".">
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo  Dependencies  oooooooooooooooooooooooooo -->
@@ -9,7 +9,6 @@
   <import file="${projectsDir}/ReFlow/build.xml" />
   <import file="${projectsDir}/EbrcModelCommon/build.xml" />
 
-
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
@@ -19,27 +18,10 @@
                                                     WDK-Installation,
                                                     EbrcModelCommon-Installation,
                                                     ClinEpiModel/Model-Installation">
-
-  	<ant target="defaultProjectInstall">
+    <ant target="defaultProjectInstall">
       <property name="project" value="ClinEpiModel" />
     </ant>
-
   </target>
-
-
-  <!-- oooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->
-
-  <target name="ClinEpiModel-Installation-postprocess">
-    <echo message="Postprocessing the ClinEpiModel installation" />
-
-    <replace dir="${targetDir}/bin"
-             propertyFile="${targetDir}/config/replacements.prop">
-      <include name="**/*" />
-      <replacefilter token="@perl@" property="perl" />
-    </replace>
-
-  </target>
-
 
   <!-- ooooooooooooooooooooooo  Install Components  ooooooooooooooooooooooo -->
 
