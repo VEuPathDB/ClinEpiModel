@@ -45,7 +45,6 @@ public class EpidemiologyStudyEDA extends DatasetInjector {
       String [][] declaration = {
                                  {"injectStudy", ""},
                                  {"isPublic", ""},
-                                 {"isSecret", "If `true`, the study will only appear on restricted sites."},
                                  {"studyAbbreviation", ""},
                                  {"studyCategories", ""},
                                  {"studyAccess", ""},
