@@ -48,6 +48,7 @@ public class EpidemiologyStudyEDA extends DatasetInjector {
                                  {"studyAbbreviation", ""},
                                  {"studyCategories", ""},
                                  {"studyAccess", ""},
+                                 {"daysForApproval", ""},
                                  {"policyUrl", ""},
                                  {"cardHeadline", ""},
                                  {"cardPoints", ""},
