@@ -25,6 +25,7 @@
   <constant name="sharedDisplayName_Category">Category</constant>
   <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
   <constant name="sharedDisplayName_Project">Project</constant>
+  <constant name="sharedDisplayName_PrimaryKey">Dataset</constant>
   <constant name="sharedDisplayName_InvestigationType">Investigation type</constant>
   <constant name="sharedDisplayName_StudyDesign">Study design</constant>
   <constant name="sharedDisplayName_SampleType">Sample type</constant>
