@@ -38,21 +38,18 @@
   <constant name="sharedDisplayName_Country">Country</constant>
 
 
-  <!-- display names shared by user datasets and datasets. SEE ALSO clinEpiModel.xml -->
+  <!-- display names shared by user datasets and datasets. SEE ALSO apiCommonModel.xml -->
 
   <constant name="sharedDisplayName_PrimaryKey">Dataset name</constant>  <!-- used by prim key  -->
   <constant name="sharedDisplayName_Summary">Summary</constant>
   <constant name="sharedDisplayName_Description">Description</constant>
-  <constant name="sharedDisplayName_ShortAttribution">Short attribution</constant>
+  <constant name="sharedDisplayName_ShortAttribution">Short attribution</constant> <!-- unneeded? only defined in ontology for dataset record (not ud) and only or download scope -->
   <constant name="sharedDisplayName_Category">Category</constant>
   <constant name="sharedDisplayName_PrimaryPublication">Primary publication</constant>
   <constant name="sharedDisplayName_PrimaryContact">Primary contact</constant>
   <constant name="sharedDisplayName_ContactInstitution">Contact affiliation</constant>
   <constant name="sharedDisplayName_ExpOrganism">Organism(s)</constant>
-
-  <!-- only genomics -->
-  <constant name="sharedDisplayName_RefOrganism">Reference organism</constant>
-  <constant name="sharedDisplayName_SourceVersion">External source version</constant>
+  <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
 
   <!-- used only in dataexplorer site  -->
   <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
