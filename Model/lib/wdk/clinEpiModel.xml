@@ -28,11 +28,11 @@
   <constant name="sharedDisplayName_PrimaryContact">Primary contact</constant>
   <constant name="sharedDisplayName_ContactInstitution">Contact affiliation</constant>
   <constant name="sharedDisplayName_ExpOrganism">Organism(s)</constant>
-  <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
   <constant name="sharedDisplayName_DateVersion">Date and Version</constant>
+  <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
+  <constant name="sharedDisplayName_ExtSource">External source</constant>
 
   <!-- used only in dataexplorer site  -->
-  <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
   <constant name="sharedDisplayName_Project">Project</constant>
   <constant name="sharedDisplayName_InvestigationType">Investigation type</constant>
   <constant name="sharedDisplayName_StudyDesign">Study design</constant>
