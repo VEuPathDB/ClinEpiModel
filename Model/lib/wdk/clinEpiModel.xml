@@ -22,7 +22,6 @@
   <constant name="sharedDisplayName_Integration">Integration workflow</constant>
   <constant name="sharedDisplayName_Summary">Summary</constant>
   <constant name="sharedDisplayName_Description">Description</constant>
-  <constant name="sharedDisplayName_ShortAttribution">Short attribution</constant> <!-- unneeded? only defined in ontology for dataset record (not ud) and only or download scope -->
   <constant name="sharedDisplayName_Category">Category</constant>
   <constant name="sharedDisplayName_PrimaryPublication">Primary publication</constant>
   <constant name="sharedDisplayName_PrimaryContact">Primary contact</constant>
@@ -32,6 +31,19 @@
   <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
   <constant name="sharedDisplayName_ExtSource">External source</constant>
 
+  <constant name="sharedDisplayName_PrimaryKey_help">Dataset name</constant>  <!-- used by prim key  -->
+  <constant name="sharedDisplayName_Integration_help">Integration workflow</constant>
+  <constant name="sharedDisplayName_Summary_help">Summary</constant>
+  <constant name="sharedDisplayName_Description_help">Description</constant>
+  <constant name="sharedDisplayName_Category_help">Dataset classification, according to the biological characteristics and structure of the data it contains.</constant>
+  <constant name="sharedDisplayName_PrimaryPublication_help">The primary references for the dataset, including PubMed for scientific papers and DOIs for other resources, e.g. book chapters.</constant>
+  <constant name="sharedDisplayName_PrimaryContact_help">Primary contact</constant>
+  <constant name="sharedDisplayName_ContactInstitution_help">The affiliation or institution of the contact person or organization.</constant>
+  <constant name="sharedDisplayName_ExpOrganism_help">The organisms represented by biological data in this dataset</constant>
+  <constant name="sharedDisplayName_ReuseConsiderations_help">Any important caveats or limitations users should consider when interpreting or reusing this dataset, or requests from the data provider stipulating the proper use of unpublished data.</constant>
+  <constant name="sharedDisplayName_DateVersion_help">The initial upload date.</constant>
+  <constant name="sharedDisplayName_ExtSource_help">External source</constant>
+
   <!-- used only in dataexplorer site  -->
   <constant name="sharedDisplayName_Project">Project</constant>
   <constant name="sharedDisplayName_InvestigationType">Investigation type</constant>
@@ -39,8 +51,18 @@
   <constant name="sharedDisplayName_SampleType">Sample type</constant>
   <constant name="sharedDisplayName_StartYear">Start year</constant>
   <constant name="sharedDisplayName_EndYear">End year</constant>
-  <constant name="sharedDisplayName_Age">Age</constant>
+  <constant name="sharedDisplayName_Age">Participant ages</constant>
   <constant name="sharedDisplayName_Country">Country</constant>
+
+    <!-- used only in dataexplorer site  -->
+  <constant name="sharedDisplayName_Project_help">Project</constant>
+  <constant name="sharedDisplayName_InvestigationType_help">For field studies and clinical trials: indicates whether the dataset was generated through observational or experimental investigation.</constant>
+  <constant name="sharedDisplayName_StudyDesign_help">For field studies and clinical trials: describes the overall structure and methodology used to conduct the study.</constant>
+  <constant name="sharedDisplayName_SampleType_help">Sample type</constant>
+  <constant name="sharedDisplayName_StartYear_help">For field studies and clinical trials: year when data collection initiated.</constant>
+  <constant name="sharedDisplayName_EndYear_help">For field studies and clinical trials: year when data collection concluded.</constant>
+  <constant name="sharedDisplayName_Age_help">For field studies and clinical trials: age range(s) of participants when data were collected</constant>
+  <constant name="sharedDisplayName_Country_help">For field studies and clinical trials: a list of the countries where data or samples were collected from the study population.</constant>
 
   <modelName displayName="dataExplorer" version="%%buildNumber%%" releaseDate="%%releaseDate%%" buildNumber="%%buildNumber%%" />
 
