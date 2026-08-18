@@ -8,8 +8,8 @@
 
 <wdkModel>
 
-  <constant name="releaseDate">09 Jul 2026</constant>
-  <constant name="buildNumber">2</constant>
+  <constant name="releaseDate">1 January 1900 00:00</constant>
+  <constant name="buildNumber">3</constant>
 
   <constant name="attributesReporterDisplayName">Tab- or comma-delimited (openable in Excel) - choose columns to make a custom table</constant>
   <constant name="tableReporterDisplayName">Tab- or comma-delimited (openable in Excel) - choose a pre-configured table</constant>
@@ -31,7 +31,7 @@
   <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
   <constant name="sharedDisplayName_ExtSource">External source</constant>
 
-  <constant name="sharedDisplayName_PrimaryKey_help">Dataset name</constant>  <!-- used by prim key  -->
+  <constant name="sharedDisplayName_PrimaryKey_help">Click a dataset to go to the full dataset record.</constant>  <!-- used by prim key  -->
   <constant name="sharedDisplayName_Integration_help">Integration workflow</constant>
   <constant name="sharedDisplayName_Summary_help">Summary</constant>
   <constant name="sharedDisplayName_Description_help">Description</constant>
@@ -52,7 +52,7 @@
   <constant name="sharedDisplayName_StartYear">Start year</constant>
   <constant name="sharedDisplayName_EndYear">End year</constant>
   <constant name="sharedDisplayName_Age">Participant ages</constant>
-  <constant name="sharedDisplayName_Country">Country</constant>
+  <constant name="sharedDisplayName_Country">Countries</constant>
 
     <!-- used only in dataexplorer site  -->
   <constant name="sharedDisplayName_Project_help">Project</constant>
