@@ -29,7 +29,7 @@
   <constant name="sharedDisplayName_ExpOrganism">Organism(s)</constant>
   <constant name="sharedDisplayName_DateVersion">Date and Version</constant>
   <constant name="sharedDisplayName_ReuseConsiderations">Reuse considerations</constant>
-  <constant name="sharedDisplayName_ExtSource">External source</constant>
+  <constant name="sharedDisplayName_ExtSource">External sources</constant>
 
   <constant name="sharedDisplayName_PrimaryKey_help">Click a dataset to go to the full dataset record.</constant>  <!-- used by prim key  -->
   <constant name="sharedDisplayName_Integration_help">Integration workflow</constant>
@@ -42,7 +42,7 @@
   <constant name="sharedDisplayName_ExpOrganism_help">The organisms represented by biological data in this dataset</constant>
   <constant name="sharedDisplayName_ReuseConsiderations_help">Any important caveats or limitations users should consider when interpreting or reusing this dataset, or requests from the data provider stipulating the proper use of unpublished data.</constant>
   <constant name="sharedDisplayName_DateVersion_help">The initial upload date.</constant>
-  <constant name="sharedDisplayName_ExtSource_help">External source</constant>
+  <constant name="sharedDisplayName_ExtSource_help">External sources</constant>
 
   <!-- used only in dataexplorer site  -->
   <constant name="sharedDisplayName_Project">Project</constant>
